@@ -1,0 +1,6 @@
+[submodule "JourneyEngine/vendor/spdlog"]
+	path = JourneyEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "JourneyEngine/vendor/fmt"]
+	path = JourneyEngine/vendor/fmt
+	url = https://github.com/fmtlib/fmt

@@ -6,5 +6,6 @@
 
 #include "Journey/Core.h"
 #include "Journey/Application.h"
+#include "Journey/Log.h"
 
 #include "Journey/EntryPoint.h"

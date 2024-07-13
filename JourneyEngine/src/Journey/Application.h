@@ -11,7 +11,7 @@ public:
 	Application();
 	virtual ~Application();
 
-	void run();
+	virtual void run();
 };
 
 //-- Will be defined in client
