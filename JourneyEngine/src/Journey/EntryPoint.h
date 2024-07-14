@@ -7,7 +7,6 @@ extern jny::Application* jny::createApplication();
 int main(int argc, char** argv)
 {
 	jny::Log::init();
-	auto& logger = jny::Log::coreLogger();
 
 	jny::Log::log(jny::Log::LogLevel::trace, "Dll main called, application init is next");
 
