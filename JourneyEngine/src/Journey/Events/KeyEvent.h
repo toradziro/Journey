@@ -24,6 +24,7 @@ class JNY_API KeyPressedEvent : public KeyEvent
 {
 public:
 	KeyPressedEvent(int keyCode, int repeatCount) : KeyEvent(keyCode), m_repeatCount(repeatCount) {}
+	~KeyPressedEvent() {}
 
 	EVENT_CLASS_TYPE(KeyPressed)
 
@@ -41,6 +42,7 @@ class JNY_API KeyReleasedEvent : public KeyEvent
 {
 public:
 	KeyReleasedEvent(int keyCode) : KeyEvent(keyCode) {}
+	~KeyReleasedEvent() {}
 
 	std::string toString() const override
 	{

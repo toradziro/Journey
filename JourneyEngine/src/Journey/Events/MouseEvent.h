@@ -8,6 +8,8 @@ namespace jny
 class JNY_API MouseButtonPressedEvent : public Event
 {
 public:
+	~MouseButtonPressedEvent() {}
+
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::MouseButton | Event::EventCategory::Input)
 	EVENT_CLASS_TYPE(MouseButtonPressed)
 
@@ -21,6 +23,8 @@ private:
 class JNY_API MouseButtonReleasedEvent : public Event
 {
 public:
+	~MouseButtonReleasedEvent() {}
+
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::MouseButton | Event::EventCategory::Input)
 	EVENT_CLASS_TYPE(MouseButtonReleased)
 
@@ -38,6 +42,8 @@ public:
 	EVENT_CLASS_TYPE(MouseMoved)
 
 	MouseMovedEvent(float x, float y) : m_mouseX(x), m_mouseY(y) {}
+	~MouseMovedEvent() {}
+
 	std::string toString() const override { return fmt::format("MouseMovedEvent: x: {}, y: {}", m_mouseX, m_mouseY); }
 	
 	float getX() const { return m_mouseX; }
@@ -55,6 +61,8 @@ public:
 	EVENT_CLASS_TYPE(MouseScrolled)
 
 	MouseScrolledEvent(float offsetX, float offsetY) : m_offsetX(offsetX), m_offsetY(offsetY) {}
+	~MouseScrolledEvent() {}
+
 	std::string toString() const override { return fmt::format("MouseScrolledEvent: offsetX: {}, offsetY: {}", m_offsetX, m_offsetY); }
 
 	float offsetX() const { return m_offsetX; }

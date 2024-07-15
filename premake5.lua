@@ -28,7 +28,6 @@ project "JourneyEngine"
 	includedirs
 	{
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/vendor/fmt/include",
 		"%{prj.name}/src"
 	}
 	
@@ -36,6 +35,8 @@ project "JourneyEngine"
 		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
+		
+		buildoptions { "/utf-8" }
 		
 		defines
 		{
@@ -81,7 +82,6 @@ project "Sandbox"
 	includedirs
 	{
 		"JourneyEngine/vendor/spdlog/include",
-		"JourneyEngine/vendor/fmt/include",
 		"JourneyEngine/src"
 	}
 	
@@ -94,6 +94,8 @@ project "Sandbox"
 		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
+		
+		buildoptions { "/utf-8" }
 		
 		defines
 		{
