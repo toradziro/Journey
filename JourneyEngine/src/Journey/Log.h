@@ -2,9 +2,6 @@
 
 #include "Core.h"
 #include <spdlog/spdlog.h>
-#include <fmt/core.h>
-
-#include <memory>
 
 namespace jny
 {

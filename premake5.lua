@@ -28,7 +28,8 @@ project "JourneyEngine"
 	includedirs
 	{
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/vendor/fmt/include"
+		"%{prj.name}/vendor/fmt/include",
+		"%{prj.name}/src"
 	}
 	
 	filter "system:windows"

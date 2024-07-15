@@ -9,3 +9,11 @@
 #else
 	#error Only Win supported
 #endif
+
+#define BIT(x) (1 << x)
+
+#include <memory>
+#include <string>
+#include <functional>
+#include <cstdint>
+#include <fmt/core.h>
