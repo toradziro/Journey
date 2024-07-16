@@ -19,6 +19,9 @@ project "JourneyEngine"
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
 	
+	pchheader "jnypch.h"
+	pchsource "JourneyEngine/src/jnypch.cpp"
+	
 	files
 	{
 		"%{prj.name}/src/**.h",

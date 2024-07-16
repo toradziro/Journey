@@ -1,8 +1,6 @@
 #pragma once
 
-//-- To proide API for applications
-
-#include <stdio.h>
+//-- To provide API for applications
 
 #include "Journey/Core.h"
 #include "Journey/Application.h"

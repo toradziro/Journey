@@ -1,3 +1,5 @@
+#include "jnypch.h"
+
 #include "Application.h"
 #include "Core.h"
 #include "Log.h"
@@ -18,18 +20,18 @@ Application::~Application()
 
 void Application::run()
 {
-	jny::Log::log(jny::Log::LogLevel::trace, "Application::run {}", "start");
+	Log::log(Log::LogLevel::trace, "Application::run {}", "start");
 
-	jny::WindowResizeEvent e(1000, 500);
+	WindowResizeEvent e(1000, 500);
 	if (e.width() != 1000 || e.height() != 500)
 	{
-		jny::Log::log(jny::Log::LogLevel::error, "Event failed, wrong sizes: h({}) w({})", e.width(), e.height());
+		Log::log(Log::LogLevel::error, "Event failed, wrong sizes: h({}) w({})", e.width(), e.height());
 	}
 	else
 	{
-		jny::Log::log(jny::Log::LogLevel::info, e.toString());
+		Log::log(Log::LogLevel::info, e.toString());
 	}
-	jny::Log::log(jny::Log::LogLevel::trace, "Application::run {}", "end");
+	Log::log(Log::LogLevel::trace, "Application::run {}", "end");
 
 	while (true)
 	{

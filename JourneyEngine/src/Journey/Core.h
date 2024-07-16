@@ -12,12 +12,8 @@
 
 #define BIT(x) (1 << x)
 
-
-#include <memory>
-#include <string>
-#include <functional>
-#include <cstdint>
-
 #define SPDLOG_HEADER_ONLY
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/bundled/format.h>
+
+#include "jnypch.h"
