@@ -7,3 +7,6 @@
 [submodule "JourneyEngine/vendor/eastlBase"]
 	path = JourneyEngine/vendor/eastlBase
 	url = https://github.com/electronicarts/EABase.git
+[submodule "JourneyEngine/vendor/GLFW"]
+	path = JourneyEngine/vendor/GLFW
+	url = https://github.com/toradziro/glfw.git

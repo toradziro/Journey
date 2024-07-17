@@ -9,15 +9,21 @@ workspace "JourneyEngine"
 		"Distribution"
 	}
 	
-outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-		
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+	
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "JourneyEngine/vendor/GLFW/include"
+
+include "JourneyEngine/vendor/GLFW"
+
 project "JourneyEngine"
 	location "JourneyEngine"
 	kind "SharedLib"
 	language "C++"
 	
-	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	pchheader "jnypch.h"
 	pchsource "JourneyEngine/src/jnypch.cpp"
@@ -33,7 +39,15 @@ project "JourneyEngine"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/eastl/include",
 		"%{prj.name}/vendor/eastlBase/include/Common",
+		"%{IncludeDir.GLFW}",
 		"%{prj.name}/src"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib",
+		"dwmapi.lib"
 	}
 	
 	filter "system:windows"
@@ -41,7 +55,7 @@ project "JourneyEngine"
 		staticruntime "On"
 		systemversion "latest"
 		
-		buildoptions { "/utf-8" }
+		buildoptions { "/utf-8", "/MT" }
 		
 		defines
 		{
@@ -51,8 +65,8 @@ project "JourneyEngine"
 		
 		postbuildcommands
 		{
-			"if not exist \"../bin/" .. outputDir .. "/Sandbox\" mkdir \"../bin/" .. outputDir .. "/Sandbox\"",
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/Sandbox")
+			"if not exist \"../bin/" .. outputdir .. "/Sandbox\" mkdir \"../bin/" .. outputdir .. "/Sandbox\"",
+			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
 		}
 		
 	filter "configurations:Debug"
@@ -75,8 +89,8 @@ project "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
 	
-	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputDir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	files
 	{
@@ -102,7 +116,7 @@ project "Sandbox"
 		staticruntime "On"
 		systemversion "latest"
 		
-		buildoptions { "/utf-8" }
+		buildoptions { "/utf-8", "/MT" }		
 		
 		defines
 		{
@@ -110,7 +124,7 @@ project "Sandbox"
 		}
 		
 	filter "configurations:Debug"
-		defines "JNY_DEBUG"
+		defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
 		symbols "On"
 		
 	filter "configurations:Release"

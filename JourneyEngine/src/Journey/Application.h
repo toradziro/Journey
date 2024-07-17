@@ -12,6 +12,9 @@ public:
 	virtual ~Application();
 
 	virtual void run();
+
+private:
+	bool m_running = true;
 };
 
 //-- Will be defined in client
