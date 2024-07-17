@@ -31,6 +31,8 @@ project "JourneyEngine"
 	includedirs
 	{
 		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/eastl/include",
+		"%{prj.name}/vendor/eastlBase/include/Common",
 		"%{prj.name}/src"
 	}
 	
@@ -85,6 +87,8 @@ project "Sandbox"
 	includedirs
 	{
 		"JourneyEngine/vendor/spdlog/include",
+		"%JourneyEngine/vendor/eastl/include",
+		"%JourneyEngine/vendor/eastlBase/include/Common",
 		"JourneyEngine/src"
 	}
 	

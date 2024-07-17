@@ -15,5 +15,3 @@
 #define SPDLOG_HEADER_ONLY
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/bundled/format.h>
-
-#include "jnypch.h"
