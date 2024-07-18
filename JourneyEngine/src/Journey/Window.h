@@ -7,7 +7,6 @@
 namespace jny
 {
 
-
 struct WindowData
 {
 	using EventCallbackFn = std::function<void(Event&)>;
@@ -23,7 +22,7 @@ struct WindowData
 };
 
 
-class Window
+class JNY_API Window
 {
 public:
 	virtual ~Window() {}
@@ -37,7 +36,7 @@ public:
 	virtual void setVSync(bool enabled) = 0;
 	virtual bool isVSync() const = 0;
 
-	static Window* create(WindowData = WindowData("Journey", 1200, 800));
+	static Window* create(WindowData data = WindowData("Journey", 1200, 800));
 };
 
 }

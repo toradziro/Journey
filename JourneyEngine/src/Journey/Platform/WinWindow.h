@@ -5,7 +5,7 @@
 namespace jny
 {
 
-class WinWindow : public Window
+class JNY_API WinWindow : public Window
 {
 public:
 	WinWindow(WindowData data);
@@ -16,9 +16,9 @@ public:
 	uint32_t height() const override { return m_data.m_height; }
 	uint32_t width() const override { return m_data.m_width; }
 
-	void setEventCallback(const WindowData::EventCallbackFn& callback) { m_data.m_eventCallback = callback; }
+	void setEventCallback(const WindowData::EventCallbackFn& callback) override { m_data.m_eventCallback = callback; }
 	
-	void setVSync(bool enabled);
+	void setVSync(bool enabled) override;
 	bool isVSync() const override { return m_data.m_vsyncEnabled; }
 
 	void init();

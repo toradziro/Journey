@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Journey/Window.h"
 
 namespace jny
 {
@@ -11,10 +12,13 @@ public:
 	Application();
 	virtual ~Application();
 
-	virtual void run();
+	void run();
+
+	void onEvent(Event& event);
 
 private:
-	bool m_running = true;
+	std::unique_ptr<Window>	m_window;
+	bool					m_running = true;
 };
 
 //-- Will be defined in client

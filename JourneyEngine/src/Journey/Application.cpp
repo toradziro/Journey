@@ -3,15 +3,18 @@
 #include "Application.h"
 #include "Core.h"
 #include "Log.h"
-#include "Journey/Events/ApplicationEvent.h"
-#include "Journey/Window.h"
 
 namespace jny
 {
 
 Application::Application()
 {
+	m_window = std::unique_ptr<Window>(Window::create(WindowData("Journey", 1200, 800)));
 
+	m_window->setEventCallback([this](Event& event)
+		{
+			onEvent(event);
+		});
 }
 
 Application::~Application()
@@ -23,15 +26,18 @@ void Application::run()
 {
 	Log::log(Log::LogLevel::trace, "Application::run {}", "start");
 
-	Window* win = Window::create();
-
 	while (m_running)
 	{
 		glClearColor(0.2f, 0.5f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		win->update();
+		m_window->update();
 	}
+}
+
+void Application::onEvent(Event& event)
+{
+	Log::log(Log::LogLevel::info, event.toString());
 }
 
 } //-- jny

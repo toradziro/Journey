@@ -2,6 +2,10 @@
 #include "WinWindow.h"
 #include "Journey/Log.h"
 
+#include "Journey/Events/ApplicationEvent.h"
+#include "Journey/Events/KeyEvent.h"
+#include "Journey/Events/MouseEvent.h"
+
 namespace jny
 {
 
@@ -67,6 +71,27 @@ void WinWindow::init()
 	glfwMakeContextCurrent(m_window);
 	glfwSetWindowUserPointer(m_window, &m_data);
 	setVSync(true);
+
+	//-- Set callbacks
+	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
+		{
+			WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
+			WindowResizeEvent event(width, height);
+			data->m_eventCallback(event);
+		});
+	//glfwSetFramebufferSizeCallback
+	//glfwSetWindowCloseCallback
+	//glfwSetWindowFocusCallback
+	//glfwSetWindowIconifyCallback
+	//glfwSetWindowMaximizeCallback
+	//glfwSetWindowPosCallback
+	//glfwSetKeyCallback
+	//glfwSetCharCallback
+	//glfwSetCharModsCallback
+	//glfwSetCursorPosCallback
+	//glfwSetMouseButtonCallback
+	//glfwSetScrollCallback
+	//glfwSetJoystickCallback
 }
 
 void WinWindow::shutdown()
