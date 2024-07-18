@@ -8,6 +8,7 @@ namespace jny
 class JNY_API MouseButtonPressedEvent : public Event
 {
 public:
+	MouseButtonPressedEvent(int button) : m_buttonCode(button) { }
 	~MouseButtonPressedEvent() {}
 
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::MouseButton | Event::EventCategory::Input)
@@ -23,6 +24,7 @@ private:
 class JNY_API MouseButtonReleasedEvent : public Event
 {
 public:
+	MouseButtonReleasedEvent(int button) : m_buttonCode(button) { }
 	~MouseButtonReleasedEvent() {}
 
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::MouseButton | Event::EventCategory::Input)

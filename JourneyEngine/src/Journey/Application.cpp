@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Core.h"
 #include "Log.h"
+#include "Events/ApplicationEvent.h"
 
 namespace jny
 {
@@ -38,6 +39,17 @@ void Application::run()
 void Application::onEvent(Event& event)
 {
 	Log::log(Log::LogLevel::info, event.toString());
+	EventDispatcher dispatcher(event);
+	dispatcher.dispatch<WindowCloseEvent>([this](WindowCloseEvent& event)
+		{
+			return windowCloseEvent();
+		});
+}
+
+bool Application::windowCloseEvent()
+{
+	m_running = false;
+	return true;
 }
 
 } //-- jny

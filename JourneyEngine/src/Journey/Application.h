@@ -15,6 +15,7 @@ public:
 	void run();
 
 	void onEvent(Event& event);
+	bool windowCloseEvent();
 
 private:
 	std::unique_ptr<Window>	m_window;
