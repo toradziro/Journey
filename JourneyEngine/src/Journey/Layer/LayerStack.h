@@ -7,6 +7,9 @@
 namespace jny
 {
 
+#pragma warning(push)
+#pragma warning(disable: 4251)
+
 class JNY_API LayerStack
 {
 public:
@@ -28,5 +31,7 @@ private:
 	eastl::vector<Layer*>	m_layers;
 	LayerStackPos			m_position;
 };
+
+#pragma warning(pop)
 
 } //-- jny

@@ -7,6 +7,9 @@
 namespace jny
 {
 
+#pragma warning(push)
+#pragma warning(disable: 4251)
+
 class JNY_API Application
 {
 public:
@@ -32,5 +35,7 @@ private:
 
 //-- Will be defined in client
 Application* createApplication();
+
+#pragma warning(pop)
 
 } //-- jny

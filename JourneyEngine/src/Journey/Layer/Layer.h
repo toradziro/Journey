@@ -7,6 +7,9 @@
 namespace jny
 {
 
+#pragma warning(push)
+#pragma warning(disable: 4251)
+
 class JNY_API Layer
 {
 public:
@@ -22,5 +25,7 @@ public:
 private:
 	std::string m_layerName;
 };
+
+#pragma warning(pop)
 
 } //-- jny

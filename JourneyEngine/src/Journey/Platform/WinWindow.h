@@ -5,6 +5,9 @@
 namespace jny
 {
 
+#pragma warning(push)
+#pragma warning(disable: 4251)
+
 class JNY_API WinWindow : public Window
 {
 public:
@@ -28,5 +31,8 @@ private:
 	WindowData		m_data;
 	GLFWwindow*		m_window;
 };
+
+#pragma warning(pop)
+#pragma warning(disable: 4251)
 
 }
