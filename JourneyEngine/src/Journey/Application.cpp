@@ -1,9 +1,9 @@
 #include "jnypch.h"
 
-#include "Application.h"
-#include "Core.h"
-#include "Log.h"
-#include "Events/ApplicationEvent.h"
+#include "Journey/Application.h"
+#include "Journey/Core.h"
+#include "Journey/Log/Log.h"
+#include "Journey/Events/ApplicationEvent.h"
 
 namespace jny
 {
@@ -12,9 +12,9 @@ Application::Application()
 {
 	m_window = std::unique_ptr<Window>(Window::create(WindowData("Journey", 1200, 800)));
 
-	m_window->setEventCallback([this](Event& event)
+	m_window->setEventCallback([this](Event& _event)
 		{
-			onEvent(event);
+			onEvent(_event);
 		});
 }
 
@@ -25,8 +25,6 @@ Application::~Application()
 
 void Application::run()
 {
-	Log::log(Log::LogLevel::trace, "Application::run {}", "start");
-
 	while (m_running)
 	{
 		glClearColor(0.2f, 0.5f, 0.0f, 1.0f);
@@ -38,18 +36,46 @@ void Application::run()
 
 void Application::onEvent(Event& event)
 {
-	Log::log(Log::LogLevel::info, event.toString());
 	EventDispatcher dispatcher(event);
 	dispatcher.dispatch<WindowCloseEvent>([this](WindowCloseEvent& event)
 		{
 			return windowCloseEvent();
 		});
+
+	for (auto& layer : m_layers)
+	{
+		layer->onEvent(event);
+		if (event.handeled())
+		{
+			break;
+		}
+	}
 }
 
 bool Application::windowCloseEvent()
 {
 	m_running = false;
 	return true;
+}
+
+void Application::pushLayer(Layer* layer)
+{
+	m_layers.push(layer);
+}
+
+void Application::popLayer(Layer* layer)
+{
+	m_layers.pop(layer);
+}
+
+void Application::pushOverlay(Layer* layer)
+{
+	m_layers.pushOverlay(layer);
+}
+
+void Application::popOverlay(Layer* layer)
+{
+	m_layers.popOverlay(layer);
 }
 
 } //-- jny

@@ -57,7 +57,7 @@ project "JourneyEngine"
         staticruntime "On"
         systemversion "latest"
 
-        buildoptions { "/utf-8", "/MT" }
+        buildoptions { "/utf-8" }
 
         defines
         {
@@ -74,16 +74,19 @@ project "JourneyEngine"
     filter "configurations:Debug"
         defines "JNY_DEBUG"
         symbols "On"
+		buildoptions { "/MDd" }
 
     filter "configurations:Release"
         defines "JNY_RELEASE"
         symbols "On"
         optimize "On"
+		buildoptions { "/MD" }
 
     filter "configurations:Distribution"
         defines "JNY_DISTR"
         symbols "Off"
         optimize "On"
+		buildoptions { "/MD" }
 
 project "Sandbox"
     location "Sandbox"
@@ -118,7 +121,7 @@ project "Sandbox"
         staticruntime "On"
         systemversion "latest"
 
-        buildoptions { "/utf-8", "/MT" }
+        buildoptions { "/utf-8" }
 
         defines
         {
@@ -128,13 +131,16 @@ project "Sandbox"
     filter "configurations:Debug"
         defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
         symbols "On"
+		buildoptions { "/MDd" }
 
     filter "configurations:Release"
         defines "JNY_RELEASE"
         symbols "On"
         optimize "On"
+		buildoptions { "/MD" }
 
     filter "configurations:Distribution"
         defines "JNY_DISTR"
         symbols "Off"
         optimize "On"
+		buildoptions { "/MD" }

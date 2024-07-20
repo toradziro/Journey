@@ -61,6 +61,8 @@ public:
 
 	inline bool isInCategory(EventCategory category) const { return static_cast<int>(category) & categoryFlags(); }
 
+	inline bool handeled() const { return m_handeled; }
+
 	virtual ~Event() {}
 
 protected:

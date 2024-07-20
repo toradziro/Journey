@@ -1,6 +1,6 @@
 #include "jnypch.h"
 #include "WinWindow.h"
-#include "Journey/Log.h"
+#include "Journey/Log/Log.h"
 
 #include "Journey/Events/ApplicationEvent.h"
 #include "Journey/Events/KeyEvent.h"
@@ -64,7 +64,7 @@ void WinWindow::setVSync(bool enabled)
 
 void WinWindow::init()
 {
-	Log::log(Log::LogLevel::info, "Creating window: width '{}' height '{}' title '{}'",
+	Log::info("Creating window: width '{}' height '{}' title '{}'",
 		m_data.m_width, m_data.m_height, m_data.m_title);
 
 	if (!s_glfwInited)
@@ -76,7 +76,7 @@ void WinWindow::init()
 		s_glfwInited = true;
 		glfwSetErrorCallback([](int error, const char* description)
 			{
-				Log::log(Log::LogLevel::error, "GLFW error '{}' '{}'", error, description);
+				Log::error("GLFW error '{}' '{}'", error, description);
 			});
 	}
 
