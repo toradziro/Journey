@@ -15,7 +15,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "JourneyEngine/vendor/GLFW/include"
 IncludeDir["EASTL"] = "JourneyEngine/vendor/eastl/include"
-IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastlBase/include/Common"
+IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastl/test/packages/EABase/include/Common"
 
 include "JourneyEngine/vendor/GLFW"
 

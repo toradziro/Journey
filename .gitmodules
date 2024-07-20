@@ -4,9 +4,6 @@
 [submodule "JourneyEngine/vendor/eastl"]
 	path = JourneyEngine/vendor/eastl
 	url = https://github.com/electronicarts/EASTL.git
-[submodule "JourneyEngine/vendor/eastlBase"]
-	path = JourneyEngine/vendor/eastlBase
-	url = https://github.com/electronicarts/EABase.git
 [submodule "JourneyEngine/vendor/GLFW"]
 	path = JourneyEngine/vendor/GLFW
 	url = https://github.com/toradziro/glfw.git
