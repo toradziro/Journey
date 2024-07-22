@@ -200,13 +200,50 @@ void ImGuiLayer::onEvent(Event& event)
 	dispatcher.dispatch<KeyPressedEvent>([](KeyPressedEvent& event)
 		{
 			ImGuiIO& io = ImGui::GetIO();
+
+			if (event.keyCode() == GLFW_KEY_LEFT_CONTROL || event.keyCode() == GLFW_KEY_RIGHT_CONTROL)
+			{
+				io.AddKeyEvent(ImGuiMod_Ctrl, true);
+			}
+			if (event.keyCode() == GLFW_KEY_LEFT_SHIFT || event.keyCode() == GLFW_KEY_RIGHT_SHIFT)
+			{
+				io.AddKeyEvent(ImGuiMod_Shift, true);
+			}
+			if (event.keyCode() == GLFW_KEY_LEFT_ALT || event.keyCode() == GLFW_KEY_RIGHT_ALT)
+			{
+				io.AddKeyEvent(ImGuiMod_Alt, true);
+			}
+			if (event.keyCode() == GLFW_KEY_LEFT_SUPER || event.keyCode() == GLFW_KEY_RIGHT_SUPER)
+			{
+				io.AddKeyEvent(ImGuiMod_Super, true);
+			}
+
 			io.AddKeyEvent(ImGui_ImplGlfw_KeyToImGuiKey(event.keyCode()), true);
+
 			return false;
 		});
 
 	dispatcher.dispatch<KeyReleasedEvent>([](KeyReleasedEvent& event)
 		{
 			ImGuiIO& io = ImGui::GetIO();
+
+			if (event.keyCode() == GLFW_KEY_LEFT_CONTROL || event.keyCode() == GLFW_KEY_RIGHT_CONTROL)
+			{
+				io.AddKeyEvent(ImGuiMod_Ctrl, false);
+			}
+			if (event.keyCode() == GLFW_KEY_LEFT_SHIFT || event.keyCode() == GLFW_KEY_RIGHT_SHIFT)
+			{
+				io.AddKeyEvent(ImGuiMod_Shift, false);
+			}
+			if (event.keyCode() == GLFW_KEY_LEFT_ALT || event.keyCode() == GLFW_KEY_RIGHT_ALT)
+			{
+				io.AddKeyEvent(ImGuiMod_Alt, false);
+			}
+			if (event.keyCode() == GLFW_KEY_LEFT_SUPER || event.keyCode() == GLFW_KEY_RIGHT_SUPER)
+			{
+				io.AddKeyEvent(ImGuiMod_Super, false);
+			}
+
 			io.AddKeyEvent(ImGui_ImplGlfw_KeyToImGuiKey(event.keyCode()), false);
 			return false;
 		});
