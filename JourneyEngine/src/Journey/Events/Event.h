@@ -35,6 +35,7 @@ public:
 		//-- Keyboard events
 		KeyPressed,
 		KeyReleased,
+		KeyTyped,
 
 		//-- Mouse events
 		MouseButtonPressed,

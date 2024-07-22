@@ -139,6 +139,13 @@ void WinWindow::init()
 					break;
 			}
 		});
+
+	glfwSetCharCallback(m_window, [](GLFWwindow* window, uint32_t charcode)
+		{
+			WindowData* data = getDataPtrFromWindow(window);
+			KeyTypedEvent event(charcode);
+			data->m_eventCallback(event);
+		});
 	
 	glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
 		{

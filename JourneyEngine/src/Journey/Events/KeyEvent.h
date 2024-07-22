@@ -52,4 +52,18 @@ public:
 	EVENT_CLASS_TYPE(KeyReleased)
 };
 
+class JNY_API KeyTypedEvent : public KeyEvent
+{
+public:
+	KeyTypedEvent(int keyCode) : KeyEvent(keyCode) {}
+	~KeyTypedEvent() {}
+
+	std::string toString() const override
+	{
+		return fmt::format("KeyTypedEvent: {}", m_keyCode);
+	}
+
+	EVENT_CLASS_TYPE(KeyTyped)
+};
+
 } //-- jny

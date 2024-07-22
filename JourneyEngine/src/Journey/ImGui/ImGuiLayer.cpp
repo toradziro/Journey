@@ -8,8 +8,10 @@
 #include "Journey/Events/Event.h"
 #include "Journey/Events/MouseEvent.h"
 #include "Journey/Events/KeyEvent.h"
+#include "Journey/Events/ApplicationEvent.h"
 
 #include <GLFW/glfw3.h>
+#include <GLAD/glad.h>
 
 namespace jny
 {
@@ -165,7 +167,7 @@ void ImGuiLayer::onEvent(Event& event)
 		{
 			ImGuiIO& io = ImGui::GetIO();
 			io.AddMousePosEvent((float)event.getX(), (float)event.getY());
-			return true;
+			return false;
 		});
 
 	dispatcher.dispatch<MouseButtonPressedEvent>([](MouseButtonPressedEvent& event)
@@ -175,7 +177,7 @@ void ImGuiLayer::onEvent(Event& event)
 			{
 				io.AddMouseButtonEvent(event.buttonCode(), true);
 			}
-			return true;
+			return false;
 		});
 
 	dispatcher.dispatch<MouseButtonReleasedEvent>([](MouseButtonReleasedEvent& event)
@@ -185,28 +187,44 @@ void ImGuiLayer::onEvent(Event& event)
 			{
 				io.AddMouseButtonEvent(event.buttonCode(), false);
 			}
-			return true;
+			return false;
 		});
 
 	dispatcher.dispatch<MouseScrolledEvent>([](MouseScrolledEvent& event)
 		{
 			ImGuiIO& io = ImGui::GetIO();
 			io.AddMouseWheelEvent((float)event.offsetX(), (float)event.offsetY());
-			return true;
+			return false;
 		});
 
 	dispatcher.dispatch<KeyPressedEvent>([](KeyPressedEvent& event)
 		{
 			ImGuiIO& io = ImGui::GetIO();
 			io.AddKeyEvent(ImGui_ImplGlfw_KeyToImGuiKey(event.keyCode()), true);
-			return true;
+			return false;
 		});
 
 	dispatcher.dispatch<KeyReleasedEvent>([](KeyReleasedEvent& event)
 		{
 			ImGuiIO& io = ImGui::GetIO();
 			io.AddKeyEvent(ImGui_ImplGlfw_KeyToImGuiKey(event.keyCode()), false);
-			return true;
+			return false;
+		});
+
+	dispatcher.dispatch<KeyTypedEvent>([](KeyTypedEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			io.AddInputCharacter(event.keyCode());
+			return false;
+		});
+
+	dispatcher.dispatch<WindowResizeEvent>([](WindowResizeEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			io.DisplaySize = ImVec2(event.width(), event.height());
+			io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+			glViewport(0, 0, event.width(), event.height());
+			return false;
 		});
 }
 
