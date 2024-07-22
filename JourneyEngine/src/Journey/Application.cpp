@@ -38,7 +38,7 @@ void Application::run()
 		glClearColor(0.2f, 0.5f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		for (auto* layer : m_layers)
+		for (auto& layer : m_layers)
 		{
 			layer->update();
 		}

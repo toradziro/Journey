@@ -5,130 +5,147 @@
 #include "Journey/Platform/OpenGL/ImGuiOpenGLRenderer.h"
 #include "Journey/Application.h"
 
+#include "Journey/Events/Event.h"
+#include "Journey/Events/MouseEvent.h"
+#include "Journey/Events/KeyEvent.h"
+
 #include <GLFW/glfw3.h>
 
 namespace jny
 {
 
-static void ImGui_SetKeymap(ImGuiIO& io)
+static ImGuiKey ImGui_ImplGlfw_KeyToImGuiKey(int key)
 {
-	io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
-	io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
-	io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
-	io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
-	io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
-	io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-	io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-	io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-	io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-	io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-	io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
-	io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
-	io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
-	io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
-	io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
-	io.KeyMap[ImGuiKey_Apostrophe] = GLFW_KEY_APOSTROPHE;
-	io.KeyMap[ImGuiKey_Comma] = GLFW_KEY_COMMA;
-	io.KeyMap[ImGuiKey_Minus] = GLFW_KEY_MINUS;
-	io.KeyMap[ImGuiKey_Period] = GLFW_KEY_PERIOD;
-	io.KeyMap[ImGuiKey_Slash] = GLFW_KEY_SLASH;
-	io.KeyMap[ImGuiKey_Semicolon] = GLFW_KEY_SEMICOLON;
-	io.KeyMap[ImGuiKey_Equal] = GLFW_KEY_EQUAL;
-	io.KeyMap[ImGuiKey_LeftBracket] = GLFW_KEY_LEFT_BRACKET;
-	io.KeyMap[ImGuiKey_Backslash] = GLFW_KEY_BACKSLASH;
-	io.KeyMap[ImGuiKey_RightBracket] = GLFW_KEY_RIGHT_BRACKET;
-	io.KeyMap[ImGuiKey_GraveAccent] = GLFW_KEY_GRAVE_ACCENT;
-	io.KeyMap[ImGuiKey_CapsLock] = GLFW_KEY_CAPS_LOCK;
-	io.KeyMap[ImGuiKey_ScrollLock] = GLFW_KEY_SCROLL_LOCK;
-	io.KeyMap[ImGuiKey_NumLock] = GLFW_KEY_NUM_LOCK;
-	io.KeyMap[ImGuiKey_PrintScreen] = GLFW_KEY_PRINT_SCREEN;
-	io.KeyMap[ImGuiKey_Pause] = GLFW_KEY_PAUSE;
-	io.KeyMap[ImGuiKey_Keypad0] = GLFW_KEY_KP_0;
-	io.KeyMap[ImGuiKey_Keypad1] = GLFW_KEY_KP_1;
-	io.KeyMap[ImGuiKey_Keypad2] = GLFW_KEY_KP_2;
-	io.KeyMap[ImGuiKey_Keypad3] = GLFW_KEY_KP_3;
-	io.KeyMap[ImGuiKey_Keypad4] = GLFW_KEY_KP_4;
-	io.KeyMap[ImGuiKey_Keypad5] = GLFW_KEY_KP_5;
-	io.KeyMap[ImGuiKey_Keypad6] = GLFW_KEY_KP_6;
-	io.KeyMap[ImGuiKey_Keypad7] = GLFW_KEY_KP_7;
-	io.KeyMap[ImGuiKey_Keypad8] = GLFW_KEY_KP_8;
-	io.KeyMap[ImGuiKey_Keypad9] = GLFW_KEY_KP_9;
-	io.KeyMap[ImGuiKey_KeypadDecimal] = GLFW_KEY_KP_DECIMAL;
-	io.KeyMap[ImGuiKey_KeypadDivide] = GLFW_KEY_KP_DIVIDE;
-	io.KeyMap[ImGuiKey_KeypadMultiply] = GLFW_KEY_KP_MULTIPLY;
-	io.KeyMap[ImGuiKey_KeypadSubtract] = GLFW_KEY_KP_SUBTRACT;
-	io.KeyMap[ImGuiKey_KeypadAdd] = GLFW_KEY_KP_ADD;
-	io.KeyMap[ImGuiKey_KeypadEnter] = GLFW_KEY_KP_ENTER;
-	io.KeyMap[ImGuiKey_KeypadEqual] = GLFW_KEY_KP_EQUAL;
-	io.KeyMap[ImGuiKey_LeftShift] = GLFW_KEY_LEFT_SHIFT;
-	io.KeyMap[ImGuiKey_LeftCtrl] = GLFW_KEY_LEFT_CONTROL;
-	io.KeyMap[ImGuiKey_LeftAlt] = GLFW_KEY_LEFT_ALT;
-	io.KeyMap[ImGuiKey_LeftSuper] = GLFW_KEY_LEFT_SUPER;
-	io.KeyMap[ImGuiKey_RightShift] = GLFW_KEY_RIGHT_SHIFT;
-	io.KeyMap[ImGuiKey_RightCtrl] = GLFW_KEY_RIGHT_CONTROL;
-	io.KeyMap[ImGuiKey_RightAlt] = GLFW_KEY_RIGHT_ALT;
-	io.KeyMap[ImGuiKey_RightSuper] = GLFW_KEY_RIGHT_SUPER;
-	io.KeyMap[ImGuiKey_Menu] = GLFW_KEY_MENU;
-	io.KeyMap[ImGuiKey_0] = GLFW_KEY_0;
-	io.KeyMap[ImGuiKey_1] = GLFW_KEY_1;
-	io.KeyMap[ImGuiKey_2] = GLFW_KEY_2;
-	io.KeyMap[ImGuiKey_3] = GLFW_KEY_3;
-	io.KeyMap[ImGuiKey_4] = GLFW_KEY_4;
-	io.KeyMap[ImGuiKey_5] = GLFW_KEY_5;
-	io.KeyMap[ImGuiKey_6] = GLFW_KEY_6;
-	io.KeyMap[ImGuiKey_7] = GLFW_KEY_7;
-	io.KeyMap[ImGuiKey_8] = GLFW_KEY_8;
-	io.KeyMap[ImGuiKey_9] = GLFW_KEY_9;
-	io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
-	io.KeyMap[ImGuiKey_B] = GLFW_KEY_B;
-	io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
-	io.KeyMap[ImGuiKey_D] = GLFW_KEY_D;
-	io.KeyMap[ImGuiKey_E] = GLFW_KEY_E;
-	io.KeyMap[ImGuiKey_F] = GLFW_KEY_F;
-	io.KeyMap[ImGuiKey_G] = GLFW_KEY_G;
-	io.KeyMap[ImGuiKey_H] = GLFW_KEY_H;
-	io.KeyMap[ImGuiKey_I] = GLFW_KEY_I;
-	io.KeyMap[ImGuiKey_J] = GLFW_KEY_J;
-	io.KeyMap[ImGuiKey_K] = GLFW_KEY_K;
-	io.KeyMap[ImGuiKey_L] = GLFW_KEY_L;
-	io.KeyMap[ImGuiKey_M] = GLFW_KEY_M;
-	io.KeyMap[ImGuiKey_N] = GLFW_KEY_N;
-	io.KeyMap[ImGuiKey_O] = GLFW_KEY_O;
-	io.KeyMap[ImGuiKey_P] = GLFW_KEY_P;
-	io.KeyMap[ImGuiKey_Q] = GLFW_KEY_Q;
-	io.KeyMap[ImGuiKey_R] = GLFW_KEY_R;
-	io.KeyMap[ImGuiKey_S] = GLFW_KEY_S;
-	io.KeyMap[ImGuiKey_T] = GLFW_KEY_T;
-	io.KeyMap[ImGuiKey_U] = GLFW_KEY_U;
-	io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
-	io.KeyMap[ImGuiKey_W] = GLFW_KEY_W;
-	io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
-	io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
-	io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
-	io.KeyMap[ImGuiKey_F1] = GLFW_KEY_F1;
-	io.KeyMap[ImGuiKey_F2] = GLFW_KEY_F2;
-	io.KeyMap[ImGuiKey_F3] = GLFW_KEY_F3;
-	io.KeyMap[ImGuiKey_F4] = GLFW_KEY_F4;
-	io.KeyMap[ImGuiKey_F5] = GLFW_KEY_F5;
-	io.KeyMap[ImGuiKey_F6] = GLFW_KEY_F6;
-	io.KeyMap[ImGuiKey_F7] = GLFW_KEY_F7;
-	io.KeyMap[ImGuiKey_F8] = GLFW_KEY_F8;
-	io.KeyMap[ImGuiKey_F9] = GLFW_KEY_F9;
-	io.KeyMap[ImGuiKey_F10] = GLFW_KEY_F10;
-	io.KeyMap[ImGuiKey_F11] = GLFW_KEY_F11;
-	io.KeyMap[ImGuiKey_F12] = GLFW_KEY_F12;
-	io.KeyMap[ImGuiKey_F13] = GLFW_KEY_F13;
-	io.KeyMap[ImGuiKey_F14] = GLFW_KEY_F14;
-	io.KeyMap[ImGuiKey_F15] = GLFW_KEY_F15;
-	io.KeyMap[ImGuiKey_F16] = GLFW_KEY_F16;
-	io.KeyMap[ImGuiKey_F17] = GLFW_KEY_F17;
-	io.KeyMap[ImGuiKey_F18] = GLFW_KEY_F18;
-	io.KeyMap[ImGuiKey_F19] = GLFW_KEY_F19;
-	io.KeyMap[ImGuiKey_F20] = GLFW_KEY_F20;
-	io.KeyMap[ImGuiKey_F21] = GLFW_KEY_F21;
-	io.KeyMap[ImGuiKey_F22] = GLFW_KEY_F22;
-	io.KeyMap[ImGuiKey_F23] = GLFW_KEY_F23;
-	io.KeyMap[ImGuiKey_F24] = GLFW_KEY_F24;
+	switch (key)
+	{
+		case GLFW_KEY_TAB: return ImGuiKey_Tab;
+		case GLFW_KEY_LEFT: return ImGuiKey_LeftArrow;
+		case GLFW_KEY_RIGHT: return ImGuiKey_RightArrow;
+		case GLFW_KEY_UP: return ImGuiKey_UpArrow;
+		case GLFW_KEY_DOWN: return ImGuiKey_DownArrow;
+		case GLFW_KEY_PAGE_UP: return ImGuiKey_PageUp;
+		case GLFW_KEY_PAGE_DOWN: return ImGuiKey_PageDown;
+		case GLFW_KEY_HOME: return ImGuiKey_Home;
+		case GLFW_KEY_END: return ImGuiKey_End;
+		case GLFW_KEY_INSERT: return ImGuiKey_Insert;
+		case GLFW_KEY_DELETE: return ImGuiKey_Delete;
+		case GLFW_KEY_BACKSPACE: return ImGuiKey_Backspace;
+		case GLFW_KEY_SPACE: return ImGuiKey_Space;
+		case GLFW_KEY_ENTER: return ImGuiKey_Enter;
+		case GLFW_KEY_ESCAPE: return ImGuiKey_Escape;
+		case GLFW_KEY_APOSTROPHE: return ImGuiKey_Apostrophe;
+		case GLFW_KEY_COMMA: return ImGuiKey_Comma;
+		case GLFW_KEY_MINUS: return ImGuiKey_Minus;
+		case GLFW_KEY_PERIOD: return ImGuiKey_Period;
+		case GLFW_KEY_SLASH: return ImGuiKey_Slash;
+		case GLFW_KEY_SEMICOLON: return ImGuiKey_Semicolon;
+		case GLFW_KEY_EQUAL: return ImGuiKey_Equal;
+		case GLFW_KEY_LEFT_BRACKET: return ImGuiKey_LeftBracket;
+		case GLFW_KEY_BACKSLASH: return ImGuiKey_Backslash;
+		case GLFW_KEY_RIGHT_BRACKET: return ImGuiKey_RightBracket;
+		case GLFW_KEY_GRAVE_ACCENT: return ImGuiKey_GraveAccent;
+		case GLFW_KEY_CAPS_LOCK: return ImGuiKey_CapsLock;
+		case GLFW_KEY_SCROLL_LOCK: return ImGuiKey_ScrollLock;
+		case GLFW_KEY_NUM_LOCK: return ImGuiKey_NumLock;
+		case GLFW_KEY_PRINT_SCREEN: return ImGuiKey_PrintScreen;
+		case GLFW_KEY_PAUSE: return ImGuiKey_Pause;
+		case GLFW_KEY_KP_0: return ImGuiKey_Keypad0;
+		case GLFW_KEY_KP_1: return ImGuiKey_Keypad1;
+		case GLFW_KEY_KP_2: return ImGuiKey_Keypad2;
+		case GLFW_KEY_KP_3: return ImGuiKey_Keypad3;
+		case GLFW_KEY_KP_4: return ImGuiKey_Keypad4;
+		case GLFW_KEY_KP_5: return ImGuiKey_Keypad5;
+		case GLFW_KEY_KP_6: return ImGuiKey_Keypad6;
+		case GLFW_KEY_KP_7: return ImGuiKey_Keypad7;
+		case GLFW_KEY_KP_8: return ImGuiKey_Keypad8;
+		case GLFW_KEY_KP_9: return ImGuiKey_Keypad9;
+		case GLFW_KEY_KP_DECIMAL: return ImGuiKey_KeypadDecimal;
+		case GLFW_KEY_KP_DIVIDE: return ImGuiKey_KeypadDivide;
+		case GLFW_KEY_KP_MULTIPLY: return ImGuiKey_KeypadMultiply;
+		case GLFW_KEY_KP_SUBTRACT: return ImGuiKey_KeypadSubtract;
+		case GLFW_KEY_KP_ADD: return ImGuiKey_KeypadAdd;
+		case GLFW_KEY_KP_ENTER: return ImGuiKey_KeypadEnter;
+		case GLFW_KEY_KP_EQUAL: return ImGuiKey_KeypadEqual;
+		case GLFW_KEY_LEFT_SHIFT: return ImGuiKey_LeftShift;
+		case GLFW_KEY_LEFT_CONTROL: return ImGuiKey_LeftCtrl;
+		case GLFW_KEY_LEFT_ALT: return ImGuiKey_LeftAlt;
+		case GLFW_KEY_LEFT_SUPER: return ImGuiKey_LeftSuper;
+		case GLFW_KEY_RIGHT_SHIFT: return ImGuiKey_RightShift;
+		case GLFW_KEY_RIGHT_CONTROL: return ImGuiKey_RightCtrl;
+		case GLFW_KEY_RIGHT_ALT: return ImGuiKey_RightAlt;
+		case GLFW_KEY_RIGHT_SUPER: return ImGuiKey_RightSuper;
+		case GLFW_KEY_MENU: return ImGuiKey_Menu;
+		case GLFW_KEY_0: return ImGuiKey_0;
+		case GLFW_KEY_1: return ImGuiKey_1;
+		case GLFW_KEY_2: return ImGuiKey_2;
+		case GLFW_KEY_3: return ImGuiKey_3;
+		case GLFW_KEY_4: return ImGuiKey_4;
+		case GLFW_KEY_5: return ImGuiKey_5;
+		case GLFW_KEY_6: return ImGuiKey_6;
+		case GLFW_KEY_7: return ImGuiKey_7;
+		case GLFW_KEY_8: return ImGuiKey_8;
+		case GLFW_KEY_9: return ImGuiKey_9;
+		case GLFW_KEY_A: return ImGuiKey_A;
+		case GLFW_KEY_B: return ImGuiKey_B;
+		case GLFW_KEY_C: return ImGuiKey_C;
+		case GLFW_KEY_D: return ImGuiKey_D;
+		case GLFW_KEY_E: return ImGuiKey_E;
+		case GLFW_KEY_F: return ImGuiKey_F;
+		case GLFW_KEY_G: return ImGuiKey_G;
+		case GLFW_KEY_H: return ImGuiKey_H;
+		case GLFW_KEY_I: return ImGuiKey_I;
+		case GLFW_KEY_J: return ImGuiKey_J;
+		case GLFW_KEY_K: return ImGuiKey_K;
+		case GLFW_KEY_L: return ImGuiKey_L;
+		case GLFW_KEY_M: return ImGuiKey_M;
+		case GLFW_KEY_N: return ImGuiKey_N;
+		case GLFW_KEY_O: return ImGuiKey_O;
+		case GLFW_KEY_P: return ImGuiKey_P;
+		case GLFW_KEY_Q: return ImGuiKey_Q;
+		case GLFW_KEY_R: return ImGuiKey_R;
+		case GLFW_KEY_S: return ImGuiKey_S;
+		case GLFW_KEY_T: return ImGuiKey_T;
+		case GLFW_KEY_U: return ImGuiKey_U;
+		case GLFW_KEY_V: return ImGuiKey_V;
+		case GLFW_KEY_W: return ImGuiKey_W;
+		case GLFW_KEY_X: return ImGuiKey_X;
+		case GLFW_KEY_Y: return ImGuiKey_Y;
+		case GLFW_KEY_Z: return ImGuiKey_Z;
+		case GLFW_KEY_F1: return ImGuiKey_F1;
+		case GLFW_KEY_F2: return ImGuiKey_F2;
+		case GLFW_KEY_F3: return ImGuiKey_F3;
+		case GLFW_KEY_F4: return ImGuiKey_F4;
+		case GLFW_KEY_F5: return ImGuiKey_F5;
+		case GLFW_KEY_F6: return ImGuiKey_F6;
+		case GLFW_KEY_F7: return ImGuiKey_F7;
+		case GLFW_KEY_F8: return ImGuiKey_F8;
+		case GLFW_KEY_F9: return ImGuiKey_F9;
+		case GLFW_KEY_F10: return ImGuiKey_F10;
+		case GLFW_KEY_F11: return ImGuiKey_F11;
+		case GLFW_KEY_F12: return ImGuiKey_F12;
+		case GLFW_KEY_F13: return ImGuiKey_F13;
+		case GLFW_KEY_F14: return ImGuiKey_F14;
+		case GLFW_KEY_F15: return ImGuiKey_F15;
+		case GLFW_KEY_F16: return ImGuiKey_F16;
+		case GLFW_KEY_F17: return ImGuiKey_F17;
+		case GLFW_KEY_F18: return ImGuiKey_F18;
+		case GLFW_KEY_F19: return ImGuiKey_F19;
+		case GLFW_KEY_F20: return ImGuiKey_F20;
+		case GLFW_KEY_F21: return ImGuiKey_F21;
+		case GLFW_KEY_F22: return ImGuiKey_F22;
+		case GLFW_KEY_F23: return ImGuiKey_F23;
+		case GLFW_KEY_F24: return ImGuiKey_F24;
+		default: return ImGuiKey_None;
+	}
+}
+
+static void ImGui_ImplGlfw_UpdateKeyModifiers(GLFWwindow* window)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.AddKeyEvent(ImGuiMod_Ctrl, (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
+	io.AddKeyEvent(ImGuiMod_Shift, (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS));
+	io.AddKeyEvent(ImGuiMod_Alt, (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS));
+	io.AddKeyEvent(ImGuiMod_Super, (glfwGetKey(window, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SUPER) == GLFW_PRESS));
 }
 
 ImGuiLayer::ImGuiLayer()
@@ -142,6 +159,55 @@ ImGuiLayer::~ImGuiLayer()
 
 void ImGuiLayer::onEvent(Event& event)
 {
+	EventDispatcher dispatcher(event);
+
+	dispatcher.dispatch<MouseMovedEvent>([](MouseMovedEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			io.AddMousePosEvent((float)event.getX(), (float)event.getY());
+			return true;
+		});
+
+	dispatcher.dispatch<MouseButtonPressedEvent>([](MouseButtonPressedEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			if (event.buttonCode() >= 0 && event.buttonCode() < ImGuiMouseButton_COUNT)
+			{
+				io.AddMouseButtonEvent(event.buttonCode(), true);
+			}
+			return true;
+		});
+
+	dispatcher.dispatch<MouseButtonReleasedEvent>([](MouseButtonReleasedEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			if (event.buttonCode() >= 0 && event.buttonCode() < ImGuiMouseButton_COUNT)
+			{
+				io.AddMouseButtonEvent(event.buttonCode(), false);
+			}
+			return true;
+		});
+
+	dispatcher.dispatch<MouseScrolledEvent>([](MouseScrolledEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			io.AddMouseWheelEvent((float)event.offsetX(), (float)event.offsetY());
+			return true;
+		});
+
+	dispatcher.dispatch<KeyPressedEvent>([](KeyPressedEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			io.AddKeyEvent(ImGui_ImplGlfw_KeyToImGuiKey(event.keyCode()), true);
+			return true;
+		});
+
+	dispatcher.dispatch<KeyReleasedEvent>([](KeyReleasedEvent& event)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			io.AddKeyEvent(ImGui_ImplGlfw_KeyToImGuiKey(event.keyCode()), false);
+			return true;
+		});
 }
 
 void ImGuiLayer::update()
@@ -173,7 +239,6 @@ void ImGuiLayer::attach()
 	ImGuiIO& io = ImGui::GetIO();
 	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 	io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-	ImGui_SetKeymap(io);
 
 	ImGui_ImplOpenGL3_Init("#version 410");
 }
