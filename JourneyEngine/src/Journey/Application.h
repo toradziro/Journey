@@ -27,10 +27,17 @@ public:
 	void pushOverlay(Layer* layer);
 	void popOverlay(Layer* layer);
 
+	inline Window& window() { return *m_window; }
+
+	inline static Application& instance() { return *s_instance; }
+
 private:
 	LayerStack				m_layers;
 	std::unique_ptr<Window>	m_window;
 	bool					m_running = true;
+
+private:
+	static Application*		s_instance;
 };
 
 //-- Will be defined in client

@@ -21,6 +21,7 @@ public:
 Sandbox::Sandbox()
 {
 	this->pushLayer(new ExampleLayer());
+	this->pushOverlay(new jny::ImGuiLayer());
 }
 
 Sandbox::~Sandbox()

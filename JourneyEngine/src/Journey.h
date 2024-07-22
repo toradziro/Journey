@@ -14,3 +14,5 @@
 #include "Journey/Layer/Layer.h"
 
 #include "Journey/EntryPoint.h"
+
+#include "Journey/ImGui/ImGuiLayer.h"

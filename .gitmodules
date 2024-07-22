@@ -7,3 +7,6 @@
 [submodule "JourneyEngine/vendor/GLFW"]
 	path = JourneyEngine/vendor/GLFW
 	url = https://github.com/toradziro/glfw.git
+[submodule "JourneyEngine/vendor/imgui"]
+	path = JourneyEngine/vendor/imgui
+	url = https://github.com/toradziro/imgui.git

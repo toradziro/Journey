@@ -10,8 +10,14 @@
 namespace jny
 {
 
+Application* Application::s_instance = nullptr;
+
 Application::Application()
 {
+	JNY_ASSERT(s_instance == nullptr, "Can't have more than one instance of application")
+
+	s_instance = this;
+
 	m_window = std::unique_ptr<Window>(Window::create(WindowData("Journey", 1200, 800)));
 
 	m_window->setEventCallback([this](Event& _event)
@@ -31,6 +37,11 @@ void Application::run()
 	{
 		glClearColor(0.2f, 0.5f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		for (auto* layer : m_layers)
+		{
+			layer->update();
+		}
 
 		m_window->update();
 	}
@@ -62,6 +73,7 @@ bool Application::windowCloseEvent()
 
 void Application::pushLayer(Layer* layer)
 {
+	layer->attach();
 	m_layers.push(layer);
 }
 
@@ -72,6 +84,7 @@ void Application::popLayer(Layer* layer)
 
 void Application::pushOverlay(Layer* layer)
 {
+	layer->attach();
 	m_layers.pushOverlay(layer);
 }
 

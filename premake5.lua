@@ -15,6 +15,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "JourneyEngine/vendor/GLFW/include"
 IncludeDir["GLAD"] = "JourneyEngine/vendor/GLAD/include"
+IncludeDir["imgui"] = "JourneyEngine/vendor/imgui/"
 IncludeDir["EASTL"] = "JourneyEngine/vendor/eastl/include"
 IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastl/test/packages/EABase/include/Common"
 
@@ -22,6 +23,7 @@ IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastl/test/packages/EABase/inclu
 include "JourneyEngine/vendor/GLFW"
 -- For modern OpenGL
 include "JourneyEngine/vendor/GLAD"
+include "JourneyEngine/vendor/imgui/"
 
 project "JourneyEngine"
     location "JourneyEngine"
@@ -47,6 +49,7 @@ project "JourneyEngine"
         "%{IncludeDir.EASTLBase}",
         "%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.imgui}",
         "%{prj.name}/src"
     }
 
@@ -55,7 +58,8 @@ project "JourneyEngine"
         "GLFW",
 		"GLAD",
         "opengl32.lib",
-        "dwmapi.lib"
+        "dwmapi.lib",
+		"imgui"
     }
 
     filter "system:windows"
@@ -116,6 +120,7 @@ project "Sandbox"
         "%{IncludeDir.EASTLBase}",
         "%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.imgui}",
         "JourneyEngine/src"
     }
 
