@@ -14,10 +14,14 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "JourneyEngine/vendor/GLFW/include"
+IncludeDir["GLAD"] = "JourneyEngine/vendor/GLAD/include"
 IncludeDir["EASTL"] = "JourneyEngine/vendor/eastl/include"
 IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastl/test/packages/EABase/include/Common"
 
+-- For window magment
 include "JourneyEngine/vendor/GLFW"
+-- For modern OpenGL
+include "JourneyEngine/vendor/GLAD"
 
 project "JourneyEngine"
     location "JourneyEngine"
@@ -42,12 +46,14 @@ project "JourneyEngine"
         "%{IncludeDir.EASTL}",
         "%{IncludeDir.EASTLBase}",
         "%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}",
         "%{prj.name}/src"
     }
 
     links
     {
         "GLFW",
+		"GLAD",
         "opengl32.lib",
         "dwmapi.lib"
     }
@@ -62,7 +68,8 @@ project "JourneyEngine"
         defines
         {
             "JNY_PLATFORM_WINDOWS",
-            "JNY_BUILD_DLL"
+            "JNY_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands
@@ -108,6 +115,7 @@ project "Sandbox"
         "%{IncludeDir.EASTL}",
         "%{IncludeDir.EASTLBase}",
         "%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}",
         "JourneyEngine/src"
     }
 

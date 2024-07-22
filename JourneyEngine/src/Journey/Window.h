@@ -2,6 +2,7 @@
 
 #include "jnypch.h"
 #include "Events/Event.h"
+
 #include <GLFW/glfw3.h>
 
 namespace jny

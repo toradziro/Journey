@@ -6,6 +6,8 @@
 #include "Journey/Events/KeyEvent.h"
 #include "Journey/Events/MouseEvent.h"
 
+#include <GLAD/glad.h>
+
 namespace
 {
 
@@ -84,6 +86,10 @@ void WinWindow::init()
 		m_data.m_title.c_str(), nullptr, nullptr);
 
 	glfwMakeContextCurrent(m_window);
+
+	int gradInitStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	JNY_CORE_ASSERT(status, "Failed to init GLAD")
+
 	glfwSetWindowUserPointer(m_window, &m_data);
 	setVSync(true);
 

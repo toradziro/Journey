@@ -5,6 +5,8 @@
 #include "Journey/Log/Log.h"
 #include "Journey/Events/ApplicationEvent.h"
 
+#include <GLAD/glad.h>
+
 namespace jny
 {
 
