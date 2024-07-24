@@ -268,8 +268,8 @@ void ImGuiLayer::onEvent(Event& event)
 void ImGuiLayer::update()
 {
 	ImGuiIO& io = ImGui::GetIO();
-	Application& appInstance = Application::instance();
-	io.DisplaySize = ImVec2((float)appInstance.window().width(), (float)appInstance.window().height());
+	auto& win = Application::instance().st<Window>();
+	io.DisplaySize = ImVec2((float)win.width(), (float)win.height());
 
 	float time = (float)glfwGetTime();
 

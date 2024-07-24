@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Journey/Events/Event.h"
+#include "Journey/SingletonInterface.h"
 
 #include <GLFW/glfw3.h>
 
@@ -26,10 +27,12 @@ struct WindowData
 #pragma warning(push)
 #pragma warning(disable: 4251)
 
-class JNY_API Window
+class JNY_API Window : public ISingleton
 {
-public:
+	JNY_SINGLETON_TYPE(Window)
 	Window(WindowData data);
+
+public:
 	~Window();
 
 	void update();

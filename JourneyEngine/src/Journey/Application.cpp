@@ -10,17 +10,17 @@
 namespace jny
 {
 
-Application* Application::s_instance = nullptr;
+std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
 {
 	JNY_ASSERT(s_instance == nullptr, "Can't have more than one instance of application")
 
-	s_instance = this;
+	s_sHolder = std::make_unique<SingletonHolder>();
 
-	m_window = std::make_unique<Window>(WindowData("Journey", 1200, 800));
+	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
 
-	m_window->setEventCallback([this](Event& _event)
+	s_sHolder->st<Window>().setEventCallback([this](Event& _event)
 		{
 			onEvent(_event);
 		});
@@ -28,7 +28,7 @@ Application::Application()
 
 Application::~Application()
 {
-
+	s_sHolder.reset();
 }
 
 void Application::run()
@@ -43,7 +43,7 @@ void Application::run()
 			layer->update();
 		}
 
-		m_window->update();
+		s_sHolder->st<Window>().update();
 	}
 }
 
