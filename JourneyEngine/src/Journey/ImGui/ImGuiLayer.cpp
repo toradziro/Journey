@@ -258,7 +258,7 @@ void ImGuiLayer::onEvent(Event& event)
 	dispatcher.dispatch<WindowResizeEvent>([](WindowResizeEvent& event)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			io.DisplaySize = ImVec2(event.width(), event.height());
+			io.DisplaySize = ImVec2((float)event.width(), (float)event.height());
 			io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 			glViewport(0, 0, event.width(), event.height());
 			return false;
@@ -269,11 +269,11 @@ void ImGuiLayer::update()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	Application& appInstance = Application::instance();
-	io.DisplaySize = ImVec2(appInstance.window().width(), appInstance.window().height());
+	io.DisplaySize = ImVec2((float)appInstance.window().width(), (float)appInstance.window().height());
 
 	float time = (float)glfwGetTime();
 
-	io.DeltaTime = m_time > 0.0f ? (time - m_time) : (1.0 / 60.0f);
+	io.DeltaTime = m_time > 0.0f ? (time - m_time) : (1.0f / 60.0f);
 	m_time = time;
 
 	ImGui_ImplOpenGL3_NewFrame();

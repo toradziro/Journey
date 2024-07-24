@@ -18,7 +18,7 @@ Application::Application()
 
 	s_instance = this;
 
-	m_window = std::unique_ptr<Window>(Window::create(WindowData("Journey", 1200, 800)));
+	m_window = std::make_unique<Window>(WindowData("Journey", 1200, 800));
 
 	m_window->setEventCallback([this](Event& _event)
 		{

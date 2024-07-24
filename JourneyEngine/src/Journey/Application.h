@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Journey/Core.h"
-#include "Journey/Window.h"
+#include "Journey/Window/Window.h"
 #include "Journey/Layer/LayerStack.h"
 
 namespace jny
