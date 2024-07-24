@@ -19,11 +19,13 @@ IncludeDir["imgui"] = "JourneyEngine/vendor/imgui/"
 IncludeDir["EASTL"] = "JourneyEngine/vendor/eastl/include"
 IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastl/test/packages/EABase/include/Common"
 
--- For window magment
-include "JourneyEngine/vendor/GLFW"
--- For modern OpenGL
-include "JourneyEngine/vendor/GLAD"
-include "JourneyEngine/vendor/imgui/"
+group "Dependencies"
+	-- For window magment
+	include "JourneyEngine/vendor/GLFW"
+	-- For modern OpenGL
+	include "JourneyEngine/vendor/GLAD"
+	include "JourneyEngine/vendor/imgui/"
+group ""
 
 project "JourneyEngine"
 	location "JourneyEngine"
