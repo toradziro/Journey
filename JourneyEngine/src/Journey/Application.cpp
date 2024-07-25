@@ -4,6 +4,7 @@
 #include "Journey/Core.h"
 #include "Journey/Log/Log.h"
 #include "Journey/Events/ApplicationEvent.h"
+#include "Journey/InputPool.h"
 
 #include <GLAD/glad.h>
 
@@ -19,6 +20,7 @@ Application::Application()
 	s_sHolder = std::make_unique<SingletonHolder>();
 
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
+	s_sHolder->add<InputPool>();
 
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)
 		{

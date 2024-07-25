@@ -1,4 +1,4 @@
-#include "jnypch.h"
+#include "sandboxpch.h"
 #include "SandboxApplication.h"
 
 class ExampleLayer : public jny::Layer
@@ -9,12 +9,17 @@ public:
 
 	void update() override
 	{
-		jny::Log::info("ExampleLayer::update");
+		//jny::Log::info("ExampleLayer::update");
 	}
 
 	void onEvent(jny::Event& event) override
 	{
-		jny::Log::trace(event.toString());
+		//jny::Log::trace(event.toString());
+		if (event.eventType() == jny::Event::EventType::KeyPressed)
+		{
+			auto mousePos = jny::Application::instance().st<jny::InputPool>().mousePos();
+			jny::Log::trace("{} {}", mousePos.x, mousePos.y);
+		}
 	}
 };
 

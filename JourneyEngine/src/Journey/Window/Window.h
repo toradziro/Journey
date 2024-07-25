@@ -48,6 +48,8 @@ public:
 	void init();
 	void shutdown();
 
+	GLFWwindow* rawWindow() { return m_window; }
+
 private:
 	WindowData		m_data;
 	GLFWwindow*		m_window;

@@ -109,6 +109,9 @@ project "Sandbox"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	
+	pchheader "sandboxpch.h"
+	pchsource "Sandbox/src/sandboxpch.cpp"
 
 	files
 	{
