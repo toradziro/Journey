@@ -1,26 +1,26 @@
 #include "jnypch.h"
 
-#include "InputPool.h"
+#include "InputPoll.h"
 #include "Journey/Application.h" 
 
 namespace jny
 {
 
-bool InputPool::keyPressed(int keycode)
+bool InputPoll::keyPressed(int keycode)
 {
 	auto& win = Application::instance().st<Window>();
 	int state = glfwGetKey(win.rawWindow(), keycode);
 	return state == GLFW_PRESS || state == GLFW_REPEAT;
 }
 
-bool InputPool::mouseButtonPressed(int button)
+bool InputPoll::mouseButtonPressed(int button)
 {
 	auto& win = Application::instance().st<Window>();
 	int state = glfwGetMouseButton(win.rawWindow(), button);
 	return state == GLFW_PRESS;
 }
 
-jny::MousePos InputPool::mousePos()
+jny::MousePos InputPoll::mousePos()
 {
 	auto& win = Application::instance().st<Window>();
 	

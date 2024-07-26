@@ -13,11 +13,11 @@ struct MousePos
 	float y = 0.0f;
 };
 
-class JNY_API InputPool : public ISingleton
+class JNY_API InputPoll : public ISingleton
 {
-	JNY_SINGLETON_TYPE(InputPool)
+	JNY_SINGLETON_TYPE(InputPoll)
 public:
-	~InputPool() {}
+	~InputPoll() {}
 	bool keyPressed(int keycode);
 	bool mouseButtonPressed(int button);
 	MousePos mousePos();

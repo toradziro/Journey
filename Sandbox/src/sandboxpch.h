@@ -39,5 +39,5 @@ void AssertionFailure(const char* pExpression);
 #include <spdlog/fmt/bundled/format.h>
 
 #include "Journey/Core.h"
-#include "Journey/InputPool.h"
+#include "Journey/InputPoll.h"
 #include "Journey/Log/Log.h"

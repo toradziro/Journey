@@ -17,7 +17,7 @@ public:
 		//jny::Log::trace(event.toString());
 		if (event.eventType() == jny::Event::EventType::KeyPressed)
 		{
-			auto mousePos = jny::Application::instance().st<jny::InputPool>().mousePos();
+			auto mousePos = jny::Application::instance().st<jny::InputPoll>().mousePos();
 			jny::Log::trace("{} {}", mousePos.x, mousePos.y);
 		}
 	}
