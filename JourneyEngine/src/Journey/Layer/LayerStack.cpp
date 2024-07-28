@@ -12,6 +12,7 @@ LayerStack::~LayerStack()
 {
 	for (auto layer : m_layers)
 	{
+		layer->detach();
 		delete layer;
 	}
 }

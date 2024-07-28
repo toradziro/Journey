@@ -92,6 +92,7 @@ void Application::pushLayer(Layer* layer)
 
 void Application::popLayer(Layer* layer)
 {
+	layer->detach();
 	m_layers.pop(layer);
 }
 
@@ -103,6 +104,7 @@ void Application::pushOverlay(Layer* layer)
 
 void Application::popOverlay(Layer* layer)
 {
+	layer->detach();
 	m_layers.popOverlay(layer);
 }
 
