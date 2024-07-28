@@ -51,7 +51,7 @@ void ImGuiLayer::attach()
 	auto& win = Application::instance().st<Window>();
 
 	ImGui_ImplGlfw_InitForOpenGL(win.rawWindow(), true);
-	ImGui_ImplOpenGL3_Init();
+	ImGui_ImplOpenGL3_Init("#version 410");
 }
 
 void ImGuiLayer::detach()
