@@ -8,6 +8,8 @@
 namespace jny
 {
 
+class ImGuiLayer;
+
 #pragma warning(push)
 #pragma warning(disable: 4251)
 
@@ -31,8 +33,9 @@ public:
 	static inline SingletonHolder& instance() { JNY_ASSERT(s_sHolder != nullptr); return *s_sHolder; }
 
 private:
-	LayerStack				m_layers;
-	bool					m_running = true;
+	LayerStack	m_layers;
+	ImGuiLayer*	m_imGuiLayer;
+	bool		m_running = true;
 
 private:
 	static std::unique_ptr<SingletonHolder>	s_sHolder;

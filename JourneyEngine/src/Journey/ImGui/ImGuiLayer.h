@@ -11,10 +11,12 @@ public:
 	ImGuiLayer();
 	~ImGuiLayer();
 
-	void onEvent(Event& event) override;
 	void attach() override;
 	void detach() override;
-	void update() override;
+	void imGuiRender() override;
+
+	void begin();
+	void end();
 
 private:
 	float m_time = 0.0f;

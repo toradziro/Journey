@@ -6,7 +6,6 @@ namespace jny
 
 LayerStack::LayerStack()
 {
-	m_position = m_layers.begin();
 }
 
 LayerStack::~LayerStack()
@@ -19,7 +18,8 @@ LayerStack::~LayerStack()
 
 void LayerStack::push(Layer* layer)
 {
-	m_position = m_layers.emplace(m_position, layer);
+	m_layers.emplace(begin() + m_position, layer);
+	++m_position;
 }
 
 void LayerStack::pop(Layer* layer)

@@ -5,6 +5,7 @@
 #include "Journey/Log/Log.h"
 #include "Journey/Events/ApplicationEvent.h"
 #include "Journey/InputPoll.h"
+#include "Journey/ImGui/ImGuiLayer.h"
 
 #include <GLAD/glad.h>
 
@@ -26,6 +27,9 @@ Application::Application()
 		{
 			onEvent(_event);
 		});
+
+	m_imGuiLayer = new ImGuiLayer;
+	pushOverlay(m_imGuiLayer);
 }
 
 Application::~Application()
@@ -44,6 +48,13 @@ void Application::run()
 		{
 			layer->update();
 		}
+
+		m_imGuiLayer->begin();
+		for (auto& layer : m_layers)
+		{
+			layer->imGuiRender();
+		}
+		m_imGuiLayer->end();
 
 		s_sHolder->st<Window>().update();
 	}

@@ -22,6 +22,8 @@ public:
 	virtual void detach() {}
 	virtual void update() {}
 
+	virtual void imGuiRender() {}
+
 private:
 	std::string m_layerName;
 };

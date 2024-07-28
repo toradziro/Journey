@@ -29,7 +29,7 @@ public:
 
 private:
 	eastl::vector<Layer*>	m_layers;
-	LayerStackPos			m_position;
+	uint32_t				m_position = 0;
 };
 
 #pragma warning(pop)
