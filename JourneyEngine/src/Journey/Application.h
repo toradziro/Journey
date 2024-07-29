@@ -24,10 +24,20 @@ public:
 	void onEvent(Event& event);
 	bool windowCloseEvent();
 
-	void pushLayer(Layer* layer);
-	void popLayer(Layer* layer);
 
-	void pushOverlay(Layer* layer);
+	template<typename T, typename ...Args>
+	T* pushLayer(Args&&... args)
+	{
+		return m_layers.pushLayer<T>(std::forward<Args>(args)...);
+	}
+
+	template<typename T, typename ...Args>
+	T* pushOverlay(Args&&... args)
+	{
+		return m_layers.pushOverlay<T>(std::forward<Args>(args)...);
+	}
+
+	void popLayer(Layer* layer);
 	void popOverlay(Layer* layer);
 
 	static inline SingletonHolder& instance() { JNY_ASSERT(s_sHolder != nullptr); return *s_sHolder; }

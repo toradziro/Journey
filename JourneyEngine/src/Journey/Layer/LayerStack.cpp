@@ -17,13 +17,7 @@ LayerStack::~LayerStack()
 	}
 }
 
-void LayerStack::push(Layer* layer)
-{
-	m_layers.emplace(begin() + m_position, layer);
-	++m_position;
-}
-
-void LayerStack::pop(Layer* layer)
+void LayerStack::popLayer(Layer* layer)
 {
 	auto it = eastl::find(m_layers.begin(), m_layers.end(), layer);
 	if (it != m_layers.end())
@@ -31,11 +25,7 @@ void LayerStack::pop(Layer* layer)
 		m_layers.erase(it);
 		--m_position;
 	}
-}
-
-void LayerStack::pushOverlay(Layer* layer)
-{
-	m_layers.emplace_back(layer);
+	delete layer;
 }
 
 void LayerStack::popOverlay(Layer* layer)
@@ -45,6 +35,7 @@ void LayerStack::popOverlay(Layer* layer)
 	{
 		m_layers.erase(it);
 	}
+	delete layer;
 }
 
 } //-- jny

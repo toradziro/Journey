@@ -32,7 +32,7 @@ public:
 
 Sandbox::Sandbox()
 {
-	this->pushLayer(new ExampleLayer());
+	auto* exampleLayer = this->pushLayer<ExampleLayer>();
 }
 
 Sandbox::~Sandbox()

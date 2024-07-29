@@ -18,10 +18,32 @@ public:
 	LayerStack();
 	~LayerStack();
 
-	void push(Layer* layer);
-	void pop(Layer* layer);
+	template<typename T, typename ...Args>
+	T* pushLayer(Args&&... args)
+	{
+		static_assert(std::is_base_of<Layer, T>::value, "To layer your layer must be inherited from Layer");
 
-	void pushOverlay(Layer* layer);
+		T* layerInstance = new T(std::forward<Args>(args)...);
+		layerInstance->attach();
+		
+		m_layers.emplace(begin() + m_position, static_cast<Layer*>(layerInstance));
+		++m_position;
+		
+		return layerInstance;
+	}
+
+	template<typename T, typename ...Args>
+	T* pushOverlay(Args&&... args)
+	{
+		T* layerInstance = new T(std::forward<Args>(args)...);
+		layerInstance->attach();
+
+		m_layers.emplace_back(static_cast<Layer*>(layerInstance));
+		
+		return layerInstance;
+	}
+
+	void popLayer(Layer* layer);
 	void popOverlay(Layer* layer);
 
 	LayerStackPos begin() { return m_layers.begin(); }

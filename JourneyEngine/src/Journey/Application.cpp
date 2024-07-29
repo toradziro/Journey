@@ -28,8 +28,7 @@ Application::Application()
 			onEvent(_event);
 		});
 
-	m_imGuiLayer = new ImGuiLayer;
-	pushOverlay(m_imGuiLayer);
+	 m_imGuiLayer = pushOverlay<ImGuiLayer>();
 }
 
 Application::~Application()
@@ -84,22 +83,10 @@ bool Application::windowCloseEvent()
 	return true;
 }
 
-void Application::pushLayer(Layer* layer)
-{
-	layer->attach();
-	m_layers.push(layer);
-}
-
 void Application::popLayer(Layer* layer)
 {
 	layer->detach();
-	m_layers.pop(layer);
-}
-
-void Application::pushOverlay(Layer* layer)
-{
-	layer->attach();
-	m_layers.pushOverlay(layer);
+	m_layers.popLayer(layer);
 }
 
 void Application::popOverlay(Layer* layer)
