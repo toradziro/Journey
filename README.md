@@ -11,11 +11,11 @@ For Windows run
 
 This command will generate .sln file (vs2022 is required). In VS just tap F5 and Sanbox app will be built and run since it's set as a Startup Project
 
-## Engine modules and short notice of what 3d parties are used
+## Engine modules
 
 - Entry point (dll main creates app via func provided by client app)
-- Application Layer (TBD)
-- Window Layer (TBD)
+- Application Layer
+- Window Layer
     - Input
     - Events
 - Renderer (TBD)
@@ -30,3 +30,11 @@ This command will generate .sln file (vs2022 is required). In VS just tap F5 and
 - Build System (for resources) (TBD)
 - Build System (for lib and application - premake)
 - Asset System (TBD)
+
+## 3d parties
+spdlog
+GLFW
+GLAD
+glm
+imgui
+EASTL
