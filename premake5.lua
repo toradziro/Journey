@@ -70,7 +70,6 @@ project "JourneyEngine"
 		"GLFW",
 		"GLAD",
 		"opengl32.lib",
-		"dwmapi.lib",
 		"imgui"
 	}
 
