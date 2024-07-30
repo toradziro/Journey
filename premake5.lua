@@ -13,6 +13,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
+IncludeDir["spdlog"] = "JourneyEngine/vendor/spdlog/include"
 IncludeDir["GLFW"] = "JourneyEngine/vendor/GLFW/include"
 IncludeDir["GLAD"] = "JourneyEngine/vendor/GLAD/include"
 IncludeDir["glm"] = "JourneyEngine/vendor/glm"
@@ -21,7 +22,7 @@ IncludeDir["EASTL"] = "JourneyEngine/vendor/eastl/include"
 IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastl/test/packages/EABase/include/Common"
 
 group "Dependencies"
-	-- For window magment
+	-- For window managment
 	include "JourneyEngine/vendor/GLFW"
 	-- For modern OpenGL
 	include "JourneyEngine/vendor/GLAD"
@@ -30,15 +31,21 @@ group ""
 
 project "JourneyEngine"
 	location "JourneyEngine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "jnypch.h"
 	pchsource "JourneyEngine/src/jnypch.cpp"
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
 
 	files
 	{
@@ -48,7 +55,7 @@ project "JourneyEngine"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.EASTL}",
 		"%{IncludeDir.EASTLBase}",
 		"%{IncludeDir.GLFW}",
@@ -88,32 +95,29 @@ project "JourneyEngine"
 
 	filter "configurations:Debug"
 		defines "JNY_DEBUG"
-		symbols "On"
+		symbols "on"
 		runtime "Debug"
 
 	filter "configurations:Release"
 		defines "JNY_RELEASE"
-		symbols "On"
-		optimize "On"
+		symbols "on"
+		optimize "on"
 		runtime "Release"
 
 	filter "configurations:Distribution"
 		defines "JNY_DISTR"
-		symbols "Off"
-		optimize "On"
+		symbols "on"
+		optimize "on"
 		runtime "Release"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-	
-	pchheader "sandboxpch.h"
-	pchsource "Sandbox/src/sandboxpch.cpp"
 
 	files
 	{
@@ -123,12 +127,9 @@ project "Sandbox"
 
 	includedirs
 	{
-		"JourneyEngine/vendor/spdlog/include",
+		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.EASTL}",
 		"%{IncludeDir.EASTLBase}",
-		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
 		"JourneyEngine/src"
 	}
@@ -151,17 +152,17 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
-		symbols "On"
+		symbols "on"
 		runtime "Debug"
 
 	filter "configurations:Release"
 		defines "JNY_RELEASE"
-		symbols "On"
-		optimize "On"
+		symbols "on"
+		optimize "on"
 		runtime "Release"
 
 	filter "configurations:Distribution"
 		defines "JNY_DISTR"
-		symbols "Off"
-		optimize "On"
+		symbols "on"
+		optimize "on"
 		runtime "Release"

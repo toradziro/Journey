@@ -6,6 +6,7 @@
 #include "Journey/Events/ApplicationEvent.h"
 #include "Journey/InputPoll.h"
 #include "Journey/ImGui/ImGuiLayer.h"
+#include "Journey/Window/Window.h"
 
 #include <GLAD/glad.h>
 

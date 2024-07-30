@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Journey/Core.h"
-#include "Journey/Window/Window.h"
 #include "Journey/Layer/LayerStack.h"
 #include "SingletonInterface.h"
 
@@ -9,6 +8,7 @@ namespace jny
 {
 
 class ImGuiLayer;
+class Window;
 
 #pragma warning(push)
 #pragma warning(disable: 4251)

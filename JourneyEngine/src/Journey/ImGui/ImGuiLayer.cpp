@@ -7,6 +7,7 @@
 #include "backends/imgui_impl_glfw.h"
 
 #include "Journey/Application.h"
+#include "Journey/Window/Window.h"
 
 #include "Journey/Events/Event.h"
 #include "Journey/Events/MouseEvent.h"

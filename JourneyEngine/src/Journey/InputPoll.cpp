@@ -2,6 +2,7 @@
 
 #include "InputPoll.h"
 #include "Journey/Application.h" 
+#include "Journey/Window/Window.h"
 
 namespace jny
 {

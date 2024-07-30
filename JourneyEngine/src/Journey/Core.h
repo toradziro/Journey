@@ -1,5 +1,6 @@
 #pragma once
 
+#ifdef JNY_DYNAMIC_LINK
 #ifdef JNY_PLATFORM_WINDOWS
 	#ifdef JNY_BUILD_DLL
 		#define JNY_API __declspec(dllexport)
@@ -8,6 +9,9 @@
 	#endif
 #else
 	#error Only Win supported
+#endif
+#else
+	#define JNY_API
 #endif
 
 #define BIT(x) (1 << x)

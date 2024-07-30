@@ -1,5 +1,7 @@
-#include "sandboxpch.h"
+#include "common.h"
+
 #include "SandboxApplication.h"
+#include "Journey/InputPoll.h"
 
 #include <imgui.h>
 
