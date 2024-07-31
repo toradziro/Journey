@@ -77,7 +77,6 @@ project "JourneyEngine"
 		defines
 		{
 			"JNY_PLATFORM_WINDOWS",
-			"JNY_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
 
