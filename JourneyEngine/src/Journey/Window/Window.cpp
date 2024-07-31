@@ -79,7 +79,7 @@ void Window::init()
 	glfwMakeContextCurrent(m_window);
 
 	int gradInitStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	JNY_CORE_ASSERT(status, "Failed to init GLAD")
+	JNY_ASSERT(status, "Failed to init GLAD")
 
 	glfwSetWindowUserPointer(m_window, &m_data);
 	setVSync(true);

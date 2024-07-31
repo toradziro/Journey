@@ -25,11 +25,7 @@ public:
 	inline static void log(LogLevel level, const std::string& formatStr, Args&&... args)
 	{
 #ifndef JNY_DISTR
-#ifdef JNY_BUILD_DLL
 		auto& logger = coreLogger();
-#else
-		auto& logger = clientLogger();
-#endif //-- JNY_BUILD_DLL
 		switch (level)
 		{
 		case LogLevel::trace:
@@ -80,13 +76,7 @@ private:
 		return s_coreLogger;
 	};
 
-	inline static std::shared_ptr<spdlog::logger>& clientLogger()
-	{
-		return s_clientLogger;
-	}
-
 	static std::shared_ptr<spdlog::logger> s_coreLogger;
-	static std::shared_ptr<spdlog::logger> s_clientLogger;
 };
 
 #pragma warning(pop)

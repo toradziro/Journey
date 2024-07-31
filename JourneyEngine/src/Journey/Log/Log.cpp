@@ -6,7 +6,6 @@ namespace jny
 {
 
 std::shared_ptr<spdlog::logger> Log::s_coreLogger;
-std::shared_ptr<spdlog::logger> Log::s_clientLogger;
 
 void Log::init()
 {
@@ -15,11 +14,8 @@ void Log::init()
 	//-- %^ start of color segment and %$ is an and of that segment
 	spdlog::set_pattern("%^[%T] %n: %v%$");
 
-	s_coreLogger = spdlog::stdout_color_mt("JNY_CORE");
+	s_coreLogger = spdlog::stdout_color_mt("LOG");
 	s_coreLogger->set_level(spdlog::level::trace);
-
-	s_clientLogger = spdlog::stdout_color_mt("APP");
-	s_clientLogger->set_level(spdlog::level::trace);
 }
 
 } //-- jny
