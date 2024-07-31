@@ -42,11 +42,6 @@ project "JourneyEngine"
 	pchheader "jnypch.h"
 	pchsource "JourneyEngine/src/jnypch.cpp"
 
-	defines
-	{
-		"_CRT_SECURE_NO_WARNINGS"
-	}
-
 	files
 	{
 		"%{prj.name}/src/**.h",
