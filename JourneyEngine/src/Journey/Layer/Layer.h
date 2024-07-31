@@ -10,7 +10,7 @@ namespace jny
 #pragma warning(push)
 #pragma warning(disable: 4251)
 
-class JNY_API Layer
+class  Layer
 {
 public:
 	Layer(const std::string name) : m_layerName(name) {}

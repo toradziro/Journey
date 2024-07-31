@@ -10,7 +10,7 @@ namespace jny
 #pragma warning(push)
 #pragma warning(disable: 4251)
 
-class JNY_API LayerStack
+class  LayerStack
 {
 public:
 	using LayerStackPos = eastl::vector<Layer*>::iterator;

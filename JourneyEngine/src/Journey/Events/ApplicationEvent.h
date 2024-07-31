@@ -5,7 +5,7 @@
 namespace jny
 {
 
-class JNY_API WindowCloseEvent : public Event
+class  WindowCloseEvent : public Event
 {
 public:
 	WindowCloseEvent() {}
@@ -15,7 +15,7 @@ public:
 	EVENT_CLASS_TYPE(WindowClose)
 };
 
-class JNY_API WindowResizeEvent : public Event
+class  WindowResizeEvent : public Event
 {
 public:
 	EVENT_CATEGORY(Event::EventCategory::Application)
@@ -34,7 +34,7 @@ private:
 	int m_height;
 };
 
-class JNY_API ApplicationTickEvent : public Event
+class  ApplicationTickEvent : public Event
 {
 public:
 	ApplicationTickEvent() {}
@@ -44,7 +44,7 @@ public:
 	EVENT_CLASS_TYPE(AppTick)
 };
 
-class JNY_API ApplicationUpdateEvent : public Event
+class  ApplicationUpdateEvent : public Event
 {
 public:
 	ApplicationUpdateEvent() {}
@@ -54,7 +54,7 @@ public:
 	EVENT_CLASS_TYPE(AppUpdate)
 };
 
-class JNY_API ApplicationRenderEvent : public Event
+class  ApplicationRenderEvent : public Event
 {
 public:
 	ApplicationRenderEvent() {}

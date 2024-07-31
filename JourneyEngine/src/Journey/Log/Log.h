@@ -8,7 +8,7 @@ namespace jny
 #pragma warning(push)
 #pragma warning(disable: 4251)
 
-class JNY_API Log
+class  Log
 {
 public:
 	enum class LogLevel

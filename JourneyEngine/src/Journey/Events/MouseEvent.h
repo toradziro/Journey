@@ -5,7 +5,7 @@
 namespace jny
 {
 
-class JNY_API MouseButtonPressedEvent : public Event
+class  MouseButtonPressedEvent : public Event
 {
 public:
 	MouseButtonPressedEvent(int button) : m_buttonCode(button) { }
@@ -21,7 +21,7 @@ private:
 	int m_buttonCode;
 };
 
-class JNY_API MouseButtonReleasedEvent : public Event
+class  MouseButtonReleasedEvent : public Event
 {
 public:
 	MouseButtonReleasedEvent(int button) : m_buttonCode(button) { }
@@ -37,7 +37,7 @@ private:
 	int m_buttonCode;
 };
 
-class JNY_API MouseMovedEvent : public Event
+class  MouseMovedEvent : public Event
 {
 public:
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::Input)
@@ -56,7 +56,7 @@ private:
 	float m_mouseY;
 };
 
-class JNY_API MouseScrolledEvent : public Event
+class  MouseScrolledEvent : public Event
 {
 public:
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::Input)

@@ -13,7 +13,7 @@ class Window;
 #pragma warning(push)
 #pragma warning(disable: 4251)
 
-class JNY_API Application
+class  Application
 {
 public:
 	Application();

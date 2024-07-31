@@ -11,7 +11,7 @@ namespace jny
 
 #define EVENT_CATEGORY(category) virtual int categoryFlags() const override { return static_cast<int>(category); }
 
-class JNY_API Event
+class  Event
 {
 private:
 	friend class EventDispatcher;

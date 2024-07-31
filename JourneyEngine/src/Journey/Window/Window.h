@@ -27,7 +27,7 @@ struct WindowData
 #pragma warning(push)
 #pragma warning(disable: 4251)
 
-class JNY_API Window : public ISingleton
+class  Window : public ISingleton
 {
 	JNY_SINGLETON_TYPE(Window)
 	Window(WindowData data);
