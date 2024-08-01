@@ -1,12 +1,11 @@
 #include "jnypch.h"
+
 #include "Window.h"
 #include "Journey/Log/Log.h"
-
 #include "Journey/Events/ApplicationEvent.h"
 #include "Journey/Events/KeyEvent.h"
 #include "Journey/Events/MouseEvent.h"
-
-#include <GLAD/glad.h>
+#include "Journey/Renderer/OpenGL/OpenGlContext.h"
 
 namespace
 {
@@ -38,7 +37,7 @@ Window::~Window()
 void Window::update()
 {
 	glfwPollEvents();
-	glfwSwapBuffers(m_window);
+	m_context->swapBuffers();
 }
 
 void Window::setVSync(bool enabled)
@@ -76,10 +75,8 @@ void Window::init()
 	m_window = glfwCreateWindow(static_cast<int>(m_data.m_width), static_cast<int>(m_data.m_height),
 		m_data.m_title.c_str(), nullptr, nullptr);
 
-	glfwMakeContextCurrent(m_window);
-
-	int gradInitStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	JNY_ASSERT(status, "Failed to init GLAD")
+	//-- Init for context will be called inside its constructor
+	m_context = std::make_unique<OpenGlContext>(m_window);
 
 	glfwSetWindowUserPointer(m_window, &m_data);
 	setVSync(true);

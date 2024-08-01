@@ -2,6 +2,7 @@
 
 #include "Journey/Events/Event.h"
 #include "Journey/SingletonInterface.h"
+#include "Journey/Renderer/GraphicContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -51,8 +52,9 @@ public:
 	GLFWwindow* rawWindow() { return m_window; }
 
 private:
-	WindowData		m_data;
-	GLFWwindow*		m_window;
+	WindowData						m_data;
+	std::unique_ptr<GraphicContext> m_context;
+	GLFWwindow*						m_window;
 };
 
 #pragma warning(pop)
