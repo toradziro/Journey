@@ -7,6 +7,7 @@
 
 namespace jny
 {
+
 OpenGlContext::OpenGlContext(GLFWwindow* window)
 	: m_window(window)
 {
@@ -19,7 +20,12 @@ void OpenGlContext::init()
 {
 	glfwMakeContextCurrent(m_window);
 	int gradInitStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	JNY_ASSERT(status, "Failed to init GLAD")
+	JNY_ASSERT(status, "Failed to init GLAD");
+
+	Log::info("OpenGL Info:");
+	Log::info("Vendor: {}", (char*)(glGetString(GL_VENDOR)));
+	Log::info("Renderer: {}", (char*)(glGetString(GL_RENDERER)));
+	Log::info("Version: {}", (char*)(glGetString(GL_VERSION)));
 }
 
 void OpenGlContext::swapBuffers()
@@ -27,4 +33,4 @@ void OpenGlContext::swapBuffers()
 	glfwSwapBuffers(m_window);
 }
 
-}
+} //-- jny

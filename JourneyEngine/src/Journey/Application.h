@@ -44,7 +44,12 @@ public:
 
 private:
 	LayerStack	m_layers;
-	ImGuiLayer*	m_imGuiLayer;
+	ImGuiLayer*	m_imGuiLayer = nullptr;
+
+	uint32_t	m_vertexArrayId = 0;
+	uint32_t	m_vertexBufferId = 0;
+	uint32_t	m_indexBufferId = 0;
+
 	bool		m_running = true;
 
 private:
