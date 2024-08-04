@@ -3,6 +3,7 @@
 #include "Journey/Core.h"
 #include "Journey/Layer/LayerStack.h"
 #include "SingletonInterface.h"
+#include "Journey/Renderer/OpenGL/Shader.h"
 
 namespace jny
 {
@@ -49,6 +50,8 @@ private:
 	uint32_t	m_vertexArrayId = 0;
 	uint32_t	m_vertexBufferId = 0;
 	uint32_t	m_indexBufferId = 0;
+
+	std::unique_ptr<Shader>	m_shader;
 
 	bool		m_running = true;
 

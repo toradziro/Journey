@@ -19,8 +19,8 @@ OpenGlContext::OpenGlContext(GLFWwindow* window)
 void OpenGlContext::init()
 {
 	glfwMakeContextCurrent(m_window);
-	int gradInitStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	JNY_ASSERT(status, "Failed to init GLAD");
+	int gladInitStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	JNY_ASSERT(gladInitStatus, "Failed to init GLAD");
 
 	Log::info("OpenGL Info:");
 	Log::info("Vendor: {}", (char*)(glGetString(GL_VENDOR)));

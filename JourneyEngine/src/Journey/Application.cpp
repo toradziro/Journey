@@ -17,8 +17,6 @@ std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
 {
-	JNY_ASSERT(s_instance == nullptr, "Can't have more than one instance of application")
-
 	s_sHolder = std::make_unique<SingletonHolder>();
 
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
@@ -62,6 +60,31 @@ Application::Application()
 	//-- Indecies
 	uint32_t indecies[3] = { 0, 1, 2 };
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * 3, indecies, GL_STATIC_DRAW);
+
+	std::string vertexSrc =
+		"#version 330 core\n"
+		"\n"
+		"layout(location = 0) in vec3 a_Position;\n"
+		"out vec3 v_Position;"
+		"\n"
+		"void main()\n"
+		"{\n"
+			"gl_Position = vec4(a_Position, 1.0f);\n"
+			"v_Position = a_Position;\n"
+		"}\n";
+
+	std::string fragmentSrc =
+		"#version 330 core\n"
+		"\n"
+		"layout(location = 0) out vec4 color;\n"
+		"in vec3 v_Position;"
+		"\n"
+		"void main()\n"
+		"{\n"
+			"color = vec4(v_Position * 0.5f + 0.5f, 1.0f);\n"
+		"}\n";
+
+	m_shader = std::make_unique<Shader>(vertexSrc, fragmentSrc);
 }
 
 Application::~Application()
@@ -76,6 +99,7 @@ void Application::run()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		m_shader->bind();
 		glBindVertexArray(m_vertexArrayId);
 		//-- Elements is indexes!
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
