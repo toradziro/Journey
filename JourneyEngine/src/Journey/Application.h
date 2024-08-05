@@ -41,7 +41,7 @@ public:
 	void popLayer(Layer* layer);
 	void popOverlay(Layer* layer);
 
-	static inline SingletonHolder& instance() { JNY_ASSERT(s_sHolder != nullptr); return *s_sHolder; }
+	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr); return *s_sHolder; }
 
 private:
 	LayerStack	m_layers;

@@ -81,12 +81,12 @@ project "JourneyEngine"
 		}
 
 	filter "configurations:Debug"
-		defines "JNY_DEBUG"
+		defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
 		symbols "on"
 		runtime "Debug"
 
 	filter "configurations:Release"
-		defines "JNY_RELEASE"
+		defines { "JNY_RELEASE", "JNY_ENABLE_ASSERTS" }
 		symbols "on"
 		optimize "on"
 		runtime "Release"
@@ -143,7 +143,7 @@ project "Sandbox"
 		runtime "Debug"
 
 	filter "configurations:Release"
-		defines "JNY_RELEASE"
+		defines { "JNY_RELEASE", "JNY_ENABLE_ASSERTS" }
 		symbols "on"
 		optimize "on"
 		runtime "Release"

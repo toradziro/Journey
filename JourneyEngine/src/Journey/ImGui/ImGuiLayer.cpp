@@ -49,7 +49,7 @@ void ImGuiLayer::attach()
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
 
-	auto& win = Application::instance().st<Window>();
+	auto& win = Application::subsystems().st<Window>();
 
 	ImGui_ImplGlfw_InitForOpenGL(win.rawWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 410");
@@ -78,7 +78,7 @@ void ImGuiLayer::begin()
 void ImGuiLayer::end()
 {
 	ImGuiIO& io = ImGui::GetIO();
-	auto& win = Application::instance().st<Window>();
+	auto& win = Application::subsystems().st<Window>();
 
 	io.DisplaySize = ImVec2((float)win.width(), (float)win.height());
 

@@ -19,7 +19,7 @@ public:
 	{
 		if (event.eventType() == jny::Event::EventType::KeyPressed)
 		{
-			auto mousePos = jny::Application::instance().st<jny::InputPoll>().mousePos();
+			auto mousePos = jny::Application::subsystems().st<jny::InputPoll>().mousePos();
 			jny::Log::trace("{} {}", mousePos.x, mousePos.y);
 		}
 	}

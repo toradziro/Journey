@@ -9,7 +9,7 @@ namespace jny
 
 bool InputPoll::keyPressed(int keycode)
 {
-	auto& win = Application::instance().st<Window>();
+	auto& win = Application::subsystems().st<Window>();
 
 	int state = glfwGetKey(win.rawWindow(), keycode);
 	return state == GLFW_PRESS || state == GLFW_REPEAT;
@@ -17,7 +17,7 @@ bool InputPoll::keyPressed(int keycode)
 
 bool InputPoll::mouseButtonPressed(int button)
 {
-	auto& win = Application::instance().st<Window>();
+	auto& win = Application::subsystems().st<Window>();
 
 	int state = glfwGetMouseButton(win.rawWindow(), button);
 	return state == GLFW_PRESS;
@@ -25,7 +25,7 @@ bool InputPoll::mouseButtonPressed(int button)
 
 jny::MousePos InputPoll::mousePos()
 {
-	auto& win = Application::instance().st<Window>();
+	auto& win = Application::subsystems().st<Window>();
 
 	double xpos = 0.0;
 	double ypos = 0.0;
