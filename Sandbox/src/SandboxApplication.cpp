@@ -34,7 +34,7 @@ public:
 
 Sandbox::Sandbox()
 {
-	auto* exampleLayer = this->pushLayer<ExampleLayer>();
+	/*auto* exampleLayer = */this->pushLayer<ExampleLayer>();
 }
 
 Sandbox::~Sandbox()

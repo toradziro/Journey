@@ -10,6 +10,8 @@ namespace jny
 
 class ImGuiLayer;
 class Window;
+class VertexBuffer;
+class IndexBuffer;
 
 #pragma warning(push)
 #pragma warning(disable: 4251)
@@ -48,10 +50,10 @@ private:
 	ImGuiLayer*	m_imGuiLayer = nullptr;
 
 	uint32_t	m_vertexArrayId = 0;
-	uint32_t	m_vertexBufferId = 0;
-	uint32_t	m_indexBufferId = 0;
 
-	std::unique_ptr<Shader>	m_shader;
+	std::unique_ptr<Shader>			m_shader;
+	std::unique_ptr<VertexBuffer>	m_vertexBuffer;
+	std::unique_ptr<IndexBuffer>	m_indexBuffer;
 
 	bool		m_running = true;
 

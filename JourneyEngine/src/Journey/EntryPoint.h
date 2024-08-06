@@ -4,7 +4,7 @@
 
 extern jny::Application* jny::createApplication();
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
 	jny::Log::init();
 

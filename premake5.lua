@@ -72,12 +72,61 @@ project "JourneyEngine"
 		cppdialect "C++17"
 		systemversion "latest"
 
-		buildoptions { "/utf-8" }
+		buildoptions
+		{
+			"/utf-8",
+			"/W4",                             -- Equivalent to -Wall - enable most common warnings
+			"/w44265",                         -- Somewhat equivalent to -Wextra
+			"/permissive-",                    -- Equivalent to -Wpedantic
+			"/w44263",                         -- Equivalent to -Wctor-dtor-privacy
+			"/w44862",                         -- Equivalent to -Wnon-virtual-dtor
+			"/w44271",                         -- Equivalent to -Wold-style-cast
+			"/w44459",                         -- Equivalent to -Woverloaded-virtual
+			"/w44263",                         -- Equivalent to -Wsign-promo
+			"/w44860",                         -- Equivalent to -Wduplicated-branches
+			"/w44861",                         -- Equivalent to -Wduplicated-cond
+			"/w44265",                         -- Equivalent to -Wfloat-equal
+			"/w44267",                         -- Equivalent to -Wshadow=compatible-local
+			"/w44266",                         -- Equivalent to -Wcast-qual
+			"/w44265",                         -- Equivalent to -Wconversion
+			"/w44268",                         -- Equivalent to -Wzero-as-null-pointer-constant
+			"/w44266",                         -- Equivalent to -Wextra-semi
+			"/w44472",                         -- Equivalent to -Wsign-conversion
+			"/w44262",                         -- Equivalent to -Wlogical-op
+			"/WX"                              -- Treat warnings as errors
+		}
 
 		defines
 		{
 			"JNY_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE"
+		}
+		
+	filter "system:linux"
+		cppdialect "C++17"
+		
+		buildoptions
+		{
+			"-Wall",                           -- Enable most common warnings
+			"-Wextra",                         -- Even more common errors will be checked
+			"-Wpedantic",                      -- And moooore
+			"-Wctor-dtor-privacy",             -- Check if class with private constructor is used by any friends
+			"-Wnon-virtual-dtor",              -- If you have virtual member funcs - don’t forget to have virtual ~
+			"-Wold-style-cast",                -- Casting only in C++ style
+			"-Woverloaded-virtual",            -- We don’t overload virtual funcs, only overriding
+			"-Wsign-promo",                    -- Overloading is not really accurate
+			"-Wduplicated-branches",           -- Do you have save if and else branches?
+			"-Wduplicated-cond",               -- Same, but with else if
+			"-Wfloat-equal",                   -- Warning for float comparison
+			"-Wshadow=compatible-local",       -- Shadowing warnings for local variables
+			"-Wcast-qual",                     -- Warning for const qualification casts
+			"-Wconversion",                    -- Warning for implicit type conversions
+			"-Wzero-as-null-pointer-constant", -- Using zero as a null pointer constant
+			"-Wextra-semi",                    -- Extra semicolon warnings
+			"-Wsign-conversion",               -- Warnings for sign conversion
+			"-Wlogical-op",                    -- Warning for logical operations
+			"-Werror",                         -- Treat warnings as errors
+			"-pedantic-errors"                 -- Treat pedantic warnings as errors
 		}
 
 	filter "configurations:Debug"
@@ -130,11 +179,60 @@ project "Sandbox"
 		cppdialect "C++17"
 		systemversion "latest"
 
-		buildoptions { "/utf-8" }
+		buildoptions
+		{
+			"/utf-8",
+			"/W4",                             -- Equivalent to -Wall - enable most common warnings
+			"/w44265",                         -- Somewhat equivalent to -Wextra
+			"/permissive-",                    -- Equivalent to -Wpedantic
+			"/w44263",                         -- Equivalent to -Wctor-dtor-privacy
+			"/w44862",                         -- Equivalent to -Wnon-virtual-dtor
+			"/w44271",                         -- Equivalent to -Wold-style-cast
+			"/w44459",                         -- Equivalent to -Woverloaded-virtual
+			"/w44263",                         -- Equivalent to -Wsign-promo
+			"/w44860",                         -- Equivalent to -Wduplicated-branches
+			"/w44861",                         -- Equivalent to -Wduplicated-cond
+			"/w44265",                         -- Equivalent to -Wfloat-equal
+			"/w44267",                         -- Equivalent to -Wshadow=compatible-local
+			"/w44266",                         -- Equivalent to -Wcast-qual
+			"/w44265",                         -- Equivalent to -Wconversion
+			"/w44268",                         -- Equivalent to -Wzero-as-null-pointer-constant
+			"/w44266",                         -- Equivalent to -Wextra-semi
+			"/w44472",                         -- Equivalent to -Wsign-conversion
+			"/w44262",                         -- Equivalent to -Wlogical-op
+			"/WX"                              -- Treat warnings as errors
+		}
 
 		defines
 		{
 			"JNY_PLATFORM_WINDOWS"
+		}
+		
+	filter "system:linux"
+		cppdialect "C++17"
+		
+		buildoptions
+		{
+			"-Wall",                           -- Enable most common warnings
+			"-Wextra",                         -- Even more common errors will be checked
+			"-Wpedantic",                      -- And moooore
+			"-Wctor-dtor-privacy",             -- Check if class with private constructor is used by any friends
+			"-Wnon-virtual-dtor",              -- If you have virtual member funcs - don’t forget to have virtual ~
+			"-Wold-style-cast",                -- Casting only in C++ style
+			"-Woverloaded-virtual",            -- We don’t overload virtual funcs, only overriding
+			"-Wsign-promo",                    -- Overloading is not really accurate
+			"-Wduplicated-branches",           -- Do you have save if and else branches?
+			"-Wduplicated-cond",               -- Same, but with else if
+			"-Wfloat-equal",                   -- Warning for float comparison
+			"-Wshadow=compatible-local",       -- Shadowing warnings for local variables
+			"-Wcast-qual",                     -- Warning for const qualification casts
+			"-Wconversion",                    -- Warning for implicit type conversions
+			"-Wzero-as-null-pointer-constant", -- Using zero as a null pointer constant
+			"-Wextra-semi",                    -- Extra semicolon warnings
+			"-Wsign-conversion",               -- Warnings for sign conversion
+			"-Wlogical-op",                    -- Warning for logical operations
+			"-Werror",                         -- Treat warnings as errors
+			"-pedantic-errors"                 -- Treat pedantic warnings as errors
 		}
 
 	filter "configurations:Debug"

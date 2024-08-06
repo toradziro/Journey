@@ -7,6 +7,8 @@
 #include "Journey/InputPoll.h"
 #include "Journey/ImGui/ImGuiLayer.h"
 #include "Journey/Window/Window.h"
+#include "Journey/Renderer/Buffer.h"
+#include "Journey/Renderer/Renderer.h"
 
 #include <GLAD/glad.h>
 
@@ -21,6 +23,7 @@ Application::Application()
 
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
 	s_sHolder->add<InputPoll>();
+	s_sHolder->add<Renderer>(RendererAPI::OpenGL);
 
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)
 		{
@@ -32,9 +35,7 @@ Application::Application()
 	//-- Vertex array
 	glGenVertexArrays(1, &m_vertexArrayId);
 	glBindVertexArray(m_vertexArrayId);
-	//-- Vertex buffer
-	glGenBuffers(1, &m_vertexBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferId);
+
 	//-- Vertices
 	float vertices[3 * 3] =
 	{
@@ -42,8 +43,10 @@ Application::Application()
 		0.5f, -0.5f, 0.0f,
 		0.0f, 0.5f, 0.0f,
 	};
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 9, vertices, GL_STATIC_DRAW);
-	
+
+	//-- Vertex buffer
+	m_vertexBuffer = std::unique_ptr<VertexBuffer>(VertexBuffer::create(vertices, 9));
+
 	glEnableVertexAttribArray(0);
 	//-- Attrib pointer applied to EVERY VERTEX, not to all data
 	//-- which means that:
@@ -52,14 +55,12 @@ Application::Application()
 	//-- type - data type for every element in that layout
 	//-- stride - size in bytes for amount of elements in this layout (corresponding to vertex)
 	//-- offset - how much bytes need to shift in vertexes to reach a start addres of this layout from the start of the vertex
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 	
-	//-- Index buffer
-	glGenBuffers(1, &m_indexBufferId);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferId);
 	//-- Indecies
 	uint32_t indecies[3] = { 0, 1, 2 };
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * 3, indecies, GL_STATIC_DRAW);
+	//-- Index buffer
+	m_indexBuffer = std::unique_ptr<IndexBuffer>(IndexBuffer::create(indecies, 3));
 
 	std::string vertexSrc =
 		"#version 330 core\n"
@@ -84,7 +85,7 @@ Application::Application()
 			"color = vec4(v_Position * 0.5f + 0.5f, 1.0f);\n"
 		"}\n";
 
-	m_shader = std::make_unique<Shader>(vertexSrc, fragmentSrc);
+	m_shader = std::make_unique<Shader>(std::move(vertexSrc), std::move(fragmentSrc));
 }
 
 Application::~Application()
@@ -102,7 +103,7 @@ void Application::run()
 		m_shader->bind();
 		glBindVertexArray(m_vertexArrayId);
 		//-- Elements is indexes!
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, m_indexBuffer->count(), GL_UNSIGNED_INT, nullptr);
 
 		for (auto& layer : m_layers)
 		{
@@ -123,7 +124,7 @@ void Application::run()
 void Application::onEvent(Event& event)
 {
 	EventDispatcher dispatcher(event);
-	dispatcher.dispatch<WindowCloseEvent>([this](WindowCloseEvent& event)
+	dispatcher.dispatch<WindowCloseEvent>([this](WindowCloseEvent&)
 		{
 			return windowCloseEvent();
 		});

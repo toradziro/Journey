@@ -100,7 +100,7 @@ void Window::init()
 			data->m_eventCallback(event);
 		});
 
-	glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 		{
 			WindowData* data = getDataPtrFromWindow(window);
 			switch (action)
@@ -135,7 +135,7 @@ void Window::init()
 			data->m_eventCallback(event);
 		});
 	
-	glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
+	glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int /*mods*/)
 		{
 			WindowData* data = getDataPtrFromWindow(window);
 			switch (action)

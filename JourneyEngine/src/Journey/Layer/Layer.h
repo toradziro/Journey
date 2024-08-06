@@ -17,7 +17,7 @@ public:
 	
 	virtual ~Layer() {}
 
-	virtual void onEvent(Event& event) {}
+	virtual void onEvent(Event&) {}
 	virtual void attach() {}
 	virtual void detach() {}
 	virtual void update() {}
