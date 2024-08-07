@@ -48,16 +48,16 @@ Application::Application()
 	m_vertexBuffer = std::unique_ptr<VertexBuffer>(VertexBuffer::create(vertices, 9));
 
 	glEnableVertexAttribArray(0);
-	//-- Attrib pointer applied to EVERY VERTEX, not to all data
+	//-- Attribute pointer applied to EVERY VERTEX, not to all data
 	//-- which means that:
 	//-- index - index of layout we are setting up
 	//-- size - amount of elements in that layout
 	//-- type - data type for every element in that layout
 	//-- stride - size in bytes for amount of elements in this layout (corresponding to vertex)
-	//-- offset - how much bytes need to shift in vertexes to reach a start addres of this layout from the start of the vertex
+	//-- offset - how much bytes need to shift in vertexes to reach a start address of this layout from the start of the vertex
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 	
-	//-- Indecies
+	//-- Indicies
 	uint32_t indecies[3] = { 0, 1, 2 };
 	//-- Index buffer
 	m_indexBuffer = std::unique_ptr<IndexBuffer>(IndexBuffer::create(indecies, 3));
@@ -85,7 +85,7 @@ Application::Application()
 			"color = vec4(v_Position * 0.5f + 0.5f, 1.0f);\n"
 		"}\n";
 
-	m_shader = std::make_unique<Shader>(std::move(vertexSrc), std::move(fragmentSrc));
+	m_shader = std::unique_ptr<Shader>(Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
 }
 
 Application::~Application()
