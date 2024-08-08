@@ -62,18 +62,19 @@ Application::Application()
 	glBindVertexArray(m_vertexArrayId);
 
 	//-- Vertices
-	float vertices[3 * 3] =
+	float vertices[3 * 7] =
 	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,0.2f, 0.5f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.0f, 0.2f, 0.5f, 0.0f, 1.0f,
+		0.0f, 0.5f, 0.0f,  0.2f, 0.5f, 0.0f, 1.0f
 	};
 
 	//-- Vertex buffer
-	m_vertexBuffer = std::unique_ptr<VertexBuffer>(VertexBuffer::create(vertices, 9));
+	m_vertexBuffer = std::unique_ptr<VertexBuffer>(VertexBuffer::create(vertices, 3 * 7));
 	//-- Setting up vertext attribute array (layout for providing data splitting in shader)
 	BufferLayout::LayoutData layoutData = {
-		{ ShaderDataType::Float3, "a_Position" }
+		{ ShaderDataType::Float3, "a_Position" },
+		{ ShaderDataType::Float4, "a_Color" }
 	};
 	BufferLayout layout = BufferLayout(std::move(layoutData));
 	m_vertexBuffer->setLayout(layout);
@@ -112,23 +113,27 @@ Application::Application()
 		"#version 330 core\n"
 		"\n"
 		"layout(location = 0) in vec3 a_Position;\n"
-		"out vec3 v_Position;"
+		"layout(location = 1) in vec4 a_Color;\n"
+		"out vec3 v_Position;\n"
+		"out vec4 v_Color;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
 			"gl_Position = vec4(a_Position, 1.0f);\n"
 			"v_Position = a_Position;\n"
+			"v_Color = a_Color;\n"
 		"}\n";
 
 	std::string fragmentSrc =
 		"#version 330 core\n"
 		"\n"
 		"layout(location = 0) out vec4 color;\n"
-		"in vec3 v_Position;"
+		"in vec3 v_Position;\n"
+		"in vec4 v_Color;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
-			"color = vec4(v_Position * 0.5f + 0.5f, 1.0f);\n"
+			"color = v_Color;\n"
 		"}\n";
 
 	m_shader = std::unique_ptr<Shader>(Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
