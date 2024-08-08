@@ -87,14 +87,16 @@ struct LayoutElement
 	uint32_t		m_size;
 	uint32_t		m_offset;
 	uint32_t		m_count;
-	bool			m_normilized = false;
+	bool			m_normilized;
 
-	LayoutElement(ShaderDataType type, const std::string& name)
+	LayoutElement(ShaderDataType type, const std::string& name, bool normalized = false)
 		: m_varName(name),
 		m_type(type),
 		m_size(shaderDataTypeSize(type)),
 		m_offset(0),
-		m_count(componentsCount(type)) {}
+		m_count(componentsCount(type)),
+		m_normilized(normalized)
+	{}
 };
 
 class BufferLayout
