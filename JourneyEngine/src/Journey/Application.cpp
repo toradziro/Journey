@@ -96,7 +96,7 @@ Application::Application()
 			element.m_count,
 			toOpenGLType(element.m_type),
 			element.m_normilized ? GL_TRUE : GL_FALSE,
-			layout.stride(),
+			m_vertexBuffer->layout().stride(),
 			reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
 		);
 
