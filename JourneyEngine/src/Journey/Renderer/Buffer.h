@@ -104,6 +104,7 @@ class BufferLayout
 public:
 	using LayoutData = eastl::vector<LayoutElement>;
 	using LayoutDataIterator = eastl::vector<LayoutElement>::iterator;
+	using LayoutDataConstIterator = eastl::vector<LayoutElement>::const_iterator;
 
 	BufferLayout() = default;
 	BufferLayout(LayoutData&& elements) : m_elements(std::move(elements))
@@ -117,6 +118,9 @@ public:
 
 	LayoutDataIterator begin() { return m_elements.begin(); }
 	LayoutDataIterator end() { return m_elements.end(); }
+
+	LayoutDataConstIterator begin() const { return m_elements.cbegin(); }
+	LayoutDataConstIterator end() const { return m_elements.cend(); }
 
 private:
 	void calculateOffsetAndStride()

@@ -80,7 +80,7 @@ Application::Application()
 	m_vertexBuffer->setLayout(layout);
 
 	uint32_t layoutIndex = 0;
-	for (const auto& element : layout)
+	for (const auto& element : m_vertexBuffer->layout())
 	{
 		//-- Enable 0 layout in our shader
 		glEnableVertexAttribArray(layoutIndex);
