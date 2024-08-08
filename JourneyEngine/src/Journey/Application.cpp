@@ -15,6 +15,31 @@
 namespace jny
 {
 
+GLenum toOpenGLType(ShaderDataType type)
+{
+	switch (type)
+	{
+	case ShaderDataType::Bool:		return GL_BOOL;
+	case ShaderDataType::Int:		return GL_INT;
+	case ShaderDataType::Int2:		return GL_INT;
+	case ShaderDataType::Int3:		return GL_INT;
+	case ShaderDataType::Int4:		return GL_INT;
+	case ShaderDataType::Float:		return GL_FLOAT;
+	case ShaderDataType::Float2:	return GL_FLOAT;
+	case ShaderDataType::Float3:	return GL_FLOAT;
+	case ShaderDataType::Float4:	return GL_FLOAT;
+		//-- 3x3 matrix
+	case ShaderDataType::Mat3:		return GL_FLOAT;
+		//-- 4x4 matrix
+	case ShaderDataType::Mat4:		return GL_FLOAT;
+	default:
+		break;
+	}
+
+	JNY_ASSERT(false);
+	return 0;
+}
+
 std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
@@ -46,16 +71,37 @@ Application::Application()
 
 	//-- Vertex buffer
 	m_vertexBuffer = std::unique_ptr<VertexBuffer>(VertexBuffer::create(vertices, 9));
+	//-- Setting up vertext attribute array (layout for providing data splitting in shader)
+	BufferLayout::LayoutData layoutData = {
+		{ ShaderDataType::Float3, "a_Position" }
+	};
+	BufferLayout layout = BufferLayout(std::move(layoutData));
+	m_vertexBuffer->setLayout(layout);
 
-	glEnableVertexAttribArray(0);
-	//-- Attribute pointer applied to EVERY VERTEX, not to all data
-	//-- which means that:
-	//-- index - index of layout we are setting up
-	//-- size - amount of elements in that layout
-	//-- type - data type for every element in that layout
-	//-- stride - size in bytes for amount of elements in this layout (corresponding to vertex)
-	//-- offset - how much bytes need to shift in vertexes to reach a start address of this layout from the start of the vertex
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+	uint32_t layoutIndex = 0;
+	for (const auto& element : layout)
+	{
+		//-- Enable 0 layout in our shader
+		glEnableVertexAttribArray(layoutIndex);
+		//-- Attribute pointer applied to EVERY VERTEX, not to all data
+		//-- which means that:
+		//-- index - index of layout we are setting up
+		//-- size - amount of elements in that layout
+		//-- type - data type for every element in that layout
+		//-- stride - size in bytes for amount of elements in this layout (corresponding to vertex)
+		//-- offset - how much bytes need to shift in vertexes to reach a start address of this layout from the start of the vertex
+		glVertexAttribPointer(
+			layoutIndex,
+			element.m_count,
+			toOpenGLType(element.m_type),
+			element.m_normilized ? GL_TRUE : GL_FALSE,
+			layout.stride(),
+			reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
+		);
+
+		++layoutIndex;
+	}
+
 	
 	//-- Indicies
 	uint32_t indecies[3] = { 0, 1, 2 };

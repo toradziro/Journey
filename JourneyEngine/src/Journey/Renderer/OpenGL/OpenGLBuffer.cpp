@@ -29,6 +29,11 @@ void OpenGLVertexBuffer::unbind() const
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void OpenGLVertexBuffer::setLayout(const BufferLayout& layout)
+{
+	m_layout = layout;
+}
+
 //------------------------------------------------------------------------------------ Index buffer
 OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
 	: m_indicesCount(count)

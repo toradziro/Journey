@@ -130,6 +130,7 @@ project "JourneyEngine"
 		}
 
 	filter "configurations:Debug"
+		files { "JourneyEngine/vendor/eastl/doc/EASTL.natvis" }
 		defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
 		symbols "on"
 		runtime "Debug"
