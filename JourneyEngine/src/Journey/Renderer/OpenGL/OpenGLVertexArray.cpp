@@ -40,6 +40,11 @@ OpenGLVertexArray::OpenGLVertexArray()
 	glCreateVertexArrays(1, &m_rendererId);
 }
 
+OpenGLVertexArray::~OpenGLVertexArray()
+{
+	glDeleteVertexArrays(1, &m_rendererId);
+}
+
 void OpenGLVertexArray::bind() const
 {
 	glBindVertexArray(m_rendererId);
