@@ -45,21 +45,21 @@ Application::Application()
 	};
 
 	//-- Vertex buffer
-	m_vertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create(vertices, 3 * 7));
+	std::shared_ptr<VertexBuffer> vertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create(vertices, 3 * 7));
 	//-- Setting up vertex attribute array (layout for providing data splitting in shader)
 	BufferLayout::LayoutData layoutData = {
 		{ ShaderDataType::Float3, "a_Position" },
 		{ ShaderDataType::Float4, "a_Color" }
 	};
 	BufferLayout layout = BufferLayout(std::move(layoutData));
-	m_vertexBuffer->setLayout(layout);
+	vertexBuffer->setLayout(layout);
 
-	m_vertexArray->addVertexBuffer(m_vertexBuffer);
+	m_vertexArray->addVertexBuffer(vertexBuffer);
 	
 	//-- Indices
 	uint32_t indecies[3] = { 0, 1, 2 };
 	//-- Index buffer
-	m_indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::create(indecies, 3));
+	std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::create(indecies, 3));
 
 	std::string vertexSrc =
 		"#version 330 core\n"
@@ -88,7 +88,7 @@ Application::Application()
 			"color = v_Color;\n"
 		"}\n";
 
-	m_vertexArray->setIndexBuffer(m_indexBuffer);
+	m_vertexArray->setIndexBuffer(indexBuffer);
 
 	m_shader = std::shared_ptr<Shader>(Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
 }
@@ -108,7 +108,7 @@ void Application::run()
 		m_shader->bind();
 		m_vertexArray->bind();
 		//-- Elements is indexes!
-		glDrawElements(GL_TRIANGLES, m_indexBuffer->count(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, m_vertexArray->indexBuffer()->count(), GL_UNSIGNED_INT, nullptr);
 
 		for (auto& layer : m_layers)
 		{
