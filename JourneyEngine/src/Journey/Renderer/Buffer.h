@@ -83,10 +83,15 @@ uint32_t componentsCount(ShaderDataType type)
 struct LayoutElement
 {
 	std::string		m_varName;
+	//-- Crossplatfom way of describing layout variable type
 	ShaderDataType	m_type = ShaderDataType::None;
+	//-- Size in bytes of current layout element - need to collect offset & stride
 	uint32_t		m_size;
+	//-- Offset from the start of layout to current layout element
 	uint32_t		m_offset;
+	//-- Amount of elements in a layout - vec3 - 3 floats
 	uint32_t		m_count;
+	//-- Is normalized data
 	bool			m_normilized;
 
 	LayoutElement(ShaderDataType type, const std::string& name, bool normalized = false)
@@ -136,7 +141,9 @@ private:
 		m_stride = offset;
 	}
 
+	//-- All layouts set for VertexArray
 	LayoutData m_elements;
+	//-- Full size of layout in bytes
 	uint32_t m_stride = 0;
 };
 
