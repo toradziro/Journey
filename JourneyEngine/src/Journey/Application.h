@@ -2,8 +2,8 @@
 
 #include "Journey/Core.h"
 #include "Journey/Layer/LayerStack.h"
-#include "SingletonInterface.h"
 #include "Journey/Renderer/Shader.h"
+#include "SingletonInterface.h"
 
 namespace jny
 {

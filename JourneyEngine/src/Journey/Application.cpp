@@ -10,8 +10,7 @@
 #include "Journey/Renderer/Buffer.h"
 #include "Journey/Renderer/VertexArray.h"
 #include "Journey/Renderer/Renderer.h"
-
-#include <GLAD/glad.h>
+#include "Journey/Renderer/RenderCommand.h"
 
 namespace jny
 {
@@ -22,10 +21,18 @@ Application::Application()
 {
 	s_sHolder = std::make_unique<SingletonHolder>();
 
+	//-- Create main window
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
+	//-- Easy way to check if any events ongoing
 	s_sHolder->add<InputPoll>();
-	s_sHolder->add<Renderer>(RendererAPI::OpenGL);
+	//-- Creating renderer based on API we want to use for rendering
+	//-- RenderCommnad is a holder for API implementation and also caller for rendering methods
+	s_sHolder->add<RenderCommand>();
+	s_sHolder->st<RenderCommand>().createRenderer(RendererAPI::API::OpenGL);
+	//-- Interface for rendering
+	s_sHolder->add<Renderer>();
 
+	//-- Prepare to process events
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)
 		{
 			onEvent(_event);
@@ -102,19 +109,27 @@ void Application::run()
 {
 	while (m_running)
 	{
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		auto& renderer = Application::subsystems().st<Renderer>();
 
+		renderer.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		renderer.clear();
+
+		//-- Start rendering
+		renderer.beginScene();
+		
+		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
 		m_shader->bind();
-		m_vertexArray->bind();
-		//-- Elements is indexes!
-		glDrawElements(GL_TRIANGLES, m_vertexArray->indexBuffer()->count(), GL_UNSIGNED_INT, nullptr);
+		renderer.submit(m_vertexArray);
+		
+		//-- End rendering
+		renderer.endScene();
 
 		for (auto& layer : m_layers)
 		{
 			layer->update();
 		}
-
+		
+		//-- ImGui drawing
 		m_imGuiLayer->begin();
 		for (auto& layer : m_layers)
 		{
@@ -134,9 +149,9 @@ void Application::onEvent(Event& event)
 			return windowCloseEvent();
 		});
 
-	for (auto& layer : m_layers)
+	for (auto it = m_layers.rbegin(); it != m_layers.rend(); ++it)
 	{
-		layer->onEvent(event);
+		(*it)->onEvent(event);
 		if (event.handeled())
 		{
 			break;

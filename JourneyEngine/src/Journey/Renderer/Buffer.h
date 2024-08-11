@@ -32,21 +32,21 @@ uint32_t shaderDataTypeSize(ShaderDataType type)
 {
 	switch (type)
 	{
-	case ShaderDataType::Bool:		return sizeof(bool);
-	case ShaderDataType::Int:		return sizeof(int);
-	case ShaderDataType::Int2:		return sizeof(int) * 2;
-	case ShaderDataType::Int3:		return sizeof(int) * 3;
-	case ShaderDataType::Int4:		return sizeof(int) * 4;
-	case ShaderDataType::Float:		return sizeof(float);
-	case ShaderDataType::Float2:	return sizeof(float) * 2;
-	case ShaderDataType::Float3:	return sizeof(float) * 3;
-	case ShaderDataType::Float4:	return sizeof(float) * 4;
-	//-- 3x3 matrix
-	case ShaderDataType::Mat3:		return sizeof(float) * 3 * 3;
-	//-- 4x4 matrix
-	case ShaderDataType::Mat4:		return sizeof(float) * 4 * 4;
-	default:
-		break;
+		case ShaderDataType::Bool:		return sizeof(bool);
+		case ShaderDataType::Int:		return sizeof(int);
+		case ShaderDataType::Int2:		return sizeof(int) * 2;
+		case ShaderDataType::Int3:		return sizeof(int) * 3;
+		case ShaderDataType::Int4:		return sizeof(int) * 4;
+		case ShaderDataType::Float:		return sizeof(float);
+		case ShaderDataType::Float2:	return sizeof(float) * 2;
+		case ShaderDataType::Float3:	return sizeof(float) * 3;
+		case ShaderDataType::Float4:	return sizeof(float) * 4;
+		//-- 3x3 matrix
+		case ShaderDataType::Mat3:		return sizeof(float) * 3 * 3;
+		//-- 4x4 matrix
+		case ShaderDataType::Mat4:		return sizeof(float) * 4 * 4;
+		default:
+			break;
 	}
 
 	JNY_ASSERT(false);
@@ -57,21 +57,21 @@ uint32_t componentsCount(ShaderDataType type)
 {
 	switch (type)
 	{
-	case ShaderDataType::Bool:		return 1;
-	case ShaderDataType::Int:		return 1;
-	case ShaderDataType::Int2:		return 2;
-	case ShaderDataType::Int3:		return 3;
-	case ShaderDataType::Int4:		return 4;
-	case ShaderDataType::Float:		return 1;
-	case ShaderDataType::Float2:	return 2;
-	case ShaderDataType::Float3:	return 3;
-	case ShaderDataType::Float4:	return 4;
-	//-- 3x3 matrix
-	case ShaderDataType::Mat3:		return 3 * 3;
-	//-- 4x4 matrix
-	case ShaderDataType::Mat4:		return 4 * 4;
-	default:
-		break;
+		case ShaderDataType::Bool:		return 1;
+		case ShaderDataType::Int:		return 1;
+		case ShaderDataType::Int2:		return 2;
+		case ShaderDataType::Int3:		return 3;
+		case ShaderDataType::Int4:		return 4;
+		case ShaderDataType::Float:		return 1;
+		case ShaderDataType::Float2:	return 2;
+		case ShaderDataType::Float3:	return 3;
+		case ShaderDataType::Float4:	return 4;
+		//-- 3x3 matrix
+		case ShaderDataType::Mat3:		return 3 * 3;
+		//-- 4x4 matrix
+		case ShaderDataType::Mat4:		return 4 * 4;
+		default:
+			break;
 	}
 
 	JNY_ASSERT(false);

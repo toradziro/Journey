@@ -14,6 +14,7 @@ class  LayerStack
 {
 public:
 	using LayerStackPos = eastl::vector<Layer*>::iterator;
+	using LayerReverseIt = eastl::vector<Layer*>::reverse_iterator;
 
 	LayerStack();
 	~LayerStack();
@@ -48,6 +49,9 @@ public:
 
 	LayerStackPos begin() { return m_layers.begin(); }
 	LayerStackPos end() { return m_layers.end(); }
+
+	LayerReverseIt rbegin() { return m_layers.rbegin(); }
+	LayerReverseIt rend() { return m_layers.rend(); }
 
 private:
 	eastl::vector<Layer*>	m_layers;

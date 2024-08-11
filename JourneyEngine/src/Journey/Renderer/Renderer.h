@@ -1,26 +1,26 @@
 #pragma once
 
 #include "Journey/SingletonInterface.h"
+#include "RenderCommand.h"
 
 namespace jny
 {
 
-enum class RendererAPI : uint8_t
-{
-	None = 0,
-	OpenGL
-};
-
 class Renderer : ISingleton
 {
 	JNY_SINGLETON_TYPE(Renderer)
-	Renderer(RendererAPI rendererAPI);
+	Renderer() = default;
 
 public:
-	inline RendererAPI API() const { return m_rendererAPI; }
+	void beginScene();
+	void endScene();
 
-private:
-	RendererAPI m_rendererAPI = RendererAPI::None;
+	void submit(const std::shared_ptr<VertexArray>& vertexArray);
+
+	void setClearColor(const glm::vec4& color);
+	void clear();
+
+	RendererAPI::API API();
 };
 
 } //-- jny

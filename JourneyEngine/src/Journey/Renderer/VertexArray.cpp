@@ -14,10 +14,10 @@ VertexArray* VertexArray::create()
 
 	switch (rendererApi)
 	{
-	case RendererAPI::None:
+	case RendererAPI::API::None:
 		JNY_ASSERT(true);
 		break;
-	case RendererAPI::OpenGL:
+	case RendererAPI::API::OpenGL:
 		buffer = new OpenGLVertexArray();
 		break;
 	default:

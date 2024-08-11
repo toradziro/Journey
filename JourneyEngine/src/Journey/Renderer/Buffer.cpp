@@ -15,10 +15,10 @@ VertexBuffer* VertexBuffer::create(float* vertices, uint32_t count)
 
 	switch (rendererApi)
 	{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			JNY_ASSERT(true);
 			break;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			buffer = new OpenGLVertexBuffer(vertices, count);
 			break;
 		default:
@@ -35,10 +35,10 @@ IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t count)
 
 	switch (rendererApi)
 	{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			JNY_ASSERT(true);
 			break;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			buffer = new OpenGLIndexBuffer(indices, count);
 			break;
 		default:

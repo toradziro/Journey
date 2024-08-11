@@ -14,10 +14,10 @@ Shader* Shader::create(const std::string& vertexSrc, const std::string& fragment
 
 	switch (api)
 	{
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			shader = new OpenGLShader(vertexSrc, fragmentSrc);
 			break;
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			JNY_ASSERT(false);
 			break;
 		default:
