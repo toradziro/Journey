@@ -7,16 +7,20 @@
 namespace jny
 {
 
-void Renderer::beginScene()
+void Renderer::beginScene(const std::shared_ptr<OrthographicCamera>& camera)
 {
+	m_sceneData.m_vpMatrix = camera->viewProjectionMatrix();
 }
 
 void Renderer::endScene()
 {
 }
 
-void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray)
+void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader)
 {
+	shader->bind();
+	shader->uploadUniformMat4(m_sceneData.m_vpMatrix, "u_vpMatrix");
+	vertexArray->bind();
 	Application::subsystems().st<RenderCommand>().drawIndexed(vertexArray);
 }
 

@@ -9,8 +9,10 @@
 #include "Journey/Window/Window.h"
 #include "Journey/Renderer/Buffer.h"
 #include "Journey/Renderer/VertexArray.h"
+#include "Journey/Renderer/Shader.h"
 #include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/RenderCommand.h"
+#include "Journey/Renderer/OrthographicCamera.h"
 
 namespace jny
 {
@@ -18,6 +20,7 @@ namespace jny
 std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
+	: m_orthoCamera(new OrthographicCamera(-1.0f, 1.0f, -1.0f, 1.0f))
 {
 	s_sHolder = std::make_unique<SingletonHolder>();
 
@@ -73,12 +76,13 @@ Application::Application()
 		"\n"
 		"layout(location = 0) in vec3 a_Position;\n"
 		"layout(location = 1) in vec4 a_Color;\n"
+		"uniform mat4 u_vpMatrix;\n"
 		"out vec3 v_Position;\n"
 		"out vec4 v_Color;\n"
 		"\n"
 		"void main()\n"
 		"{\n"
-			"gl_Position = vec4(a_Position, 1.0f);\n"
+			"gl_Position = u_vpMatrix * vec4(a_Position, 1.0f);\n"
 			"v_Position = a_Position;\n"
 			"v_Color = a_Color;\n"
 		"}\n";
@@ -114,12 +118,14 @@ void Application::run()
 		renderer.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		renderer.clear();
 
+		m_orthoCamera->setPosition({0.2f, 0.2f, 0.0f});
+		m_orthoCamera->setRotation(45.0f);
+
 		//-- Start rendering
-		renderer.beginScene();
+		renderer.beginScene(m_orthoCamera);
 		
 		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
-		m_shader->bind();
-		renderer.submit(m_vertexArray);
+		renderer.submit(m_vertexArray, m_shader);
 		
 		//-- End rendering
 		renderer.endScene();

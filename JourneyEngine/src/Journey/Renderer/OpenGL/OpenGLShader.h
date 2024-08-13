@@ -14,6 +14,8 @@ public:
 	virtual void bind() const override;
 	virtual void unbind() const override;
 
+	virtual void uploadUniformMat4(const glm::mat4& matrix, std::string_view name) override;
+
 private:
 	uint32_t	m_rendererId = 0;
 };
