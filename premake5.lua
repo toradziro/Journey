@@ -168,6 +168,9 @@ project "Sandbox"
 		"%{IncludeDir.EASTL}",
 		"%{IncludeDir.EASTLBase}",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}",
 		"JourneyEngine/src"
 	}
 

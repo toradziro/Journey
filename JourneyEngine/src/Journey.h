@@ -16,3 +16,10 @@
 #include "Journey/EntryPoint.h"
 
 #include "Journey/ImGui/ImGuiLayer.h"
+
+#include "Journey/Renderer/Buffer.h"
+#include "Journey/Renderer/VertexArray.h"
+#include "Journey/Renderer/Shader.h"
+#include "Journey/Renderer/Renderer.h"
+#include "Journey/Renderer/RenderCommand.h"
+#include "Journey/Renderer/OrthographicCamera.h"

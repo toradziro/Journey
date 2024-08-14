@@ -9,11 +9,6 @@ namespace jny
 
 class ImGuiLayer;
 class Window;
-class VertexBuffer;
-class IndexBuffer;
-class VertexArray;
-class Shader;
-class OrthographicCamera;
 
 #pragma warning(push)
 #pragma warning(disable: 4251)
@@ -54,9 +49,7 @@ private:
 
 	uint32_t							m_vertexArrayId = 0;
 
-	std::shared_ptr<Shader>				m_shader;
-	std::shared_ptr<VertexArray>		m_vertexArray;
-	std::shared_ptr<OrthographicCamera>	m_orthoCamera;
+
 
 	bool		m_running = true;
 

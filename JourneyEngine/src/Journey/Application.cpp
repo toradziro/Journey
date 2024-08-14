@@ -7,12 +7,9 @@
 #include "Journey/InputPoll.h"
 #include "Journey/ImGui/ImGuiLayer.h"
 #include "Journey/Window/Window.h"
-#include "Journey/Renderer/Buffer.h"
-#include "Journey/Renderer/VertexArray.h"
-#include "Journey/Renderer/Shader.h"
+
 #include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/RenderCommand.h"
-#include "Journey/Renderer/OrthographicCamera.h"
 
 namespace jny
 {
@@ -20,7 +17,6 @@ namespace jny
 std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
-	: m_orthoCamera(new OrthographicCamera(-1.0f, 1.0f, -1.0f, 1.0f))
 {
 	s_sHolder = std::make_unique<SingletonHolder>();
 
@@ -42,66 +38,6 @@ Application::Application()
 		});
 
 	m_imGuiLayer = pushOverlay<ImGuiLayer>();
-
-	//-- Vertex array
-	m_vertexArray = std::shared_ptr<VertexArray>(VertexArray::create());
-
-	//-- Vertices
-	float vertices[3 * 7] =
-	{
-		-0.5f, -0.5f, 0.0f,0.2f, 0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.0f, 0.2f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.5f, 0.0f,  0.9f, 0.2f, 0.0f, 1.0f
-	};
-
-	//-- Vertex buffer
-	std::shared_ptr<VertexBuffer> vertexBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create(vertices, 3 * 7));
-	//-- Setting up vertex attribute array (layout for providing data splitting in shader)
-	BufferLayout::LayoutData layoutData = {
-		{ ShaderDataType::Float3, "a_Position" },
-		{ ShaderDataType::Float4, "a_Color" }
-	};
-	BufferLayout layout = BufferLayout(std::move(layoutData));
-	vertexBuffer->setLayout(layout);
-
-	m_vertexArray->addVertexBuffer(vertexBuffer);
-	
-	//-- Indices
-	uint32_t indecies[3] = { 0, 1, 2 };
-	//-- Index buffer
-	std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::create(indecies, 3));
-
-	std::string vertexSrc =
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) in vec3 a_Position;\n"
-		"layout(location = 1) in vec4 a_Color;\n"
-		"uniform mat4 u_vpMatrix;\n"
-		"out vec3 v_Position;\n"
-		"out vec4 v_Color;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-			"gl_Position = u_vpMatrix * vec4(a_Position, 1.0f);\n"
-			"v_Position = a_Position;\n"
-			"v_Color = a_Color;\n"
-		"}\n";
-
-	std::string fragmentSrc =
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) out vec4 color;\n"
-		"in vec3 v_Position;\n"
-		"in vec4 v_Color;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-			"color = v_Color;\n"
-		"}\n";
-
-	m_vertexArray->setIndexBuffer(indexBuffer);
-
-	m_shader = std::shared_ptr<Shader>(Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
 }
 
 Application::~Application()
@@ -113,22 +49,7 @@ void Application::run()
 {
 	while (m_running)
 	{
-		auto& renderer = Application::subsystems().st<Renderer>();
 
-		renderer.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		renderer.clear();
-
-		m_orthoCamera->setPosition({0.2f, 0.2f, 0.0f});
-		m_orthoCamera->setRotation(45.0f);
-
-		//-- Start rendering
-		renderer.beginScene(m_orthoCamera);
-		
-		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
-		renderer.submit(m_vertexArray, m_shader);
-		
-		//-- End rendering
-		renderer.endScene();
 
 		for (auto& layer : m_layers)
 		{
