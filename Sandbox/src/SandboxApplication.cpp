@@ -96,59 +96,87 @@ public:
 	void onEvent(jny::Event& event) override
 	{
 		jny::EventDispatcher dispatcher(event);
+
 		dispatcher.dispatch<jny::KeyPressedEvent>([&](jny::KeyPressedEvent& event)
 			{
-				constexpr float C_SPEED = 0.02f;
-				auto currPos = m_orthoCamera->position();
-				//-- Camera is ortho so we won't see any difference with z component right now
-				if (event.keyCode() == GLFW_KEY_W)
-				{
-					currPos.z += C_SPEED;
-					m_orthoCamera->setPosition(currPos);
-					return true;
-				}
-				else if (event.keyCode() == GLFW_KEY_S)
-				{
-					currPos.z -= C_SPEED;
-					m_orthoCamera->setPosition(currPos);
-					return true;
-				}
-				else if (event.keyCode() == GLFW_KEY_A)
-				{
-					currPos.x -= C_SPEED;
-					m_orthoCamera->setPosition(currPos);
-					return true;
-				}
-				else if (event.keyCode() == GLFW_KEY_D)
-				{
-					currPos.x += C_SPEED;
-					m_orthoCamera->setPosition(currPos);
-					return true;
-				}
-				else if (event.keyCode() == GLFW_KEY_Q)
-				{
-					currPos.y += C_SPEED;
-					m_orthoCamera->setPosition(currPos);
-					return true;
-				}
-				else if (event.keyCode() == GLFW_KEY_E)
-				{
-					currPos.y -= C_SPEED;
-					m_orthoCamera->setPosition(currPos);
-					return true;
-				}
-				return false;
+				return keyPressedEventDispatch(event);
 			});
 	}
 
 	void imGuiRender() override
 	{
+		if (m_scenePropsWindowOpen)
+		{
+			ImGui::Begin("Scene properties", &m_scenePropsWindowOpen);
+			
+			constexpr auto tableFlags = ImGuiTableFlags_NoSavedSettings
+				| ImGuiTableFlags_NoBordersInBodyUntilResize
+				| ImGuiTableFlags_Resizable;
+
+			if (ImGui::BeginTable("##scenePropsTable", 2, tableFlags, ImGui::GetContentRegionAvail()))
+			{
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted("Camera speed");
+
+				ImGui::TableNextColumn();
+				ImGui::DragFloat("##cameraSpeedScalar", &m_cameraSpeed, 0.01f, 0.0f, 1.0f);
+
+				ImGui::EndTable();
+			}
+			ImGui::End();
+		}
+	}
+
+	bool keyPressedEventDispatch(jny::KeyPressedEvent& event)
+	{
+		auto currPos = m_orthoCamera->position();
+		//-- Camera is ortho so we won't see any difference with z component right now
+		if (event.keyCode() == GLFW_KEY_W)
+		{
+			currPos.z += m_cameraSpeed;
+			m_orthoCamera->setPosition(currPos);
+			return true;
+		}
+		else if (event.keyCode() == GLFW_KEY_S)
+		{
+			currPos.z -= m_cameraSpeed;
+			m_orthoCamera->setPosition(currPos);
+			return true;
+		}
+		else if (event.keyCode() == GLFW_KEY_A)
+		{
+			currPos.x -= m_cameraSpeed;
+			m_orthoCamera->setPosition(currPos);
+			return true;
+		}
+		else if (event.keyCode() == GLFW_KEY_D)
+		{
+			currPos.x += m_cameraSpeed;
+			m_orthoCamera->setPosition(currPos);
+			return true;
+		}
+		else if (event.keyCode() == GLFW_KEY_Q)
+		{
+			currPos.y += m_cameraSpeed;
+			m_orthoCamera->setPosition(currPos);
+			return true;
+		}
+		else if (event.keyCode() == GLFW_KEY_E)
+		{
+			currPos.y -= m_cameraSpeed;
+			m_orthoCamera->setPosition(currPos);
+			return true;
+		}
+		return false;
 	}
 
 private:
 	std::shared_ptr<jny::Shader>				m_shader;
 	std::shared_ptr<jny::VertexArray>			m_vertexArray;
 	std::shared_ptr<jny::OrthographicCamera>	m_orthoCamera;
+
+	float										m_cameraSpeed = 0.02f;
+	bool										m_scenePropsWindowOpen = true;
 };
 
 Sandbox::Sandbox()
