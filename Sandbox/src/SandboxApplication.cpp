@@ -78,6 +78,8 @@ public:
 
 	void update() override
 	{
+		updateCamera();
+
 		auto& renderer = jny::Application::subsystems().st<jny::Renderer>();
 
 		renderer.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
@@ -93,14 +95,9 @@ public:
 		renderer.endScene();
 	}
 
-	void onEvent(jny::Event& event) override
+	void onEvent(jny::Event& /*event*/) override
 	{
-		jny::EventDispatcher dispatcher(event);
-
-		dispatcher.dispatch<jny::KeyPressedEvent>([&](jny::KeyPressedEvent& event)
-			{
-				return keyPressedEventDispatch(event);
-			});
+		//jny::EventDispatcher dispatcher(event);
 	}
 
 	void imGuiRender() override
@@ -115,11 +112,19 @@ public:
 
 			if (ImGui::BeginTable("##scenePropsTable", 2, tableFlags, ImGui::GetContentRegionAvail()))
 			{
+				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
 				ImGui::TextUnformatted("Camera speed");
 
 				ImGui::TableNextColumn();
 				ImGui::DragFloat("##cameraSpeedScalar", &m_cameraSpeed, 0.01f, 0.0f, 1.0f);
+
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted("Rotation speed");
+
+				ImGui::TableNextColumn();
+				ImGui::DragFloat("##cameraRotationSpeedScalar", &m_cameraRotationSpeed, 1.0f, 0.0f, 20.0f);
 
 				ImGui::EndTable();
 			}
@@ -127,47 +132,37 @@ public:
 		}
 	}
 
-	bool keyPressedEventDispatch(jny::KeyPressedEvent& event)
+	void updateCamera()
 	{
-		auto currPos = m_orthoCamera->position();
-		//-- Camera is ortho so we won't see any difference with z component right now
-		if (event.keyCode() == GLFW_KEY_W)
+		auto& inputPollSystem = jny::Application::subsystems().st<jny::InputPoll>();
+		if (inputPollSystem.keyPressed(GLFW_KEY_RIGHT))
 		{
-			currPos.z += m_cameraSpeed;
-			m_orthoCamera->setPosition(currPos);
-			return true;
+			m_cameraPos.x -= m_cameraSpeed;
 		}
-		else if (event.keyCode() == GLFW_KEY_S)
+		else if (inputPollSystem.keyPressed(GLFW_KEY_LEFT))
 		{
-			currPos.z -= m_cameraSpeed;
-			m_orthoCamera->setPosition(currPos);
-			return true;
+			m_cameraPos.x += m_cameraSpeed;
 		}
-		else if (event.keyCode() == GLFW_KEY_A)
+
+		if (inputPollSystem.keyPressed(GLFW_KEY_UP))
 		{
-			currPos.x -= m_cameraSpeed;
-			m_orthoCamera->setPosition(currPos);
-			return true;
+			m_cameraPos.y += m_cameraSpeed;
 		}
-		else if (event.keyCode() == GLFW_KEY_D)
+		else if (inputPollSystem.keyPressed(GLFW_KEY_DOWN))
 		{
-			currPos.x += m_cameraSpeed;
-			m_orthoCamera->setPosition(currPos);
-			return true;
+			m_cameraPos.y -= m_cameraSpeed;
 		}
-		else if (event.keyCode() == GLFW_KEY_Q)
+
+		if (inputPollSystem.keyPressed(GLFW_KEY_Q))
 		{
-			currPos.y += m_cameraSpeed;
-			m_orthoCamera->setPosition(currPos);
-			return true;
+			m_cameraRotation += m_cameraRotationSpeed;
 		}
-		else if (event.keyCode() == GLFW_KEY_E)
+		else if (inputPollSystem.keyPressed(GLFW_KEY_E))
 		{
-			currPos.y -= m_cameraSpeed;
-			m_orthoCamera->setPosition(currPos);
-			return true;
+			m_cameraRotation -= m_cameraRotationSpeed;
 		}
-		return false;
+		m_orthoCamera->setPosition(m_cameraPos);
+		m_orthoCamera->setRotation(m_cameraRotation);
 	}
 
 private:
@@ -175,7 +170,11 @@ private:
 	std::shared_ptr<jny::VertexArray>			m_vertexArray;
 	std::shared_ptr<jny::OrthographicCamera>	m_orthoCamera;
 
-	float										m_cameraSpeed = 0.02f;
+	glm::vec3									m_cameraPos = { 0.0f, 0.0f, 0.0f };
+	float										m_cameraRotation = 0.0f;
+
+	float										m_cameraSpeed = 0.01f;
+	float										m_cameraRotationSpeed = 1.0f;
 	bool										m_scenePropsWindowOpen = true;
 };
 
