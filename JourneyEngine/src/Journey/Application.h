@@ -43,14 +43,8 @@ public:
 	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr); return *s_sHolder; }
 
 private:
-
-	LayerStack							m_layers;
-	ImGuiLayer*							m_imGuiLayer = nullptr;
-
-	uint32_t							m_vertexArrayId = 0;
-
-
-
+	LayerStack	m_layers;
+	ImGuiLayer*	m_imGuiLayer = nullptr;
 	bool		m_running = true;
 
 private:

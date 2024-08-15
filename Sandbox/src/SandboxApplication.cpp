@@ -76,8 +76,10 @@ public:
 		m_shader = std::shared_ptr<jny::Shader>(jny::Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
 	}
 
-	void update() override
+	void update(float dt) override
 	{
+		m_deltaTime = dt;
+
 		updateCamera();
 
 		auto& renderer = jny::Application::subsystems().st<jny::Renderer>();
@@ -110,56 +112,70 @@ public:
 				| ImGuiTableFlags_NoBordersInBodyUntilResize
 				| ImGuiTableFlags_Resizable;
 
-			if (ImGui::BeginTable("##scenePropsTable", 2, tableFlags, ImGui::GetContentRegionAvail()))
+			//-- (ImGui::CalcTextSize("Delta Time").y * 2) + 5;
+			//-- 2 strings at the bottom for FPS and DeltaTime and 5 pixels to see it clear
+			float textHeight = (ImGui::CalcTextSize("Delta Time").y * 2) + 5;
+			ImVec2 tableSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - textHeight };
+
+			if (ImGui::BeginTable("##scenePropsTable", 2, tableFlags, tableSize))
 			{
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
 				ImGui::TextUnformatted("Camera speed");
 
 				ImGui::TableNextColumn();
-				ImGui::DragFloat("##cameraSpeedScalar", &m_cameraSpeed, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("##cameraSpeedScalar", &m_cameraMoveSpeed, 0.1f, 0.0f, 5.0f);
 
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
 				ImGui::TextUnformatted("Rotation speed");
 
 				ImGui::TableNextColumn();
-				ImGui::DragFloat("##cameraRotationSpeedScalar", &m_cameraRotationSpeed, 1.0f, 0.0f, 20.0f);
+				ImGui::DragFloat("##cameraRotationSpeedScalar", &m_cameraRotationSpeed, 1.0f, 0.0f, 40.0f);
 
 				ImGui::EndTable();
 			}
+
+			std::string deltaTimeStr = fmt::format("Frame time: {:.1f} ms", m_deltaTime * 1000.0f);
+			std::string fpsStr = fmt::format("FPS: {}", static_cast<int>(1.0f / m_deltaTime));
+
+			ImGui::TextUnformatted(deltaTimeStr.c_str());
+			ImGui::TextUnformatted(fpsStr.c_str());
 			ImGui::End();
 		}
 	}
 
 	void updateCamera()
 	{
+		float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * m_deltaTime;
+		float cameraRotationWithDeltaTime = m_cameraRotationSpeed * m_deltaTime;
+
 		auto& inputPollSystem = jny::Application::subsystems().st<jny::InputPoll>();
 		if (inputPollSystem.keyPressed(GLFW_KEY_RIGHT))
 		{
-			m_cameraPos.x -= m_cameraSpeed;
+			m_cameraPos.x -= cameraSpeedWithDeltaTime;
 		}
 		else if (inputPollSystem.keyPressed(GLFW_KEY_LEFT))
 		{
-			m_cameraPos.x += m_cameraSpeed;
+			m_cameraPos.x += cameraSpeedWithDeltaTime;
 		}
 
 		if (inputPollSystem.keyPressed(GLFW_KEY_UP))
 		{
-			m_cameraPos.y += m_cameraSpeed;
+			m_cameraPos.y += cameraSpeedWithDeltaTime;
 		}
 		else if (inputPollSystem.keyPressed(GLFW_KEY_DOWN))
 		{
-			m_cameraPos.y -= m_cameraSpeed;
+			m_cameraPos.y -= cameraSpeedWithDeltaTime;
 		}
 
 		if (inputPollSystem.keyPressed(GLFW_KEY_Q))
 		{
-			m_cameraRotation += m_cameraRotationSpeed;
+			m_cameraRotation += cameraRotationWithDeltaTime;
 		}
 		else if (inputPollSystem.keyPressed(GLFW_KEY_E))
 		{
-			m_cameraRotation -= m_cameraRotationSpeed;
+			m_cameraRotation -= cameraRotationWithDeltaTime;
 		}
 		m_orthoCamera->setPosition(m_cameraPos);
 		m_orthoCamera->setRotation(m_cameraRotation);
@@ -173,8 +189,9 @@ private:
 	glm::vec3									m_cameraPos = { 0.0f, 0.0f, 0.0f };
 	float										m_cameraRotation = 0.0f;
 
-	float										m_cameraSpeed = 0.01f;
-	float										m_cameraRotationSpeed = 1.0f;
+	float										m_cameraMoveSpeed = 1.0f;
+	float										m_cameraRotationSpeed = 20.0f;
+	float										m_deltaTime = 0.0f;
 	bool										m_scenePropsWindowOpen = true;
 };
 

@@ -11,6 +11,7 @@ void operator delete[](void* p, size_t alignment, size_t alignmentOffset, const 
 #include <string>
 #include <sstream>
 #include <functional>
+#include <chrono>
 
 #ifdef JNY_PLATFORM_WINDOWS
 #include <Windows.h>

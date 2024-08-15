@@ -47,13 +47,14 @@ Application::~Application()
 
 void Application::run()
 {
+	std::chrono::duration<float> deltaTime = {};
 	while (m_running)
 	{
-
+		auto startTime = std::chrono::high_resolution_clock::now();
 
 		for (auto& layer : m_layers)
 		{
-			layer->update();
+			layer->update(deltaTime.count());
 		}
 		
 		//-- ImGui drawing
@@ -65,6 +66,9 @@ void Application::run()
 		m_imGuiLayer->end();
 
 		s_sHolder->st<Window>().update();
+
+		auto endTime = std::chrono::high_resolution_clock::now();
+		deltaTime = endTime - startTime;
 	}
 }
 
