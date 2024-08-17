@@ -17,7 +17,9 @@ public:
 	void beginScene(const std::shared_ptr<OrthographicCamera>& camera);
 	void endScene();
 
-	void submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader);
+	void submit(const std::shared_ptr<VertexArray>& vertexArray,
+		const std::shared_ptr<Shader>& shader,
+		const glm::mat4& objTransform = glm::mat4(1.0f));
 
 	void setClearColor(const glm::vec4& color);
 	void clear();

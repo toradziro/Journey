@@ -5,6 +5,7 @@
 
 #include <imgui.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
 class ExampleLayer : public jny::Layer
@@ -49,12 +50,13 @@ public:
 			"layout(location = 0) in vec3 a_Position;\n"
 			"layout(location = 1) in vec4 a_Color;\n"
 			"uniform mat4 u_vpMatrix;\n"
+			"uniform mat4 u_modelTransform;\n"
 			"out vec3 v_Position;\n"
 			"out vec4 v_Color;\n"
 			"\n"
 			"void main()\n"
 			"{\n"
-			"gl_Position = u_vpMatrix * vec4(a_Position, 1.0f);\n"
+			"gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);\n"
 			"v_Position = a_Position;\n"
 			"v_Color = a_Color;\n"
 			"}\n";
@@ -91,7 +93,10 @@ public:
 		renderer.beginScene(m_orthoCamera);
 
 		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
-		renderer.submit(m_vertexArray, m_shader);
+		m_modelTransform = glm::mat4(1.0f);
+		m_modelTransform = glm::translate(m_modelTransform, m_modelPosition);
+		m_modelTransform = glm::scale(m_modelTransform, m_modelScale);
+		renderer.submit(m_vertexArray, m_shader, m_modelTransform);
 
 		//-- End rendering
 		renderer.endScene();
@@ -132,6 +137,24 @@ public:
 
 				ImGui::TableNextColumn();
 				ImGui::DragFloat("##cameraRotationSpeedScalar", &m_cameraRotationSpeed, 1.0f, 0.0f, 40.0f);
+
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted("Position");
+				ImGui::TableNextColumn();
+				ImGui::DragFloat3("##positionModel", &m_modelPosition.x, 0.01f, 0.0f);
+
+				//ImGui::TableNextRow();
+				//ImGui::TableNextColumn();
+				//ImGui::TextUnformatted("Rotation");
+				//ImGui::TableNextColumn();
+				//ImGui::DragFloat3("##rotationModel", &m_modelRotation.x, 0.0f);
+
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted("Scale");
+				ImGui::TableNextColumn();
+				ImGui::DragFloat3("##scaleModel", &m_modelScale.x, 0.01f, 0.0f);
 
 				ImGui::EndTable();
 			}
@@ -185,6 +208,11 @@ private:
 	std::shared_ptr<jny::Shader>				m_shader;
 	std::shared_ptr<jny::VertexArray>			m_vertexArray;
 	std::shared_ptr<jny::OrthographicCamera>	m_orthoCamera;
+
+	glm::mat4									m_modelTransform = (1.0f);
+	glm::vec3									m_modelPosition = { 0.0f, 0.0f, 0.0f };
+	//glm::vec3									m_modelRotation = { 1.0f, 1.0f, 1.0f };
+	glm::vec3									m_modelScale = { 1.0f, 1.0f, 1.0f };
 
 	glm::vec3									m_cameraPos = { 0.0f, 0.0f, 0.0f };
 	float										m_cameraRotation = 0.0f;
