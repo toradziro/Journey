@@ -48,17 +48,16 @@ public:
 			"#version 330 core\n"
 			"\n"
 			"layout(location = 0) in vec3 a_Position;\n"
-			"uniform vec3 u_color;\n"
+			"\n"
 			"uniform mat4 u_vpMatrix;\n"
 			"uniform mat4 u_modelTransform;\n"
+			"\n"
 			"out vec3 v_Position;\n"
-			"out vec4 v_Color;\n"
 			"\n"
 			"void main()\n"
 			"{\n"
-			"gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);\n"
-			"v_Position = a_Position;\n"
-			"v_Color = vec4(u_color, 1.0f);\n"
+			"	gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);\n"
+			"	v_Position = a_Position;\n"
 			"}\n";
 
 		std::string fragmentSrc =
@@ -66,11 +65,11 @@ public:
 			"\n"
 			"layout(location = 0) out vec4 color;\n"
 			"in vec3 v_Position;\n"
-			"in vec4 v_Color;\n"
+			"uniform vec3 u_color;\n"
 			"\n"
 			"void main()\n"
 			"{\n"
-			"color = v_Color;\n"
+			"	color = vec4(u_color, 1.0f);\n"
 			"}\n";
 
 		m_vertexArray->setIndexBuffer(indexBuffer);
@@ -97,8 +96,9 @@ public:
 		m_modelTransform = glm::scale(m_modelTransform, m_modelScale);
 		
 		m_shader->bind();
-		m_shader->uploadUniformVec3({0.1f, 0.2f, 0.6f}, "u_color");
 
+		glm::vec3 redColor(0.6f, 0.3f, 0.3f);
+		glm::vec3 greenColor(0.3f, 0.6f, 0.3f);
 		for (int i = 0; i < 20; ++i)
 		{
 			for (int j = 0; j < 20; ++j)
@@ -110,11 +110,21 @@ public:
 				tmpPos.y = tmpPos.y + (0.11f * j);
 				glm::mat4 tmpTransform = glm::translate(glm::mat4(1.0f), tmpPos);
 				tmpTransform = glm::scale(tmpTransform, tmpScale);
+
+				if (j % 2 == 0)
+				{
+					m_shader->uploadUniformVec3(redColor, "u_color");
+				}
+				else
+				{
+					m_shader->uploadUniformVec3(greenColor, "u_color");
+				}
+
 				renderer.submit(m_vertexArray, m_shader, tmpTransform);
 			}
 		}
 
-		m_shader->uploadUniformVec3({ 0.8f, 0.2f, 0.6f }, "u_color");
+		m_shader->uploadUniformVec3({ 0.7f, 0.3f, 0.6f }, "u_color");
 		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
 		renderer.submit(m_vertexArray, m_shader, m_modelTransform);
 
