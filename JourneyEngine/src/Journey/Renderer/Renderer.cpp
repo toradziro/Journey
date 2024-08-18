@@ -18,10 +18,9 @@ void Renderer::endScene()
 
 void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray,
 	const std::shared_ptr<Shader>& shader,
-	const glm::mat4& objTransform)
+	const glm::mat4& objTransform) const
 {
 	shader->bind();
-	
 	shader->uploadUniformMat4(m_sceneData.m_vpMatrix, "u_vpMatrix");
 	shader->uploadUniformMat4(objTransform, "u_modelTransform");
 

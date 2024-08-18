@@ -132,4 +132,14 @@ void OpenGLShader::uploadUniformMat4(const glm::mat4& matrix, std::string_view n
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void OpenGLShader::uploadUniformVec3(const glm::vec3& vector, std::string_view name)
+{
+	//glUseProgram(m_rendererId);
+	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+
+	JNY_ASSERT(location != -1);
+
+	glUniform3fv(location, 1, glm::value_ptr(vector));
+}
+
 }

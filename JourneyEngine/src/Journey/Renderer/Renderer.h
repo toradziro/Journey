@@ -19,7 +19,7 @@ public:
 
 	void submit(const std::shared_ptr<VertexArray>& vertexArray,
 		const std::shared_ptr<Shader>& shader,
-		const glm::mat4& objTransform = glm::mat4(1.0f));
+		const glm::mat4& objTransform = glm::mat4(1.0f)) const;
 
 	void setClearColor(const glm::vec4& color);
 	void clear();
