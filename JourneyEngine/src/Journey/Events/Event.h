@@ -64,7 +64,7 @@ public:
 
 	inline bool handeled() const { return m_handeled; }
 
-	virtual ~Event() {}
+	virtual ~Event() = default;
 
 protected:
 	bool m_handeled = false;

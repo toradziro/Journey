@@ -15,7 +15,7 @@ class  Layer
 public:
 	Layer(const std::string name) : m_layerName(name) {}
 	
-	virtual ~Layer() {}
+	virtual ~Layer() = default;
 
 	virtual void onEvent(Event&) {}
 	virtual void attach() {}

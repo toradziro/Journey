@@ -97,7 +97,8 @@ public:
 		
 		m_shader->bind();
 
-		glm::vec3 redColor(0.6f, 0.3f, 0.3f);
+		m_shader->uploadUniformFloat3(m_backgroundTrianglesColor, "u_color");
+
 		glm::vec3 greenColor(0.3f, 0.6f, 0.3f);
 		for (int i = 0; i < 20; ++i)
 		{
@@ -105,26 +106,19 @@ public:
 			{
 				glm::vec3 tmpScale = m_modelScale;
 				tmpScale /= 10.0f;
+				
 				glm::vec3 tmpPos = m_modelPosition;
 				tmpPos.x = tmpPos.x + (0.11f * i);
 				tmpPos.y = tmpPos.y + (0.11f * j);
+
 				glm::mat4 tmpTransform = glm::translate(glm::mat4(1.0f), tmpPos);
 				tmpTransform = glm::scale(tmpTransform, tmpScale);
-
-				if (j % 2 == 0)
-				{
-					m_shader->uploadUniformVec3(redColor, "u_color");
-				}
-				else
-				{
-					m_shader->uploadUniformVec3(greenColor, "u_color");
-				}
 
 				renderer.submit(m_vertexArray, m_shader, tmpTransform);
 			}
 		}
 
-		m_shader->uploadUniformVec3({ 0.7f, 0.3f, 0.6f }, "u_color");
+		m_shader->uploadUniformFloat3({ 0.7f, 0.3f, 0.6f }, "u_color");
 		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
 		renderer.submit(m_vertexArray, m_shader, m_modelTransform);
 
@@ -192,6 +186,12 @@ public:
 				ImGui::TableNextColumn();
 				ImGui::DragFloat3("##cameraPosition", glm::value_ptr(m_cameraPos), 0.01f, 0.0f);
 
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted("Triangles Color");
+				ImGui::TableNextColumn();
+				ImGui::ColorEdit3("##trianglesColor", glm::value_ptr(m_backgroundTrianglesColor));
+
 				ImGui::EndTable();
 			}
 
@@ -249,6 +249,8 @@ private:
 	glm::vec3									m_modelPosition = { 0.0f, 0.0f, 0.0f };
 	//glm::vec3									m_modelRotation = { 1.0f, 1.0f, 1.0f };
 	glm::vec3									m_modelScale = { 1.0f, 1.0f, 1.0f };
+
+	glm::vec3									m_backgroundTrianglesColor = { 0.21f, 0.73f, 0.93f };
 
 	glm::vec3									m_cameraPos = { 0.0f, 0.0f, 0.0f };
 	float										m_cameraRotation = 0.0f;

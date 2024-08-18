@@ -122,24 +122,74 @@ void OpenGLShader::unbind() const
 	glUseProgram(0);
 }
 
-void OpenGLShader::uploadUniformMat4(const glm::mat4& matrix, std::string_view name)
+void OpenGLShader::uploadUniformInt(const int value, std::string_view name)
 {
 	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1);
 
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniform1i(location, value);
 }
 
-void OpenGLShader::uploadUniformVec3(const glm::vec3& vector, std::string_view name)
+void OpenGLShader::uploadUniformFloat(const float value, std::string_view name)
 {
 	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1);
 
-	glUniform3fv(location, 1, glm::value_ptr(vector));
+	glUniform1f(location, value);
+}
+
+void OpenGLShader::uploadUniformFloat2(const glm::vec2& value, std::string_view name)
+{
+	//glUseProgram(m_rendererId);
+	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+
+	JNY_ASSERT(location != -1);
+
+	glUniform2fv(location, 1, glm::value_ptr(value));
+}
+
+void OpenGLShader::uploadUniformFloat3(const glm::vec3& value, std::string_view name)
+{
+	//glUseProgram(m_rendererId);
+	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+
+	JNY_ASSERT(location != -1);
+
+	glUniform3fv(location, 1, glm::value_ptr(value));
+}
+
+void OpenGLShader::uploadUniformFloat4(const glm::vec4& value, std::string_view name)
+{
+	//glUseProgram(m_rendererId);
+	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+
+	JNY_ASSERT(location != -1);
+
+	glUniform4fv(location, 1, glm::value_ptr(value));
+}
+
+void OpenGLShader::uploadUniformMat3(const glm::mat3& value, std::string_view name)
+{
+	//glUseProgram(m_rendererId);
+	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+
+	JNY_ASSERT(location != -1);
+
+	glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
+}
+
+void OpenGLShader::uploadUniformMat4(const glm::mat4& value, std::string_view name)
+{
+	//glUseProgram(m_rendererId);
+	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+
+	JNY_ASSERT(location != -1);
+
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
 }

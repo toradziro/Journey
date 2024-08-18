@@ -8,7 +8,7 @@ namespace jny
 class  KeyEvent : public Event
 {
 public:
-	virtual ~KeyEvent() {}
+	virtual ~KeyEvent() = default;
 
 	EVENT_CATEGORY(Event::EventCategory::Keyboard | Event::EventCategory::Input)
 

@@ -6,7 +6,7 @@ namespace jny
 class GraphicContext
 {
 public:
-	virtual ~GraphicContext() {}
+	virtual ~GraphicContext() = default;
 
 	virtual void swapBuffers() = 0;
 };
