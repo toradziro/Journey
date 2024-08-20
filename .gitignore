@@ -4,6 +4,8 @@
 *.vcxproj.filters
 *.vcxproj.user
 
+*Makefile
+
 bin
 bin-int
 imgui.ini
