@@ -39,3 +39,5 @@ void AssertionFailure(const char* pExpression);
 #define SPDLOG_HEADER_ONLY
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/bundled/format.h>
+
+#include <Journey/Reference.h>

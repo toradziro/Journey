@@ -35,7 +35,7 @@ public:
 
 	Ref(T* instance) : m_instance(instance)
 	{
-		increment()
+		increment();
 	}
 
 	Ref(const Ref<T>& other) : m_instance(other.m_instance)
@@ -91,11 +91,11 @@ public:
 	static Ref<T> create(Args&&... args)
 	{
 		static_assert(std::is_base_of<ReferenceCounter, T>::value, "Must be a child of ReferenceCounter");
-		return Ref<T>(new T(std::forward<Args>(args)...))
+		return Ref<T>(new T(std::forward<Args>(args)...));
 	}
 
 private:
-	void decrement()
+	void decrement() const
 	{
 		if (m_instance)
 		{
@@ -107,7 +107,7 @@ private:
 		}
 	}
 
-	void increment()
+	void increment() const
 	{
 		if (m_instance)
 		{
@@ -115,7 +115,7 @@ private:
 		}
 	}
 
-	T* m_instance;
+	mutable T* m_instance;
 };
 
 } //-- jny

@@ -14,11 +14,11 @@ class Renderer : ISingleton
 	Renderer() = default;
 
 public:
-	void beginScene(const std::shared_ptr<OrthographicCamera>& camera);
+	void beginScene(const Ref<OrthographicCamera>& camera);
 	void endScene();
 
-	void submit(const std::shared_ptr<VertexArray>& vertexArray,
-		const std::shared_ptr<Shader>& shader,
+	void submit(const Ref<VertexArray>& vertexArray,
+		const Ref<Shader>& shader,
 		const glm::mat4& objTransform = glm::mat4(1.0f)) const;
 
 	void setClearColor(const glm::vec4& color);

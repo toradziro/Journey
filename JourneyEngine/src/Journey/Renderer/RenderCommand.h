@@ -13,7 +13,7 @@ class RenderCommand : public ISingleton
 public:
 	void createRenderer(RendererAPI::API api);
 
-	void drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+	void drawIndexed(const Ref<VertexArray>& vertexArray)
 	{
 		m_RendererAPI->drawIndexed(vertexArray);
 	}

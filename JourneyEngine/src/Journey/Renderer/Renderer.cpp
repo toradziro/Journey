@@ -7,7 +7,7 @@
 namespace jny
 {
 
-void Renderer::beginScene(const std::shared_ptr<OrthographicCamera>& camera)
+void Renderer::beginScene(const Ref<OrthographicCamera>& camera)
 {
 	m_sceneData.m_vpMatrix = camera->viewProjectionMatrix();
 }
@@ -16,8 +16,8 @@ void Renderer::endScene()
 {
 }
 
-void Renderer::submit(const std::shared_ptr<VertexArray>& vertexArray,
-	const std::shared_ptr<Shader>& shader,
+void Renderer::submit(const Ref<VertexArray>& vertexArray,
+	const Ref<Shader>& shader,
 	const glm::mat4& objTransform) const
 {
 	shader->bind();

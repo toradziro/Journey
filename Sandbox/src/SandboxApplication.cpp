@@ -15,10 +15,10 @@ public:
 
 	ExampleLayer() : Layer("Test")
 	{
-		m_orthoCamera = std::shared_ptr<jny::OrthographicCamera>(new jny::OrthographicCamera(-1.0f, 1.0f, -1.0f, 1.0f));
+		m_orthoCamera = jny::Ref<jny::OrthographicCamera>(new jny::OrthographicCamera(-1.0f, 1.0f, -1.0f, 1.0f));
 
 		//-- Vertex array
-		m_vertexArray = std::shared_ptr<jny::VertexArray>(jny::VertexArray::create());
+		m_vertexArray = jny::Ref<jny::VertexArray>(jny::VertexArray::create());
 
 		//-- Vertices
 		float vertices[3 * 7] =
@@ -29,7 +29,7 @@ public:
 		};
 
 		//-- Vertex buffer
-		std::shared_ptr<jny::VertexBuffer> vertexBuffer = std::shared_ptr<jny::VertexBuffer>(jny::VertexBuffer::create(vertices, 3 * 7));
+		jny::Ref<jny::VertexBuffer> vertexBuffer = jny::Ref<jny::VertexBuffer>(jny::VertexBuffer::create(vertices, 3 * 7));
 		//-- Setting up vertex attribute array (layout for providing data splitting in shader)
 		jny::BufferLayout::LayoutData layoutData = {
 			{ jny::ShaderDataType::Float3, "a_Position" }
@@ -42,7 +42,7 @@ public:
 		//-- Indices
 		uint32_t indecies[3] = { 0, 1, 2 };
 		//-- Index buffer
-		std::shared_ptr<jny::IndexBuffer> indexBuffer = std::shared_ptr<jny::IndexBuffer>(jny::IndexBuffer::create(indecies, 3));
+		jny::Ref<jny::IndexBuffer> indexBuffer = jny::Ref<jny::IndexBuffer>(jny::IndexBuffer::create(indecies, 3));
 
 		std::string vertexSrc =
 			"#version 330 core\n"
@@ -74,7 +74,7 @@ public:
 
 		m_vertexArray->setIndexBuffer(indexBuffer);
 
-		m_shader = std::shared_ptr<jny::Shader>(jny::Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
+		m_shader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
 	}
 
 	void update(float dt) override
@@ -241,24 +241,24 @@ public:
 	}
 
 private:
-	std::shared_ptr<jny::Shader>				m_shader;
-	std::shared_ptr<jny::VertexArray>			m_vertexArray;
-	std::shared_ptr<jny::OrthographicCamera>	m_orthoCamera;
+	jny::Ref<jny::Shader>				m_shader;
+	jny::Ref<jny::VertexArray>			m_vertexArray;
+	jny::Ref<jny::OrthographicCamera>	m_orthoCamera;
 
-	glm::mat4									m_modelTransform = (1.0f);
-	glm::vec3									m_modelPosition = { 0.0f, 0.0f, 0.0f };
-	//glm::vec3									m_modelRotation = { 1.0f, 1.0f, 1.0f };
-	glm::vec3									m_modelScale = { 1.0f, 1.0f, 1.0f };
+	glm::mat4							m_modelTransform = (1.0f);
+	glm::vec3							m_modelPosition = { 0.0f, 0.0f, 0.0f };
+	//glm::vec3							m_modelRotation = { 1.0f, 1.0f, 1.0f };
+	glm::vec3							m_modelScale = { 1.0f, 1.0f, 1.0f };
 
-	glm::vec3									m_backgroundTrianglesColor = { 0.21f, 0.73f, 0.93f };
+	glm::vec3							m_backgroundTrianglesColor = { 0.21f, 0.73f, 0.93f };
 
-	glm::vec3									m_cameraPos = { 0.0f, 0.0f, 0.0f };
-	float										m_cameraRotation = 0.0f;
+	glm::vec3							m_cameraPos = { 0.0f, 0.0f, 0.0f };
+	float								m_cameraRotation = 0.0f;
 
-	float										m_cameraMoveSpeed = 1.8f;
-	float										m_cameraRotationSpeed = 40.0f;
-	float										m_deltaTime = 0.0f;
-	bool										m_scenePropsWindowOpen = true;
+	float								m_cameraMoveSpeed = 1.8f;
+	float								m_cameraRotationSpeed = 40.0f;
+	float								m_deltaTime = 0.0f;
+	bool								m_scenePropsWindowOpen = true;
 };
 
 Sandbox::Sandbox()

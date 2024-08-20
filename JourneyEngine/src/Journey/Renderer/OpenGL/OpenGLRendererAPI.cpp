@@ -16,7 +16,7 @@ void OpenGLRendererAPI::setClearColor(const glm::vec4& color)
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void OpenGLRendererAPI::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray)
 {
 	vertexArray->bind();
 	//-- Elements is indexes!

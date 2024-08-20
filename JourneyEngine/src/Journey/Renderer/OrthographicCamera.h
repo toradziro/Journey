@@ -5,7 +5,7 @@
 namespace jny
 {
 
-class OrthographicCamera
+class OrthographicCamera : public ReferenceCounter
 {
 public:
 	OrthographicCamera(float left, float right, float bottom, float top);
@@ -14,12 +14,12 @@ public:
 	//-- For 2D space we need only z rotation
 	inline void setRotation(float rotation) { m_rotation = rotation; recalculateViewMatrix(); }
 
-	const glm::vec3& position() { return m_position; }
+	const glm::vec3& position() const { return m_position; }
 	float rotation() const { return m_rotation; }
 
-	const glm::mat4& projectionMatrix() { return m_projectionMatrix; }
-	const glm::mat4& viewMatrix() { return m_viewMatrix; }
-	const glm::mat4& viewProjectionMatrix() { return m_viewProjectionMatrix; }
+	const glm::mat4& projectionMatrix() const { return m_projectionMatrix; }
+	const glm::mat4& viewMatrix() const { return m_viewMatrix; }
+	const glm::mat4& viewProjectionMatrix() const { return m_viewProjectionMatrix; }
 
 private:
 	void recalculateViewMatrix();
