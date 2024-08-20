@@ -5,6 +5,7 @@ workspace "JourneyEngine"
 	configurations
 	{
 		"Debug",
+		"Debug-AS",
 		"Release",
 		"Distribution"
 	}
@@ -98,6 +99,7 @@ project "JourneyEngine"
 
 		defines
 		{
+			"_CRT_SECURE_NO_WARNINGS",
 			"JNY_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE"
 		}
@@ -129,11 +131,15 @@ project "JourneyEngine"
 			"-pedantic-errors"                 -- Treat pedantic warnings as errors
 		}
 
-	filter "configurations:Debug"
+	filter "configurations:Debug or configurations:Debug-AS"
 		files { "JourneyEngine/vendor/eastl/doc/EASTL.natvis" }
 		defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
 		symbols "on"
 		runtime "Debug"
+		
+	filter { "system:windows", "configurations:Debug-AS" }	
+		sanitize { "Address" }
+		flags { "NoRuntimeChecks", "NoIncrementalLink" }
 
 	filter "configurations:Release"
 		defines { "JNY_RELEASE", "JNY_ENABLE_ASSERTS" }
@@ -239,10 +245,14 @@ project "Sandbox"
 			"-pedantic-errors"                 -- Treat pedantic warnings as errors
 		}
 
-	filter "configurations:Debug"
+	filter "configurations:Debug or configurations:Debug-AS"
 		defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
 		symbols "on"
 		runtime "Debug"
+		
+	filter { "system:windows", "configurations:Debug-AS" }	
+		sanitize { "Address" }
+		flags { "NoRuntimeChecks", "NoIncrementalLink" }
 
 	filter "configurations:Release"
 		defines { "JNY_RELEASE", "JNY_ENABLE_ASSERTS" }
