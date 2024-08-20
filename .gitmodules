@@ -1,9 +1,6 @@
 [submodule "JourneyEngine/vendor/spdlog"]
 	path = JourneyEngine/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "JourneyEngine/vendor/eastl"]
-	path = JourneyEngine/vendor/eastl
-	url = https://github.com/toradziro/EASTL.git
 [submodule "JourneyEngine/vendor/GLFW"]
 	path = JourneyEngine/vendor/GLFW
 	url = https://github.com/toradziro/glfw.git
