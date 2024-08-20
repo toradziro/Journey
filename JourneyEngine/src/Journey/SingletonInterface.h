@@ -47,7 +47,7 @@ public:
 	}
 
 private:
-	eastl::vector_map<std::string, ISingleton*> m_singletones;
+	std::unordered_map<std::string, ISingleton*> m_singletones;
 };
 
 } //-- jny

@@ -19,8 +19,6 @@ IncludeDir["GLFW"] = "JourneyEngine/vendor/GLFW/include"
 IncludeDir["GLAD"] = "JourneyEngine/vendor/GLAD/include"
 IncludeDir["glm"] = "JourneyEngine/vendor/glm"
 IncludeDir["imgui"] = "JourneyEngine/vendor/imgui/"
-IncludeDir["EASTL"] = "JourneyEngine/vendor/eastl/include"
-IncludeDir["EASTLBase"] = "JourneyEngine/vendor/eastl/test/packages/EABase/include/Common"
 
 group "Dependencies"
 	-- For window managment
@@ -52,8 +50,6 @@ project "JourneyEngine"
 	includedirs
 	{
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.EASTL}",
-		"%{IncludeDir.EASTLBase}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.glm}",
@@ -132,7 +128,6 @@ project "JourneyEngine"
 		}
 
 	filter "configurations:Debug or configurations:Debug-AS"
-		files { "JourneyEngine/vendor/eastl/doc/EASTL.natvis" }
 		defines { "JNY_DEBUG", "JNY_ENABLE_ASSERTS" }
 		symbols "on"
 		runtime "Debug"
@@ -171,8 +166,6 @@ project "Sandbox"
 	includedirs
 	{
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.EASTL}",
-		"%{IncludeDir.EASTLBase}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.GLFW}",

@@ -2,7 +2,6 @@
 
 #include "Journey/Core.h"
 #include "Journey/Layer/Layer.h"
-#include <EASTL/vector.h>
 
 namespace jny
 {
@@ -13,8 +12,8 @@ namespace jny
 class  LayerStack
 {
 public:
-	using LayerStackPos = eastl::vector<Layer*>::iterator;
-	using LayerReverseIt = eastl::vector<Layer*>::reverse_iterator;
+	using LayerStackPos = std::vector<Layer*>::iterator;
+	using LayerReverseIt = std::vector<Layer*>::reverse_iterator;
 
 	LayerStack();
 	~LayerStack();
@@ -54,7 +53,7 @@ public:
 	LayerReverseIt rend() { return m_layers.rend(); }
 
 private:
-	eastl::vector<Layer*>	m_layers;
+	std::vector<Layer*>		m_layers;
 	uint32_t				m_position = 0;
 };
 

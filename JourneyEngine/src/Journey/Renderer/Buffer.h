@@ -107,9 +107,9 @@ struct LayoutElement
 class BufferLayout
 {
 public:
-	using LayoutData = eastl::vector<LayoutElement>;
-	using LayoutDataIterator = eastl::vector<LayoutElement>::iterator;
-	using LayoutDataConstIterator = eastl::vector<LayoutElement>::const_iterator;
+	using LayoutData = std::vector<LayoutElement>;
+	using LayoutDataIterator = std::vector<LayoutElement>::iterator;
+	using LayoutDataConstIterator = std::vector<LayoutElement>::const_iterator;
 
 	BufferLayout() = default;
 	BufferLayout(LayoutData&& elements) : m_elements(std::move(elements))
