@@ -16,12 +16,13 @@ VertexBuffer* VertexBuffer::create(float* vertices, uint32_t count)
 	switch (rendererApi)
 	{
 		case RendererAPI::API::None:
-			JNY_ASSERT(true);
+			JNY_ASSERT(true, "Can't be none");
 			break;
 		case RendererAPI::API::OpenGL:
 			buffer = new OpenGLVertexBuffer(vertices, count);
 			break;
 		default:
+			JNY_ASSERT(true, "Can't be none");
 			break;
 	}
 
@@ -36,12 +37,13 @@ IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t count)
 	switch (rendererApi)
 	{
 		case RendererAPI::API::None:
-			JNY_ASSERT(true);
+			JNY_ASSERT(true, "Can't be none");
 			break;
 		case RendererAPI::API::OpenGL:
 			buffer = new OpenGLIndexBuffer(indices, count);
 			break;
 		default:
+			JNY_ASSERT(true, "Can't be none");
 			break;
 	}
 

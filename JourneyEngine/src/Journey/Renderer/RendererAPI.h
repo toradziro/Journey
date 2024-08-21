@@ -10,6 +10,8 @@ namespace jny
 class RendererAPI
 {
 public:
+	virtual ~RendererAPI() {}
+
 	enum class API : uint8_t
 	{
 		None = 0,

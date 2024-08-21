@@ -12,7 +12,7 @@ namespace
 
 static jny::WindowData* getDataPtrFromWindow(GLFWwindow* window)
 {
-	JNY_ASSERT(window != nullptr)
+	JNY_ASSERT(window != nullptr, "Win nullptr")
 	return (jny::WindowData*)glfwGetWindowUserPointer(window);
 }
 
@@ -63,7 +63,7 @@ void Window::init()
 	{
 		int success = glfwInit();
 
-		JNY_ASSERT(success == GLFW_TRUE)
+		JNY_ASSERT(success == GLFW_TRUE, "Hehe, how it can be?")
 		
 		s_glfwInited = true;
 		glfwSetErrorCallback([](int error, const char* description)

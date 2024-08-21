@@ -20,8 +20,30 @@ project "GLAD"
 	}
 
 	filter "system:linux"
-		pic "On"
+		--pic "On"
 		systemversion "latest"
+		buildoptions
+		{
+			"-Wno-sign-conversion",
+			"-Wno-duplicated-branches",
+			"-Wno-error",
+		}
+		
+		links
+		{
+			"GLFW",
+			"Glad",
+			"ImGui",
+			"Xrandr",
+			"Xi",
+			"GLU",
+			"GL",
+			"X11",
+			"dl",
+			"pthread",
+			"stdc++fs"
+		}
+
 
 	filter "system:macosx"
 		pic "On"

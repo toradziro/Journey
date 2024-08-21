@@ -6,8 +6,10 @@
 namespace jny
 {
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(push)
 #pragma warning(disable: 4251)
+#endif
 
 class  LayerStack
 {
@@ -57,6 +59,8 @@ private:
 	uint32_t				m_position = 0;
 };
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(pop)
+#endif
 
 } //-- jny

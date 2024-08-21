@@ -87,7 +87,7 @@ public:
 		m_instance = instance;
 	}
 
-	template<typename T, typename... Args>
+	template<typename... Args>
 	static Ref<T> create(Args&&... args)
 	{
 		static_assert(std::is_base_of<ReferenceCounter, T>::value, "Must be a child of ReferenceCounter");

@@ -11,13 +11,13 @@ void RenderCommand::createRenderer(RendererAPI::API api)
 	switch (api)
 	{
 	case RendererAPI::API::None:
-		JNY_ASSERT(false);
+		JNY_ASSERT(false, "Can't be none");
 		break;
 	case RendererAPI::API::OpenGL:
 		m_RendererAPI = std::unique_ptr<RendererAPI>(new OpenGLRendererAPI);
 		break;
 	default:
-		JNY_ASSERT(false);
+		JNY_ASSERT(false, "Create valid renderer API");
 		break;
 	}
 

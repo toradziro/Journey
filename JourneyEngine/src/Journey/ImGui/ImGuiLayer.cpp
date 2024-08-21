@@ -12,10 +12,6 @@
 #include "Journey/Events/Event.h"
 #include "Journey/Events/MouseEvent.h"
 #include "Journey/Events/KeyEvent.h"
-#include "Journey/Events/ApplicationEvent.h"
-
-#include <GLFW/glfw3.h>
-#include <GLAD/glad.h>
 
 namespace jny
 {

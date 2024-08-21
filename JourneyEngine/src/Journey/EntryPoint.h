@@ -1,7 +1,5 @@
 #pragma once
 
-#ifdef JNY_PLATFORM_WINDOWS
-
 extern jny::Application* jny::createApplication();
 
 int main(int /*argc*/, char** /*argv*/)
@@ -14,5 +12,3 @@ int main(int /*argc*/, char** /*argv*/)
 	app->run();
 	delete app;
 }
-
-#endif

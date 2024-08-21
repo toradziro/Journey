@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Journey/Core.h"
-#include <glad/glad.h>
 
 namespace jny
 {
@@ -49,7 +48,7 @@ uint32_t shaderDataTypeSize(ShaderDataType type)
 			break;
 	}
 
-	JNY_ASSERT(false);
+	JNY_ASSERT(false, "Invalid Type");
 	return 0;
 }
 
@@ -74,7 +73,7 @@ uint32_t componentsCount(ShaderDataType type)
 			break;
 	}
 
-	JNY_ASSERT(false);
+	JNY_ASSERT(false, "Invalid type");
 	return 0;
 }
 
@@ -119,7 +118,7 @@ public:
 	~BufferLayout() {}
 
 	inline const LayoutData& elements() const { return m_elements; }
-	inline const uint32_t stride() const { return m_stride; }
+	inline uint32_t stride() const { return m_stride; }
 
 	LayoutDataIterator begin() { return m_elements.begin(); }
 	LayoutDataIterator end() { return m_elements.end(); }

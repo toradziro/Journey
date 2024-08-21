@@ -25,8 +25,10 @@ struct WindowData
 	}
 };
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(push)
 #pragma warning(disable: 4251)
+#endif
 
 class  Window : public ISingleton
 {
@@ -57,7 +59,9 @@ private:
 	GLFWwindow*						m_window;
 };
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(pop)
 #pragma warning(disable: 4251)
+#endif
 
 }

@@ -10,8 +10,10 @@ namespace jny
 class ImGuiLayer;
 class Window;
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(push)
 #pragma warning(disable: 4251)
+#endif
 
 class  Application
 {
@@ -40,7 +42,7 @@ public:
 	void popLayer(Layer* layer);
 	void popOverlay(Layer* layer);
 
-	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr); return *s_sHolder; }
+	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr, "Don't know this systyem"); return *s_sHolder; }
 
 private:
 	LayerStack	m_layers;
@@ -54,6 +56,8 @@ private:
 //-- Will be defined in client
 Application* createApplication();
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(pop)
+#endif
 
 } //-- jny

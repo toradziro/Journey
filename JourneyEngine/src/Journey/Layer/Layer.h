@@ -7,8 +7,10 @@
 namespace jny
 {
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(push)
 #pragma warning(disable: 4251)
+#endif
 
 class  Layer
 {
@@ -28,6 +30,8 @@ private:
 	std::string m_layerName;
 };
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(pop)
+#endif
 
 } //-- jny

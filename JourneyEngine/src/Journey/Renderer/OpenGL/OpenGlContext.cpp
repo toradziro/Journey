@@ -2,8 +2,8 @@
 #include "OpenGlContext.h"
 #include "Journey/Core.h"
 
-#include <GLFW/glfw3.h>
 #include <GLAD/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace jny
 {
@@ -23,9 +23,9 @@ void OpenGlContext::init()
 	JNY_ASSERT(gladInitStatus, "Failed to init GLAD");
 
 	Log::info("OpenGL Info:");
-	Log::info("Vendor: {}", (char*)(glGetString(GL_VENDOR)));
-	Log::info("Renderer: {}", (char*)(glGetString(GL_RENDERER)));
-	Log::info("Version: {}", (char*)(glGetString(GL_VERSION)));
+	Log::info("Vendor: {}", (const char*)(glGetString(GL_VENDOR)));
+	Log::info("Renderer: {}", (const char*)(glGetString(GL_RENDERER)));
+	Log::info("Version: {}", (const char*)(glGetString(GL_VERSION)));
 }
 
 void OpenGlContext::swapBuffers()

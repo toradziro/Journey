@@ -29,7 +29,7 @@ GLenum toOpenGLType(ShaderDataType type)
 			break;
 	}
 
-	JNY_ASSERT(false);
+	JNY_ASSERT(false, "Invalid type");
 	return 0;
 }
 
@@ -57,7 +57,7 @@ void OpenGLVertexArray::unbind() const
 
 void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 {
-	JNY_ASSERT(!vertexBuffer->layout().elements().empty());
+	JNY_ASSERT(!vertexBuffer->layout().elements().empty(), "Empty layout");
 
 	glBindVertexArray(m_rendererId);
 	vertexBuffer->bind();

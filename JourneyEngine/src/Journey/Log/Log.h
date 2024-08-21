@@ -5,8 +5,10 @@
 namespace jny
 {
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(push)
 #pragma warning(disable: 4251)
+#endif
 
 class  Log
 {
@@ -74,11 +76,13 @@ private:
 	inline static std::shared_ptr<spdlog::logger>& coreLogger()
 	{
 		return s_coreLogger;
-	};
+	}
 
 	static std::shared_ptr<spdlog::logger> s_coreLogger;
 };
 
+#ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(pop)
+#endif
 
 } //-- jny

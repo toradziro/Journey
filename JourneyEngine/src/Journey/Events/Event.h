@@ -5,7 +5,7 @@
 namespace jny
 {
 
-#define EVENT_CLASS_TYPE(type)	static Event::EventType staticEventType() { return Event::EventType::##type; } \
+#define EVENT_CLASS_TYPE(type)	static Event::EventType staticEventType() { return Event::EventType::type; } \
 								virtual Event::EventType eventType() const override { return staticEventType(); } \
 								virtual const char* name() const override { return #type; }
 
@@ -85,7 +85,7 @@ public:
 		if (m_event.eventType() == T::staticEventType())
 		{
 			//-- We need to downcast to child for proper handling
-			m_event.m_handeled = handler(*(T*)&m_event);
+			m_event.m_handeled = handler(*static_cast<T*>(&m_event));
 			return true;
 		}
 		return false;

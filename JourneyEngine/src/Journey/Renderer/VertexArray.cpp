@@ -15,7 +15,7 @@ VertexArray* VertexArray::create()
 	switch (rendererApi)
 	{
 	case RendererAPI::API::None:
-		JNY_ASSERT(true);
+		JNY_ASSERT(true, "Can't be None");
 		break;
 	case RendererAPI::API::OpenGL:
 		buffer = new OpenGLVertexArray();

@@ -102,6 +102,16 @@ project "JourneyEngine"
 		
 	filter "system:linux"
 		cppdialect "C++17"
+
+		links 
+		{ 
+			"Xrandr",
+			"Xi",
+			"GLEW",
+			"GLU",
+			"GL",
+			"X11"
+		}
 		
 		buildoptions
 		{
@@ -110,18 +120,14 @@ project "JourneyEngine"
 			"-Wpedantic",                      -- And moooore
 			"-Wctor-dtor-privacy",             -- Check if class with private constructor is used by any friends
 			"-Wnon-virtual-dtor",              -- If you have virtual member funcs - don’t forget to have virtual ~
-			"-Wold-style-cast",                -- Casting only in C++ style
 			"-Woverloaded-virtual",            -- We don’t overload virtual funcs, only overriding
 			"-Wsign-promo",                    -- Overloading is not really accurate
-			"-Wduplicated-branches",           -- Do you have save if and else branches?
 			"-Wduplicated-cond",               -- Same, but with else if
 			"-Wfloat-equal",                   -- Warning for float comparison
 			"-Wshadow=compatible-local",       -- Shadowing warnings for local variables
 			"-Wcast-qual",                     -- Warning for const qualification casts
 			"-Wconversion",                    -- Warning for implicit type conversions
-			"-Wzero-as-null-pointer-constant", -- Using zero as a null pointer constant
 			"-Wextra-semi",                    -- Extra semicolon warnings
-			"-Wsign-conversion",               -- Warnings for sign conversion
 			"-Wlogical-op",                    -- Warning for logical operations
 			"-Werror",                         -- Treat warnings as errors
 			"-pedantic-errors"                 -- Treat pedantic warnings as errors
@@ -213,6 +219,21 @@ project "Sandbox"
 		
 	filter "system:linux"
 		cppdialect "C++17"
+
+		links
+		{
+			"GLFW",
+			"Glad",
+			"ImGui",
+			"Xrandr",
+			"Xi",
+			"GLU",
+			"GL",
+			"X11",
+			"dl",
+			"pthread",
+			"stdc++fs"
+		}
 		
 		buildoptions
 		{
@@ -221,18 +242,13 @@ project "Sandbox"
 			"-Wpedantic",                      -- And moooore
 			"-Wctor-dtor-privacy",             -- Check if class with private constructor is used by any friends
 			"-Wnon-virtual-dtor",              -- If you have virtual member funcs - don’t forget to have virtual ~
-			"-Wold-style-cast",                -- Casting only in C++ style
 			"-Woverloaded-virtual",            -- We don’t overload virtual funcs, only overriding
 			"-Wsign-promo",                    -- Overloading is not really accurate
-			"-Wduplicated-branches",           -- Do you have save if and else branches?
 			"-Wduplicated-cond",               -- Same, but with else if
 			"-Wfloat-equal",                   -- Warning for float comparison
 			"-Wshadow=compatible-local",       -- Shadowing warnings for local variables
 			"-Wcast-qual",                     -- Warning for const qualification casts
-			"-Wconversion",                    -- Warning for implicit type conversions
-			"-Wzero-as-null-pointer-constant", -- Using zero as a null pointer constant
 			"-Wextra-semi",                    -- Extra semicolon warnings
-			"-Wsign-conversion",               -- Warnings for sign conversion
 			"-Wlogical-op",                    -- Warning for logical operations
 			"-Werror",                         -- Treat warnings as errors
 			"-pedantic-errors"                 -- Treat pedantic warnings as errors

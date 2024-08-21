@@ -18,9 +18,10 @@ Shader* Shader::create(const std::string& vertexSrc, const std::string& fragment
 			shader = new OpenGLShader(vertexSrc, fragmentSrc);
 			break;
 		case RendererAPI::API::None:
-			JNY_ASSERT(false);
+			JNY_ASSERT(false, "Can't be none");
 			break;
 		default:
+			JNY_ASSERT(false, "Create valid renderer API");
 			break;
 	}
 	return shader;
