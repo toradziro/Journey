@@ -18,6 +18,8 @@ std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
 {
+	jny::Log::info("Curr path is: {}", std::filesystem::current_path().string());
+
 	s_sHolder = std::make_unique<SingletonHolder>();
 
 	//-- Create main window

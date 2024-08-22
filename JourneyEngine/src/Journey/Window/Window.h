@@ -16,6 +16,7 @@ struct WindowData
 	std::string		m_title;
 	uint32_t		m_width;
 	uint32_t		m_height;
+	float			m_dpiScale = 1.0f;
 	EventCallbackFn	m_eventCallback;
 	bool			m_vsyncEnabled = true;
 
@@ -50,6 +51,8 @@ public:
 
 	void init();
 	void shutdown();
+
+	float dpiScale() const { return m_data.m_dpiScale; }
 
 	GLFWwindow* rawWindow() { return m_window; }
 

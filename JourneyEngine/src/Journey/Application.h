@@ -26,7 +26,6 @@ public:
 	void onEvent(Event& event);
 	bool windowCloseEvent();
 
-
 	template<typename T, typename ...Args>
 	T* pushLayer(Args&&... args)
 	{

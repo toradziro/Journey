@@ -41,11 +41,26 @@ void ImGuiLayer::attach()
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		style.WindowRounding = 0.0f;
-		//style.WindowMinSize = { 1200.0f, 600.0f };
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
 
 	auto& win = Application::subsystems().st<Window>();
+
+	ImGui::GetStyle().ScaleAllSizes(win.dpiScale());
+	float fontSize = 17.0f * win.dpiScale();
+
+	io.Fonts->Clear();
+
+	ImFontConfig fontConfig;
+	fontConfig.OversampleH = 2;
+	fontConfig.OversampleV = 1;
+	fontConfig.PixelSnapH = true;
+	fontConfig.RasterizerMultiply = 1.2f;
+
+	//io.Fonts->AddFontFromFileTTF("../resources/fonts/noto_fonts.ttf", fontSize, &fontConfig);
+	io.Fonts->AddFontFromFileTTF("../resources/fonts/roboto.ttf", fontSize, &fontConfig);
+
+	io.Fonts->Build();
 
 	ImGui_ImplGlfw_InitForOpenGL(win.rawWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 410");

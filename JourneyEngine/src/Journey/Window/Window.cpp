@@ -56,9 +56,6 @@ void Window::setVSync(bool enabled)
 
 void Window::init()
 {
-	Log::info("Creating window: width '{}' height '{}' title '{}'",
-		m_data.m_width, m_data.m_height, m_data.m_title);
-
 	if (!s_glfwInited)
 	{
 		int success = glfwInit();
@@ -70,7 +67,18 @@ void Window::init()
 			{
 				Log::error("GLFW error '{}' '{}'", error, description);
 			});
+
+		float monScaleX = 0.0f;
+		float monScaleY = 0.0f;
+		glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &monScaleX, &monScaleY);
+
+		m_data.m_dpiScale = std::max<float>(monScaleX, monScaleY);
+		m_data.m_width = static_cast<uint32_t>(static_cast<float>(m_data.m_width) * m_data.m_dpiScale);
+		m_data.m_height = static_cast<uint32_t>(static_cast<float>(m_data.m_height) * m_data.m_dpiScale);
 	}
+
+	Log::info("Creating window: width '{}' height '{}' title '{}'",
+		m_data.m_width, m_data.m_height, m_data.m_title);
 
 	m_window = glfwCreateWindow(static_cast<int>(m_data.m_width), static_cast<int>(m_data.m_height),
 		m_data.m_title.c_str(), nullptr, nullptr);
