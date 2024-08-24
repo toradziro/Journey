@@ -21,18 +21,20 @@ public:
 		m_vertexArray = jny::Ref<jny::VertexArray>(jny::VertexArray::create());
 
 		//-- Vertices
-		float vertices[3 * 7] =
+		float vertices[5 * 4] =
 		{
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f,
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		//-- Vertex buffer
-		jny::Ref<jny::VertexBuffer> vertexBuffer = jny::Ref<jny::VertexBuffer>(jny::VertexBuffer::create(vertices, 3 * 7));
+		jny::Ref<jny::VertexBuffer> vertexBuffer = jny::Ref<jny::VertexBuffer>(jny::VertexBuffer::create(vertices, 5 * 4));
 		//-- Setting up vertex attribute array (layout for providing data splitting in shader)
 		jny::BufferLayout::LayoutData layoutData = {
-			{ jny::ShaderDataType::Float3, "a_Position" }
+			{ jny::ShaderDataType::Float3, "a_Position" },
+			{ jny::ShaderDataType::Float2, "a_TexturePos" },
 		};
 		jny::BufferLayout layout = jny::BufferLayout(std::move(layoutData));
 		vertexBuffer->setLayout(layout);
@@ -40,9 +42,11 @@ public:
 		m_vertexArray->addVertexBuffer(vertexBuffer);
 
 		//-- Indices
-		uint32_t indecies[3] = { 0, 1, 2 };
+		uint32_t indecies[6] = { 0, 1, 2, 2, 3, 0 };
 		//-- Index buffer
-		jny::Ref<jny::IndexBuffer> indexBuffer = jny::Ref<jny::IndexBuffer>(jny::IndexBuffer::create(indecies, 3));
+		jny::Ref<jny::IndexBuffer> indexBuffer = jny::Ref<jny::IndexBuffer>(jny::IndexBuffer::create(indecies, 6));
+
+		m_vertexArray->setIndexBuffer(indexBuffer);
 
 		std::string vertexSrc =
 			"#version 330 core\n"
@@ -72,9 +76,47 @@ public:
 			"	color = vec4(u_color, 1.0f);\n"
 			"}\n";
 
-		m_vertexArray->setIndexBuffer(indexBuffer);
-
 		m_shader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
+
+		std::string textVertexSrc = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexturePos;
+
+			uniform mat4 u_vpMatrix;
+			uniform mat4 u_modelTransform;
+
+			out vec2 v_TexturePos;
+
+			void main()
+			{
+				v_TexturePos = a_TexturePos;
+				gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);
+			}
+		)";
+
+		std::string textFragmentSrc = R"(
+			#version 330 core
+
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexturePos;
+
+			uniform sampler2D u_texture;
+
+			void main()
+			{
+				color = texture(u_texture, v_TexturePos);
+			}
+		)";
+
+		m_textureShader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(textVertexSrc), std::move(textFragmentSrc)));
+		m_bombTexture = jny::Texture2D::create("../resources/assets/textures/bomb.png");
+		m_checkerboardTexture = jny::Texture2D::create("../resources/assets/textures/checkerboard.png");
+
+		m_textureShader->bind();
+		m_textureShader->uploadUniformInt(0, "u_texture");
 	}
 
 	void update(float dt) override
@@ -95,11 +137,7 @@ public:
 		m_modelTransform = glm::translate(m_modelTransform, m_modelPosition);
 		m_modelTransform = glm::scale(m_modelTransform, m_modelScale);
 		
-		m_shader->bind();
-
-		m_shader->uploadUniformFloat3(m_backgroundTrianglesColor, "u_color");
-
-		glm::vec3 greenColor(0.3f, 0.6f, 0.3f);
+		m_bombTexture->bind();
 		for (int i = 0; i < 20; ++i)
 		{
 			for (int j = 0; j < 20; ++j)
@@ -114,13 +152,13 @@ public:
 				glm::mat4 tmpTransform = glm::translate(glm::mat4(1.0f), tmpPos);
 				tmpTransform = glm::scale(tmpTransform, tmpScale);
 
-				renderer.submit(m_vertexArray, m_shader, tmpTransform);
+				renderer.submit(m_vertexArray, /*m_shader*/m_textureShader, tmpTransform);
 			}
 		}
 
-		m_shader->uploadUniformFloat3({ 0.7f, 0.3f, 0.6f }, "u_color");
+		m_checkerboardTexture->bind();
 		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
-		renderer.submit(m_vertexArray, m_shader, m_modelTransform);
+		renderer.submit(m_vertexArray, m_textureShader/*m_shader*/, m_modelTransform);
 
 		//-- End rendering
 		renderer.endScene();
@@ -242,6 +280,9 @@ public:
 
 private:
 	jny::Ref<jny::Shader>				m_shader;
+	jny::Ref<jny::Shader>				m_textureShader;
+	jny::Ref<jny::Texture2D>			m_bombTexture;
+	jny::Ref<jny::Texture2D>			m_checkerboardTexture;
 	jny::Ref<jny::VertexArray>			m_vertexArray;
 	jny::Ref<jny::OrthographicCamera>	m_orthoCamera;
 

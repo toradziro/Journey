@@ -62,11 +62,10 @@ void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	glBindVertexArray(m_rendererId);
 	vertexBuffer->bind();
 
-	uint32_t layoutIndex = 0;
 	for (const auto& element : vertexBuffer->layout())
 	{
 		//-- Enable 0 layout in our shader
-		glEnableVertexAttribArray(layoutIndex);
+		glEnableVertexAttribArray(m_vertexBufferIndexOffset);
 		//-- Attribute pointer applied to EVERY VERTEX, not to all data
 		//-- which means that:
 		//-- index - index of layout we are setting up
@@ -75,7 +74,7 @@ void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 		//-- stride - size in bytes for all of elements in this layout (corresponding to vertex)
 		//-- offset - how much bytes need to shift in vertexes to reach a start address of this layout from the start of the vertex
 		glVertexAttribPointer(
-			layoutIndex,
+			m_vertexBufferIndexOffset,
 			element.m_count,
 			toOpenGLType(element.m_type),
 			element.m_normilized ? GL_TRUE : GL_FALSE,
@@ -83,11 +82,10 @@ void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 			reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
 		);
 
-		++layoutIndex;
+		++m_vertexBufferIndexOffset;
 	}
 
 	m_vertexBuffers.push_back(vertexBuffer);
-
 }
 
 void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& IndexBuffer)

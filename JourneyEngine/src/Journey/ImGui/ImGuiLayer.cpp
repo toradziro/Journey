@@ -55,7 +55,6 @@ void ImGuiLayer::attach()
 	fontConfig.OversampleH = 2;
 	fontConfig.OversampleV = 1;
 	fontConfig.PixelSnapH = true;
-	fontConfig.RasterizerMultiply = 1.2f;
 
 	//io.Fonts->AddFontFromFileTTF("../resources/fonts/noto_fonts.ttf", fontSize, &fontConfig);
 	io.Fonts->AddFontFromFileTTF("../resources/fonts/roboto.ttf", fontSize, &fontConfig);

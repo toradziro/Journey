@@ -10,6 +10,11 @@ workspace "JourneyEngine"
 		"Distribution"
 	}
 
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
@@ -44,7 +49,10 @@ project "JourneyEngine"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp"
 	}
 
 	includedirs
@@ -54,7 +62,8 @@ project "JourneyEngine"
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{prj.name}/vendor/stb_image"
 	}
 
 	links

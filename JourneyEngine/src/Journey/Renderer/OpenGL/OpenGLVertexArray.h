@@ -23,6 +23,7 @@ public:
 private:
 	std::vector<Ref<VertexBuffer>>	m_vertexBuffers;
 	Ref<IndexBuffer>				m_indexBuffer;
+	uint32_t						m_vertexBufferIndexOffset = 0;
 	uint32_t						m_rendererId;
 };
 
