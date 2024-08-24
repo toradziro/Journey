@@ -41,6 +41,10 @@ public:
 
 		m_vertexArray->addVertexBuffer(vertexBuffer);
 
+		//--TODO: move to render
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+
 		//-- Indices
 		uint32_t indecies[6] = { 0, 1, 2, 2, 3, 0 };
 		//-- Index buffer
