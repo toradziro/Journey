@@ -9,6 +9,18 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
 
+namespace
+{
+
+constexpr const char* texturesNames[] =
+{
+	"../resources/assets/textures/checkerboard.png",
+	"../resources/assets/textures/bomb.png",
+	"../resources/assets/textures/icon_path.png"
+};
+
+}
+
 class ExampleLayer : public jny::Layer
 {
 public:
@@ -117,7 +129,7 @@ public:
 
 		m_textureShader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(textVertexSrc), std::move(textFragmentSrc)));
 		m_bombTexture = jny::Texture2D::create("../resources/assets/textures/bomb.png");
-		m_checkerboardTexture = jny::Texture2D::create("../resources/assets/textures/checkerboard.png");
+		m_frontObjTexture = jny::Texture2D::create(texturesNames[m_currSelectedTexture]);
 
 		m_textureShader->bind();
 		m_textureShader->uploadUniformInt(0, "u_texture");
@@ -160,7 +172,7 @@ public:
 			}
 		}
 
-		m_checkerboardTexture->bind();
+		m_frontObjTexture->bind();
 		//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
 		renderer.submit(m_vertexArray, m_textureShader/*m_shader*/, m_modelTransform);
 
@@ -234,6 +246,16 @@ public:
 				ImGui::TableNextColumn();
 				ImGui::ColorEdit3("##trianglesColor", glm::value_ptr(m_backgroundTrianglesColor));
 
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::TextUnformatted("Front Texture");
+				ImGui::TableNextColumn();
+
+				if (ImGui::Combo("##textureSelector", &m_currSelectedTexture, texturesNames, IM_ARRAYSIZE(texturesNames)))
+				{
+					m_frontObjTexture = jny::Texture2D::create(texturesNames[m_currSelectedTexture]);
+				}
+
 				ImGui::EndTable();
 			}
 
@@ -286,7 +308,7 @@ private:
 	jny::Ref<jny::Shader>				m_shader;
 	jny::Ref<jny::Shader>				m_textureShader;
 	jny::Ref<jny::Texture2D>			m_bombTexture;
-	jny::Ref<jny::Texture2D>			m_checkerboardTexture;
+	jny::Ref<jny::Texture2D>			m_frontObjTexture;
 	jny::Ref<jny::VertexArray>			m_vertexArray;
 	jny::Ref<jny::OrthographicCamera>	m_orthoCamera;
 
@@ -303,6 +325,9 @@ private:
 	float								m_cameraMoveSpeed = 1.8f;
 	float								m_cameraRotationSpeed = 40.0f;
 	float								m_deltaTime = 0.0f;
+
+	int									m_currSelectedTexture = 0;
+
 	bool								m_scenePropsWindowOpen = true;
 };
 
