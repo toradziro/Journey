@@ -11,6 +11,8 @@ class RenderCommand : public ISingleton
 	JNY_SINGLETON_TYPE(RenderCommand)
 
 public:
+	void init();
+
 	void createRenderer(RendererAPI::API api);
 
 	void drawIndexed(const Ref<VertexArray>& vertexArray)

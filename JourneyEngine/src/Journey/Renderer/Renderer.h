@@ -14,6 +14,8 @@ class Renderer : ISingleton
 	Renderer() = default;
 
 public:
+	void init();
+
 	void beginScene(const Ref<OrthographicCamera>& camera);
 	void endScene();
 

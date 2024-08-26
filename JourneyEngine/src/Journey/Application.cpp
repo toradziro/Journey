@@ -32,6 +32,7 @@ Application::Application()
 	s_sHolder->st<RenderCommand>().createRenderer(RendererAPI::API::OpenGL);
 	//-- Interface for rendering
 	s_sHolder->add<Renderer>();
+	s_sHolder->st<Renderer>().init();
 
 	//-- Prepare to process events
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)

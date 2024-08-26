@@ -6,6 +6,11 @@
 namespace jny
 {
 
+void RenderCommand::init()
+{
+	m_RendererAPI->init();
+}
+
 void RenderCommand::createRenderer(RendererAPI::API api)
 {
 	switch (api)
