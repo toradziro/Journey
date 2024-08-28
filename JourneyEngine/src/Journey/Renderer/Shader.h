@@ -24,6 +24,7 @@ public:
 	virtual void uploadUniformMat4(const glm::mat4& value, std::string_view name) const = 0;
 
 	static Shader* create(const std::string& vertexSrc, const std::string& fragmentSrc);
+	static Shader* create(const std::string& path);
 };
 
 } //-- jny

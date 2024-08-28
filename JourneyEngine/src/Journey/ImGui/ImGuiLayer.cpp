@@ -57,7 +57,7 @@ void ImGuiLayer::attach()
 	fontConfig.PixelSnapH = true;
 
 	//io.Fonts->AddFontFromFileTTF("../resources/fonts/noto_fonts.ttf", fontSize, &fontConfig);
-	io.Fonts->AddFontFromFileTTF("../resources/fonts/roboto.ttf", fontSize, &fontConfig);
+	io.Fonts->AddFontFromFileTTF("resources/fonts/roboto.ttf", fontSize, &fontConfig);
 
 	io.Fonts->Build();
 

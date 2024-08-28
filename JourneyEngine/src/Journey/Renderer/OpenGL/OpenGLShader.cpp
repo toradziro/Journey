@@ -1,11 +1,43 @@
 #include "jnypch.h"
 #include "OpenGLShader.h"
 #include "Journey/Log/Log.h"
-#include <GLAD/glad.h>
+
 #include <glm/gtc/type_ptr.hpp>
 
 namespace jny
 {
+
+namespace
+{
+
+constexpr GLenum C_INVALID_TYPE = std::numeric_limits<GLenum>::max();
+
+GLenum stringToGlType(const std::string& line)
+{
+	constexpr std::string_view C_VERTEX = "vertex";
+	constexpr std::string_view C_FRAGMENT = "fragment";
+
+	if (line.find(C_VERTEX) != std::string::npos)
+	{
+		return GL_VERTEX_SHADER;
+	}
+	else if (line.find(C_FRAGMENT) != std::string::npos)
+	{
+		return GL_FRAGMENT_SHADER;
+	}
+
+	JNY_ASSERT(false, "Unknown shader type");
+
+	return C_INVALID_TYPE;
+}
+
+} //-- unnamed
+
+OpenGLShader::OpenGLShader(const std::string& path)
+{
+	std::string shaderSource = readFile(path);
+	auto splitSources = preprocess(shaderSource);
+}
 
 OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
 {
@@ -120,6 +152,72 @@ void OpenGLShader::bind() const
 void OpenGLShader::unbind() const
 {
 	glUseProgram(0);
+}
+
+std::string OpenGLShader::readFile(const std::string& path)
+{
+	std::string result;
+	std::ifstream in(path, std::ios::binary);
+
+	if (in)
+	{
+		//-- move to EOF
+		in.seekg(0, std::ios::end);
+		//-- reserve space for the file size
+		result.resize(in.tellg());
+		//-- move back to the start of file
+		in.seekg(0, std::ios::beg);
+		//-- read a file
+		in.read(result.data(), result.size());
+		in.close();
+	}
+	else
+	{
+		JNY_ASSERT(false, "Can't read shader: '{}'", path);
+	}
+	
+	return result;
+}
+
+OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
+{
+	constexpr std::string_view C_LINEBREAK = "\r\n";
+	constexpr std::string_view C_TOKEN = "#type";
+
+	ShaderSources shaderSources;
+
+	size_t pos = 0;
+	std::string currShader;
+	GLenum currShaderType = C_INVALID_TYPE;
+
+	while (pos < source.size() && pos != std::string::npos)
+	{
+		size_t lineEnd = source.find(C_LINEBREAK, pos);
+		std::string line = source.substr(pos, lineEnd);
+
+		if (line.find(C_TOKEN) != std::string::npos)
+		{
+			if (currShaderType != C_INVALID_TYPE)
+			{
+				shaderSources[currShaderType] = currShader;
+			}
+			currShaderType = stringToGlType(line);
+			currShader = {};
+		}
+		else
+		{
+			currShader += line;
+		}
+		pos = lineEnd + C_LINEBREAK.size();
+	}
+
+	return shaderSources;
+}
+
+void OpenGLShader::compile(const std::string& vertexSrc, const std::string& fragmentSrc)
+{
+	auto size = vertexSrc.size();
+	size = fragmentSrc.size();
 }
 
 void OpenGLShader::uploadUniformInt(const int value, std::string_view name) const

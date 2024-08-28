@@ -14,9 +14,9 @@ namespace
 
 constexpr const char* texturesNames[] =
 {
-	"../resources/assets/textures/checkerboard.png",
-	"../resources/assets/textures/bomb.png",
-	"../resources/assets/textures/icon_path.png"
+	"resources/assets/textures/checkerboard.png",
+	"resources/assets/textures/bomb.png",
+	"resources/assets/textures/icon_path.png"
 };
 
 }
@@ -60,71 +60,40 @@ public:
 
 		m_vertexArray->setIndexBuffer(indexBuffer);
 
-		std::string vertexSrc =
-			"#version 330 core\n"
-			"\n"
-			"layout(location = 0) in vec3 a_Position;\n"
-			"\n"
-			"uniform mat4 u_vpMatrix;\n"
-			"uniform mat4 u_modelTransform;\n"
-			"\n"
-			"out vec3 v_Position;\n"
-			"\n"
-			"void main()\n"
-			"{\n"
-			"	gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);\n"
-			"	v_Position = a_Position;\n"
-			"}\n";
-
-		std::string fragmentSrc =
-			"#version 330 core\n"
-			"\n"
-			"layout(location = 0) out vec4 color;\n"
-			"in vec3 v_Position;\n"
-			"uniform vec3 u_color;\n"
-			"\n"
-			"void main()\n"
-			"{\n"
-			"	color = vec4(u_color, 1.0f);\n"
-			"}\n";
-
-		m_shader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
-
-		std::string textVertexSrc = R"(
+		std::string vertexSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexturePos;
 
 			uniform mat4 u_vpMatrix;
 			uniform mat4 u_modelTransform;
 
-			out vec2 v_TexturePos;
+			out vec3 v_Position;
 
 			void main()
 			{
-				v_TexturePos = a_TexturePos;
 				gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);
+				v_Position = a_Position;
 			}
 		)";
 
-		std::string textFragmentSrc = R"(
+		std::string fragmentSrc = R"(
 			#version 330 core
 
 			layout(location = 0) out vec4 color;
-
-			in vec2 v_TexturePos;
-
-			uniform sampler2D u_texture;
+			in vec3 v_Position;
+			uniform vec3 u_color;
 
 			void main()
 			{
-				color = texture(u_texture, v_TexturePos);
+				color = vec4(u_color, 1.0f);
 			}
 		)";
 
-		m_textureShader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(textVertexSrc), std::move(textFragmentSrc)));
-		m_bombTexture = jny::Texture2D::create("../resources/assets/textures/bomb.png");
+		m_shader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
+
+		m_textureShader = jny::Ref<jny::Shader>(jny::Shader::create("resources/assets/shaders/Texture.glsl"));
+		m_bombTexture = jny::Texture2D::create("resources/assets/textures/bomb.png");
 		m_frontObjTexture = jny::Texture2D::create(texturesNames[m_currSelectedTexture]);
 
 		m_textureShader->bind();

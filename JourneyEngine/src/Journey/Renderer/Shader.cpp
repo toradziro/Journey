@@ -27,4 +27,24 @@ Shader* Shader::create(const std::string& vertexSrc, const std::string& fragment
 	return shader;
 }
 
+jny::Shader* Shader::create(const std::string& path)
+{
+	const auto api = Application::subsystems().st<Renderer>().API();
+	Shader* shader = nullptr;
+
+	switch (api)
+	{
+	case RendererAPI::API::OpenGL:
+		shader = new OpenGLShader(path);
+		break;
+	case RendererAPI::API::None:
+		JNY_ASSERT(false, "Can't be none");
+		break;
+	default:
+		JNY_ASSERT(false, "Create valid renderer API");
+		break;
+	}
+	return shader;
+}
+
 } //-- jny
