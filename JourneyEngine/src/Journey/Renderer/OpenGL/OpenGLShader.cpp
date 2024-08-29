@@ -158,6 +158,7 @@ OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 {
 	std::vector<GLuint> shaders;
+	shaders.reserve(sources.size());
 
 	//-- Compile all sources
 	std::ranges::for_each(sources, [&](auto& source)
