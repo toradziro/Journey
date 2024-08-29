@@ -14,7 +14,7 @@ void Log::init()
 	//-- %^ start of color segment and %$ is an and of that segment
 	spdlog::set_pattern("%^[%T] %n: %v%$");
 
-	s_coreLogger = spdlog::stdout_color_mt("LOG");
+	s_coreLogger = spdlog::stdout_color_mt("[LOG]");
 	s_coreLogger->set_level(spdlog::level::trace);
 }
 

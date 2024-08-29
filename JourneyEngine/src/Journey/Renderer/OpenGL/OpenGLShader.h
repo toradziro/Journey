@@ -35,6 +35,8 @@ private:
 	ShaderSources preprocess(const std::string& source);
 	void compile(const ShaderSources& source);
 
+	std::string	m_path;
+
 	uint32_t	m_rendererId = 0;
 };
 

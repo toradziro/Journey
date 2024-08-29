@@ -51,25 +51,25 @@ public:
 	template<typename... Args>
 	static void trace(const std::string& formatStr, Args&&... args)
 	{
-		log(LogLevel::trace, formatStr, std::forward<Args>(args)...);
+		log(LogLevel::trace, "[TRACE] " + formatStr, std::forward<Args>(args)...);
 	}
 
 	template<typename... Args>
 	static void info(const std::string& formatStr, Args&&... args)
 	{
-		log(LogLevel::info, formatStr, std::forward<Args>(args)...);
+		log(LogLevel::info, "[INFO] " + formatStr, std::forward<Args>(args)...);
 	}
 
 	template<typename... Args>
 	static void warning(const std::string& formatStr, Args&&... args)
 	{
-		log(LogLevel::warning, formatStr, std::forward<Args>(args)...);
+		log(LogLevel::warning, "[WARNING] " + formatStr, std::forward<Args>(args)...);
 	}
 
 	template<typename... Args>
 	static void error(const std::string& formatStr, Args&&... args)
 	{
-		log(LogLevel::error, formatStr, std::forward<Args>(args)...);
+		log(LogLevel::error, "[ERROR] " + formatStr, std::forward<Args>(args)...);
 	}
 
 private:

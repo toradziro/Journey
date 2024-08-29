@@ -31,9 +31,27 @@ GLenum stringToGlType(const std::string& line)
 	return C_INVALID_TYPE;
 }
 
+std::string glTypeToStr(GLuint type)
+{
+	constexpr const char* C_VERTEX_SHADER_TYPE = "Vertex";
+	constexpr const char* C_FRAGMENT_SHADER_TYPE = "Fragment";
+	constexpr const char* C_UNKNOWN_SHADER_TYPE = "Unknown";
+
+	if (type == GL_VERTEX_SHADER)
+	{
+		return C_VERTEX_SHADER_TYPE;
+	}
+	else if (type == GL_FRAGMENT_SHADER)
+	{
+		return C_FRAGMENT_SHADER_TYPE;
+	}
+	return C_UNKNOWN_SHADER_TYPE;
+}
+
 } //-- unnamed
 
 OpenGLShader::OpenGLShader(const std::string& path)
+	: m_path(path)
 {
 	std::string shaderSource = readFile(path);
 	auto splitSources = preprocess(shaderSource);
@@ -90,7 +108,8 @@ std::string OpenGLShader::readFile(const std::string& path)
 
 OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 {
-	constexpr std::string_view C_LINEBREAK = "\r\n";
+	constexpr std::string_view C_WIN_LINEBREAK = "\r\n";
+	constexpr std::string_view C_LIN_LINEBREAK = "\n";
 	constexpr std::string_view C_TOKEN = "#type";
 
 	ShaderSources shaderSources;
@@ -99,9 +118,15 @@ OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 	std::string currShader;
 	GLenum currShaderType = C_INVALID_TYPE;
 
+	std::string_view linebreak = C_WIN_LINEBREAK;
+	if (source.find(C_WIN_LINEBREAK) == std::string::npos)
+	{
+		linebreak = C_LIN_LINEBREAK;
+	}
+
 	while (pos < source.size() && pos != std::string::npos)
 	{
-		size_t lineEnd = source.find(C_LINEBREAK, pos);
+		size_t lineEnd = source.find(linebreak, pos);
 		std::string line = source.substr(pos, lineEnd - pos);
 
 		if (line.find(C_TOKEN) != std::string::npos)
@@ -117,8 +142,8 @@ OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 		{
 			currShader += line;
 		}
-		currShader += C_LINEBREAK;
-		pos = lineEnd + C_LINEBREAK.size();
+		currShader += linebreak;
+		pos = lineEnd + linebreak.size();
 
 		//-- Process last parsed shader
 		if (pos == source.size() && !currShader.empty() && currShaderType != C_INVALID_TYPE)
@@ -163,7 +188,7 @@ void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 				glDeleteShader(shader);
 
 				Log::error("{}", infoLog);
-				JNY_ASSERT(false, "Shader compilation error");
+				JNY_ASSERT(false, "Shader compilation error. Shader type: {}", glTypeToStr(sType));
 			}
 			shaders.push_back(shader);
 		});
@@ -207,7 +232,6 @@ void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 	}
 
 	//-- Always detach shaders after a successful link.
-
 	std::ranges::for_each(shaders, [&](GLuint shader)
 		{
 			glDetachShader(m_rendererId, shader);
