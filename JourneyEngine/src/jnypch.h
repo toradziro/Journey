@@ -10,6 +10,8 @@
 #include <filesystem>
 #include <algorithm>
 
+#include <ranges>
+
 #include <vector>
 #include <map>
 #include <set>

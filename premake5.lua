@@ -37,7 +37,7 @@ project "JourneyEngine"
 	location "JourneyEngine"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -75,7 +75,7 @@ project "JourneyEngine"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
+		cppdialect "C++20"
 		systemversion "latest"
 
 		buildoptions
@@ -110,7 +110,7 @@ project "JourneyEngine"
 		}
 		
 	filter "system:linux"
-		cppdialect "C++17"
+		cppdialect "C++20"
 
 		links 
 		{ 
@@ -194,7 +194,7 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
+		cppdialect "C++20"
 		systemversion "latest"
 
 		buildoptions
@@ -227,7 +227,7 @@ project "Sandbox"
 		}
 		
 	filter "system:linux"
-		cppdialect "C++17"
+		cppdialect "C++20"
 
 		links
 		{

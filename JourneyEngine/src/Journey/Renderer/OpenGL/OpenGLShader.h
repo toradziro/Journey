@@ -33,7 +33,7 @@ private:
 
 	std::string readFile(const std::string& path);
 	ShaderSources preprocess(const std::string& source);
-	void compile(const std::string& vertexSrc, const std::string& fragmentSrc);
+	void compile(const ShaderSources& source);
 
 	uint32_t	m_rendererId = 0;
 };

@@ -23,7 +23,9 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& texturePath)
 	m_width = width;
 	m_height = height;
 
+	//-- For internal format we need to set bits per channel to know how deep color is
 	GLenum internalFormat = channelsInFile == 3 ? GL_RGB8 : GL_RGBA8;
+	//-- While for data format we need to know only how it's mixed together
 	GLenum format = channelsInFile == 3 ? GL_RGB : GL_RGBA;
 
 	glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererId);

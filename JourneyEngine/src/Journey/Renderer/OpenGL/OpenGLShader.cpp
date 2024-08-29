@@ -37,106 +37,15 @@ OpenGLShader::OpenGLShader(const std::string& path)
 {
 	std::string shaderSource = readFile(path);
 	auto splitSources = preprocess(shaderSource);
+	compile(splitSources);
 }
 
 OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
 {
-	// Create an empty vertex shader handle
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-	// Send the vertex shader source code to GL
-	// Note that std::string's .c_str is NULL character terminated.
-	const GLchar* source = (const GLchar*)vertexSrc.c_str();
-	glShaderSource(vertexShader, 1, &source, 0);
-
-	// Compile the vertex shader
-	glCompileShader(vertexShader);
-
-	GLint isCompiled = 0;
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-	if (isCompiled == GL_FALSE)
-	{
-		GLint maxLength = 0;
-		glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-		// The maxLength includes the NULL character
-		char* infoLog = (char*)alloca(maxLength * sizeof(char));
-		glGetShaderInfoLog(vertexShader, maxLength, &maxLength, infoLog);
-
-		// We don't need the shader anymore.
-		glDeleteShader(vertexShader);
-
-		Log::error("{}", infoLog);
-		JNY_ASSERT(false, "Vertex shader compilation error");
-	}
-
-	// Create an empty fragment shader handle
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	// Send the fragment shader source code to GL
-	// Note that std::string's .c_str is NULL character terminated.
-	source = (const GLchar*)fragmentSrc.c_str();
-	glShaderSource(fragmentShader, 1, &source, 0);
-
-	// Compile the fragment shader
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-	if (isCompiled == GL_FALSE)
-	{
-		GLint maxLength = 0;
-		glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-		// The maxLength includes the NULL character
-		char* infoLog = (char*)alloca(maxLength * sizeof(char));
-		glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, infoLog);
-
-		// We don't need the shader anymore.
-		glDeleteShader(fragmentShader);
-		// Either of them. Don't leak shaders.
-		glDeleteShader(vertexShader);
-
-		Log::error("{}", infoLog);
-		JNY_ASSERT(false, "Fragment shader compilation error");
-	}
-
-	// Vertex and fragment shaders are successfully compiled.
-	// Now time to link them together into a program.
-	// Get a program object.
-	m_rendererId = glCreateProgram();
-
-	// Attach our shaders to our program
-	glAttachShader(m_rendererId, vertexShader);
-	glAttachShader(m_rendererId, fragmentShader);
-
-	// Link our program
-	glLinkProgram(m_rendererId);
-
-	// Note the different functions here: glGetProgram* instead of glGetShader*.
-	GLint isLinked = 0;
-	glGetProgramiv(m_rendererId, GL_LINK_STATUS, (int*)&isLinked);
-	if (isLinked == GL_FALSE)
-	{
-		GLint maxLength = 0;
-		glGetProgramiv(m_rendererId, GL_INFO_LOG_LENGTH, &maxLength);
-
-		// The maxLength includes the NULL character
-		char* infoLog = (char*)alloca(maxLength * sizeof(char));
-		glGetProgramInfoLog(m_rendererId, maxLength, &maxLength, &infoLog[0]);
-
-		// We don't need the program anymore.
-		glDeleteProgram(m_rendererId);
-		// Don't leak shaders either.
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-
-		Log::error("{}", infoLog);
-		JNY_ASSERT(false, "Shader linking error");
-	}
-
-	// Always detach shaders after a successful link.
-	glDetachShader(m_rendererId, vertexShader);
-	glDetachShader(m_rendererId, fragmentShader);
+	ShaderSources sources;
+	sources[GL_VERTEX_SHADER] = vertexSrc;
+	sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+	compile(sources);
 }
 
 OpenGLShader::~OpenGLShader()
@@ -193,7 +102,7 @@ OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 	while (pos < source.size() && pos != std::string::npos)
 	{
 		size_t lineEnd = source.find(C_LINEBREAK, pos);
-		std::string line = source.substr(pos, lineEnd);
+		std::string line = source.substr(pos, lineEnd - pos);
 
 		if (line.find(C_TOKEN) != std::string::npos)
 		{
@@ -208,21 +117,104 @@ OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 		{
 			currShader += line;
 		}
+		currShader += C_LINEBREAK;
 		pos = lineEnd + C_LINEBREAK.size();
+
+		//-- Process last parsed shader
+		if (pos == source.size() && !currShader.empty() && currShaderType != C_INVALID_TYPE)
+		{
+			shaderSources[currShaderType] = currShader;
+		}
 	}
 
 	return shaderSources;
 }
 
-void OpenGLShader::compile(const std::string& vertexSrc, const std::string& fragmentSrc)
+void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 {
-	auto size = vertexSrc.size();
-	size = fragmentSrc.size();
+	std::vector<GLuint> shaders;
+
+	//-- Compile all sources
+	std::ranges::for_each(sources, [&](auto& source)
+		{
+			//-- Create an empty vertex shader handle
+			GLuint shader = glCreateShader(source.first);
+
+			//-- Send the shader source code to GL
+			const GLchar* toGlTypeShader = static_cast<const GLchar*>(source.second.c_str());
+			glShaderSource(shader, 1, &toGlTypeShader, 0);
+
+			//-- Compile the vertex shader
+			glCompileShader(shader);
+
+			GLint isCompiled = 0;
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+			if (isCompiled == GL_FALSE)
+			{
+				GLint maxLength = 0;
+				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+				//-- The maxLength includes the NULL character
+				char* infoLog = (char*)alloca(maxLength * sizeof(char));
+				glGetShaderInfoLog(shader, maxLength, &maxLength, infoLog);
+
+				//-- We don't need the shader anymore.
+				glDeleteShader(shader);
+
+				Log::error("{}", infoLog);
+				JNY_ASSERT(false, "Shader compilation error");
+			}
+			shaders.push_back(shader);
+		});
+
+	//-- Shaders are successfully compiled.
+	//-- Now time to link them together into a program.
+	//-- Get a program object.
+	m_rendererId = glCreateProgram();
+
+	//-- Attach our shaders to our program
+	std::ranges::for_each(shaders, [&](GLuint shader)
+		{
+			glAttachShader(m_rendererId, shader);
+		});
+	
+	//-- Link our program
+	glLinkProgram(m_rendererId);
+
+	//-- Note the different functions here: glGetProgram* instead of glGetShader*.
+	GLint isLinked = 0;
+	glGetProgramiv(m_rendererId, GL_LINK_STATUS, (int*)&isLinked);
+	if (isLinked == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(m_rendererId, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//-- The maxLength includes the NULL character
+		char* infoLog = (char*)alloca(maxLength * sizeof(char));
+		glGetProgramInfoLog(m_rendererId, maxLength, &maxLength, &infoLog[0]);
+
+		//-- We don't need the program anymore.
+		glDeleteProgram(m_rendererId);
+		//-- Don't leak shaders either.
+		std::ranges::for_each(shaders, [&](GLuint shader)
+			{
+				glDeleteShader(shader);
+			});
+
+		Log::error("{}", infoLog);
+		JNY_ASSERT(false, "Shader linking error");
+	}
+
+	//-- Always detach shaders after a successful link.
+
+	std::ranges::for_each(shaders, [&](GLuint shader)
+		{
+			glDetachShader(m_rendererId, shader);
+		});
 }
 
 void OpenGLShader::uploadUniformInt(const int value, std::string_view name) const
 {
-	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
@@ -232,7 +224,6 @@ void OpenGLShader::uploadUniformInt(const int value, std::string_view name) cons
 
 void OpenGLShader::uploadUniformFloat(const float value, std::string_view name) const
 {
-	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
@@ -242,7 +233,6 @@ void OpenGLShader::uploadUniformFloat(const float value, std::string_view name) 
 
 void OpenGLShader::uploadUniformFloat2(const glm::vec2& value, std::string_view name) const
 {
-	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
@@ -252,7 +242,6 @@ void OpenGLShader::uploadUniformFloat2(const glm::vec2& value, std::string_view 
 
 void OpenGLShader::uploadUniformFloat3(const glm::vec3& value, std::string_view name) const
 {
-	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
@@ -262,7 +251,6 @@ void OpenGLShader::uploadUniformFloat3(const glm::vec3& value, std::string_view 
 
 void OpenGLShader::uploadUniformFloat4(const glm::vec4& value, std::string_view name) const
 {
-	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
@@ -272,7 +260,6 @@ void OpenGLShader::uploadUniformFloat4(const glm::vec4& value, std::string_view 
 
 void OpenGLShader::uploadUniformMat3(const glm::mat3& value, std::string_view name) const
 {
-	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
@@ -282,7 +269,6 @@ void OpenGLShader::uploadUniformMat3(const glm::mat3& value, std::string_view na
 
 void OpenGLShader::uploadUniformMat4(const glm::mat4& value, std::string_view name) const
 {
-	//glUseProgram(m_rendererId);
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
