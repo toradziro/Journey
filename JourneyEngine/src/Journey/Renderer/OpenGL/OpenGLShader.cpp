@@ -137,11 +137,12 @@ void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 	//-- Compile all sources
 	std::ranges::for_each(sources, [&](auto& source)
 		{
+			auto& [sType, shaderSourceCode] = source;
 			//-- Create an empty vertex shader handle
-			GLuint shader = glCreateShader(source.first);
+			GLuint shader = glCreateShader(sType);
 
 			//-- Send the shader source code to GL
-			const GLchar* toGlTypeShader = static_cast<const GLchar*>(source.second.c_str());
+			const GLchar* toGlTypeShader = static_cast<const GLchar*>(shaderSourceCode.c_str());
 			glShaderSource(shader, 1, &toGlTypeShader, 0);
 
 			//-- Compile the vertex shader
