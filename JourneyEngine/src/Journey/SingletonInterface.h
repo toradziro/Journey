@@ -11,7 +11,7 @@ namespace jny
 
 class SingletonHolder;
 
-class  ISingleton
+class ISingleton
 {
 public:
 	ISingleton() = default;

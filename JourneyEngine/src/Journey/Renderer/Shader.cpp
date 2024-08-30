@@ -7,7 +7,7 @@
 namespace jny
 {
 
-Shader* Shader::create(const std::string& vertexSrc, const std::string& fragmentSrc)
+Shader* Shader::create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 {
 	const auto api = Application::subsystems().st<Renderer>().API();
 	Shader* shader = nullptr;
@@ -15,7 +15,7 @@ Shader* Shader::create(const std::string& vertexSrc, const std::string& fragment
 	switch (api)
 	{
 		case RendererAPI::API::OpenGL:
-			shader = new OpenGLShader(vertexSrc, fragmentSrc);
+			shader = new OpenGLShader(name, vertexSrc, fragmentSrc);
 			break;
 		case RendererAPI::API::None:
 			JNY_ASSERT(false, "Can't be none");
@@ -45,6 +45,28 @@ jny::Shader* Shader::create(const std::string& path)
 		break;
 	}
 	return shader;
+}
+
+void ShaderLibrary::add(const Ref<Shader>& shader)
+{
+	JNY_ASSERT(m_shaders.count(shader->path()) == 0, "Shader with this path already exists");
+
+	m_shaders[shader->path()] = shader;
+}
+
+jny::Ref<jny::Shader> ShaderLibrary::load(const std::string& path)
+{
+	JNY_ASSERT(m_shaders.count(path) == 0, "Shader with this path already exists");
+
+	m_shaders[path] = Shader::create(path);
+	return m_shaders[path];
+}
+
+jny::Ref<jny::Shader> ShaderLibrary::shader(const std::string& path)
+{
+	JNY_ASSERT(m_shaders.count(path) == 1, "Unknown shader");
+
+	return m_shaders.at(path);
 }
 
 } //-- jny

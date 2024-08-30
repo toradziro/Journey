@@ -58,7 +58,8 @@ OpenGLShader::OpenGLShader(const std::string& path)
 	compile(splitSources);
 }
 
-OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+	: m_path(name)
 {
 	ShaderSources sources;
 	sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -84,7 +85,7 @@ void OpenGLShader::unbind() const
 std::string OpenGLShader::readFile(const std::string& path)
 {
 	std::string result;
-	std::ifstream in(path, std::ios::binary);
+	std::ifstream in(path, std::ios::in | std::ios::binary);
 
 	if (in)
 	{

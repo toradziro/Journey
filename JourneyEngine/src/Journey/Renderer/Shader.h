@@ -2,6 +2,8 @@
 
 #include "glm/glm.hpp"
 
+#include "Journey/SingletonInterface.h"
+
 namespace jny
 {
 
@@ -13,6 +15,8 @@ public:
 	virtual void bind() const = 0;
 	virtual void unbind() const = 0;
 
+	virtual const std::string& path() const = 0;
+
 	virtual void uploadUniformInt(const int value, std::string_view name) const = 0;
 
 	virtual void uploadUniformFloat(const float value, std::string_view name) const = 0;
@@ -23,8 +27,21 @@ public:
 	virtual void uploadUniformMat3(const glm::mat3& value, std::string_view name) const = 0;
 	virtual void uploadUniformMat4(const glm::mat4& value, std::string_view name) const = 0;
 
-	static Shader* create(const std::string& vertexSrc, const std::string& fragmentSrc);
+	static Shader* create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	static Shader* create(const std::string& path);
+};
+
+class ShaderLibrary : ISingleton
+{
+	JNY_SINGLETON_TYPE(ShaderLibrary)
+
+public:
+	void add(const Ref<Shader>& shader);
+	Ref<Shader> load(const std::string& path);
+	Ref<Shader> shader(const std::string& path);
+
+private:
+	std::unordered_map<std::string, Ref<Shader>> m_shaders;
 };
 
 } //-- jny

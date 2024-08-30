@@ -11,11 +11,13 @@ class OpenGLShader : public Shader
 {
 public:
 	OpenGLShader(const std::string& path);
-	OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+	OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	virtual ~OpenGLShader();
 
 	virtual void bind() const override;
 	virtual void unbind() const override;
+
+	virtual const std::string& path() const { return m_path; }
 
 	//-- Uniforms
 	virtual void uploadUniformInt(const int value, std::string_view name) const override;

@@ -90,9 +90,12 @@ public:
 			}
 		)";
 
-		m_shader = jny::Ref<jny::Shader>(jny::Shader::create(std::move(vertexSrc), std::move(fragmentSrc)));
+		auto& shaderLib = jny::Application::subsystems().st<jny::ShaderLibrary>();
 
-		m_textureShader = jny::Ref<jny::Shader>(jny::Shader::create("resources/assets/shaders/Texture.glsl"));
+		m_shader = jny::Ref<jny::Shader>(jny::Shader::create("Triangle shader", std::move(vertexSrc), std::move(fragmentSrc)));
+		shaderLib.add(m_shader);
+
+		m_textureShader = shaderLib.load("resources/assets/shaders/Texture.glsl");
 		m_bombTexture = jny::Texture2D::create("resources/assets/textures/bomb.png");
 		m_frontObjTexture = jny::Texture2D::create(texturesNames[m_currSelectedTexture]);
 

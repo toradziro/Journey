@@ -34,6 +34,8 @@ Application::Application()
 	s_sHolder->add<Renderer>();
 	s_sHolder->st<Renderer>().init();
 
+	s_sHolder->add<ShaderLibrary>();
+
 	//-- Prepare to process events
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)
 		{
