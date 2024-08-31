@@ -81,7 +81,6 @@ project "JourneyEngine"
 		buildoptions
 		{
 			"/utf-8",
-			"/W4",                             -- Equivalent to -Wall - enable most common warnings
 			"/w44265",                         -- Somewhat equivalent to -Wextra
 			"/permissive-",                    -- Equivalent to -Wpedantic
 			"/w44263",                         -- Equivalent to -Wctor-dtor-privacy
@@ -99,7 +98,6 @@ project "JourneyEngine"
 			"/w44266",                         -- Equivalent to -Wextra-semi
 			"/w44472",                         -- Equivalent to -Wsign-conversion
 			"/w44262",                         -- Equivalent to -Wlogical-op
-			"/WX"                              -- Treat warnings as errors
 		}
 
 		defines
@@ -200,7 +198,6 @@ project "Sandbox"
 		buildoptions
 		{
 			"/utf-8",
-			"/W4",                             -- Equivalent to -Wall - enable most common warnings
 			"/w44265",                         -- Somewhat equivalent to -Wextra
 			"/permissive-",                    -- Equivalent to -Wpedantic
 			"/w44263",                         -- Equivalent to -Wctor-dtor-privacy
@@ -218,7 +215,6 @@ project "Sandbox"
 			"/w44266",                         -- Equivalent to -Wextra-semi
 			"/w44472",                         -- Equivalent to -Wsign-conversion
 			"/w44262",                         -- Equivalent to -Wlogical-op
-			"/WX"                              -- Treat warnings as errors
 		}
 
 		defines
