@@ -39,9 +39,9 @@ OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
 	: m_indicesCount(count)
 {
 	glCreateBuffers(1, &m_rendererId);
-	bind();
+	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 	//-- Elements macro is indices in OpenGl
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indicesCount * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_indicesCount * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer()

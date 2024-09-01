@@ -25,10 +25,9 @@ class ExampleLayer : public jny::Layer
 {
 public:
 
-	ExampleLayer() : Layer("Test")
+	ExampleLayer() : Layer("Test"),
+		m_orthoCameraCtrl(jny::Application::aspectRatio())
 	{
-		m_orthoCamera = jny::Ref<jny::OrthographicCamera>(new jny::OrthographicCamera(-1.0f, 1.0f, -1.0f, 1.0f));
-
 		//-- Vertex array
 		m_vertexArray = jny::Ref<jny::VertexArray>(jny::VertexArray::create());
 
@@ -105,9 +104,9 @@ public:
 
 	void update(float dt) override
 	{
-		m_deltaTime = dt;
+		m_orthoCameraCtrl.update(dt);
 
-		updateCamera();
+		m_deltaTime = dt;
 
 		auto& renderer = jny::Application::subsystems().st<jny::Renderer>();
 
@@ -115,7 +114,7 @@ public:
 		renderer.clear();
 
 		//-- Start rendering
-		renderer.beginScene(m_orthoCamera);
+		renderer.beginScene(m_orthoCameraCtrl.camera());
 
 		m_modelTransform = glm::mat4(1.0f);
 		m_modelTransform = glm::translate(m_modelTransform, m_modelPosition);
@@ -148,8 +147,9 @@ public:
 		renderer.endScene();
 	}
 
-	void onEvent(jny::Event& /*event*/) override
+	void onEvent(jny::Event& event) override
 	{
+		m_orthoCameraCtrl.onEvent(event);
 		//jny::EventDispatcher dispatcher(event);
 	}
 
@@ -170,19 +170,19 @@ public:
 
 			if (ImGui::BeginTable("##scenePropsTable", 2, tableFlags, tableSize))
 			{
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				ImGui::TextUnformatted("Camera speed");
+				//ImGui::TableNextRow();
+				//ImGui::TableNextColumn();
+				//ImGui::TextUnformatted("Camera speed");
 
-				ImGui::TableNextColumn();
-				ImGui::DragFloat("##cameraSpeedScalar", &m_cameraMoveSpeed, 0.1f, 0.0f, 5.0f);
+				//ImGui::TableNextColumn();
+				//ImGui::DragFloat("##cameraSpeedScalar", &m_cameraMoveSpeed, 0.1f, 0.0f, 5.0f);
 
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				ImGui::TextUnformatted("Rotation speed");
+				//ImGui::TableNextRow();
+				//ImGui::TableNextColumn();
+				//ImGui::TextUnformatted("Rotation speed");
 
-				ImGui::TableNextColumn();
-				ImGui::DragFloat("##cameraRotationSpeedScalar", &m_cameraRotationSpeed, 1.0f, 0.0f, 40.0f);
+				//ImGui::TableNextColumn();
+				//ImGui::DragFloat("##cameraRotationSpeedScalar", &m_cameraRotationSpeed, 1.0f, 0.0f, 40.0f);
 
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
@@ -202,11 +202,11 @@ public:
 				ImGui::TableNextColumn();
 				ImGui::DragFloat3("##scaleModel", glm::value_ptr(m_modelScale), 0.01f, 0.0f);
 
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				ImGui::TextUnformatted("Camera Position");
-				ImGui::TableNextColumn();
-				ImGui::DragFloat3("##cameraPosition", glm::value_ptr(m_cameraPos), 0.01f, 0.0f);
+				//ImGui::TableNextRow();
+				//ImGui::TableNextColumn();
+				//ImGui::TextUnformatted("Camera Position");
+				//ImGui::TableNextColumn();
+				//ImGui::DragFloat3("##cameraPosition", glm::value_ptr(m_cameraPos), 0.01f, 0.0f);
 
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
@@ -236,49 +236,14 @@ public:
 		}
 	}
 
-	void updateCamera()
-	{
-		float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * m_deltaTime;
-		float cameraRotationWithDeltaTime = m_cameraRotationSpeed * m_deltaTime;
-
-		auto& inputPollSystem = jny::Application::subsystems().st<jny::InputPoll>();
-		if (inputPollSystem.keyPressed(GLFW_KEY_RIGHT))
-		{
-			m_cameraPos.x += cameraSpeedWithDeltaTime;
-		}
-		else if (inputPollSystem.keyPressed(GLFW_KEY_LEFT))
-		{
-			m_cameraPos.x -= cameraSpeedWithDeltaTime;
-		}
-
-		if (inputPollSystem.keyPressed(GLFW_KEY_UP))
-		{
-			m_cameraPos.y += cameraSpeedWithDeltaTime;
-		}
-		else if (inputPollSystem.keyPressed(GLFW_KEY_DOWN))
-		{
-			m_cameraPos.y -= cameraSpeedWithDeltaTime;
-		}
-
-		if (inputPollSystem.keyPressed(GLFW_KEY_Q))
-		{
-			m_cameraRotation += cameraRotationWithDeltaTime;
-		}
-		else if (inputPollSystem.keyPressed(GLFW_KEY_E))
-		{
-			m_cameraRotation -= cameraRotationWithDeltaTime;
-		}
-		m_orthoCamera->setPosition(m_cameraPos);
-		m_orthoCamera->setRotation(m_cameraRotation);
-	}
-
 private:
+	jny::OrthographicCameraController	m_orthoCameraCtrl;
+
 	jny::Ref<jny::Shader>				m_shader;
 	jny::Ref<jny::Shader>				m_textureShader;
 	jny::Ref<jny::Texture2D>			m_bombTexture;
 	jny::Ref<jny::Texture2D>			m_frontObjTexture;
 	jny::Ref<jny::VertexArray>			m_vertexArray;
-	jny::Ref<jny::OrthographicCamera>	m_orthoCamera;
 
 	glm::mat4							m_modelTransform = (1.0f);
 	glm::vec3							m_modelPosition = { 0.0f, 0.0f, 0.0f };
@@ -287,11 +252,6 @@ private:
 
 	glm::vec3							m_backgroundTrianglesColor = { 0.21f, 0.73f, 0.93f };
 
-	glm::vec3							m_cameraPos = { 0.0f, 0.0f, 0.0f };
-	float								m_cameraRotation = 0.0f;
-
-	float								m_cameraMoveSpeed = 1.8f;
-	float								m_cameraRotationSpeed = 40.0f;
 	float								m_deltaTime = 0.0f;
 
 	int									m_currSelectedTexture = 0;

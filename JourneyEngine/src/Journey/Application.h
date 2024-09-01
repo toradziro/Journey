@@ -41,6 +41,8 @@ public:
 	void popLayer(Layer* layer);
 	void popOverlay(Layer* layer);
 
+	static float aspectRatio();
+
 	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr, "Don't know this systyem"); return *s_sHolder; }
 
 private:

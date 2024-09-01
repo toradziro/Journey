@@ -24,3 +24,5 @@
 #include "Journey/Renderer/RenderCommand.h"
 #include "Journey/Renderer/OrthographicCamera.h"
 #include "Journey/Renderer/Texture.h"
+
+#include "Journey/OrthographicCameraController.h"

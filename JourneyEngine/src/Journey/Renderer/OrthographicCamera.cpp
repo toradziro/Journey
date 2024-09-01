@@ -9,20 +9,14 @@ namespace jny
 {
 
 OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
-	: /*m_projectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)),*/ m_viewMatrix(1.0f)
+	: m_projectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)), m_viewMatrix(1.0f)
 {
-	float winHeight = static_cast<float>(Application::subsystems().st<Window>().height());
-	float winWidth = static_cast<float>(Application::subsystems().st<Window>().width());
-	float aspectRatio = winWidth / winHeight;
-	
-	if (aspectRatio >= 1.0f)
-	{
-		m_projectionMatrix = glm::ortho(left * aspectRatio, right * aspectRatio, bottom, top, -1.0f, 1.0f);
-	} else
-	{
-		m_projectionMatrix = glm::ortho(left, right, bottom / aspectRatio, top / aspectRatio, -1.0f, 1.0f);
-	}
+	m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
+}
 
+void OrthographicCamera::setProjection(float left, float right, float bottom, float top)
+{
+	m_projectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
 	m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
 }
 

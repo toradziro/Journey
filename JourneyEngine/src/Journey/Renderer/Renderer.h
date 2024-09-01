@@ -16,7 +16,7 @@ class Renderer : ISingleton
 public:
 	void init();
 
-	void beginScene(const Ref<OrthographicCamera>& camera);
+	void beginScene(const OrthographicCamera& camera);
 	void endScene();
 
 	void submit(const Ref<VertexArray>& vertexArray,

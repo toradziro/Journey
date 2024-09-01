@@ -113,4 +113,10 @@ void Application::popOverlay(Layer* layer)
 	m_layers.popOverlay(layer);
 }
 
+float Application::aspectRatio()
+{
+	return static_cast<float>(Application::subsystems().st<Window>().width()) /
+		static_cast<float>(Application::subsystems().st<Window>().height());
+}
+
 } //-- jny

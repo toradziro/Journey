@@ -12,9 +12,9 @@ void Renderer::init()
 	Application::subsystems().st<RenderCommand>().init();
 }
 
-void Renderer::beginScene(const Ref<OrthographicCamera>& camera)
+void Renderer::beginScene(const OrthographicCamera& camera)
 {
-	m_sceneData.m_vpMatrix = camera->viewProjectionMatrix();
+	m_sceneData.m_vpMatrix = camera.viewProjectionMatrix();
 }
 
 void Renderer::endScene()
