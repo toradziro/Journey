@@ -9,6 +9,7 @@ namespace jny
 
 class ImGuiLayer;
 class Window;
+class WindowResizeEvent;
 
 #ifdef JNY_PLATFORM_WINDOWS
 #pragma warning(push)
@@ -25,6 +26,7 @@ public:
 
 	void onEvent(Event& event);
 	bool windowCloseEvent();
+	bool windowResizeEvent(WindowResizeEvent& e);
 
 	template<typename T, typename ...Args>
 	T* pushLayer(Args&&... args)
@@ -49,6 +51,7 @@ private:
 	LayerStack	m_layers;
 	ImGuiLayer*	m_imGuiLayer = nullptr;
 	bool		m_running = true;
+	bool		m_minimized = false;
 
 private:
 	static std::unique_ptr<SingletonHolder>	s_sHolder;

@@ -57,11 +57,14 @@ void Application::run()
 	{
 		auto startTime = std::chrono::high_resolution_clock::now();
 
-		for (auto& layer : m_layers)
+		if (!m_minimized)
 		{
-			layer->update(deltaTime.count());
+			for (auto& layer : m_layers)
+			{
+				layer->update(deltaTime.count());
+			}
 		}
-		
+
 		//-- ImGui drawing
 		m_imGuiLayer->begin();
 		for (auto& layer : m_layers)
@@ -85,6 +88,11 @@ void Application::onEvent(Event& event)
 			return windowCloseEvent();
 		});
 
+	dispatcher.dispatch<WindowResizeEvent>([this](WindowResizeEvent& e)
+		{
+			return windowResizeEvent(e);
+		});
+
 	for (auto it = m_layers.rbegin(); it != m_layers.rend(); ++it)
 	{
 		(*it)->onEvent(event);
@@ -99,6 +107,23 @@ bool Application::windowCloseEvent()
 {
 	m_running = false;
 	return true;
+}
+
+bool Application::windowResizeEvent(WindowResizeEvent& e)
+{
+	auto w = e.width();
+	auto h = e.height();
+
+	if (w == 0 && h == 0)
+	{
+		m_minimized = true;
+		return false;
+	}
+	m_minimized = false;
+
+	s_sHolder->st<Renderer>().windowResized(w, h);
+
+	return false;
 }
 
 void Application::popLayer(Layer* layer)

@@ -16,6 +16,8 @@ class Renderer : ISingleton
 public:
 	void init();
 
+	void windowResized(uint32_t width, uint32_t height);
+
 	void beginScene(const OrthographicCamera& camera);
 	void endScene();
 

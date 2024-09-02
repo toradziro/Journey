@@ -11,6 +11,11 @@ void RenderCommand::init()
 	m_RendererAPI->init();
 }
 
+void RenderCommand::windowResized(uint32_t width, uint32_t height)
+{
+	m_RendererAPI->windowResized(width, height);
+}
+
 void RenderCommand::createRenderer(RendererAPI::API api)
 {
 	switch (api)

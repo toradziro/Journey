@@ -12,7 +12,7 @@ class OpenGlContext : public GraphicContext
 public:
 	OpenGlContext(GLFWwindow* window);
 
-	void swapBuffers() override;
+	virtual void swapBuffers() override;
 
 private:
 	void init();

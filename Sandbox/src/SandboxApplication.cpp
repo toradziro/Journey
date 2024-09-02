@@ -170,49 +170,17 @@ public:
 
 			if (ImGui::BeginTable("##scenePropsTable", 2, tableFlags, tableSize))
 			{
-				//ImGui::TableNextRow();
-				//ImGui::TableNextColumn();
-				//ImGui::TextUnformatted("Camera speed");
-
-				//ImGui::TableNextColumn();
-				//ImGui::DragFloat("##cameraSpeedScalar", &m_cameraMoveSpeed, 0.1f, 0.0f, 5.0f);
-
-				//ImGui::TableNextRow();
-				//ImGui::TableNextColumn();
-				//ImGui::TextUnformatted("Rotation speed");
-
-				//ImGui::TableNextColumn();
-				//ImGui::DragFloat("##cameraRotationSpeedScalar", &m_cameraRotationSpeed, 1.0f, 0.0f, 40.0f);
-
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
 				ImGui::TextUnformatted("Position");
 				ImGui::TableNextColumn();
 				ImGui::DragFloat3("##positionModel", glm::value_ptr(m_modelPosition), 0.01f, 0.0f);
 
-				//ImGui::TableNextRow();
-				//ImGui::TableNextColumn();
-				//ImGui::TextUnformatted("Rotation");
-				//ImGui::TableNextColumn();
-				//ImGui::DragFloat3("##rotationModel", &m_modelRotation.x, 0.0f);
-
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
 				ImGui::TextUnformatted("Scale");
 				ImGui::TableNextColumn();
 				ImGui::DragFloat3("##scaleModel", glm::value_ptr(m_modelScale), 0.01f, 0.0f);
-
-				//ImGui::TableNextRow();
-				//ImGui::TableNextColumn();
-				//ImGui::TextUnformatted("Camera Position");
-				//ImGui::TableNextColumn();
-				//ImGui::DragFloat3("##cameraPosition", glm::value_ptr(m_cameraPos), 0.01f, 0.0f);
-
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				ImGui::TextUnformatted("Triangles Color");
-				ImGui::TableNextColumn();
-				ImGui::ColorEdit3("##trianglesColor", glm::value_ptr(m_backgroundTrianglesColor));
 
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
@@ -247,10 +215,7 @@ private:
 
 	glm::mat4							m_modelTransform = (1.0f);
 	glm::vec3							m_modelPosition = { 0.0f, 0.0f, 0.0f };
-	//glm::vec3							m_modelRotation = { 1.0f, 1.0f, 1.0f };
 	glm::vec3							m_modelScale = { 1.0f, 1.0f, 1.0f };
-
-	glm::vec3							m_backgroundTrianglesColor = { 0.21f, 0.73f, 0.93f };
 
 	float								m_deltaTime = 0.0f;
 

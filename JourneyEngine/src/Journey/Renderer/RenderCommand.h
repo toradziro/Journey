@@ -13,6 +13,8 @@ class RenderCommand : public ISingleton
 public:
 	void init();
 
+	void windowResized(uint32_t width, uint32_t height);
+
 	void createRenderer(RendererAPI::API api);
 
 	void drawIndexed(const Ref<VertexArray>& vertexArray)
