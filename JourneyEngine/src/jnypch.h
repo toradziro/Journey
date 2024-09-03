@@ -27,4 +27,4 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/bundled/format.h>
 
-#include <Journey/Reference.h>
+#include <Journey/Core/Reference.h>

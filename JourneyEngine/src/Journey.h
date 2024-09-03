@@ -2,8 +2,8 @@
 
 //-- To provide API for applications
 
-#include "Journey/Core.h"
-#include "Journey/Application.h"
+#include "Journey/Core/Core.h"
+#include "Journey/Core/Application.h"
 #include "Journey/Log/Log.h"
 
 #include "Journey/Events/Event.h"
@@ -13,7 +13,7 @@
 
 #include "Journey/Layer/Layer.h"
 
-#include "Journey/EntryPoint.h"
+#include "Journey/Core/EntryPoint.h"
 
 #include "Journey/ImGui/ImGuiLayer.h"
 
@@ -25,4 +25,4 @@
 #include "Journey/Renderer/OrthographicCamera.h"
 #include "Journey/Renderer/Texture.h"
 
-#include "Journey/OrthographicCameraController.h"
+#include "Journey/Renderer/OrthographicCameraController.h"

@@ -1,6 +1,6 @@
 #include <jnypch.h>
 #include "OpenGlContext.h"
-#include "Journey/Core.h"
+#include "Journey/Core/Core.h"
 
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>

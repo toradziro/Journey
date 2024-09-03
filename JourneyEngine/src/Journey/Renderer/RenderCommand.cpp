@@ -1,6 +1,6 @@
 #include "jnypch.h"
 #include "RenderCommand.h"
-#include "Journey/Core.h"
+#include "Journey/Core/Core.h"
 #include "Journey/Renderer/OpenGL/OpenGLRendererAPI.h"
 
 namespace jny

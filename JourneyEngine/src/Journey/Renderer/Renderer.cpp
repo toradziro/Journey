@@ -1,7 +1,7 @@
 #include "jnypch.h"
 #include "Renderer.h"
-#include "Journey/Core.h"
-#include "Journey/Application.h"
+#include "Journey/Core/Core.h"
+#include "Journey/Core/Application.h"
 #include "VertexArray.h"
 
 namespace jny

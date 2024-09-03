@@ -1,7 +1,7 @@
 #include "jnypch.h"
-#include "Journey/OrthographicCameraController.h"
-#include "Journey/Application.h"
-#include "Journey/InputPoll.h"
+#include "Journey/Renderer/OrthographicCameraController.h"
+#include "Journey/Core/Application.h"
+#include "Journey/Core/InputPoll.h"
 
 #include "GLFW/glfw3.h"
 

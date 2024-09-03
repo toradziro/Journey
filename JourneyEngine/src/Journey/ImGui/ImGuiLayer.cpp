@@ -6,7 +6,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 
-#include "Journey/Application.h"
+#include "Journey/Core/Application.h"
 #include "Journey/Window/Window.h"
 
 #include "Journey/Events/Event.h"

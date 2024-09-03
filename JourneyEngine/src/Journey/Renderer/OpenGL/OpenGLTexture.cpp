@@ -1,6 +1,6 @@
 #include "jnypch.h"
 #include "OpenGLTexture.h"
-#include "Journey/Core.h"
+#include "Journey/Core/Core.h"
 
 #include "stb_image.h"
 #include <GLAD/glad.h>

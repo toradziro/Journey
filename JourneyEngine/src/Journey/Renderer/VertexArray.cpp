@@ -1,6 +1,6 @@
 #include "jnypch.h"
 #include "VertexArray.h"
-#include "Journey/Application.h"
+#include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/OpenGL/OpenGLVertexArray.h"
 

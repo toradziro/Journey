@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Journey/SingletonInterface.h"
+#include "Journey/Core/SingletonInterface.h"
 #include "RenderCommand.h"
 #include "OrthographicCamera.h"
 #include "Shader.h"

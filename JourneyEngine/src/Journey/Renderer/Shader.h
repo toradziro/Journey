@@ -2,7 +2,7 @@
 
 #include "glm/glm.hpp"
 
-#include "Journey/SingletonInterface.h"
+#include "Journey/Core/SingletonInterface.h"
 
 namespace jny
 {

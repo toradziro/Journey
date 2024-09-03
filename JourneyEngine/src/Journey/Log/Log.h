@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Journey/Core.h"
+#include "Journey/Core/Core.h"
 
 namespace jny
 {

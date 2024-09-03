@@ -237,6 +237,7 @@ void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 	std::ranges::for_each(shaders, [&](GLuint shader)
 		{
 			glDetachShader(m_rendererId, shader);
+			glDeleteShader(shader);
 		});
 }
 

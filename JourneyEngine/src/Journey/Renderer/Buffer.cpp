@@ -1,8 +1,8 @@
 #include "jnypch.h"
 #include "Buffer.h"
-#include "Journey/Core.h"
+#include "Journey/Core/Core.h"
 #include "Journey/Renderer/OpenGL/OpenGLBuffer.h"
-#include "Journey/Application.h"
+#include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer.h"
 
 namespace jny

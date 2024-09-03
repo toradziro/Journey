@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Journey/Events/Event.h"
-#include "Journey/SingletonInterface.h"
+#include "Journey/Core/SingletonInterface.h"
 #include "Journey/Renderer/GraphicContext.h"
 
 #include <GLFW/glfw3.h>

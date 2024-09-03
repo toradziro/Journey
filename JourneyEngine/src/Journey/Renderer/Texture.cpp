@@ -3,7 +3,7 @@
 
 #include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/OpenGL/OpenGLTexture.h"
-#include "Journey/Application.h"
+#include "Journey/Core/Application.h"
 
 namespace jny
 {

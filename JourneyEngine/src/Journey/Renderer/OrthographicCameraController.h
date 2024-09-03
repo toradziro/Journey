@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reference.h"
+#include "Journey/Core/Reference.h"
 #include "Journey/Renderer/OrthographicCamera.h"
 #include "Journey/Events/ApplicationEvent.h"
 #include "Journey/Events/MouseEvent.h"

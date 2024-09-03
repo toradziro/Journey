@@ -1,7 +1,7 @@
 #include "common.h"
 
 #include "SandboxApplication.h"
-#include "Journey/InputPoll.h"
+#include "Journey/Core/InputPoll.h"
 
 #include <imgui.h>
 #include <glm/glm.hpp>

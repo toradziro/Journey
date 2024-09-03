@@ -1,7 +1,7 @@
 #pragma once
 
 #include "jnypch.h"
-#include "Journey/Core.h"
+#include "Journey/Core/Core.h"
 #include "Journey/Events/Event.h"
 
 namespace jny

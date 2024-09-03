@@ -1,6 +1,6 @@
 #include "jnypch.h"
 #include "OrthographicCamera.h"
-#include "Journey/Application.h"
+#include "Journey/Core/Application.h"
 #include "Journey/Window/Window.h"
 
 #include <glm/gtc/matrix_transform.hpp>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RendererAPI.h"
-#include "Journey/SingletonInterface.h"
+#include "Journey/Core/SingletonInterface.h"
 
 namespace jny
 {
