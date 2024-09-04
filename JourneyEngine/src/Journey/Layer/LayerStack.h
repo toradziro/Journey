@@ -11,7 +11,7 @@ namespace jny
 #pragma warning(disable: 4251)
 #endif
 
-class  LayerStack
+class LayerStack
 {
 public:
 	using LayerStackPos = std::vector<Layer*>::iterator;

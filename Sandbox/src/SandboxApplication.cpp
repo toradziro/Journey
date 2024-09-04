@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "SandboxApplication.h"
+#include "Sandbox2D.h"
 #include "Journey/Core/InputPoll.h"
 
 #include <imgui.h>
@@ -226,7 +227,8 @@ private:
 
 Sandbox::Sandbox()
 {
-	this->pushLayer<ExampleLayer>();
+	//this->pushLayer<ExampleLayer>();
+	this->pushLayer<Sandbox2D>();
 }
 
 Sandbox::~Sandbox()
