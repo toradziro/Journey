@@ -2,7 +2,9 @@
 
 #include "SandboxApplication.h"
 #include "Sandbox2D.h"
+
 #include "Journey/Core/InputPoll.h"
+#include "Journey/Core/EntryPoint.h"
 
 #include <imgui.h>
 #include <glm/glm.hpp>
@@ -60,39 +62,9 @@ public:
 
 		m_vertexArray->setIndexBuffer(indexBuffer);
 
-		std::string vertexSrc = R"(
-			#version 330 core
-
-			layout(location = 0) in vec3 a_Position;
-
-			uniform mat4 u_vpMatrix;
-			uniform mat4 u_modelTransform;
-
-			out vec3 v_Position;
-
-			void main()
-			{
-				gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);
-				v_Position = a_Position;
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-
-			layout(location = 0) out vec4 color;
-			in vec3 v_Position;
-			uniform vec3 u_color;
-
-			void main()
-			{
-				color = vec4(u_color, 1.0f);
-			}
-		)";
-
 		auto& shaderLib = jny::Application::subsystems().st<jny::ShaderLibrary>();
 
-		m_shader = jny::Ref<jny::Shader>(jny::Shader::create("Triangle shader", std::move(vertexSrc), std::move(fragmentSrc)));
+		m_shader = shaderLib.load("resources/assets/shaders/FlatColor.glsl");
 		shaderLib.add(m_shader);
 
 		m_textureShader = shaderLib.load("resources/assets/shaders/Texture.glsl");

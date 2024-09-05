@@ -13,7 +13,7 @@
 
 #include "Journey/Layer/Layer.h"
 
-#include "Journey/Core/EntryPoint.h"
+//#include "Journey/Core/EntryPoint.h"
 
 #include "Journey/ImGui/ImGuiLayer.h"
 

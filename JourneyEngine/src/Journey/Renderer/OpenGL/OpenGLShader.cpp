@@ -147,9 +147,10 @@ OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 		pos = lineEnd + linebreak.size();
 
 		//-- Process last parsed shader
-		if (pos == source.size() && !currShader.empty() && currShaderType != C_INVALID_TYPE)
+		if ((pos == source.size() || lineEnd == std::string::npos) && !currShader.empty() && currShaderType != C_INVALID_TYPE)
 		{
 			shaderSources[currShaderType] = currShader;
+			break;
 		}
 	}
 
