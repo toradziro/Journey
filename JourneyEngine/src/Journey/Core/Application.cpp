@@ -7,6 +7,7 @@
 #include "Journey/Core/InputPoll.h"
 #include "Journey/ImGui/ImGuiLayer.h"
 #include "Journey/Window/Window.h"
+#include "Journey/Renderer/Renderer2D.h"
 
 #include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/RenderCommand.h"
@@ -24,23 +25,29 @@ Application::Application()
 
 	//-- Create main window
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
-	//-- Easy way to check if any events ongoing
-	s_sHolder->add<InputPoll>();
-	//-- Creating renderer based on API we want to use for rendering
-	//-- RenderCommnad is a holder for API implementation and also caller for rendering methods
-	s_sHolder->add<RenderCommand>();
-	s_sHolder->st<RenderCommand>().createRenderer(RendererAPI::API::OpenGL);
-	//-- Interface for rendering
-	s_sHolder->add<Renderer>();
-	s_sHolder->st<Renderer>().init();
-
-	s_sHolder->add<ShaderLibrary>();
 
 	//-- Prepare to process events
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)
 		{
 			onEvent(_event);
 		});
+	
+	//-- Easy way to check if any events ongoing
+	s_sHolder->add<InputPoll>();
+	
+	//-- Creating renderer based on API we want to use for rendering
+	//-- RenderCommnad is a holder for API implementation and also caller for rendering methods
+	s_sHolder->add<RenderCommand>();
+	s_sHolder->st<RenderCommand>().createRenderer(RendererAPI::API::OpenGL);
+	
+	//-- Interface for rendering
+	s_sHolder->add<Renderer>();
+	s_sHolder->st<Renderer>().init();
+
+	//-- And for 2D rendering as well
+	s_sHolder->add<Renderer2D>();
+
+	s_sHolder->add<ShaderLibrary>();
 
 	m_imGuiLayer = pushOverlay<ImGuiLayer>();
 }
