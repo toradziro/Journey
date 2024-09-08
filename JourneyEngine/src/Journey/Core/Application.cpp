@@ -35,6 +35,9 @@ Application::Application()
 	//-- Easy way to check if any events ongoing
 	s_sHolder->add<InputPoll>();
 	
+	//-- Must be init before renderer is initialized
+	s_sHolder->add<ShaderLibrary>();
+
 	//-- Creating renderer based on API we want to use for rendering
 	//-- RenderCommnad is a holder for API implementation and also caller for rendering methods
 	s_sHolder->add<RenderCommand>();
@@ -46,8 +49,7 @@ Application::Application()
 
 	//-- And for 2D rendering as well
 	s_sHolder->add<Renderer2D>();
-
-	s_sHolder->add<ShaderLibrary>();
+	s_sHolder->st<Renderer2D>().init();
 
 	m_imGuiLayer = pushOverlay<ImGuiLayer>();
 }
