@@ -5,6 +5,7 @@
 #include "Journey/Renderer/OrthographicCamera.h"
 #include "Journey/Renderer/VertexArray.h"
 #include "Journey/Renderer/Shader.h"
+#include "Journey/Renderer/Texture.h"
 
 namespace jny
 {
@@ -23,9 +24,13 @@ public:
 	void drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
 	void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
 
+	void drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture);
+	void drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture);
+
 private:
 	Ref<VertexArray>	m_quadVertexArray;
 	Ref<Shader>			m_flatColorShader;
+	Ref<Shader>			m_textureShader;
 };
 
 } //-- jny

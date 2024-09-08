@@ -13,11 +13,10 @@ Sandbox2D::Sandbox2D() :
 
 void Sandbox2D::attach()
 {
+	m_checkerboardTexture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
 }
 
-void Sandbox2D::detach()
-{
-}
+void Sandbox2D::detach() { }
 
 void Sandbox2D::update(float dt)
 {
@@ -32,6 +31,7 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 	renderer2D.drawQuad(m_pos, m_size, m_squareColor);
+	renderer2D.drawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_checkerboardTexture);
 
 	//-- End rendering
 	renderer2D.endScene();
