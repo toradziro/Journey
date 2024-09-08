@@ -5,6 +5,8 @@
 #include "Journey/Renderer/RenderCommand.h"
 #include "Journey/Core/Application.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace jny
 {
 
@@ -50,7 +52,6 @@ void Renderer2D::beginScene(const OrthographicCamera& camera)
 	m_quadVertexArray->bind();
 
 	m_flatColorShader->uploadUniformMat4(camera.viewProjectionMatrix(), "u_vpMatrix");
-	m_flatColorShader->uploadUniformMat4(glm::mat4(1.0f), "u_modelTransform");
 }
 
 void Renderer2D::endScene()
@@ -60,10 +61,6 @@ void Renderer2D::endScene()
 
 void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 {
-	//-- must be bound while sending color, uncomment if scenarios changes a shader
-	//m_flatColorShader->bind();
-	//m_quadVertexArray->bind();
-
 	drawQuad({position.x, position.y, 0.0f}, size, color);
 }
 
@@ -74,6 +71,11 @@ void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, cons
 	//m_quadVertexArray->bind();
 
 	m_flatColorShader->uploadUniformFloat4(color, "u_color");
+
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
+	transform = glm::scale(transform, { size.x, size.y, 0.0f });
+	m_flatColorShader->uploadUniformMat4(transform, "u_modelTransform");
+
 	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray);
 }
 

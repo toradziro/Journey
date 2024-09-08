@@ -31,7 +31,7 @@ void Sandbox2D::update(float dt)
 
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
-	renderer2D.drawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, m_squareColor);
+	renderer2D.drawQuad(m_pos, m_size, m_squareColor);
 
 	//-- End rendering
 	renderer2D.endScene();
@@ -46,5 +46,7 @@ void Sandbox2D::imGuiRender()
 {
 	ImGui::Begin("Color prop");
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_squareColor));
+	ImGui::DragFloat2("Position: ", glm::value_ptr(m_pos), 0.01f);
+	ImGui::DragFloat2("Size: ", glm::value_ptr(m_size), 0.01f);
 	ImGui::End();
 }
