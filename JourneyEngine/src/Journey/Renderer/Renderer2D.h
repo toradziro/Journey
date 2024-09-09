@@ -29,8 +29,8 @@ public:
 
 private:
 	Ref<VertexArray>	m_quadVertexArray;
-	Ref<Shader>			m_flatColorShader;
 	Ref<Shader>			m_textureShader;
+	Ref<Texture2D>		m_whiteTexture;
 };
 
 } //-- jny

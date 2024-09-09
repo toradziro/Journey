@@ -42,10 +42,13 @@ void Renderer2D::init()
 	m_quadVertexArray->setIndexBuffer(indexBuffer);
 
 	auto& shaderLib = Application::subsystems().st<ShaderLibrary>();
-	m_flatColorShader = shaderLib.load("resources/assets/shaders/FlatColor.glsl");
 	m_textureShader = shaderLib.load("resources/assets/shaders/Texture.glsl");
 	m_textureShader->bind();
 	m_textureShader->uploadUniformInt(0, "u_texture");
+
+	m_whiteTexture = Texture2D::create(1, 1);
+	uint32_t whiteTextureData = 0xffffffff;
+	m_whiteTexture->setData(static_cast<void*>(&whiteTextureData), sizeof(whiteTextureData));
 }
 
 void Renderer2D::shutdown() { }
@@ -56,9 +59,6 @@ void Renderer2D::beginScene(const OrthographicCamera& camera)
 
 	m_textureShader->bind();
 	m_textureShader->uploadUniformMat4(camera.viewProjectionMatrix(), "u_vpMatrix");
-
-	m_flatColorShader->bind();
-	m_flatColorShader->uploadUniformMat4(camera.viewProjectionMatrix(), "u_vpMatrix");
 }
 
 void Renderer2D::endScene() { }
@@ -72,13 +72,14 @@ void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, cons
 {
 	//-- must be bound while sending color, uncomment if scenarios changes a shader
 	//m_quadVertexArray->bind();
-	m_flatColorShader->bind();
+	//m_textureShader->bind();
+	m_textureShader->uploadUniformFloat4(color, "u_color");
 
-	m_flatColorShader->uploadUniformFloat4(color, "u_color");
+	m_whiteTexture->bind();
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
 	transform = glm::scale(transform, { size.x, size.y, 0.0f });
-	m_flatColorShader->uploadUniformMat4(transform, "u_modelTransform");
+	m_textureShader->uploadUniformMat4(transform, "u_modelTransform");
 
 	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray);
 }
@@ -92,13 +93,14 @@ void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, cons
 {
 	//-- must be bound while sending color, uncomment if scenarios changes a shader
 	//m_quadVertexArray->bind();
-	m_textureShader->bind();
+	//m_textureShader->bind();
+	m_textureShader->uploadUniformFloat4(glm::vec4(1.0f), "u_color");
+
+	texture->bind();
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
 	transform = glm::scale(transform, { size.x, size.y, 0.0f });
 	m_textureShader->uploadUniformMat4(transform, "u_modelTransform");
-
-	texture->bind();
 
 	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray);
 }

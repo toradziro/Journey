@@ -28,4 +28,24 @@ Ref<Texture2D> Texture2D::create(const std::string& texturePath)
 	return tex;
 }
 
+Ref<Texture2D> Texture2D::create(uint32_t width, uint32_t height)
+{
+	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	Ref<Texture2D> tex = nullptr;
+
+	switch (rendererApi)
+	{
+	case RendererAPI::API::None:
+		JNY_ASSERT(true, "Can't be None");
+		break;
+	case RendererAPI::API::OpenGL:
+		tex = new OpenGLTexture2D(width, height);
+		break;
+	default:
+		break;
+	}
+
+	return tex;
+}
+
 } //-- jny
