@@ -19,8 +19,6 @@ std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
 {
-	jny::Log::info("Curr path is: {}", std::filesystem::current_path().string());
-
 	s_sHolder = std::make_unique<SingletonHolder>();
 
 	//-- Create main window
@@ -68,18 +66,18 @@ void Application::run()
 
 		if (!m_minimized)
 		{
-			for (auto& layer : m_layers)
-			{
-				layer->update(deltaTime.count());
-			}
+			std::ranges::for_each(m_layers, [&deltaTime](auto& layer)
+				{
+					layer->update(deltaTime.count());
+				});
 		}
 
 		//-- ImGui drawing
 		m_imGuiLayer->begin();
-		for (auto& layer : m_layers)
-		{
-			layer->imGuiRender();
-		}
+		std::ranges::for_each(m_layers, [](auto& layer)
+			{
+				layer->imGuiRender();
+			});
 		m_imGuiLayer->end();
 
 		s_sHolder->st<Window>().update();

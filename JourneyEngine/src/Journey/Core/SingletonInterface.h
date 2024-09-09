@@ -26,10 +26,10 @@ class SingletonHolder
 public:
 	~SingletonHolder()
 	{
-		for (auto& it : m_singletones)
-		{
-			delete it.second;
-		}
+		std::ranges::for_each(m_singletones, [](auto& s)
+			{
+				delete s.second;
+			});
 	}
 
 	template<typename T, typename... Args>

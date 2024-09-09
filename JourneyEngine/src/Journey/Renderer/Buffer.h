@@ -131,11 +131,11 @@ private:
 	{
 		uint32_t offset = 0;
 		
-		for (auto& element : m_elements)
-		{
-			element.m_offset = offset;
-			offset = offset + element.m_size;
-		}
+		std::ranges::for_each(m_elements, [&offset](auto& element)
+			{
+				element.m_offset = offset;
+				offset = offset + element.m_size;
+			});
 		//-- All elements already calculated full stride size in offset
 		m_stride = offset;
 	}
