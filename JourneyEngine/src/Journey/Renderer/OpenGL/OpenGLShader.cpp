@@ -91,17 +91,25 @@ std::string OpenGLShader::readFile(const std::string& path)
 	{
 		//-- move to EOF
 		in.seekg(0, std::ios::end);
-		//-- reserve space for the file size
-		result.resize(in.tellg());
-		//-- move back to the start of file
-		in.seekg(0, std::ios::beg);
-		//-- read a file
-		in.read(result.data(), result.size());
-		in.close();
+		size_t size = in.tellg();
+		if (size != -1)
+		{
+			//-- reserve space for the file size
+			result.resize(size);
+			//-- move back to the start of file
+			in.seekg(0, std::ios::beg);
+			//-- read a file
+			in.read(result.data(), result.size());
+			in.close();
+		}
+		else
+		{
+			JNY_ASSERT(false, "Can't read shader: '{}'", path);
+		}
 	}
 	else
 	{
-		JNY_ASSERT(false, "Can't read shader: '{}'", path);
+		JNY_ASSERT(false, "Can't open shader: '{}'", path);
 	}
 	
 	return result;

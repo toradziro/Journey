@@ -74,8 +74,11 @@ void ImGuiLayer::detach()
 
 void ImGuiLayer::imGuiRender()
 {
-	static bool s_show;
-	ImGui::ShowDemoWindow(&s_show);
+	static bool s_show = false;
+	if (s_show)
+	{
+		ImGui::ShowDemoWindow();
+	}
 }
 
 void ImGuiLayer::begin()
