@@ -17,46 +17,6 @@ void printTypeSize()
 
 }
 
-class Timer
-{
-public:
-	using TimePoint = std::chrono::steady_clock::time_point;
-	using TimeCallback = std::function<void(Sandbox2D::ProfileResult)>;
-
-	Timer(std::string_view name, TimeCallback&& timerCallback) :
-		m_timerCallback(timerCallback),
-		m_name(name)
-	{
-		m_startPoint = std::chrono::high_resolution_clock::now();
-	}
-
-	~Timer()
-	{
-		if (!m_stopped)
-		{
-			stop();
-		}
-	}
-
-	void stop()
-	{
-		TimePoint endPoint = std::chrono::high_resolution_clock::now();
-		int64_t timeTakenMcs = std::chrono::duration_cast<std::chrono::microseconds>(endPoint - m_startPoint).count();
-
-		float duration = static_cast<float>(timeTakenMcs) * 0.001f;
-
-		m_stopped = true;
-		m_timerCallback({ m_name.data(), duration});
-	}
-
-private:
-	TimeCallback			m_timerCallback;
-
-	const std::string_view	m_name;
-	TimePoint				m_startPoint;
-	bool					m_stopped = false;
-};
-
 Sandbox2D::Sandbox2D() :
 	Layer("Sandbox2Ds"),
 	m_orthoCameraCtrl(jny::Application::aspectRatio())
