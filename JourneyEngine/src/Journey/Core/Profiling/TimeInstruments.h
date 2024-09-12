@@ -54,12 +54,12 @@ private:
 };
 
 #ifdef JNY_DEBUG 
-#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
-#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
+	#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
+	#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
 #elif JNY_RELEASE
-#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
-#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
+	#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
+	#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
 #else
-#define PROFILE_SCOPE(name)
-#define PROFILE_FUNC
+	#define PROFILE_SCOPE(name)
+	#define PROFILE_FUNC
 #endif
