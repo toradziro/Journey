@@ -6,17 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace
-{
-
-template <typename T>
-void printTypeSize()
-{
-	jny::Log::error("'{}' : '{}'", typeid(T).name(), sizeof(T));
-}
-
-}
-
 Sandbox2D::Sandbox2D() :
 	Layer("Sandbox2Ds"),
 	m_orthoCameraCtrl(jny::Application::aspectRatio())
@@ -31,10 +20,7 @@ void Sandbox2D::detach() { }
 
 void Sandbox2D::update(float dt)
 {
-	const Timer timer("Sandbox2D::update", [&](ProfileResult result)
-		{
-			m_profileData.push_back(result);
-		});
+	PROFILE_FUNC;
 
 	m_orthoCameraCtrl.update(dt);
 
@@ -55,11 +41,15 @@ void Sandbox2D::update(float dt)
 
 void Sandbox2D::onEvent(jny::Event& event)
 {
+	PROFILE_FUNC;
+
 	m_orthoCameraCtrl.onEvent(event);
 }
 
 void Sandbox2D::imGuiRender()
 {
+	PROFILE_FUNC;
+
 	ImGui::Begin("Color prop");
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_squareColor));
 	ImGui::DragFloat2("Position: ", glm::value_ptr(m_pos), 0.01f);

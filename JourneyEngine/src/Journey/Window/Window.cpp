@@ -7,6 +7,8 @@
 #include "Journey/Events/MouseEvent.h"
 #include "Journey/Renderer/OpenGL/OpenGlContext.h"
 
+#include "Journey/Core/Profiling/TimeInstruments.h"
+
 namespace
 {
 
@@ -36,6 +38,8 @@ Window::~Window()
 
 void Window::update()
 {
+	PROFILE_FUNC;
+
 	glfwPollEvents();
 	m_context->swapBuffers();
 }
@@ -56,6 +60,8 @@ void Window::setVSync(bool enabled)
 
 void Window::init()
 {
+	PROFILE_FUNC;
+
 	if (!s_glfwInited)
 	{
 		int success = glfwInit();

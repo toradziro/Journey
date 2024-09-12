@@ -4,6 +4,7 @@
 #include "Journey/Renderer/Shader.h"
 #include "Journey/Renderer/RenderCommand.h"
 #include "Journey/Core/Application.h"
+#include "Journey/Core/Profiling/TimeInstruments.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -12,6 +13,8 @@ namespace jny
 
 void Renderer2D::init()
 {
+	PROFILE_FUNC;
+
 	//-- Vertex array
 	m_quadVertexArray = Ref<VertexArray>(VertexArray::create());
 
@@ -55,6 +58,8 @@ void Renderer2D::shutdown() { }
 
 void Renderer2D::beginScene(const OrthographicCamera& camera)
 {
+	PROFILE_FUNC;
+
 	m_quadVertexArray->bind();
 
 	m_textureShader->bind();
@@ -70,6 +75,8 @@ void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, cons
 
 void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 {
+	PROFILE_FUNC;
+
 	//-- must be bound while sending color, uncomment if scenarios changes a shader
 	//m_quadVertexArray->bind();
 	//m_textureShader->bind();
@@ -91,6 +98,8 @@ void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, cons
 
 void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 {
+	PROFILE_FUNC;
+
 	//-- must be bound while sending color, uncomment if scenarios changes a shader
 	//m_quadVertexArray->bind();
 	//m_textureShader->bind();

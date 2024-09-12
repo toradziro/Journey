@@ -27,3 +27,6 @@
 #include "Journey/Renderer/Texture.h"
 
 #include "Journey/Renderer/OrthographicCameraController.h"
+
+#include "Journey/Core/Profiling/TimeInstruments.h"
+#include "Journey/Core/Profiling/Utils.h"

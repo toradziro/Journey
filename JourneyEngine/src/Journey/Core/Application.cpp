@@ -12,6 +12,8 @@
 #include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/RenderCommand.h"
 
+#include "Journey/Core/Profiling/TimeInstruments.h"
+
 namespace jny
 {
 
@@ -19,7 +21,12 @@ std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
 Application::Application()
 {
+	PROFILE_FUNC;
+
 	s_sHolder = std::make_unique<SingletonHolder>();
+
+	s_sHolder->add<Instrumentor>();
+	s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_INIT_FILE);
 
 	//-- Create main window
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
@@ -50,6 +57,7 @@ Application::Application()
 	s_sHolder->st<Renderer2D>().init();
 
 	m_imGuiLayer = pushOverlay<ImGuiLayer>();
+	s_sHolder->st<Instrumentor>().endSession();
 }
 
 Application::~Application()
@@ -59,9 +67,23 @@ Application::~Application()
 
 void Application::run()
 {
+	PROFILE_FUNC;
+
+	s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_MAIN_LOOP_FILE);
+
 	std::chrono::duration<float> deltaTime = {};
 	while (m_running)
 	{
+		PROFILE_SCOPE("Application::run::main_cicle");
+
+		if (m_ciclingCount == C_PROFILING_FRAMES)
+		{
+			s_sHolder->st<Instrumentor>().endSession();
+			s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_MAIN_LOOP_FILE);
+
+			m_ciclingCount = 0;
+		}
+
 		auto startTime = std::chrono::high_resolution_clock::now();
 
 		if (!m_minimized)
@@ -84,11 +106,17 @@ void Application::run()
 
 		auto endTime = std::chrono::high_resolution_clock::now();
 		deltaTime = endTime - startTime;
+
+		++m_ciclingCount;
 	}
+
+	s_sHolder->st<Instrumentor>().endSession();
 }
 
 void Application::onEvent(Event& event)
 {
+	PROFILE_FUNC;
+
 	EventDispatcher dispatcher(event);
 	dispatcher.dispatch<WindowCloseEvent>([this](WindowCloseEvent&)
 		{
