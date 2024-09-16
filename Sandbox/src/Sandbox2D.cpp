@@ -13,75 +13,64 @@ Sandbox2D::Sandbox2D() :
 
 void Sandbox2D::attach()
 {
-	//-- Vertex array
-	m_vertexArray = jny::Ref<jny::VertexArray>(jny::VertexArray::create());
+	m_quad.m_textureOpt = jny::TextureOpt::FlatColored;
+	m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
+	m_quad.m_color = { 0.2f, 0.3f, 0.8f, 0.7f };
+	m_quad.m_position = { 0.0f, 0.0f, 0.0f };
+	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
+	m_quad.m_rotation = 0.0f;
+	m_quad.m_tilingFactor = 1.0f;
 
-	//-- Vertices
-	float vertices[3 * 4] =
-	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f, 
-		-0.5f, 0.5f, 0.0f
-	};
-
-	//-- Vertex buffer
-	jny::Ref<jny::VertexBuffer> vertexBuffer = jny::Ref<jny::VertexBuffer>(jny::VertexBuffer::create(vertices, 3 * 4));
-	//-- Setting up vertex attribute array (layout for providing data splitting in shader)
-	jny::BufferLayout::LayoutData layoutData = {
-		{ jny::ShaderDataType::Float3, "a_Position" },
-	};
-	jny::BufferLayout layout = jny::BufferLayout(std::move(layoutData));
-	vertexBuffer->setLayout(layout);
-
-	m_vertexArray->addVertexBuffer(vertexBuffer);
-
-	//-- Indices
-	uint32_t indecies[6] = { 0, 1, 2, 2, 3, 0 };
-	//-- Index buffer
-	jny::Ref<jny::IndexBuffer> indexBuffer = jny::Ref<jny::IndexBuffer>(jny::IndexBuffer::create(indecies, 6));
-
-	m_vertexArray->setIndexBuffer(indexBuffer);
-
-	auto& shaderLib = jny::Application::subsystems().st<jny::ShaderLibrary>();
-
-	m_shader = shaderLib.load("resources/assets/shaders/FlatColor.glsl");
+	m_backgroundQuad.m_textureOpt = jny::TextureOpt::Textured;
+	m_backgroundQuad.m_rotateOpt = jny::RotateOpt::AlignedByAxices;
+	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.1f };
+	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
+	m_backgroundQuad.m_tilingFactor = 10.0f;
+	m_backgroundQuad.m_texture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
+	m_backgroundQuad.m_color = { 0.1f, 0.3f, 0.1f, 1.0f };
 }
 
-void Sandbox2D::detach()
-{
-}
+void Sandbox2D::detach() { }
 
 void Sandbox2D::update(float dt)
 {
+	PROFILE_FUNC;
+
 	m_orthoCameraCtrl.update(dt);
 
-	auto& renderer = jny::Application::subsystems().st<jny::Renderer>();
+	auto& rc = jny::Application::subsystems().st<jny::RenderCommand>();
+	rc.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+	rc.clear();
 
-	renderer.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-	renderer.clear();
+	auto& renderer2D = jny::Application::subsystems().st<jny::Renderer2D>();
 
 	//-- Start rendering
-	renderer.beginScene(m_orthoCameraCtrl.camera());
+	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	m_shader->bind();
-	m_shader->uploadUniformFloat4(m_squareColor, "u_color");
-
-	//-- Submit data we want to render, if we wanna submit more VA's - we use more submission calls
-	renderer.submit(m_vertexArray, m_shader);
+	renderer2D.drawQuad(m_backgroundQuad);
+	renderer2D.drawQuad(m_quad);
 
 	//-- End rendering
-	renderer.endScene();
+	renderer2D.endScene();
 }
 
 void Sandbox2D::onEvent(jny::Event& event)
 {
+	PROFILE_FUNC;
+
 	m_orthoCameraCtrl.onEvent(event);
 }
 
 void Sandbox2D::imGuiRender()
 {
+	PROFILE_FUNC;
+
 	ImGui::Begin("Color prop");
-	ImGui::ColorEdit4("Square color", glm::value_ptr(m_squareColor));
+	ImGui::ColorEdit4("Square color", glm::value_ptr(m_quad.m_color));
+	ImGui::DragFloat2("Position", glm::value_ptr(m_quad.m_position), 0.01f);
+	ImGui::DragFloat2("Size", glm::value_ptr(m_quad.m_size), 0.01f);
+	ImGui::DragFloat("Rotation", &m_quad.m_rotationDegrees, 1.0f);
+	m_quad.m_rotation = glm::radians(m_quad.m_rotationDegrees);
+
 	ImGui::End();
 }

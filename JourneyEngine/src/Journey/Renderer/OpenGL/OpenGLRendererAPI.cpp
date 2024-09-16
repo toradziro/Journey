@@ -1,6 +1,8 @@
 #include "jnypch.h"
 #include "OpenGLRendererAPI.h"
 
+#include "Journey/Core/Profiling/TimeInstruments.h"
+
 #include <glad/glad.h>
 
 namespace jny
@@ -10,6 +12,8 @@ void OpenGLRendererAPI::init()
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glEnable(GL_DEPTH_TEST);
 }
 
 void OpenGLRendererAPI::windowResized(uint32_t width, uint32_t height)
@@ -29,6 +33,8 @@ void OpenGLRendererAPI::setClearColor(const glm::vec4& color)
 
 void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray)
 {
+	PROFILE_FUNC;
+
 	vertexArray->bind();
 	//-- Elements is indexes!
 	glDrawElements(GL_TRIANGLES, vertexArray->indexBuffer()->count(), GL_UNSIGNED_INT, nullptr);

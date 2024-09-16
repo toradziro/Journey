@@ -9,3 +9,6 @@
 bin
 bin-int
 imgui.ini
+
+init.json
+main_loop.json

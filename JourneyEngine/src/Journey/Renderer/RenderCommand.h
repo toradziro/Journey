@@ -2,6 +2,7 @@
 
 #include "RendererAPI.h"
 #include "Journey/Core/SingletonInterface.h"
+#include "Journey/Core/Profiling/TimeInstruments.h"
 
 namespace jny
 {
@@ -19,6 +20,8 @@ public:
 
 	void drawIndexed(const Ref<VertexArray>& vertexArray)
 	{
+		PROFILE_FUNC;
+
 		m_RendererAPI->drawIndexed(vertexArray);
 	}
 

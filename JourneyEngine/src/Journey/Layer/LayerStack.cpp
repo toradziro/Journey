@@ -10,11 +10,11 @@ LayerStack::LayerStack()
 
 LayerStack::~LayerStack()
 {
-	for (auto layer : m_layers)
-	{
-		layer->detach();
-		delete layer;
-	}
+	std::ranges::for_each(m_layers, [](auto& layer)
+		{
+			layer->detach();
+			delete layer;
+		});
 }
 
 void LayerStack::popLayer(Layer* layer)

@@ -2,6 +2,7 @@
 #include "Journey/Renderer/OrthographicCameraController.h"
 #include "Journey/Core/Application.h"
 #include "Journey/Core/InputPoll.h"
+#include "Journey/Core/Profiling/TimeInstruments.h"
 
 #include "GLFW/glfw3.h"
 
@@ -18,6 +19,8 @@ OrthographicCameraController::OrthographicCameraController(float aspectRatio, fl
 
 void OrthographicCameraController::update(float dt)
 {
+	PROFILE_FUNC;
+
 	float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * dt;
 
 	auto& inputPollSystem = Application::subsystems().st<jny::InputPoll>();
@@ -58,6 +61,8 @@ void OrthographicCameraController::update(float dt)
 
 void OrthographicCameraController::onEvent(Event& event)
 {
+	PROFILE_FUNC;
+
 	jny::EventDispatcher dispatcher(event);
 	dispatcher.dispatch<WindowResizeEvent>([this](WindowResizeEvent& e)
 		{
@@ -72,6 +77,8 @@ void OrthographicCameraController::onEvent(Event& event)
 
 bool OrthographicCameraController::mouseScrolled(MouseScrolledEvent& e)
 {
+	PROFILE_FUNC;
+
 	m_zoomLevel -= e.offsetY() * 0.2f;
 	m_zoomLevel = std::max(m_zoomLevel, 0.1f);
 	m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);

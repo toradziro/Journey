@@ -12,6 +12,7 @@
 #include "Journey/Events/Event.h"
 #include "Journey/Events/MouseEvent.h"
 #include "Journey/Events/KeyEvent.h"
+#include "Journey/Core/Profiling/TimeInstruments.h"
 
 namespace jny
 {
@@ -27,6 +28,8 @@ ImGuiLayer::~ImGuiLayer()
 
 void ImGuiLayer::attach()
 {
+	PROFILE_FUNC;
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -74,12 +77,17 @@ void ImGuiLayer::detach()
 
 void ImGuiLayer::imGuiRender()
 {
-	static bool s_show;
-	ImGui::ShowDemoWindow(&s_show);
+	static bool s_show = false;
+	if (s_show)
+	{
+		ImGui::ShowDemoWindow();
+	}
 }
 
 void ImGuiLayer::begin()
 {
+	PROFILE_FUNC;
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -87,6 +95,8 @@ void ImGuiLayer::begin()
 
 void ImGuiLayer::end()
 {
+	PROFILE_FUNC;
+
 	ImGuiIO& io = ImGui::GetIO();
 	auto& win = Application::subsystems().st<Window>();
 

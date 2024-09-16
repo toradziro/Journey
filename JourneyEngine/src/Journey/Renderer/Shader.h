@@ -36,6 +36,8 @@ class ShaderLibrary : ISingleton
 	JNY_SINGLETON_TYPE(ShaderLibrary)
 
 public:
+	ShaderLibrary() = default;
+
 	void add(const Ref<Shader>& shader);
 	Ref<Shader> load(const std::string& path);
 	Ref<Shader> shader(const std::string& path);

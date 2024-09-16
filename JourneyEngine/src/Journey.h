@@ -21,8 +21,12 @@
 #include "Journey/Renderer/VertexArray.h"
 #include "Journey/Renderer/Shader.h"
 #include "Journey/Renderer/Renderer.h"
+#include "Journey/Renderer/Renderer2D.h"
 #include "Journey/Renderer/RenderCommand.h"
 #include "Journey/Renderer/OrthographicCamera.h"
 #include "Journey/Renderer/Texture.h"
 
 #include "Journey/Renderer/OrthographicCameraController.h"
+
+#include "Journey/Core/Profiling/TimeInstruments.h"
+#include "Journey/Core/Profiling/Utils.h"

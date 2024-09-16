@@ -62,28 +62,28 @@ void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	glBindVertexArray(m_rendererId);
 	vertexBuffer->bind();
 
-	for (const auto& element : vertexBuffer->layout())
-	{
-		//-- Enable 0 layout in our shader
-		glEnableVertexAttribArray(m_vertexBufferIndexOffset);
-		//-- Attribute pointer applied to EVERY VERTEX, not to all data
-		//-- which means that:
-		//-- index - index of layout we are setting up
-		//-- size - amount of elements in that layout
-		//-- type - data type for every element in that layout
-		//-- stride - size in bytes for all of elements in this layout (corresponding to vertex)
-		//-- offset - how much bytes need to shift in vertexes to reach a start address of this layout from the start of the vertex
-		glVertexAttribPointer(
-			m_vertexBufferIndexOffset,
-			element.m_count,
-			toOpenGLType(element.m_type),
-			element.m_normilized ? GL_TRUE : GL_FALSE,
-			vertexBuffer->layout().stride(),
-			reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
-		);
+	std::ranges::for_each(vertexBuffer->layout(), [&](const auto& element)
+		{
+			//-- Enable 0 layout in our shader
+			glEnableVertexAttribArray(m_vertexBufferIndexOffset);
+			//-- Attribute pointer applied to EVERY VERTEX, not to all data
+			//-- which means that:
+			//-- index - index of layout we are setting up
+			//-- size - amount of elements in that layout
+			//-- type - data type for every element in that layout
+			//-- stride - size in bytes for all of elements in this layout (corresponding to vertex)
+			//-- offset - how much bytes need to shift in vertexes to reach a start address of this layout from the start of the vertex
+			glVertexAttribPointer(
+				m_vertexBufferIndexOffset,
+				element.m_count,
+				toOpenGLType(element.m_type),
+				element.m_normilized ? GL_TRUE : GL_FALSE,
+				vertexBuffer->layout().stride(),
+				reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
+			);
 
-		++m_vertexBufferIndexOffset;
-	}
+			++m_vertexBufferIndexOffset;
+		});
 
 	m_vertexBuffers.push_back(vertexBuffer);
 }
