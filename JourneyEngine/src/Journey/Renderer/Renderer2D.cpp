@@ -68,49 +68,39 @@ void Renderer2D::beginScene(const OrthographicCamera& camera)
 
 void Renderer2D::endScene() { }
 
-void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
-{
-	drawQuad({position.x, position.y, 0.0f}, size, color);
-}
-
-void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+void Renderer2D::drawQuad(const QuadCfg& cfg)
 {
 	PROFILE_FUNC;
 
-	//-- must be bound while sending color, uncomment if scenarios changes a shader
-	//m_quadVertexArray->bind();
-	//m_textureShader->bind();
-	m_textureShader->uploadUniformFloat4(color, "u_color");
-	m_textureShader->uploadUniformFloat(1.0f, "u_tilingFactor");
+	Ref<Texture2D> textureToUse = nullptr;
 
-	m_whiteTexture->bind();
-
-	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
-	transform = glm::scale(transform, { size.x, size.y, 0.0f });
-	m_textureShader->uploadUniformMat4(transform, "u_modelTransform");
-
-	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray);
-}
-
-void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
-{
-	drawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor);
-}
-
-void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
-{
-	PROFILE_FUNC;
+	switch (cfg.m_textureOpt)
+	{
+	case TextureOpt::FlatColored:
+		textureToUse = m_whiteTexture;
+		break;
+	case TextureOpt::Textured:
+		textureToUse = cfg.m_texture;
+		break;
+	default:
+		break;
+	}
+	JNY_ASSERT(textureToUse.raw() != nullptr, "Set texture on the quad");
 
 	//-- must be bound while sending color, uncomment if scenarios changes a shader
-	//m_quadVertexArray->bind();
-	//m_textureShader->bind();
-	m_textureShader->uploadUniformFloat4(glm::vec4(1.0f), "u_color");
-	m_textureShader->uploadUniformFloat(tilingFactor, "u_tilingFactor");
+	m_textureShader->uploadUniformFloat4(cfg.m_color, "u_color");
+	m_textureShader->uploadUniformFloat(cfg.m_tilingFactor, "u_tilingFactor");
 
-	texture->bind();
+	textureToUse->bind();
 
-	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
-	transform = glm::scale(transform, { size.x, size.y, 0.0f });
+	glm::mat4 transform = glm::mat4(1.0f);
+	transform = glm::translate(transform, cfg.m_position);
+	transform = glm::scale(transform, { cfg.m_size.x, cfg.m_size.y, 0.0f });
+	//-- Rotation is hard operation, so don't use it unless it's really necessary
+	if (cfg.m_rotateOpt == RotateOpt::Rotated)
+	{
+		transform = glm::rotate(transform, cfg.m_rotation, { 0.0f, 0.0f, 1.0f });
+	}
 	m_textureShader->uploadUniformMat4(transform, "u_modelTransform");
 
 	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray);

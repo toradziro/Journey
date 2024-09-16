@@ -17,12 +17,9 @@ public:
 private:
 	jny::OrthographicCameraController	m_orthoCameraCtrl;
 
-	glm::vec4							m_squareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
-	glm::vec2							m_pos = { 0.0f, 0.0f };
-	glm::vec2							m_size = { 1.0f, 1.0f };
+	jny::QuadCfg						m_quad;
+	jny::QuadCfg						m_backgroundQuad;
 
 	jny::Ref<jny::Texture2D>			m_checkerboardTexture;
-	jny::Ref<jny::VertexArray>			m_vertexArray;
-	jny::Ref<jny::Shader>				m_shader;
 };
 
