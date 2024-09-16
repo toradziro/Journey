@@ -81,6 +81,7 @@ void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, cons
 	//m_quadVertexArray->bind();
 	//m_textureShader->bind();
 	m_textureShader->uploadUniformFloat4(color, "u_color");
+	m_textureShader->uploadUniformFloat(1.0f, "u_tilingFactor");
 
 	m_whiteTexture->bind();
 
@@ -91,12 +92,12 @@ void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, cons
 	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray);
 }
 
-void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+void Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
 {
-	drawQuad({ position.x, position.y, 0.0f }, size, texture);
+	drawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor);
 }
 
-void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
 {
 	PROFILE_FUNC;
 
@@ -104,6 +105,7 @@ void Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, cons
 	//m_quadVertexArray->bind();
 	//m_textureShader->bind();
 	m_textureShader->uploadUniformFloat4(glm::vec4(1.0f), "u_color");
+	m_textureShader->uploadUniformFloat(tilingFactor, "u_tilingFactor");
 
 	texture->bind();
 

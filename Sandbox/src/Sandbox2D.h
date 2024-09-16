@@ -14,16 +14,8 @@ public:
 	void onEvent(jny::Event& event) override;
 	void imGuiRender() override;
 
-	struct ProfileResult
-	{
-		const char* m_name;
-		float		m_time;
-	};
-
 private:
 	jny::OrthographicCameraController	m_orthoCameraCtrl;
-
-	std::vector<ProfileResult>			m_profileData;
 
 	glm::vec4							m_squareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 	glm::vec2							m_pos = { 0.0f, 0.0f };

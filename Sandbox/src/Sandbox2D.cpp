@@ -33,7 +33,7 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 	renderer2D.drawQuad(m_pos, m_size, m_squareColor);
-	renderer2D.drawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_checkerboardTexture);
+	renderer2D.drawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_checkerboardTexture, 10.0f);
 
 	//-- End rendering
 	renderer2D.endScene();
@@ -54,19 +54,6 @@ void Sandbox2D::imGuiRender()
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_squareColor));
 	ImGui::DragFloat2("Position: ", glm::value_ptr(m_pos), 0.01f);
 	ImGui::DragFloat2("Size: ", glm::value_ptr(m_size), 0.01f);
-
-	std::ranges::for_each(m_profileData, [](const auto& data)
-		{
-			constexpr std::string_view C_PATTERN = "00.000 ms";
-
-			const auto currCursor = ImGui::GetCursorPos();
-			ImGui::Text("%.3f ms", data.m_time);
-			ImGui::SetCursorPos(currCursor);
-			ImGui::Dummy(ImVec2(ImGui::CalcTextSize(C_PATTERN.data()).x * ImGui::GetWindowDpiScale(), 0.0f));
-			ImGui::SameLine();
-			ImGui::TextUnformatted(data.m_name);
-		});
-	m_profileData.clear();
 
 	ImGui::End();
 }

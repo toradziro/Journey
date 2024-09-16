@@ -17,7 +17,6 @@ public:
 	using TimePoint = std::chrono::steady_clock::time_point;
 
 	InstrumentTimerScope(std::string_view name);
-
 	~InstrumentTimerScope();
 
 	void stop();
@@ -37,14 +36,12 @@ class Instrumentor : jny::ISingleton
 public:
 	Instrumentor() = default;
 	~Instrumentor() = default;
-	void beginSession(/*const std::string& name, */const std::string& filename = "profile.json");
 
+	void beginSession(/*const std::string& name, */const std::string& filename = "profile.json");
 	void endSession();
 
 	void writeProfile(const ProfileResult& result);
-
 	void writeHeader();
-
 	void writeFooter();
 
 private:

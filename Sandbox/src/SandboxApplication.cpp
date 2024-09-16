@@ -191,9 +191,7 @@ private:
 	glm::vec3							m_modelScale = { 1.0f, 1.0f, 1.0f };
 
 	float								m_deltaTime = 0.0f;
-
 	int									m_currSelectedTexture = 0;
-
 	bool								m_scenePropsWindowOpen = true;
 };
 
