@@ -16,18 +16,19 @@ void Sandbox2D::attach()
 	m_quad.m_textureOpt = jny::TextureOpt::FlatColored;
 	m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
 	m_quad.m_color = { 0.2f, 0.3f, 0.8f, 0.7f };
-	m_quad.m_position = { 0.0f, 0.0f, 0.0f };
+	m_quad.m_position = { -0.5f, 0.0f, 0.0f };
 	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
-	m_quad.m_rotation = 0.0f;
-	m_quad.m_tilingFactor = 1.0f;
+
+	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
+	m_quad2.m_position = { -1.0f, -1.0f, -0.1f };
+	m_quad2.m_size = { 1.0f, 1.0f, 0.0f };
+	m_quad2.m_texture = jny::Texture2D::create("resources/assets/textures/bomb.png");
 
 	m_backgroundQuad.m_textureOpt = jny::TextureOpt::Textured;
-	m_backgroundQuad.m_rotateOpt = jny::RotateOpt::AlignedByAxices;
-	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.1f };
+	m_backgroundQuad.m_position = { -5.0f, -5.0f, -0.2f };
 	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
 	m_backgroundQuad.m_tilingFactor = 10.0f;
 	m_backgroundQuad.m_texture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
-	m_backgroundQuad.m_color = { 0.1f, 0.3f, 0.1f, 1.0f };
 }
 
 void Sandbox2D::detach() { }
@@ -47,11 +48,9 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	//renderer2D.drawQuad(m_backgroundQuad);
-	for (int i = 0; i < 7000; ++i)
-	{
-		renderer2D.drawQuad(m_quad);
-	}
+	renderer2D.drawQuad(m_backgroundQuad);
+	renderer2D.drawQuad(m_quad2);
+	renderer2D.drawQuad(m_quad);
 
 	//-- End rendering
 	renderer2D.endScene();

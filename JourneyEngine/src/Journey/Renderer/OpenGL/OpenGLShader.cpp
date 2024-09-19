@@ -259,6 +259,15 @@ void OpenGLShader::uploadUniformInt(const int value, std::string_view name) cons
 	glUniform1i(location, value);
 }
 
+void OpenGLShader::uploadUniformIntArray(const int32_t* values, uint32_t count, std::string_view name) const
+{
+	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+
+	JNY_ASSERT(location != -1, "invalid location");
+
+	glUniform1iv(location, count, values);
+}
+
 void OpenGLShader::uploadUniformFloat(const float value, std::string_view name) const
 {
 	int32_t location = glGetUniformLocation(m_rendererId, name.data());

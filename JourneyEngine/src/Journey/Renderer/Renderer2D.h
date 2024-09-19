@@ -40,6 +40,8 @@ class Renderer2D : public ISingleton
 {
 	JNY_SINGLETON_TYPE(Renderer2D)
 public:
+	constexpr static uint32_t C_MAX_TEXTURE_SLOTS = 32;
+
 	void init();
 	void shutdown();
 
@@ -54,21 +56,25 @@ public:
 private:
 	struct QuadVertex
 	{
-		glm::vec3 m_position;
-		glm::vec4 m_color;
-		glm::vec2 m_textureCoordinate;
-		//-- TODO: add textureId
+		glm::vec3	m_position;
+		glm::vec4	m_color;
+		glm::vec2	m_textureCoordinate;
+		float		m_textureIndex;
+		float		m_tilingFactor;
 	};
 
-	Ref<VertexArray>	m_quadVertexArray;
-	Ref<VertexBuffer>	m_quadVertexBuffer;
-	Ref<Shader>			m_textureShader;
-	Ref<Texture2D>		m_whiteTexture;
+	std::array<Ref<Texture2D>, C_MAX_TEXTURE_SLOTS>	m_textureSlots;
 
-	QuadVertex*			m_quadVertexBase = nullptr;
-	QuadVertex*			m_quadVertexPtr = nullptr;
+	Ref<VertexArray>								m_quadVertexArray;
+	Ref<VertexBuffer>								m_quadVertexBuffer;
+	Ref<Shader>										m_textureShader;
+	Ref<Texture2D>									m_whiteTexture;
 
-	uint32_t			m_currQuadIndex = 0;
+	QuadVertex*										m_quadVertexBase = nullptr;
+	QuadVertex*										m_quadVertexPtr = nullptr;
+
+	uint32_t										m_currQuadIndex = 0;
+	uint32_t										m_currTextureSlot = 1; //-- 0 is for white texture
 };
 
 } //-- jny

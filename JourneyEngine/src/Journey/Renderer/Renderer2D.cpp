@@ -16,6 +16,7 @@ constexpr	uint32_t C_INDICES_IN_QUAD = 6;
 constexpr	uint32_t C_MAX_QUADS_IN_A_BATCH = 10000;
 constexpr	uint32_t C_MAX_VERTICES = C_MAX_QUADS_IN_A_BATCH * C_VERTICES_IN_QUAD;
 constexpr	uint32_t C_MAX_INDICES = C_MAX_QUADS_IN_A_BATCH * C_INDICES_IN_QUAD;
+constexpr	uint32_t C_INVALID_INDEX = std::numeric_limits<uint32_t>::max();
 
 } //-- unnamed
 
@@ -35,7 +36,9 @@ void Renderer2D::init()
 	BufferLayout::LayoutData layoutData = {
 		{ ShaderDataType::Float3, "a_Position" },
 		{ ShaderDataType::Float4, "a_Color" },
-		{ ShaderDataType::Float2, "a_TexturePos" }
+		{ ShaderDataType::Float2, "a_TexturePos" },
+		{ ShaderDataType::Float, "a_TextureIndex" },
+		{ ShaderDataType::Float, "a_TilingFactor" }
 	};
 	BufferLayout layout = BufferLayout(std::move(layoutData));
 	m_quadVertexBuffer->setLayout(layout);
@@ -67,11 +70,18 @@ void Renderer2D::init()
 	auto& shaderLib = Application::subsystems().st<ShaderLibrary>();
 	m_textureShader = shaderLib.load("resources/assets/shaders/Texture.glsl");
 	m_textureShader->bind();
-	//m_textureShader->uploadUniformInt(0, "u_texture");
 
 	m_whiteTexture = Texture2D::create(1, 1);
 	uint32_t whiteTextureData = 0xffffffff;
 	m_whiteTexture->setData(static_cast<void*>(&whiteTextureData), sizeof(whiteTextureData));
+	m_textureSlots[0] = m_whiteTexture;
+
+	int32_t samplers[C_MAX_TEXTURE_SLOTS]{};
+	for (uint32_t i = 0; i < C_MAX_TEXTURE_SLOTS; ++i)
+	{
+		samplers[i] = i;
+	}
+	m_textureShader->uploadUniformIntArray(samplers, C_MAX_TEXTURE_SLOTS, "u_textures");
 }
 
 void Renderer2D::shutdown() { }
@@ -87,6 +97,7 @@ void Renderer2D::beginScene(const OrthographicCamera& camera)
 
 	m_quadVertexPtr = m_quadVertexBase;
 	m_currQuadIndex = 0;
+	m_currTextureSlot = 1;
 }
 
 void Renderer2D::endScene()
@@ -104,6 +115,10 @@ void Renderer2D::endScene()
 void Renderer2D::flush()
 {
 	PROFILE_FUNC;
+	for (uint32_t i = 0; i < m_currTextureSlot; ++i)
+	{
+		m_textureSlots[i]->bind(i);
+	}
 
 	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray, m_currQuadIndex);
 }
@@ -112,44 +127,69 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 {
 	PROFILE_FUNC;
 
+	Ref<Texture2D> textureToUse = nullptr;
+	switch (cfg.m_textureOpt)
+	{
+	case TextureOpt::FlatColored:
+		textureToUse = m_whiteTexture;
+		break;
+	case TextureOpt::Textured:
+		textureToUse = cfg.m_texture;
+		break;
+	default:
+		break;
+	}
+	JNY_ASSERT(textureToUse.raw() != nullptr, "Set texture on the quad");
+
+	uint32_t textureIndex = C_INVALID_INDEX;
+	for (uint32_t i = 0; i < m_currTextureSlot; ++i)
+	{
+		if (m_textureSlots[i]->rendererId() == textureToUse->rendererId())
+		{
+			textureIndex = i;
+			break;
+		}
+	}
+
+	if (textureIndex == C_INVALID_INDEX)
+	{
+		textureIndex = m_currTextureSlot;
+		m_textureSlots[textureIndex] = textureToUse;
+		++m_currTextureSlot;
+	}
+
+	const float textureIndexCastedToFloat = static_cast<float>(textureIndex);
+
 	m_quadVertexPtr->m_position = cfg.m_position;
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 0.0f, 0.0f };
+	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
+	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 	m_quadVertexPtr++;
 
 	m_quadVertexPtr->m_position = { cfg.m_position.x + cfg.m_size.x, cfg.m_position.y, cfg.m_position.z };
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 1.0f, 0.0f };
+	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
+	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 	m_quadVertexPtr++;
 
 	m_quadVertexPtr->m_position = { cfg.m_position.x + cfg.m_size.x, cfg.m_position.y + cfg.m_size.y, cfg.m_position.z };
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 1.0f, 1.0f };
+	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
+	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 	m_quadVertexPtr++;
 
 	m_quadVertexPtr->m_position = { cfg.m_position.x, cfg.m_position.y + cfg.m_size.y, cfg.m_position.z };
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 0.0f, 1.0f };
+	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
+	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 	m_quadVertexPtr++;
 
 	m_currQuadIndex += C_INDICES_IN_QUAD;
 
-	//Ref<Texture2D> textureToUse = nullptr;
-
-	//switch (cfg.m_textureOpt)
-	//{
-	//case TextureOpt::FlatColored:
-	//	textureToUse = m_whiteTexture;
-	//	break;
-	//case TextureOpt::Textured:
-	//	textureToUse = cfg.m_texture;
-	//	break;
-	//default:
-	//	break;
-	//}
-	//JNY_ASSERT(textureToUse.raw() != nullptr, "Set texture on the quad");
-
-	//textureToUse->bind();
 
 	//glm::mat4 transform = glm::mat4(1.0f);
 	//transform = glm::translate(transform, cfg.m_position);
