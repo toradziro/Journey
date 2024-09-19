@@ -31,13 +31,15 @@ void OpenGLRendererAPI::setClearColor(const glm::vec4& color)
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray)
+void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count)
 {
 	PROFILE_FUNC;
 
+	uint32_t indiciesCount = count == 0 ? vertexArray->indexBuffer()->count() : count;
+
 	vertexArray->bind();
 	//-- Elements is indexes!
-	glDrawElements(GL_TRIANGLES, vertexArray->indexBuffer()->count(), GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, indiciesCount, GL_UNSIGNED_INT, nullptr);
 }
 
 }

@@ -21,5 +21,7 @@ private:
 	jny::QuadCfg						m_backgroundQuad;
 
 	jny::Ref<jny::Texture2D>			m_checkerboardTexture;
+
+	float								m_FPS = 0.0f;
 };
 

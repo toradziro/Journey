@@ -46,13 +46,29 @@ public:
 	void beginScene(const OrthographicCamera& camera);
 	void endScene();
 
+	void flush();
+
 	//-- Primitives
 	void drawQuad(const QuadCfg& cfg);
 
 private:
+	struct QuadVertex
+	{
+		glm::vec3 m_position;
+		glm::vec4 m_color;
+		glm::vec2 m_textureCoordinate;
+		//-- TODO: add textureId
+	};
+
 	Ref<VertexArray>	m_quadVertexArray;
+	Ref<VertexBuffer>	m_quadVertexBuffer;
 	Ref<Shader>			m_textureShader;
 	Ref<Texture2D>		m_whiteTexture;
+
+	QuadVertex*			m_quadVertexBase = nullptr;
+	QuadVertex*			m_quadVertexPtr = nullptr;
+
+	uint32_t			m_currQuadIndex = 0;
 };
 
 } //-- jny

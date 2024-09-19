@@ -2,17 +2,19 @@
 #version 330 core
 
 layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec2 a_TexturePos;
+layout(location = 1) in vec4 a_Color;
+layout(location = 2) in vec2 a_TexturePos;
 
 uniform mat4 u_vpMatrix;
-uniform mat4 u_modelTransform;
 
 out vec2 v_TexturePos;
+out vec4 v_Color;
 
 void main()
 {
+	v_Color = a_Color;
 	v_TexturePos = a_TexturePos;
-	gl_Position = u_vpMatrix * u_modelTransform * vec4(a_Position, 1.0f);
+	gl_Position = u_vpMatrix * vec4(a_Position, 1.0f);
 }
 
 
@@ -22,12 +24,12 @@ void main()
 layout(location = 0) out vec4 color;
 
 in vec2 v_TexturePos;
+in vec4 v_Color;
 
 uniform sampler2D u_texture;
-uniform vec4 u_color;
-uniform float u_tilingFactor;
 
 void main()
 {
-	color = texture(u_texture, v_TexturePos * u_tilingFactor) * u_color;
+	color = v_Color;
+	//texture(u_texture, v_TexturePos) * v_Color;
 }

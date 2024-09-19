@@ -47,11 +47,16 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	renderer2D.drawQuad(m_backgroundQuad);
-	renderer2D.drawQuad(m_quad);
+	//renderer2D.drawQuad(m_backgroundQuad);
+	for (int i = 0; i < 7000; ++i)
+	{
+		renderer2D.drawQuad(m_quad);
+	}
 
 	//-- End rendering
 	renderer2D.endScene();
+
+	m_FPS = 1.0f / dt;
 }
 
 void Sandbox2D::onEvent(jny::Event& event)
@@ -71,6 +76,8 @@ void Sandbox2D::imGuiRender()
 	ImGui::DragFloat2("Size", glm::value_ptr(m_quad.m_size), 0.01f);
 	ImGui::DragFloat("Rotation", &m_quad.m_rotationDegrees, 1.0f);
 	m_quad.m_rotation = glm::radians(m_quad.m_rotationDegrees);
+
+	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 
 	ImGui::End();
 }
