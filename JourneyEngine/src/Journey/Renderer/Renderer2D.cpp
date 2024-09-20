@@ -82,6 +82,11 @@ void Renderer2D::init()
 		samplers[i] = i;
 	}
 	m_textureShader->uploadUniformIntArray(samplers, C_MAX_TEXTURE_SLOTS, "u_textures");
+
+	m_quadVertexPosition[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+	m_quadVertexPosition[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+	m_quadVertexPosition[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
+	m_quadVertexPosition[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
 }
 
 void Renderer2D::shutdown() { }
@@ -158,30 +163,39 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 		++m_currTextureSlot;
 	}
 
+	glm::mat4 transform = glm::mat4(1.0f);
+	transform = glm::translate(transform, cfg.m_position);
+	//-- Rotation is hard operation, so don't use it unless it's really necessary
+	if (cfg.m_rotateOpt == RotateOpt::Rotated)
+	{
+		transform = glm::rotate(transform, cfg.m_rotation, { 0.0f, 0.0f, 1.0f });
+	}
+	transform = glm::scale(transform, { cfg.m_size.x, cfg.m_size.y, 0.0f });
+
 	const float textureIndexCastedToFloat = static_cast<float>(textureIndex);
 
-	m_quadVertexPtr->m_position = cfg.m_position;
+	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[0];
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 0.0f, 0.0f };
 	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
 	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 	m_quadVertexPtr++;
 
-	m_quadVertexPtr->m_position = { cfg.m_position.x + cfg.m_size.x, cfg.m_position.y, cfg.m_position.z };
+	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[1];
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 1.0f, 0.0f };
 	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
 	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 	m_quadVertexPtr++;
 
-	m_quadVertexPtr->m_position = { cfg.m_position.x + cfg.m_size.x, cfg.m_position.y + cfg.m_size.y, cfg.m_position.z };
+	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[2];
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 1.0f, 1.0f };
 	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
 	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 	m_quadVertexPtr++;
 
-	m_quadVertexPtr->m_position = { cfg.m_position.x, cfg.m_position.y + cfg.m_size.y, cfg.m_position.z };
+	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[3];
 	m_quadVertexPtr->m_color = cfg.m_color;
 	m_quadVertexPtr->m_textureCoordinate = { 0.0f, 1.0f };
 	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
@@ -189,20 +203,6 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 	m_quadVertexPtr++;
 
 	m_currQuadIndex += C_INDICES_IN_QUAD;
-
-
-	//glm::mat4 transform = glm::mat4(1.0f);
-	//transform = glm::translate(transform, cfg.m_position);
-	//transform = glm::scale(transform, { cfg.m_size.x, cfg.m_size.y, 0.0f });
-	////-- Rotation is hard operation, so don't use it unless it's really necessary
-	//if (cfg.m_rotateOpt == RotateOpt::Rotated)
-	//{
-	//	transform = glm::rotate(transform, cfg.m_rotation, { 0.0f, 0.0f, 1.0f });
-	//}
-	//m_quadVertexPtr->m_position *= transform;
-	////m_textureShader->uploadUniformMat4(transform, "u_modelTransform");
-
-	//Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray);
 }
 
 } //-- jny

@@ -65,6 +65,9 @@ private:
 
 	std::array<Ref<Texture2D>, C_MAX_TEXTURE_SLOTS>	m_textureSlots;
 
+	//-- Need to apply transformation matrix to
+	glm::vec4										m_quadVertexPosition[4];
+
 	Ref<VertexArray>								m_quadVertexArray;
 	Ref<VertexBuffer>								m_quadVertexBuffer;
 	Ref<Shader>										m_textureShader;

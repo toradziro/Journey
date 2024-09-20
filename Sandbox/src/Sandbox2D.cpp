@@ -16,7 +16,7 @@ void Sandbox2D::attach()
 	m_quad.m_textureOpt = jny::TextureOpt::FlatColored;
 	m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
 	m_quad.m_color = { 0.2f, 0.3f, 0.8f, 0.7f };
-	m_quad.m_position = { -0.5f, 0.0f, 0.0f };
+	m_quad.m_position = { 0.0f, 0.0f, 0.0f };
 	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
 
 	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
@@ -25,7 +25,7 @@ void Sandbox2D::attach()
 	m_quad2.m_texture = jny::Texture2D::create("resources/assets/textures/bomb.png");
 
 	m_backgroundQuad.m_textureOpt = jny::TextureOpt::Textured;
-	m_backgroundQuad.m_position = { -5.0f, -5.0f, -0.2f };
+	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.2f };
 	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
 	m_backgroundQuad.m_tilingFactor = 10.0f;
 	m_backgroundQuad.m_texture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
