@@ -95,12 +95,15 @@ void Application::run()
 		}
 
 		//-- ImGui drawing
-		m_imGuiLayer->begin();
-		std::ranges::for_each(m_layers, [](auto& layer)
-			{
-				layer->imGuiRender();
-			});
-		m_imGuiLayer->end();
+		if (m_imGuiEnabled)
+		{
+			m_imGuiLayer->begin();
+			std::ranges::for_each(m_layers, [](auto& layer)
+				{
+					layer->imGuiRender();
+				});
+			m_imGuiLayer->end();
+		}
 
 		s_sHolder->st<Window>().update();
 

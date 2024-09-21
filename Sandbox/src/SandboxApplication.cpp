@@ -197,6 +197,7 @@ private:
 
 Sandbox::Sandbox()
 {
+	//disableImGui();
 	//this->pushLayer<ExampleLayer>();
 	this->pushLayer<Sandbox2D>();
 }

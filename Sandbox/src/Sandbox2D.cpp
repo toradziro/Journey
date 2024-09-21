@@ -49,9 +49,12 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	renderer2D.drawQuad(m_backgroundQuad);
-	renderer2D.drawQuad(m_quad2);
-	renderer2D.drawQuad(m_quad);
+	//for (int i = 0; i < 10000; ++i)
+	//{
+		renderer2D.drawQuad(m_backgroundQuad);
+		renderer2D.drawQuad(m_quad2);
+		renderer2D.drawQuad(m_quad);
+	//}
 
 	//-- End rendering
 	renderer2D.endScene();

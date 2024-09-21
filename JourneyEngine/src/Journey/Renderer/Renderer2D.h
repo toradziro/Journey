@@ -86,6 +86,7 @@ private:
 	const OrthographicCamera*						m_currCamera;
 	//-- Need to apply transformation matrix to
 	glm::vec4										m_quadVertexPosition[C_VERTICES_IN_QUAD];
+	glm::vec2										m_texturesPos[C_VERTICES_IN_QUAD];
 
 	Statistic										m_frameStat;
 

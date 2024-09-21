@@ -84,6 +84,11 @@ void Renderer2D::init()
 	m_quadVertexPosition[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
 	m_quadVertexPosition[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
 	m_quadVertexPosition[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
+
+	m_texturesPos[0] = { 0.0f, 0.0f };
+	m_texturesPos[1] = { 1.0f, 0.0f };
+	m_texturesPos[2] = { 1.0f, 1.0f };
+	m_texturesPos[3] = { 0.0f, 1.0f };
 }
 
 void Renderer2D::shutdown() { }
@@ -178,33 +183,17 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 
 	const float textureIndexCastedToFloat = static_cast<float>(textureIndex);
 
-	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[0];
-	m_quadVertexPtr->m_color = cfg.m_color;
-	m_quadVertexPtr->m_textureCoordinate = { 0.0f, 0.0f };
-	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
-	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
-	m_quadVertexPtr++;
-
-	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[1];
-	m_quadVertexPtr->m_color = cfg.m_color;
-	m_quadVertexPtr->m_textureCoordinate = { 1.0f, 0.0f };
-	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
-	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
-	m_quadVertexPtr++;
-
-	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[2];
-	m_quadVertexPtr->m_color = cfg.m_color;
-	m_quadVertexPtr->m_textureCoordinate = { 1.0f, 1.0f };
-	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
-	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
-	m_quadVertexPtr++;
-
-	m_quadVertexPtr->m_position = transform * m_quadVertexPosition[3];
-	m_quadVertexPtr->m_color = cfg.m_color;
-	m_quadVertexPtr->m_textureCoordinate = { 0.0f, 1.0f };
-	m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
-	m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
-	m_quadVertexPtr++;
+	uint8_t idx = 0;
+	std::ranges::for_each(m_quadVertexPosition, [&](const auto& pos)
+		{
+			m_quadVertexPtr->m_position = transform * pos;
+			m_quadVertexPtr->m_color = cfg.m_color;
+			m_quadVertexPtr->m_textureCoordinate = m_texturesPos[idx];
+			m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
+			m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
+			m_quadVertexPtr++;
+			++idx;
+		});
 
 	m_currQuadIndex += C_INDICES_IN_QUAD;
 

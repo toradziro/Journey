@@ -47,6 +47,9 @@ public:
 	void popLayer(Layer* layer);
 	void popOverlay(Layer* layer);
 
+	void disableImGui() { m_imGuiEnabled = false; }
+	void enableImGui() { m_imGuiEnabled = true; }
+
 	static float aspectRatio();
 
 	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr, "Don't know this systyem"); return *s_sHolder; }
@@ -57,6 +60,7 @@ private:
 	uint8_t		m_ciclingCount = 0;
 	bool		m_running = true;
 	bool		m_minimized = false;
+	bool		m_imGuiEnabled = true;
 
 private:
 	static std::unique_ptr<SingletonHolder>	s_sHolder;
