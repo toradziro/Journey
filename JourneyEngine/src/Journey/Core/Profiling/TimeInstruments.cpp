@@ -24,15 +24,13 @@ void InstrumentTimerScope::stop()
 	int64_t startMs = std::chrono::duration_cast<std::chrono::microseconds>(m_startPoint.time_since_epoch()).count();
 	int64_t endMs = std::chrono::duration_cast<std::chrono::microseconds>(endPoint.time_since_epoch()).count();
 
-	//int64_t timeTakenMcs = std::chrono::duration_cast<std::chrono::microseconds>(endPoint - m_startPoint).count();
-
 	m_stopped = true;
 
 	ProfileResult result(startMs, endMs, m_name);
 	jny::Application::subsystems().st<Instrumentor>().writeProfile(result);
 }
 
-void Instrumentor::beginSession(/*const std::string& name, */const std::string& filename /*= "profile.json"*/)
+void Instrumentor::beginSession(const std::string& filename /*= "profile.json"*/)
 {
 	m_stream.open(filename, std::ios::out | std::ios::trunc);
 	writeHeader();
