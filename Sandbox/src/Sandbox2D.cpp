@@ -45,6 +45,7 @@ void Sandbox2D::update(float dt)
 
 	auto& renderer2D = jny::Application::subsystems().st<jny::Renderer2D>();
 
+	renderer2D.resetStatistics();
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
@@ -77,6 +78,10 @@ void Sandbox2D::imGuiRender()
 	m_quad.m_rotation = glm::radians(m_quad.m_rotationDegrees);
 
 	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
+
+	const auto& stat = jny::Application::subsystems().st<jny::Renderer2D>().stats();
+	ImGui::Text("Draw calls: %d", stat.m_drawCalls);
+	ImGui::Text("Quads count: %d", stat.m_quadCount);
 
 	ImGui::End();
 }

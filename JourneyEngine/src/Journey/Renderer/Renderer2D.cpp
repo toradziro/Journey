@@ -11,11 +11,8 @@
 namespace
 {
 
-constexpr	uint32_t C_VERTICES_IN_QUAD = 4;
-constexpr	uint32_t C_INDICES_IN_QUAD = 6;
-constexpr	uint32_t C_MAX_QUADS_IN_A_BATCH = 10000;
-constexpr	uint32_t C_MAX_VERTICES = C_MAX_QUADS_IN_A_BATCH * C_VERTICES_IN_QUAD;
-constexpr	uint32_t C_MAX_INDICES = C_MAX_QUADS_IN_A_BATCH * C_INDICES_IN_QUAD;
+constexpr	uint32_t C_MAX_VERTICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Renderer2D::C_VERTICES_IN_QUAD;
+constexpr	uint32_t C_MAX_INDICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Renderer2D::C_INDICES_IN_QUAD;
 constexpr	uint32_t C_INVALID_INDEX = std::numeric_limits<uint32_t>::max();
 
 } //-- unnamed
@@ -103,6 +100,7 @@ void Renderer2D::beginScene(const OrthographicCamera& camera)
 	m_quadVertexPtr = m_quadVertexBase;
 	m_currQuadIndex = 0;
 	m_currTextureSlot = 1;
+	m_currCamera = &camera;
 }
 
 void Renderer2D::endScene()
@@ -126,11 +124,17 @@ void Renderer2D::flush()
 	}
 
 	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray, m_currQuadIndex);
+	m_frameStat.m_drawCalls++;
 }
 
 void Renderer2D::drawQuad(const QuadCfg& cfg)
 {
 	PROFILE_FUNC;
+
+	if (m_currQuadIndex >= C_MAX_INDICES || m_currTextureSlot >= C_MAX_TEXTURE_SLOTS)
+	{
+		startNextBatch();
+	}
 
 	Ref<Texture2D> textureToUse = nullptr;
 	switch (cfg.m_textureOpt)
@@ -203,6 +207,17 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 	m_quadVertexPtr++;
 
 	m_currQuadIndex += C_INDICES_IN_QUAD;
+
+	m_frameStat.m_quadCount++;
+}
+
+void Renderer2D::startNextBatch()
+{
+	endScene();
+
+	m_quadVertexPtr = m_quadVertexBase;
+	m_currQuadIndex = 0;
+	m_currTextureSlot = 1;
 }
 
 } //-- jny
