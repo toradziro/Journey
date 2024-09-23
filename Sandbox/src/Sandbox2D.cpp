@@ -20,12 +20,12 @@ void Sandbox2D::attach()
 	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
 
 	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
-	m_quad2.m_position = { -1.0f, -1.0f, -0.1f };
+	m_quad2.m_position = { -1.0f, -1.0f, -0.2f };
 	m_quad2.m_size = { 1.0f, 1.0f, 0.0f };
 	m_quad2.m_texture = jny::Texture2D::create("resources/assets/textures/bomb.png");
 
 	m_backgroundQuad.m_textureOpt = jny::TextureOpt::Textured;
-	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.2f };
+	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.4f };
 	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
 	m_backgroundQuad.m_tilingFactor = 10.0f;
 	m_backgroundQuad.m_texture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
@@ -77,17 +77,17 @@ void Sandbox2D::onEvent(jny::Event& event)
 			float ar = jny::Application::aspectRatio();
 
 			jny::ParticleProps prop = {};
-			prop.m_position = { m_quad.m_position.x, m_quad.m_position.y, 0.01f };
-			prop.m_velocity = { 0.0f, -1.0f, 0.0f };
-			prop.m_velocityVariation = { 4.0f, 1.0f };
+			prop.m_position = { m_quad.m_position.x, m_quad.m_position.y, 0.2f };
+			prop.m_velocity = { 0.0f, -0.5f, 0.0f };
+			prop.m_velocityVariation = { 6.0f, 6.0f };
 			prop.m_colorBegin = { 0.8f, 0.2f, 0.0f, 1.0f };
 			prop.m_colorEnd = { 0.2f, 0.8f, 0.0f, 1.0f };
-			prop.m_sizeBegin = 0.2f;
+			prop.m_sizeBegin = 0.05f;
 			prop.m_sizeEnd = 0.05f;
 			prop.m_sizeVariation = 0.1f;
 			prop.m_lifeTime = 10.0f;
 			
-			for (int i = 0; i < 20; ++i)
+			for (int i = 0; i < 1000; ++i)
 			{
 				m_particleSystem.emit(prop);
 			}
