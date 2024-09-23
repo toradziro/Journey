@@ -28,6 +28,13 @@ void ParticleSystem::update(float dt)
 					return;
 				}
 
+				const float lifePoint = particle.m_lifeRemaning / particle.m_lifeTime;
+				const float lifetimeSize = glm::lerp(particle.m_sizeBegin, particle.m_sizeEnd, lifePoint);
+
+				particle.m_color = glm::lerp(particle.m_colorBegin, particle.m_colorEnd, lifePoint);
+				particle.m_color.a *= lifePoint;
+				particle.m_size = { lifetimeSize, lifetimeSize };
+
 				particle.m_lifeRemaning -= dt;
 				particle.m_lifeRemaning -= dt;
 				particle.m_position += particle.m_velocity * dt;
@@ -36,7 +43,7 @@ void ParticleSystem::update(float dt)
 		});
 }
 
-void ParticleSystem::render(const OrthographicCamera& camera)
+void ParticleSystem::render()
 {
 	auto& renderer = Application::subsystems().st<Renderer2D>();
 
@@ -44,14 +51,12 @@ void ParticleSystem::render(const OrthographicCamera& camera)
 		{
 			if (particle.m_active)
 			{
-				const float lifePoint = particle.m_lifeRemaning / particle.m_lifeTime;
 				QuadCfg rendererCfg;
 				rendererCfg.m_rotateOpt = RotateOpt::Rotated;
-				rendererCfg.m_color = glm::lerp(particle.m_colorBegin, particle.m_colorEnd, lifePoint);
+				rendererCfg.m_color = particle.m_color;
 				rendererCfg.m_rotation = particle.m_rotation;
-				rendererCfg.m_position = { particle.m_position, 0.0f };
-				const float lifetimeSize = glm::lerp(particle.m_sizeBegin, particle.m_sizeEnd, lifePoint);
-				rendererCfg.m_size = { lifetimeSize, lifetimeSize, 0.0f };
+				rendererCfg.m_position = particle.m_position;
+				rendererCfg.m_size = { particle.m_size, 0.0f };
 
 				renderer.drawQuad(rendererCfg);
 			}

@@ -38,6 +38,7 @@ void Sandbox2D::update(float dt)
 	PROFILE_FUNC;
 
 	m_orthoCameraCtrl.update(dt);
+	m_particleSystem.update(dt);
 
 	auto& rc = jny::Application::subsystems().st<jny::RenderCommand>();
 	rc.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
@@ -49,13 +50,11 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	//for (int i = 0; i < 10000; ++i)
-	//{
-		renderer2D.drawQuad(m_backgroundQuad);
-		renderer2D.drawQuad(m_quad2);
-		renderer2D.drawQuad(m_quad);
-	//}
+	renderer2D.drawQuad(m_backgroundQuad);
+	renderer2D.drawQuad(m_quad2);
+	renderer2D.drawQuad(m_quad);
 
+	m_particleSystem.render();
 	//-- End rendering
 	renderer2D.endScene();
 
@@ -67,6 +66,33 @@ void Sandbox2D::onEvent(jny::Event& event)
 	PROFILE_FUNC;
 
 	m_orthoCameraCtrl.onEvent(event);
+	jny::EventDispatcher dispatcher(event);
+	dispatcher.dispatch<jny::MouseButtonPressedEvent>([this](jny::MouseButtonPressedEvent& e)
+		{
+			auto& iPoll = jny::Application::subsystems().st<jny::InputPoll>();
+			
+			auto winSizeW = jny::Application::subsystems().st<jny::Window>().width();
+			auto winSizeH = jny::Application::subsystems().st<jny::Window>().height();
+
+			float ar = jny::Application::aspectRatio();
+
+			jny::ParticleProps prop = {};
+			prop.m_position = { m_quad.m_position.x, m_quad.m_position.y, 0.01f };
+			prop.m_velocity = { 0.0f, -1.0f, 0.0f };
+			prop.m_velocityVariation = { 4.0f, 1.0f };
+			prop.m_colorBegin = { 0.8f, 0.2f, 0.0f, 1.0f };
+			prop.m_colorEnd = { 0.2f, 0.8f, 0.0f, 1.0f };
+			prop.m_sizeBegin = 0.2f;
+			prop.m_sizeEnd = 0.05f;
+			prop.m_sizeVariation = 0.1f;
+			prop.m_lifeTime = 10.0f;
+			
+			for (int i = 0; i < 20; ++i)
+			{
+				m_particleSystem.emit(prop);
+			}
+			return false;
+		});
 }
 
 void Sandbox2D::imGuiRender()

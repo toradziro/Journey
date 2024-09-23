@@ -10,8 +10,8 @@ namespace jny
 
 struct ParticleProps
 {
-	glm::vec2	m_position = {};
-	glm::vec2	m_velocity = {};
+	glm::vec3	m_position = {};
+	glm::vec3	m_velocity = {};
 	glm::vec2	m_velocityVariation = {};
 	glm::vec4	m_colorBegin = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glm::vec4	m_colorEnd = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -27,17 +27,19 @@ public:
 	ParticleSystem();
 
 	void update(float dt);
-	void render(const OrthographicCamera& camera);
+	void render();
 
 	void emit(const ParticleProps& props);
 
 private:
 	struct Particle
 	{
-		glm::vec2	m_position = {};
-		glm::vec2	m_velocity = {};
+		glm::vec3	m_position = {};
+		glm::vec3	m_velocity = {};
+		glm::vec2	m_size = {};
 		glm::vec4	m_colorBegin = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glm::vec4	m_colorEnd = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glm::vec4	m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float		m_rotation = 0.0f;
 		float		m_sizeBegin = 0.0f;
 		float		m_sizeEnd = 0.0f;
