@@ -13,6 +13,7 @@
 #include "Journey/Renderer/RenderCommand.h"
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
+#include "Journey/Core/Random.h"
 
 namespace jny
 {
@@ -27,6 +28,8 @@ Application::Application()
 
 	s_sHolder->add<Instrumentor>();
 	s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_INIT_FILE);
+
+	s_sHolder->add<Random>();
 
 	//-- Create main window
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));

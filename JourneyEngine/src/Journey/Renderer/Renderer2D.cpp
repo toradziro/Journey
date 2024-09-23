@@ -123,6 +123,7 @@ void Renderer2D::endScene()
 void Renderer2D::flush()
 {
 	PROFILE_FUNC;
+
 	for (uint32_t i = 0; i < m_currTextureSlot; ++i)
 	{
 		m_textureSlots[i]->bind(i);

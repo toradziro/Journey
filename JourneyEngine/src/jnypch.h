@@ -9,6 +9,8 @@
 #include <atomic>
 #include <filesystem>
 #include <algorithm>
+#include <limits>
+#include <random>
 
 #include <ranges>
 
@@ -20,6 +22,7 @@
 #include <unordered_set>
 
 #ifdef JNY_PLATFORM_WINDOWS
+#define NOMINMAX
 #include <Windows.h>
 #endif
 
