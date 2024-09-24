@@ -54,6 +54,39 @@ void Sandbox2D::update(float dt)
 	renderer2D.drawQuad(m_quad2);
 	renderer2D.drawQuad(m_quad);
 
+	{
+		auto& iPoll = jny::Application::subsystems().st<jny::InputPoll>();
+		if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			auto [mouseX, mouseY] = iPoll.mousePos();
+
+			auto winSizeW = jny::Application::subsystems().st<jny::Window>().width();
+			auto winSizeH = jny::Application::subsystems().st<jny::Window>().height();
+
+			const auto& cameraBounds = m_orthoCameraCtrl.bounds();
+			const auto& cameraPos = m_orthoCameraCtrl.cameraPosition();
+
+			float x = ((mouseX / winSizeW) * cameraBounds.width() - cameraBounds.width() * 0.5f) + cameraPos.x;
+			float y = ((mouseY / winSizeH) * cameraBounds.height() - cameraBounds.height() * 0.5f) + cameraPos.y;
+
+			jny::ParticleProps prop = {};
+			prop.m_position = { x, y, 0.2f };
+			prop.m_velocity = { 0.0f, -0.5f, 0.0f };
+			prop.m_velocityVariation = { 3.0f, 1.0f };
+			prop.m_colorBegin = { 0.8f, 0.2f, 0.0f, 1.0f };
+			prop.m_colorEnd = { 0.2f, 0.8f, 0.0f, 1.0f };
+			prop.m_sizeBegin = 0.2f;
+			prop.m_sizeEnd = 0.05f;
+			prop.m_sizeVariation = 0.1f;
+			prop.m_lifeTime = 3.0f;
+
+			for (int i = 0; i < 5; ++i)
+			{
+				m_particleSystem.emit(prop);
+			}
+		}
+	}
+
 	m_particleSystem.render();
 	//-- End rendering
 	renderer2D.endScene();
@@ -66,33 +99,6 @@ void Sandbox2D::onEvent(jny::Event& event)
 	PROFILE_FUNC;
 
 	m_orthoCameraCtrl.onEvent(event);
-	jny::EventDispatcher dispatcher(event);
-	dispatcher.dispatch<jny::MouseButtonPressedEvent>([this](jny::MouseButtonPressedEvent& e)
-		{
-			auto& iPoll = jny::Application::subsystems().st<jny::InputPoll>();
-			
-			auto winSizeW = jny::Application::subsystems().st<jny::Window>().width();
-			auto winSizeH = jny::Application::subsystems().st<jny::Window>().height();
-
-			float ar = jny::Application::aspectRatio();
-
-			jny::ParticleProps prop = {};
-			prop.m_position = { m_quad.m_position.x, m_quad.m_position.y, 0.2f };
-			prop.m_velocity = { 0.0f, -0.5f, 0.0f };
-			prop.m_velocityVariation = { 6.0f, 6.0f };
-			prop.m_colorBegin = { 0.8f, 0.2f, 0.0f, 1.0f };
-			prop.m_colorEnd = { 0.2f, 0.8f, 0.0f, 1.0f };
-			prop.m_sizeBegin = 0.05f;
-			prop.m_sizeEnd = 0.05f;
-			prop.m_sizeVariation = 0.1f;
-			prop.m_lifeTime = 10.0f;
-			
-			for (int i = 0; i < 1000; ++i)
-			{
-				m_particleSystem.emit(prop);
-			}
-			return false;
-		});
 }
 
 void Sandbox2D::imGuiRender()

@@ -13,7 +13,7 @@ namespace jny
 
 ParticleSystem::ParticleSystem()
 {
-	m_particlePool.resize(1000);
+	m_particlePool.resize(C_MAX_PARTICLES_IN_A_BATCH);
 }
 
 void ParticleSystem::update(float dt)
@@ -29,9 +29,9 @@ void ParticleSystem::update(float dt)
 				}
 
 				const float lifePoint = particle.m_lifeRemaning / particle.m_lifeTime;
-				const float lifetimeSize = glm::lerp(particle.m_sizeBegin, particle.m_sizeEnd, lifePoint);
+				const float lifetimeSize = glm::lerp(particle.m_sizeEnd, particle.m_sizeBegin, lifePoint);
 
-				particle.m_color = glm::lerp(particle.m_colorBegin, particle.m_colorEnd, lifePoint);
+				particle.m_color = glm::lerp(particle.m_colorEnd, particle.m_colorBegin, lifePoint);
 				particle.m_color.a *= lifePoint;
 				particle.m_size = { lifetimeSize, lifetimeSize };
 
@@ -86,7 +86,7 @@ void ParticleSystem::emit(const ParticleProps& props)
 
 	if (m_poolIndex == 0)
 	{
-		m_poolIndex = 999;
+		m_poolIndex = C_MAX_PARTICLES_IN_A_BATCH - 1;
 	}
 	else
 	{

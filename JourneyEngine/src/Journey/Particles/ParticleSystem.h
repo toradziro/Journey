@@ -24,6 +24,8 @@ struct ParticleProps
 class ParticleSystem
 {
 public:
+	static constexpr inline uint32_t C_MAX_PARTICLES_IN_A_BATCH = 10000;
+
 	ParticleSystem();
 
 	void update(float dt);
@@ -49,7 +51,7 @@ private:
 	};
 
 	std::vector<Particle>	m_particlePool;
-	uint32_t				m_poolIndex = 999;
+	uint32_t				m_poolIndex = C_MAX_PARTICLES_IN_A_BATCH - 1;
 
 	uint32_t				m_quadVA = 0;
 	Ref<Shader>				m_particleShader = nullptr;
