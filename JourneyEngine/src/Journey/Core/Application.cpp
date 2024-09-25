@@ -13,6 +13,7 @@
 #include "Journey/Renderer/RenderCommand.h"
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
+#include "Journey/Core/Random.h"
 
 namespace jny
 {
@@ -27,6 +28,8 @@ Application::Application()
 
 	s_sHolder->add<Instrumentor>();
 	s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_INIT_FILE);
+
+	s_sHolder->add<Random>();
 
 	//-- Create main window
 	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
@@ -95,12 +98,15 @@ void Application::run()
 		}
 
 		//-- ImGui drawing
-		m_imGuiLayer->begin();
-		std::ranges::for_each(m_layers, [](auto& layer)
-			{
-				layer->imGuiRender();
-			});
-		m_imGuiLayer->end();
+		if (m_imGuiEnabled)
+		{
+			m_imGuiLayer->begin();
+			std::ranges::for_each(m_layers, [](auto& layer)
+				{
+					layer->imGuiRender();
+				});
+			m_imGuiLayer->end();
+		}
 
 		s_sHolder->st<Window>().update();
 

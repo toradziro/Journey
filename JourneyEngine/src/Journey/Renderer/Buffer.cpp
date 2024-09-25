@@ -29,6 +29,27 @@ VertexBuffer* VertexBuffer::create(float* vertices, uint32_t count)
 	return buffer;
 }
 
+jny::VertexBuffer* VertexBuffer::create(uint32_t size)
+{
+	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	VertexBuffer* buffer = nullptr;
+
+	switch (rendererApi)
+	{
+	case RendererAPI::API::None:
+		JNY_ASSERT(true, "Can't be none");
+		break;
+	case RendererAPI::API::OpenGL:
+		buffer = new OpenGLVertexBuffer(size);
+		break;
+	default:
+		JNY_ASSERT(true, "Can't be none");
+		break;
+	}
+
+	return buffer;
+}
+
 IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t count)
 {
 	auto rendererApi = Application::subsystems().st<Renderer>().API();

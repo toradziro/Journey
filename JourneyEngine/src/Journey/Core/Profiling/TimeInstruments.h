@@ -37,7 +37,7 @@ public:
 	Instrumentor() = default;
 	~Instrumentor() = default;
 
-	void beginSession(/*const std::string& name, */const std::string& filename = "profile.json");
+	void beginSession(const std::string& filename = "profile.json");
 	void endSession();
 
 	void writeProfile(const ProfileResult& result);
@@ -50,12 +50,14 @@ private:
 	int				m_profileCount = 0;
 };
 
-#ifdef JNY_DEBUG 
-	#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
-	#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
-#elif JNY_RELEASE
-	#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
-	#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
+#ifdef PROFILE_ENABLED
+	#ifdef JNY_DEBUG 
+		#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
+		#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
+	#elif JNY_RELEASE
+		#define PROFILE_SCOPE(name) InstrumentTimerScope timer##__LINE__(name)
+		#define PROFILE_FUNC PROFILE_SCOPE(__FUNCSIG__)
+#endif
 #else
 	#define PROFILE_SCOPE(name)
 	#define PROFILE_FUNC

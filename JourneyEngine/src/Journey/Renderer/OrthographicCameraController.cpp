@@ -11,10 +11,10 @@ namespace jny
 
 OrthographicCameraController::OrthographicCameraController(float aspectRatio, float zoomLevel, bool rotation)
 	: m_camera(-aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel),
+	m_bounds({ -aspectRatio * zoomLevel, aspectRatio * zoomLevel, -zoomLevel, zoomLevel }),
 	m_aspectRatio(aspectRatio),
 	m_zoomLevel(zoomLevel)
 {
-
 }
 
 void OrthographicCameraController::update(float dt)
@@ -82,6 +82,7 @@ bool OrthographicCameraController::mouseScrolled(MouseScrolledEvent& e)
 	m_zoomLevel -= e.offsetY() * 0.2f;
 	m_zoomLevel = std::max(m_zoomLevel, 0.1f);
 	m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+	m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
 
 	return false;
 }
@@ -90,6 +91,7 @@ bool OrthographicCameraController::windowResized(WindowResizeEvent& e)
 {
 	m_aspectRatio = static_cast<float>(e.width()) / static_cast<float>(e.height());
 	m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+	m_bounds = { -m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel };
 
 	return false;
 }

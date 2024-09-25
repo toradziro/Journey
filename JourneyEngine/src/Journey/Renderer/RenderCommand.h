@@ -18,7 +18,7 @@ public:
 
 	void createRenderer(RendererAPI::API api);
 
-	void drawIndexed(const Ref<VertexArray>& vertexArray)
+	void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t size = 0)
 	{
 		PROFILE_FUNC;
 

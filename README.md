@@ -18,8 +18,8 @@ This command will generate .sln file (vs2022 is required). In VS just tap F5 and
 - Window Layer
     - Input
     - Events
-- Renderer (TBD)
-- Renderer API (TBD)
+- Renderer2D
+- Renderer API
 - Debugging support
     - Logging System (spdlog for logging & fmt::format for strings)
 - Scripting language (TBD)

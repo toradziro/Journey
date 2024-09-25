@@ -16,10 +16,14 @@ public:
 
 private:
 	jny::OrthographicCameraController	m_orthoCameraCtrl;
+	jny::ParticleSystem					m_particleSystem;
 
 	jny::QuadCfg						m_quad;
+	jny::QuadCfg						m_quad2;
 	jny::QuadCfg						m_backgroundQuad;
 
 	jny::Ref<jny::Texture2D>			m_checkerboardTexture;
+
+	float								m_FPS = 0.0f;
 };
 

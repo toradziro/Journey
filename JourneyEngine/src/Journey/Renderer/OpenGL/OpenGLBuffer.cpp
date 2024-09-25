@@ -7,10 +7,17 @@ namespace jny
 {
 
 //------------------------------------------------------------------------------------ Vertex buffer
+OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+{
+	glCreateBuffers(1, &m_rendererId);
+	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
+	glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+}
+
 OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t count)
 {
 	glCreateBuffers(1, &m_rendererId);
-	bind();
+	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), vertices, GL_STATIC_DRAW);
 }
 
@@ -27,6 +34,12 @@ void OpenGLVertexBuffer::bind() const
 void OpenGLVertexBuffer::unbind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void OpenGLVertexBuffer::setData(const void* data, uint32_t size)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 }
 
 void OpenGLVertexBuffer::setLayout(const BufferLayout& layout)
