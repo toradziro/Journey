@@ -11,13 +11,40 @@ Sandbox2D::Sandbox2D() :
 	m_orthoCameraCtrl(jny::Application::aspectRatio())
 { }
 
+void sampleTexture(jny::QuadCfg& cfg, glm::vec2 sampledTexture)
+{
+	float width = static_cast<float>(cfg.m_texture->width());
+	float height = static_cast<float>(cfg.m_texture->height());
+	float spriteWidth = 128.0f;
+	float spriteHeight = 128.0f;
+
+	float startPosX = (spriteWidth * sampledTexture.x) / width;
+	float startPosY = (spriteHeight * sampledTexture.y) / height;
+	float stepX = spriteWidth / width;
+	float stepY = spriteHeight / height;
+
+	glm::vec2		texturesPos[4] = {
+		{ startPosX, startPosY },
+		{ startPosX + stepX, startPosY },
+		{ startPosX + stepX, startPosY + stepY },
+		{ startPosX, startPosY + stepY }
+	};
+
+	for (int i = 0; i < 4; ++i)
+	{
+		cfg.m_texturesPos[i] = texturesPos[i];
+	}
+}
+
 void Sandbox2D::attach()
 {
-	m_quad.m_textureOpt = jny::TextureOpt::FlatColored;
+	m_quad.m_textureOpt = jny::TextureOpt::Textured;
 	m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
-	m_quad.m_color = { 0.2f, 0.3f, 0.8f, 0.7f };
-	m_quad.m_position = { 0.0f, 0.0f, 0.0f };
+	m_quad.m_position = { 0.0f, 0.0f, 0.5f };
 	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
+	m_quad.m_texture = jny::Texture2D::create("resources/assets/textures/rpg_kenny_sprite_sheet.png");
+	sampleTexture(m_quad, m_sampledTexture);
+
 
 	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
 	m_quad2.m_position = { -1.0f, -1.0f, -0.2f };
@@ -50,10 +77,8 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	renderer2D.drawQuad(m_backgroundQuad);
-	renderer2D.drawQuad(m_quad2);
-	renderer2D.drawQuad(m_quad);
-
+	//renderer2D.drawQuad(m_backgroundQuad);
+	//renderer2D.drawQuad(m_quad2);
 	{
 		auto& iPoll = jny::Application::subsystems().st<jny::InputPoll>();
 		if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
@@ -88,6 +113,9 @@ void Sandbox2D::update(float dt)
 	}
 
 	m_particleSystem.render();
+	
+	renderer2D.drawQuad(m_quad);
+	
 	//-- End rendering
 	renderer2D.endScene();
 
@@ -106,6 +134,10 @@ void Sandbox2D::imGuiRender()
 	PROFILE_FUNC;
 
 	ImGui::Begin("Color prop");
+	if (ImGui::DragFloat2("Sampler", glm::value_ptr(m_sampledTexture), 1.0f, 0.0f, 20.0f))
+	{
+		sampleTexture(m_quad, m_sampledTexture);
+	}
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_quad.m_color));
 	ImGui::DragFloat2("Position", glm::value_ptr(m_quad.m_position), 0.01f);
 	ImGui::DragFloat2("Size", glm::value_ptr(m_quad.m_size), 0.01f);
