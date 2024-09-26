@@ -35,7 +35,7 @@ struct QuadCfg
 								{ 1.0f, 0.0f },
 								{ 1.0f, 1.0f },
 								{ 0.0f, 1.0f }
-							}; //C_VERTICES_IN_QUAD
+							};
 	Ref<Texture2D>	m_texture = nullptr;
 
 	TextureOpt		m_textureOpt = TextureOpt::FlatColored;

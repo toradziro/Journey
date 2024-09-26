@@ -28,4 +28,3 @@ private:
 
 	float								m_FPS = 0.0f;
 };
-
