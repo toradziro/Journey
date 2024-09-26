@@ -9,9 +9,9 @@
 namespace jny
 {
 
-void sampleTexture(QuadCfg& cfg, glm::vec2 sampledTexture)
+void sampleTexture(QuadCfg& cfg, glm::vec2 sampledTexture, const glm::vec2& spriteSize, const glm::vec2& cellsFromAtlas)
 {
-	Ref<SubTexture2D> sbt = SubTexture2D::createFromCoords(sampledTexture, { 128.0f, 128.0f }, cfg.m_texture);
+	Ref<SubTexture2D> sbt = SubTexture2D::createFromCoords(sampledTexture, spriteSize, cellsFromAtlas, cfg.m_texture);
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -68,15 +68,20 @@ SubTexture2D::SubTexture2D(const Ref<Texture2D>& texture, const glm::vec2& min, 
 	m_textureCoordinates[3] = { min.x, max.y };
 }
 
-Ref<SubTexture2D> SubTexture2D::createFromCoords(const glm::vec2& coordinates, const glm::vec2& spriteSize, const Ref<Texture2D>& texture)
+Ref<SubTexture2D> SubTexture2D::createFromCoords(const glm::vec2& coordinates,
+	const glm::vec2& spriteSize,
+	const glm::vec2& cellsFromAtlas,
+	const Ref<Texture2D>& texture)
 {
 	float width = static_cast<float>(texture->width());
 	float height = static_cast<float>(texture->height());
 
 	float startPosX = (spriteSize.x * coordinates.x) / width;
 	float startPosY = (spriteSize.y * coordinates.y) / height;
-	float stepX = spriteSize.x / width;
-	float stepY = spriteSize.y / height;
+
+	//-- cellsFromAtlas we need to find out how much textures we want to sample, i.e. if we want tree divided on 2 textures be drawn in one call
+	float stepX = (spriteSize.x / width) * cellsFromAtlas.x;
+	float stepY = (spriteSize.y / height) * cellsFromAtlas.y;
 
 	glm::vec2 minCoords = { startPosX, startPosY };
 	glm::vec2 maxCoords = { startPosX + stepX, startPosY + stepY };

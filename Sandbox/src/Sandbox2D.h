@@ -19,6 +19,7 @@ private:
 	jny::ParticleSystem					m_particleSystem;
 
 	jny::QuadCfg						m_quad;
+	jny::QuadCfg						m_quad1;
 	jny::QuadCfg						m_quad2;
 	jny::QuadCfg						m_backgroundQuad;
 

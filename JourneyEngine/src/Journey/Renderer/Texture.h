@@ -7,7 +7,7 @@ namespace jny
 
 struct QuadCfg;
 
-void sampleTexture(QuadCfg& cfg, glm::vec2 sampledTexture);
+void sampleTexture(QuadCfg& cfg, glm::vec2 sampledTextureCoords, const glm::vec2& spriteSize, const glm::vec2& cellsFromAtlas);
 
 class Texture : public ReferenceCounter
 {
@@ -40,7 +40,10 @@ public:
 	const glm::vec2* textureCoordinates() const { return m_textureCoordinates; }
 	const Ref<Texture2D>& texture() const { return m_texture; }
 
-	static Ref<SubTexture2D> createFromCoords(const glm::vec2& coordinates, const glm::vec2& spriteSize, const Ref<Texture2D>& texture);
+	static Ref<SubTexture2D> createFromCoords(const glm::vec2& coordinates,
+		const glm::vec2& spriteSize,
+		const glm::vec2& cellsFromAtlas,
+		const Ref<Texture2D>& texture);
 
 private:
 	Ref<Texture2D>	m_texture;

@@ -15,11 +15,18 @@ void Sandbox2D::attach()
 {
 	m_quad.m_textureOpt = jny::TextureOpt::Textured;
 	m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
-	m_quad.m_position = { 0.0f, 0.0f, 0.5f };
+	m_quad.m_position = { -0.5f, 0.0f, 0.5f };
 	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
 	m_quad.m_texture = jny::Texture2D::create("resources/assets/textures/rpg_kenny_sprite_sheet.png");
-	jny::sampleTexture(m_quad, m_sampledTexture);
+	jny::sampleTexture(m_quad, m_sampledTexture, { 128.0f, 128.0f }, { 1.0f, 1.0f });
 
+
+	m_quad1.m_textureOpt = jny::TextureOpt::Textured;
+	m_quad1.m_rotateOpt = jny::RotateOpt::Rotated;
+	m_quad1.m_position = { 0.8f, 0.5f, 0.5f };
+	m_quad1.m_size = { 1.0f, 2.0f, 0.0f };
+	m_quad1.m_texture = m_quad.m_texture;
+	jny::sampleTexture(m_quad1, { 1.0f, 1.0f }, { 128.0f, 128.0f }, { 1.0f, 2.0f });
 
 	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
 	m_quad2.m_position = { -1.0f, -1.0f, -0.2f };
@@ -90,6 +97,7 @@ void Sandbox2D::update(float dt)
 	m_particleSystem.render();
 	
 	renderer2D.drawQuad(m_quad);
+	renderer2D.drawQuad(m_quad1);
 	
 	//-- End rendering
 	renderer2D.endScene();
@@ -111,7 +119,7 @@ void Sandbox2D::imGuiRender()
 	ImGui::Begin("Color prop");
 	if (ImGui::DragFloat2("Sampler", glm::value_ptr(m_sampledTexture), 1.0f, 0.0f, 20.0f))
 	{
-		jny::sampleTexture(m_quad, m_sampledTexture);
+		jny::sampleTexture(m_quad, m_sampledTexture, { 128.0f, 128.0f }, { 1.0f, 1.0f });
 	}
 
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_quad.m_color));
