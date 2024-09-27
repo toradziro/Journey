@@ -29,7 +29,7 @@ void Sandbox2D::attach()
 	jny::sampleTexture(m_quad1, { 1.0f, 1.0f }, { 128.0f, 128.0f }, { 1.0f, 2.0f });
 
 	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
-	m_quad2.m_position = { -1.0f, -1.0f, -0.2f };
+	m_quad2.m_position = { -1.0f, -1.0f, 0.5f };
 	m_quad2.m_size = { 1.0f, 1.0f, 0.0f };
 	m_quad2.m_texture = jny::Texture2D::create("resources/assets/textures/bomb.png");
 
@@ -59,8 +59,6 @@ void Sandbox2D::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	//renderer2D.drawQuad(m_backgroundQuad);
-	//renderer2D.drawQuad(m_quad2);
 	{
 		auto& iPoll = jny::Application::subsystems().st<jny::InputPoll>();
 		if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
@@ -77,7 +75,7 @@ void Sandbox2D::update(float dt)
 			float y = ((mouseY / winSizeH) * cameraBounds.height() - cameraBounds.height() * 0.5f) + cameraPos.y;
 
 			jny::ParticleProps prop = {};
-			prop.m_position = { x, y, 0.2f };
+			prop.m_position = { x, y, 0.3f };
 			prop.m_velocity = { 0.0f, -0.5f, 0.0f };
 			prop.m_velocityVariation = { 3.0f, 1.0f };
 			prop.m_colorBegin = { 0.8f, 0.2f, 0.0f, 1.0f };
@@ -94,11 +92,14 @@ void Sandbox2D::update(float dt)
 		}
 	}
 
+	//renderer2D.drawQuad(m_backgroundQuad);
+
 	m_particleSystem.render();
-	
+
+	//renderer2D.drawQuad(m_quad2);
 	renderer2D.drawQuad(m_quad);
 	renderer2D.drawQuad(m_quad1);
-	
+
 	//-- End rendering
 	renderer2D.endScene();
 
