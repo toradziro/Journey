@@ -86,7 +86,10 @@ void Renderer2D::init()
 	m_quadVertexPosition[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
 }
 
-void Renderer2D::shutdown() { }
+void Renderer2D::shutdown()
+{
+	delete[] m_quadVertexBase;
+}
 
 void Renderer2D::beginScene(const OrthographicCamera& camera)
 {
