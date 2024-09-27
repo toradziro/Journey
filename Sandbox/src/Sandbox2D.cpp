@@ -38,6 +38,8 @@ void Sandbox2D::attach()
 	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
 	m_backgroundQuad.m_tilingFactor = 10.0f;
 	m_backgroundQuad.m_texture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
+
+	m_orthoCameraCtrl.setZoomLevel(2.0f);
 }
 
 void Sandbox2D::detach() { }
