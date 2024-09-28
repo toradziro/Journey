@@ -13,20 +13,13 @@ Sandbox2D::Sandbox2D() :
 
 void Sandbox2D::attach()
 {
-	m_quad.m_textureOpt = jny::TextureOpt::Textured;
-	m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
-	m_quad.m_position = { -0.5f, 0.0f, 0.5f };
-	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
-	m_quad.m_texture = jny::Texture2D::create("resources/assets/textures/rpg_kenny_sprite_sheet.png");
-	jny::sampleTexture(m_quad, m_sampledTexture, { 128.0f, 128.0f }, { 1.0f, 1.0f });
-
-
-	m_quad1.m_textureOpt = jny::TextureOpt::Textured;
-	m_quad1.m_rotateOpt = jny::RotateOpt::Rotated;
-	m_quad1.m_position = { 0.8f, 0.5f, 0.5f };
-	m_quad1.m_size = { 1.0f, 2.0f, 0.0f };
-	m_quad1.m_texture = m_quad.m_texture;
-	jny::sampleTexture(m_quad1, { 1.0f, 1.0f }, { 128.0f, 128.0f }, { 1.0f, 2.0f });
+	//-- Sample of subtexturing
+	//m_quad.m_textureOpt = jny::TextureOpt::Textured;
+	//m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
+	//m_quad.m_position = { -0.5f, 0.0f, 0.5f };
+	//m_quad.m_size = { 1.0f, 1.0f, 0.0f };
+	//m_quad.m_texture = jny::Texture2D::create("resources/assets/textures/rpg_kenny_sprite_sheet.png");
+	//jny::sampleTexture(m_quad, m_sampledTexture, { 128.0f, 128.0f }, { 1.0f, 1.0f });
 
 	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
 	m_quad2.m_position = { -1.0f, -1.0f, 0.5f };
@@ -38,6 +31,7 @@ void Sandbox2D::attach()
 	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
 	m_backgroundQuad.m_tilingFactor = 10.0f;
 	m_backgroundQuad.m_texture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
+	m_checkerboardTexture = m_backgroundQuad.m_texture;
 
 	m_orthoCameraCtrl.setZoomLevel(2.0f);
 }
@@ -94,13 +88,10 @@ void Sandbox2D::update(float dt)
 		}
 	}
 
-	//renderer2D.drawQuad(m_backgroundQuad);
-
+	renderer2D.drawQuad(m_backgroundQuad);
 	m_particleSystem.render();
-
-	//renderer2D.drawQuad(m_quad2);
-	renderer2D.drawQuad(m_quad);
-	renderer2D.drawQuad(m_quad1);
+	renderer2D.drawQuad(m_quad2);
+	//renderer2D.drawQuad(m_quad);
 
 	//-- End rendering
 	renderer2D.endScene();
@@ -119,17 +110,26 @@ void Sandbox2D::imGuiRender()
 {
 	PROFILE_FUNC;
 
-	ImGui::Begin("Color prop");
-	if (ImGui::DragFloat2("Sampler", glm::value_ptr(m_sampledTexture), 1.0f, 0.0f, 20.0f))
+	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
+
+	if (ImGui::BeginMainMenuBar())
 	{
-		jny::sampleTexture(m_quad, m_sampledTexture, { 128.0f, 128.0f }, { 1.0f, 1.0f });
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::MenuItem("TstOpt", NULL, &m_tstOpt);
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
 	}
 
-	ImGui::ColorEdit4("Square color", glm::value_ptr(m_quad.m_color));
-	ImGui::DragFloat2("Position", glm::value_ptr(m_quad.m_position), 0.01f);
-	ImGui::DragFloat2("Size", glm::value_ptr(m_quad.m_size), 0.01f);
-	ImGui::DragFloat("Rotation", &m_quad.m_rotationDegrees, 1.0f);
-	m_quad.m_rotation = glm::radians(m_quad.m_rotationDegrees);
+	ImGui::Begin("TstWindow");
+	uint64_t tId = m_checkerboardTexture->rendererId();
+	auto dpiScale = ImGui::GetWindowDpiScale();
+	constexpr ImVec2 imageSize = { 64.0f, 64.0f };
+	ImVec2 imageSizeScaled = { imageSize.x * dpiScale, imageSize.y * dpiScale };
+	ImGui::Image(reinterpret_cast<void*>(tId), imageSizeScaled);
+	ImGui::DragFloat2("Position", glm::value_ptr(m_quad2.m_position), 0.01f);
 
 	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 
