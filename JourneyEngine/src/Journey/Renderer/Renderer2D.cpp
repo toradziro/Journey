@@ -84,14 +84,12 @@ void Renderer2D::init()
 	m_quadVertexPosition[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
 	m_quadVertexPosition[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
 	m_quadVertexPosition[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
-
-	m_texturesPos[0] = { 0.0f, 0.0f };
-	m_texturesPos[1] = { 1.0f, 0.0f };
-	m_texturesPos[2] = { 1.0f, 1.0f };
-	m_texturesPos[3] = { 0.0f, 1.0f };
 }
 
-void Renderer2D::shutdown() { }
+void Renderer2D::shutdown()
+{
+	delete[] m_quadVertexBase;
+}
 
 void Renderer2D::beginScene(const OrthographicCamera& camera)
 {
@@ -189,7 +187,7 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 		{
 			m_quadVertexPtr->m_position = transform * pos;
 			m_quadVertexPtr->m_color = cfg.m_color;
-			m_quadVertexPtr->m_textureCoordinate = m_texturesPos[idx];
+			m_quadVertexPtr->m_textureCoordinate = cfg.m_texturesPos[idx];
 			m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
 			m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
 			m_quadVertexPtr++;

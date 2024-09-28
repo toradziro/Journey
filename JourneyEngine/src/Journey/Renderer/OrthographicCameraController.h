@@ -30,11 +30,15 @@ public:
 	const auto& bounds() const { return m_bounds; }
 	const auto& cameraPosition() const { return m_cameraPos; }
 
+	void setZoomLevel(float zoomLevel) { m_zoomLevel = zoomLevel; calculateView(); }
+
 	const OrthographicCamera& camera() const { return m_camera; }
 
 private:
 	bool mouseScrolled(MouseScrolledEvent& e);
 	bool windowResized(WindowResizeEvent& e);
+
+	void calculateView();
 
 	OrthographicCamera			m_camera;
 	OrthographicCameraBounds	m_bounds;

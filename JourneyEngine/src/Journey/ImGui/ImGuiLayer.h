@@ -13,6 +13,7 @@ public:
 
 	void attach() override;
 	void detach() override;
+	void onEvent(Event& e) override;
 	void imGuiRender() override;
 
 	void begin();

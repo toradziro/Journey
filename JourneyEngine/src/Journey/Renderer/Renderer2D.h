@@ -30,6 +30,12 @@ struct QuadCfg
 	float			m_rotation = 0.0f;
 	float			m_rotationDegrees = 0.0f;
 	float			m_tilingFactor = 1.0f;
+	glm::vec2		m_texturesPos[4] =  {
+								{ 0.0f, 0.0f },
+								{ 1.0f, 0.0f },
+								{ 1.0f, 1.0f },
+								{ 0.0f, 1.0f }
+							};
 	Ref<Texture2D>	m_texture = nullptr;
 
 	TextureOpt		m_textureOpt = TextureOpt::FlatColored;
@@ -86,7 +92,6 @@ private:
 	const OrthographicCamera*						m_currCamera;
 	//-- Need to apply transformation matrix to
 	glm::vec4										m_quadVertexPosition[C_VERTICES_IN_QUAD];
-	glm::vec2										m_texturesPos[C_VERTICES_IN_QUAD];
 
 	Statistic										m_frameStat;
 

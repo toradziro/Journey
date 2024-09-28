@@ -65,6 +65,7 @@ Application::Application()
 
 Application::~Application()
 {
+	s_sHolder->st<Renderer2D>().shutdown();
 	s_sHolder.reset();
 }
 
