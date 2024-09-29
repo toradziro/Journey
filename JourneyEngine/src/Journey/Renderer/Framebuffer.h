@@ -1,0 +1,31 @@
+#pragma once
+
+namespace jny
+{
+
+struct FramebufferSpecs
+{
+	uint32_t	m_width = 0;
+	uint32_t	m_height = 0;
+	uint32_t	m_samples = 1;
+
+	//-- rendering on the screen or not
+	bool		m_swapChainTarget = false;
+};
+
+class Framebuffer : public ReferenceCounter
+{
+public:
+	virtual const FramebufferSpecs& specs() const = 0;
+	virtual FramebufferSpecs& specs() = 0;
+
+	virtual void bind() = 0;
+	virtual void unbind() = 0;
+	virtual void resize() = 0;
+
+	virtual uint32_t colorAttachment() = 0;
+
+	static Ref<Framebuffer> create(const FramebufferSpecs& specs);
+};
+
+}

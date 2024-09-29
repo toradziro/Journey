@@ -26,6 +26,7 @@
 #include "Journey/Renderer/OrthographicCamera.h"
 #include "Journey/Renderer/Texture.h"
 #include "Journey/Renderer/OrthographicCameraController.h"
+#include "Journey/Renderer/Framebuffer.h"
 
 #include "Journey/Particles/ParticleSystem.h"
 

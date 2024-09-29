@@ -13,6 +13,11 @@ Sandbox2D::Sandbox2D() :
 
 void Sandbox2D::attach()
 {
+	jny::FramebufferSpecs specs;
+	specs.m_width = 1200;
+	specs.m_height = 800;
+	m_framebuffer = jny::Framebuffer::create(specs);
+
 	//-- Sample of subtexturing
 	//m_quad.m_textureOpt = jny::TextureOpt::Textured;
 	//m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
@@ -46,12 +51,14 @@ void Sandbox2D::update(float dt)
 	m_particleSystem.update(dt);
 
 	auto& rc = jny::Application::subsystems().st<jny::RenderCommand>();
-	rc.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-	rc.clear();
-
 	auto& renderer2D = jny::Application::subsystems().st<jny::Renderer2D>();
 
 	renderer2D.resetStatistics();
+	m_framebuffer->bind();
+
+	rc.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+	rc.clear();
+
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
@@ -95,6 +102,7 @@ void Sandbox2D::update(float dt)
 
 	//-- End rendering
 	renderer2D.endScene();
+	m_framebuffer->unbind();
 
 	m_FPS = 1.0f / dt;
 }
@@ -124,13 +132,20 @@ void Sandbox2D::imGuiRender()
 	}
 
 	ImGui::Begin("TstWindow");
-	uint64_t tId = m_checkerboardTexture->rendererId();
-	auto dpiScale = ImGui::GetWindowDpiScale();
-	constexpr ImVec2 imageSize = { 64.0f, 64.0f };
-	ImVec2 imageSizeScaled = { imageSize.x * dpiScale, imageSize.y * dpiScale };
-	ImGui::Image(reinterpret_cast<void*>(tId), imageSizeScaled);
-	ImGui::DragFloat2("Position", glm::value_ptr(m_quad2.m_position), 0.01f);
 
+	//auto dpiScale = ImGui::GetWindowDpiScale();
+	//constexpr ImVec2 imageSize = { 320.0f, 180.0f };
+	//ImVec2 imageSizeScaled = { imageSize.x * dpiScale, imageSize.y * dpiScale };
+
+	if (ImGui::Begin("Viewport"))
+	{
+		auto size = ImGui::GetWindowSize();
+		uint64_t frameId = static_cast<uint64_t>(m_framebuffer->colorAttachment());
+		ImGui::Image(reinterpret_cast<void*>(frameId), size, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
+		ImGui::End();
+	}
+
+	ImGui::DragFloat2("Position", glm::value_ptr(m_quad2.m_position), 0.01f);
 	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 
 	const auto& stat = jny::Application::subsystems().st<jny::Renderer2D>().stats();
