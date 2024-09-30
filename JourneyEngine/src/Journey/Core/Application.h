@@ -23,7 +23,7 @@ class  Application
 	static constexpr const char*	C_PROFILE_MAIN_LOOP_FILE = "main_loop.json";
 
 public:
-	Application();
+	Application(const std::string_view& name = "Journey");
 	virtual ~Application();
 
 	void run();

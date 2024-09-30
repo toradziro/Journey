@@ -13,14 +13,14 @@ struct WindowData
 {
 	using EventCallbackFn = std::function<void(Event&)>;
 
-	std::string		m_title;
-	uint32_t		m_width;
-	uint32_t		m_height;
-	float			m_dpiScale = 1.0f;
-	EventCallbackFn	m_eventCallback;
-	bool			m_vsyncEnabled = true;
+	std::string_view	m_title;
+	uint32_t			m_width;
+	uint32_t			m_height;
+	float				m_dpiScale = 1.0f;
+	EventCallbackFn		m_eventCallback;
+	bool				m_vsyncEnabled = true;
 
-	WindowData(std::string title, uint32_t width, uint32_t height) :
+	WindowData(std::string_view title, uint32_t width, uint32_t height) :
 		m_title(title), m_width(width), m_height(height)
 	{
 	}
