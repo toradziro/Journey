@@ -17,7 +17,7 @@ void Sandbox2D::attach()
 	m_quad.m_rotateOpt = jny::RotateOpt::Rotated;
 	m_quad.m_position = { -0.5f, 0.0f, 0.5f };
 	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
-	m_quad.m_texture = jny::Texture2D::create("resources/assets/textures/rpg_kenny_sprite_sheet.png");
+	m_quad.m_texture = jny::Texture2D::create("../resources/assets/textures/rpg_kenny_sprite_sheet.png");
 	jny::sampleTexture(m_quad, m_sampledTexture, { 128.0f, 128.0f }, { 1.0f, 1.0f });
 
 
@@ -31,13 +31,13 @@ void Sandbox2D::attach()
 	m_quad2.m_textureOpt = jny::TextureOpt::Textured;
 	m_quad2.m_position = { -1.0f, -1.0f, 0.5f };
 	m_quad2.m_size = { 1.0f, 1.0f, 0.0f };
-	m_quad2.m_texture = jny::Texture2D::create("resources/assets/textures/bomb.png");
+	m_quad2.m_texture = jny::Texture2D::create("../resources/assets/textures/bomb.png");
 
 	m_backgroundQuad.m_textureOpt = jny::TextureOpt::Textured;
 	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.4f };
 	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
 	m_backgroundQuad.m_tilingFactor = 10.0f;
-	m_backgroundQuad.m_texture = jny::Texture2D::create("resources/assets/textures/checkerboard.png");
+	m_backgroundQuad.m_texture = jny::Texture2D::create("../resources/assets/textures/checkerboard.png");
 
 	m_orthoCameraCtrl.setZoomLevel(2.0f);
 }
@@ -94,18 +94,16 @@ void Sandbox2D::update(float dt)
 		}
 	}
 
-	//renderer2D.drawQuad(m_backgroundQuad);
+	renderer2D.drawQuad(m_backgroundQuad);
 
 	m_particleSystem.render();
 
-	//renderer2D.drawQuad(m_quad2);
+	renderer2D.drawQuad(m_quad2);
 	renderer2D.drawQuad(m_quad);
 	renderer2D.drawQuad(m_quad1);
 
 	//-- End rendering
 	renderer2D.endScene();
-
-	m_FPS = 1.0f / dt;
 }
 
 void Sandbox2D::onEvent(jny::Event& event)
@@ -130,8 +128,6 @@ void Sandbox2D::imGuiRender()
 	ImGui::DragFloat2("Size", glm::value_ptr(m_quad.m_size), 0.01f);
 	ImGui::DragFloat("Rotation", &m_quad.m_rotationDegrees, 1.0f);
 	m_quad.m_rotation = glm::radians(m_quad.m_rotationDegrees);
-
-	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 
 	const auto& stat = jny::Application::subsystems().st<jny::Renderer2D>().stats();
 	ImGui::Text("Draw calls: %d", stat.m_drawCalls);

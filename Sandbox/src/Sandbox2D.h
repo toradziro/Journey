@@ -12,7 +12,7 @@ public:
 
 	void update(float dt) override;
 	void onEvent(jny::Event& event) override;
-	void imGuiRender() override {}
+	void imGuiRender() override;
 
 private:
 	jny::OrthographicCameraController	m_orthoCameraCtrl;
