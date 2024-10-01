@@ -65,7 +65,7 @@ void Renderer2D::init()
 	delete[] indices;
 
 	auto& shaderLib = Application::subsystems().st<ShaderLibrary>();
-	m_textureShader = shaderLib.load("resources/assets/shaders/Texture.glsl");
+	m_textureShader = shaderLib.load("../resources/assets/shaders/Texture.glsl");
 	m_textureShader->bind();
 
 	m_whiteTexture = Texture2D::create(1, 1);

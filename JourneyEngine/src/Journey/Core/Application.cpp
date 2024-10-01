@@ -20,7 +20,7 @@ namespace jny
 
 std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
-Application::Application()
+Application::Application(const std::string_view& name)
 {
 	PROFILE_FUNC;
 
@@ -32,7 +32,7 @@ Application::Application()
 	s_sHolder->add<Random>();
 
 	//-- Create main window
-	s_sHolder->add<Window>(WindowData("Journey", 1200, 800));
+	s_sHolder->add<Window>(WindowData(name, 1200, 800));
 
 	//-- Prepare to process events
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)

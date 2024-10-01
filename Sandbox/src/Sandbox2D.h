@@ -26,6 +26,4 @@ private:
 	glm::vec2							m_sampledTexture = { 2.0f, 3.0f };
 
 	jny::Ref<jny::Texture2D>			m_checkerboardTexture;
-
-	float								m_FPS = 0.0f;
 };

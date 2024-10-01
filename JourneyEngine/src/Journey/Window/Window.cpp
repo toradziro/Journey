@@ -87,7 +87,7 @@ void Window::init()
 		m_data.m_width, m_data.m_height, m_data.m_title);
 
 	m_window = glfwCreateWindow(static_cast<int>(m_data.m_width), static_cast<int>(m_data.m_height),
-		m_data.m_title.c_str(), nullptr, nullptr);
+		m_data.m_title.data(), nullptr, nullptr);
 
 	//-- Init for context will be called inside its constructor
 	m_context = std::make_unique<OpenGlContext>(m_window);
