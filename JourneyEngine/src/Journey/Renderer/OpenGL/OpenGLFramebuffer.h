@@ -19,7 +19,8 @@ public:
 
 	virtual uint32_t colorAttachment() override { return m_colorAttachment; }
 
-	virtual void resize() override;
+	virtual void resize(const glm::vec2& size) override;
+	void invalidate();
 
 private:
 	FramebufferSpecs	m_specs;

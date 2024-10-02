@@ -32,3 +32,5 @@
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
 #include "Journey/Core/Profiling/Utils.h"
+
+#include "Journey/Core/ImGuiIntegration.h"

@@ -1,7 +1,9 @@
 #include "jnypch.h"
 #include "OpenGLFramebuffer.h"
 #include "Journey/Core/Core.h"
+
 #include <GLAD/glad.h>
+#include <glm/glm.hpp>
 
 namespace jny
 {
@@ -9,17 +11,21 @@ namespace jny
 OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecs& specs) :
 	m_specs(specs)
 {
-	resize();
+	invalidate();
 }
 
 OpenGLFramebuffer::~OpenGLFramebuffer()
 {
 	glDeleteFramebuffers(1, &m_rendererId);
+
+	glDeleteTextures(1, &m_colorAttachment);
+	glDeleteTextures(1, &m_depthAttachment);
 }
 
 void OpenGLFramebuffer::bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_rendererId);
+	glViewport(0, 0, m_specs.m_width, m_specs.m_height);
 }
 
 void OpenGLFramebuffer::unbind()
@@ -27,8 +33,24 @@ void OpenGLFramebuffer::unbind()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void OpenGLFramebuffer::resize()
+void OpenGLFramebuffer::resize(const glm::vec2& size)
 {
+	m_specs.m_width = static_cast<uint32_t>(size.x);
+	m_specs.m_height = static_cast<uint32_t>(size.y);
+
+	invalidate();
+}
+
+void OpenGLFramebuffer::invalidate()
+{
+	if (m_rendererId != 0)
+	{
+		glDeleteFramebuffers(1, &m_rendererId);
+
+		glDeleteTextures(1, &m_colorAttachment);
+		glDeleteTextures(1, &m_depthAttachment);
+	}
+
 	glCreateFramebuffers(1, &m_rendererId);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_rendererId);
 	

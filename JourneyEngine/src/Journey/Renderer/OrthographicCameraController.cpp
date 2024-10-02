@@ -75,6 +75,12 @@ void OrthographicCameraController::onEvent(Event& event)
 		});
 }
 
+void OrthographicCameraController::resize(float width, float height)
+{
+	m_aspectRatio = width / height;
+	calculateView();
+}
+
 bool OrthographicCameraController::mouseScrolled(MouseScrolledEvent& e)
 {
 	PROFILE_FUNC;
@@ -89,8 +95,7 @@ bool OrthographicCameraController::mouseScrolled(MouseScrolledEvent& e)
 
 bool OrthographicCameraController::windowResized(WindowResizeEvent& e)
 {
-	m_aspectRatio = static_cast<float>(e.width()) / static_cast<float>(e.height());
-	calculateView();
+	resize(static_cast<float>(e.width()), static_cast<float>(e.height()));
 
 	return false;
 }

@@ -1,7 +1,6 @@
 #include "jnypch.h"
 #include "EditorLayer.h"
 
-#include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -127,15 +126,17 @@ void EditorLayer::imGuiRender()
 
 	ImGui::Begin("TstWindow");
 
-	//auto dpiScale = ImGui::GetWindowDpiScale();
-	//constexpr ImVec2 imageSize = { 320.0f, 180.0f };
-	//ImVec2 imageSizeScaled = { imageSize.x * dpiScale, imageSize.y * dpiScale };
-
 	if (ImGui::Begin("Viewport"))
 	{
-		auto size = ImGui::GetWindowSize();
+		ImVec2 regionSize = ImGui::GetContentRegionAvail();
+		if (regionSize != m_viewportSize)
+		{
+			m_viewportSize = regionSize;
+			m_framebuffer->resize({ m_viewportSize.x, m_viewportSize.y });
+			m_orthoCameraCtrl.resize(m_viewportSize.x, m_viewportSize.y);
+		}
 		uint64_t frameId = static_cast<uint64_t>(m_framebuffer->colorAttachment());
-		ImGui::Image(reinterpret_cast<void*>(frameId), size, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
+		ImGui::Image(reinterpret_cast<void*>(frameId), m_viewportSize, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
 		ImGui::End();
 	}
 

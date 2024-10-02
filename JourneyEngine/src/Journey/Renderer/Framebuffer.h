@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace jny
 {
 
@@ -16,12 +18,14 @@ struct FramebufferSpecs
 class Framebuffer : public ReferenceCounter
 {
 public:
+	virtual ~Framebuffer() = default;
+
 	virtual const FramebufferSpecs& specs() const = 0;
 	virtual FramebufferSpecs& specs() = 0;
 
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
-	virtual void resize() = 0;
+	virtual void resize(const glm::vec2& size) = 0;
 
 	virtual uint32_t colorAttachment() = 0;
 

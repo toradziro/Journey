@@ -34,6 +34,8 @@ public:
 
 	const OrthographicCamera& camera() const { return m_camera; }
 
+	void resize(float width, float height);
+
 private:
 	bool mouseScrolled(MouseScrolledEvent& e);
 	bool windowResized(WindowResizeEvent& e);

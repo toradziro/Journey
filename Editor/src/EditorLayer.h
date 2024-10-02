@@ -2,6 +2,8 @@
 
 #include "Journey.h"
 
+struct ImVec2;
+
 namespace jny
 {
 
@@ -25,6 +27,7 @@ private:
 	QuadCfg							m_backgroundQuad;
 
 	glm::vec2						m_sampledTexture = { 2.0f, 3.0f };
+	ImVec2							m_viewportSize = { 0.0f, 0.0f };
 
 	Ref<Texture2D>					m_checkerboardTexture;
 	Ref<Framebuffer>				m_framebuffer;

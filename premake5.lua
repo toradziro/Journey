@@ -1,6 +1,6 @@
 workspace "JourneyEngine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Editor"
 
 	configurations
 	{
