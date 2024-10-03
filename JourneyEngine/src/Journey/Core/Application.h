@@ -49,9 +49,9 @@ public:
 
 	void disableImGui() { m_imGuiEnabled = false; }
 	void enableImGui() { m_imGuiEnabled = true; }
+	ImGuiLayer* imGuiLayer() { return m_imGuiLayer; }
 
 	static float aspectRatio();
-
 	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr, "Don't know this systyem"); return *s_sHolder; }
 
 private:

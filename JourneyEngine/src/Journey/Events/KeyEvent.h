@@ -24,7 +24,7 @@ class  KeyPressedEvent : public KeyEvent
 {
 public:
 	KeyPressedEvent(int keyCode, int repeatCount) : KeyEvent(keyCode), m_repeatCount(repeatCount) {}
-	~KeyPressedEvent() {}
+	~KeyPressedEvent() = default;
 
 	EVENT_CLASS_TYPE(KeyPressed)
 
@@ -42,7 +42,7 @@ class  KeyReleasedEvent : public KeyEvent
 {
 public:
 	KeyReleasedEvent(int keyCode) : KeyEvent(keyCode) {}
-	~KeyReleasedEvent() {}
+	~KeyReleasedEvent() = default;
 
 	std::string toString() const override
 	{
@@ -56,7 +56,7 @@ class  KeyTypedEvent : public KeyEvent
 {
 public:
 	KeyTypedEvent(int keyCode) : KeyEvent(keyCode) {}
-	~KeyTypedEvent() {}
+	~KeyTypedEvent() = default;
 
 	std::string toString() const override
 	{

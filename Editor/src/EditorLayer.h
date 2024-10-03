@@ -10,7 +10,7 @@ namespace jny
 class EditorLayer : public Layer
 {
 public:
-	EditorLayer();
+	EditorLayer(Application* app);
 
 	virtual void attach() override;
 	virtual void detach() override;
@@ -31,9 +31,11 @@ private:
 
 	Ref<Texture2D>					m_checkerboardTexture;
 	Ref<Framebuffer>				m_framebuffer;
+	Application*					m_app;
 
 	float							m_FPS = 0.0f;
 	bool							m_tstOpt = false;
+	bool							m_viewportActive = false;
 };
 
 }

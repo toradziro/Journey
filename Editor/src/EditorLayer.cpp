@@ -8,10 +8,13 @@
 namespace jny
 {
 
-EditorLayer::EditorLayer() :
+EditorLayer::EditorLayer(Application* app) :
 	Layer("EditorLayers"),
-	m_orthoCameraCtrl(Application::aspectRatio())
-{ }
+	m_orthoCameraCtrl(Application::aspectRatio()),
+	m_app(app)
+{
+	JNY_ASSERT(app != nullptr, "Use valid app");
+}
 
 void EditorLayer::attach()
 {
@@ -41,7 +44,10 @@ void EditorLayer::update(float dt)
 {
 	PROFILE_FUNC;
 
-	m_orthoCameraCtrl.update(dt);
+	if (m_viewportActive)
+	{
+		m_orthoCameraCtrl.update(dt);
+	}
 	m_particleSystem.update(dt);
 
 	auto& rc = Application::subsystems().st<RenderCommand>();
@@ -56,6 +62,7 @@ void EditorLayer::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
+	if (m_viewportActive)
 	{
 		auto& iPoll = Application::subsystems().st<InputPoll>();
 		if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
@@ -120,7 +127,6 @@ void EditorLayer::imGuiRender()
 			ImGui::MenuItem("TstOpt", NULL, &m_tstOpt);
 			ImGui::EndMenu();
 		}
-
 		ImGui::EndMainMenuBar();
 	}
 
@@ -128,6 +134,9 @@ void EditorLayer::imGuiRender()
 
 	if (ImGui::Begin("Viewport"))
 	{
+		m_viewportActive = ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
+		m_app->imGuiLayer()->setUpMarkEventsProcessed(!m_viewportActive);
+
 		ImVec2 regionSize = ImGui::GetContentRegionAvail();
 		if (regionSize != m_viewportSize)
 		{

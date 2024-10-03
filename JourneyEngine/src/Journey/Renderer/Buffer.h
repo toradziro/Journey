@@ -115,7 +115,7 @@ public:
 	{
 		calculateOffsetAndStride();
 	}
-	~BufferLayout() {}
+	~BufferLayout() = default;
 
 	inline const LayoutData& elements() const { return m_elements; }
 	inline uint32_t stride() const { return m_stride; }

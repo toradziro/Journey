@@ -9,7 +9,7 @@ class  MouseButtonPressedEvent : public Event
 {
 public:
 	MouseButtonPressedEvent(int button) : m_buttonCode(button) { }
-	~MouseButtonPressedEvent() {}
+	~MouseButtonPressedEvent() = default;
 
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::MouseButton | Event::EventCategory::Input)
 	EVENT_CLASS_TYPE(MouseButtonPressed)
@@ -25,7 +25,7 @@ class  MouseButtonReleasedEvent : public Event
 {
 public:
 	MouseButtonReleasedEvent(int button) : m_buttonCode(button) { }
-	~MouseButtonReleasedEvent() {}
+	~MouseButtonReleasedEvent() = default;
 
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::MouseButton | Event::EventCategory::Input)
 	EVENT_CLASS_TYPE(MouseButtonReleased)
@@ -44,7 +44,7 @@ public:
 	EVENT_CLASS_TYPE(MouseMoved)
 
 	MouseMovedEvent(float x, float y) : m_mouseX(x), m_mouseY(y) {}
-	~MouseMovedEvent() {}
+	~MouseMovedEvent() = default;
 
 	std::string toString() const override { return fmt::format("MouseMovedEvent: x: {}, y: {}", m_mouseX, m_mouseY); }
 	
@@ -63,7 +63,7 @@ public:
 	EVENT_CLASS_TYPE(MouseScrolled)
 
 	MouseScrolledEvent(float offsetX, float offsetY) : m_offsetX(offsetX), m_offsetY(offsetY) {}
-	~MouseScrolledEvent() {}
+	~MouseScrolledEvent() = default;
 
 	std::string toString() const override { return fmt::format("MouseScrolledEvent: offsetX: {}, offsetY: {}", m_offsetX, m_offsetY); }
 

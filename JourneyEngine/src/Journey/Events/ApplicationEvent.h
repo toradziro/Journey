@@ -8,8 +8,8 @@ namespace jny
 class  WindowCloseEvent : public Event
 {
 public:
-	WindowCloseEvent() {}
-	~WindowCloseEvent() {}
+	WindowCloseEvent() = default;
+	~WindowCloseEvent() = default;
 
 	EVENT_CATEGORY(Event::EventCategory::Application)
 	EVENT_CLASS_TYPE(WindowClose)
@@ -22,7 +22,7 @@ public:
 	EVENT_CLASS_TYPE(WindowResize)
 
 	WindowResizeEvent(int width, int height) : m_width(width), m_height(height) { }
-	~WindowResizeEvent() {}
+	~WindowResizeEvent() = default;
 
 	inline int width() const { return m_width; }
 	inline int height() const { return m_height; }
@@ -37,8 +37,8 @@ private:
 class  ApplicationTickEvent : public Event
 {
 public:
-	ApplicationTickEvent() {}
-	~ApplicationTickEvent() {}
+	ApplicationTickEvent() = default;
+	~ApplicationTickEvent() = default;
 
 	EVENT_CATEGORY(Event::EventCategory::Application)
 	EVENT_CLASS_TYPE(AppTick)
@@ -47,8 +47,8 @@ public:
 class  ApplicationUpdateEvent : public Event
 {
 public:
-	ApplicationUpdateEvent() {}
-	~ApplicationUpdateEvent() {}
+	ApplicationUpdateEvent() = default;
+	~ApplicationUpdateEvent() = default;
 
 	EVENT_CATEGORY(Event::EventCategory::Application)
 	EVENT_CLASS_TYPE(AppUpdate)
@@ -57,8 +57,8 @@ public:
 class  ApplicationRenderEvent : public Event
 {
 public:
-	ApplicationRenderEvent() {}
-	~ApplicationRenderEvent() {}
+	ApplicationRenderEvent() = default;
+	~ApplicationRenderEvent() = default;
 
 	EVENT_CATEGORY(Event::EventCategory::Application)
 	EVENT_CLASS_TYPE(AppRender)

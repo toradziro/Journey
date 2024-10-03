@@ -16,8 +16,10 @@ struct MousePos
 class  InputPoll : public ISingleton
 {
 	JNY_SINGLETON_TYPE(InputPoll)
+
 public:
-	~InputPoll() {}
+	~InputPoll() = default;
+
 	bool keyPressed(int keycode);
 	bool mouseButtonPressed(int button);
 	MousePos mousePos();

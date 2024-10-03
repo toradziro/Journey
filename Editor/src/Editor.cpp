@@ -18,7 +18,7 @@ Editor::Editor() :
 	Application("Editor")
 {
 	//disableImGui();
-	this->pushLayer<EditorLayer>();
+	this->pushLayer<EditorLayer>(static_cast<Application*>(this));
 }
 
 Editor::~Editor()

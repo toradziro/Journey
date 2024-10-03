@@ -77,41 +77,44 @@ void ImGuiLayer::detach()
 
 void ImGuiLayer::onEvent(Event& e)
 {
-	ImGuiIO& io = ImGui::GetIO();
-	EventDispatcher dispatcher(e);
-	if (io.WantCaptureMouse)
+	if (m_markEventsProcessed)
 	{
-		dispatcher.dispatch<MouseButtonPressedEvent>([this](MouseButtonPressedEvent&)
-			{
-				return true;
-			});
-		dispatcher.dispatch<MouseButtonReleasedEvent>([this](MouseButtonReleasedEvent&)
-			{
-				return true;
-			});
-		dispatcher.dispatch<MouseMovedEvent>([this](MouseMovedEvent&)
-			{
-				return true;
-			});
-		dispatcher.dispatch<MouseScrolledEvent>([this](MouseScrolledEvent&)
-			{
-				return true;
-			});
-	}
-	if (io.WantCaptureKeyboard)
-	{
-		dispatcher.dispatch<KeyPressedEvent>([this](KeyPressedEvent&)
-			{
-				return true;
-			});
-		dispatcher.dispatch<KeyReleasedEvent>([this](KeyReleasedEvent&)
-			{
-				return true;
-			});
-		dispatcher.dispatch<KeyTypedEvent>([this](KeyTypedEvent&)
-			{
-				return true;
-			});
+		ImGuiIO& io = ImGui::GetIO();
+		EventDispatcher dispatcher(e);
+		if (io.WantCaptureMouse)
+		{
+			dispatcher.dispatch<MouseButtonPressedEvent>([this](MouseButtonPressedEvent&)
+				{
+					return true;
+				});
+			dispatcher.dispatch<MouseButtonReleasedEvent>([this](MouseButtonReleasedEvent&)
+				{
+					return true;
+				});
+			dispatcher.dispatch<MouseMovedEvent>([this](MouseMovedEvent&)
+				{
+					return true;
+				});
+			dispatcher.dispatch<MouseScrolledEvent>([this](MouseScrolledEvent&)
+				{
+					return true;
+				});
+		}
+		if (io.WantCaptureKeyboard)
+		{
+			dispatcher.dispatch<KeyPressedEvent>([this](KeyPressedEvent&)
+				{
+					return true;
+				});
+			dispatcher.dispatch<KeyReleasedEvent>([this](KeyReleasedEvent&)
+				{
+					return true;
+				});
+			dispatcher.dispatch<KeyTypedEvent>([this](KeyTypedEvent&)
+				{
+					return true;
+				});
+		}
 	}
 }
 
