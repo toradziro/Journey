@@ -66,6 +66,8 @@ void ImGuiLayer::attach()
 
 	ImGui_ImplGlfw_InitForOpenGL(win.rawWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 410");
+
+	//-- TODO: Docking layout loading
 }
 
 void ImGuiLayer::detach()
