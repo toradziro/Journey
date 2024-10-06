@@ -21,7 +21,6 @@ public:
 
 private:
 	OrthographicCameraController	m_orthoCameraCtrl;
-	ParticleSystem					m_particleSystem;
 
 	QuadCfg							m_quad;
 	QuadCfg							m_backgroundQuad;

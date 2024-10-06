@@ -7,8 +7,9 @@
 #include "Journey/Core/InputPoll.h"
 #include "Journey/ImGui/ImGuiLayer.h"
 #include "Journey/Window/Window.h"
-#include "Journey/Renderer/Renderer2D.h"
+#include "Journey/Core/fs/VirtualFileSystem.h"
 
+#include "Journey/Renderer/Renderer2D.h"
 #include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/RenderCommand.h"
 
@@ -30,6 +31,8 @@ Application::Application(const std::string_view& name)
 	s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_INIT_FILE);
 
 	s_sHolder->add<Random>();
+	s_sHolder->add<VFS>();
+	s_sHolder->st<VFS>().init();
 
 	//-- Create main window
 	s_sHolder->add<Window>(WindowData(name, 1200, 800));

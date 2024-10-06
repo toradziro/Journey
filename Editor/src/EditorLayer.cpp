@@ -18,6 +18,8 @@ EditorLayer::EditorLayer(Application* app) :
 
 void EditorLayer::attach()
 {
+	const auto& vfs = Application::subsystems().st<VFS>();
+
 	FramebufferSpecs specs;
 	specs.m_width = 1200;
 	specs.m_height = 800;
@@ -26,13 +28,13 @@ void EditorLayer::attach()
 	m_quad.m_textureOpt = TextureOpt::Textured;
 	m_quad.m_position = { -1.0f, -1.0f, 0.5f };
 	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
-	m_quad.m_texture = Texture2D::create("../resources/assets/textures/bomb.png");
+	m_quad.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
 
 	m_backgroundQuad.m_textureOpt = TextureOpt::Textured;
 	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.4f };
 	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
 	m_backgroundQuad.m_tilingFactor = 10.0f;
-	m_backgroundQuad.m_texture = Texture2D::create("../resources/assets/textures/checkerboard.png");
+	m_backgroundQuad.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/checkerboard.png").string());
 	m_checkerboardTexture = m_backgroundQuad.m_texture;
 
 	m_orthoCameraCtrl.setZoomLevel(2.0f);
@@ -48,7 +50,6 @@ void EditorLayer::update(float dt)
 	{
 		m_orthoCameraCtrl.update(dt);
 	}
-	m_particleSystem.update(dt);
 
 	auto& rc = Application::subsystems().st<RenderCommand>();
 	auto& renderer2D = Application::subsystems().st<Renderer2D>();
@@ -62,46 +63,12 @@ void EditorLayer::update(float dt)
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
-	if (m_viewportActive)
-	{
-		auto& iPoll = Application::subsystems().st<InputPoll>();
-		if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
-		{
-			auto [mouseX, mouseY] = iPoll.mousePos();
-
-			auto winSizeW = Application::subsystems().st<Window>().width();
-			auto winSizeH = Application::subsystems().st<Window>().height();
-
-			const auto& cameraBounds = m_orthoCameraCtrl.bounds();
-			const auto& cameraPos = m_orthoCameraCtrl.cameraPosition();
-
-			float x = ((mouseX / winSizeW) * cameraBounds.width() - cameraBounds.width() * 0.5f) + cameraPos.x;
-			float y = ((mouseY / winSizeH) * cameraBounds.height() - cameraBounds.height() * 0.5f) + cameraPos.y;
-
-			ParticleProps prop = {};
-			prop.m_position = { x, y, 0.3f };
-			prop.m_velocity = { 0.0f, -0.5f, 0.0f };
-			prop.m_velocityVariation = { 3.0f, 1.0f };
-			prop.m_colorBegin = { 0.8f, 0.2f, 0.0f, 1.0f };
-			prop.m_colorEnd = { 0.2f, 0.8f, 0.0f, 1.0f };
-			prop.m_sizeBegin = 0.2f;
-			prop.m_sizeEnd = 0.05f;
-			prop.m_sizeVariation = 0.1f;
-			prop.m_lifeTime = 3.0f;
-
-			for (int i = 0; i < 5; ++i)
-			{
-				m_particleSystem.emit(prop);
-			}
-		}
-	}
-
 	renderer2D.drawQuad(m_backgroundQuad);
-	m_particleSystem.render();
 	renderer2D.drawQuad(m_quad);
 
 	//-- End rendering
 	renderer2D.endScene();
+
 	m_framebuffer->unbind();
 
 	m_FPS = 1.0f / dt;
@@ -141,7 +108,7 @@ void EditorLayer::imGuiRender()
 		if (regionSize != m_viewportSize)
 		{
 			m_viewportSize = regionSize;
-			m_framebuffer->resize({ m_viewportSize.x, m_viewportSize.y });
+			m_framebuffer->resize({ std::max(m_viewportSize.x, 1.0f), std::max(m_viewportSize.y, 1.0f) });
 			m_orthoCameraCtrl.resize(m_viewportSize.x, m_viewportSize.y);
 		}
 		uint64_t frameId = static_cast<uint64_t>(m_framebuffer->colorAttachment());

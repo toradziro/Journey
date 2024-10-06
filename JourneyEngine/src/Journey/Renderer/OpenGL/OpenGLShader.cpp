@@ -1,6 +1,8 @@
 #include "jnypch.h"
 #include "OpenGLShader.h"
 #include "Journey/Log/Log.h"
+#include "Journey/Core/Application.h"
+#include "Journey/Core/fs/VirtualFileSystem.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -53,8 +55,9 @@ std::string glTypeToStr(GLuint type)
 OpenGLShader::OpenGLShader(const std::string& path)
 	: m_path(path)
 {
-	std::string shaderSource = readFile(path);
-	auto splitSources = preprocess(shaderSource);
+	Ref<File> shaderSource = Application::subsystems().st<VFS>().loadFile(path);
+	std::string sourceAsStr = shaderSource->toString();
+	auto splitSources = preprocess(sourceAsStr);
 	compile(splitSources);
 }
 
@@ -80,39 +83,6 @@ void OpenGLShader::bind() const
 void OpenGLShader::unbind() const
 {
 	glUseProgram(0);
-}
-
-std::string OpenGLShader::readFile(const std::string& path)
-{
-	std::string result;
-	std::ifstream in(path, std::ios::in | std::ios::binary);
-
-	if (in)
-	{
-		//-- move to EOF
-		in.seekg(0, std::ios::end);
-		size_t size = in.tellg();
-		if (size != -1)
-		{
-			//-- reserve space for the file size
-			result.resize(size);
-			//-- move back to the start of file
-			in.seekg(0, std::ios::beg);
-			//-- read a file
-			in.read(result.data(), result.size());
-			in.close();
-		}
-		else
-		{
-			JNY_ASSERT(false, "Can't read shader: '{}'", path);
-		}
-	}
-	else
-	{
-		JNY_ASSERT(false, "Can't open shader: '{}'", path);
-	}
-	
-	return result;
 }
 
 OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)

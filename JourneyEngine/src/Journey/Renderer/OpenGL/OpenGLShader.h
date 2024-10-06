@@ -34,7 +34,6 @@ public:
 private:
 	using ShaderSources = std::unordered_map<GLenum, std::string>;
 
-	std::string readFile(const std::string& path);
 	ShaderSources preprocess(const std::string& source);
 	void compile(const ShaderSources& source);
 
