@@ -24,7 +24,7 @@ struct ParticleProps
 class ParticleSystem
 {
 public:
-	static constexpr inline uint32_t C_MAX_PARTICLES_IN_A_BATCH = 10000;
+	static constexpr inline uint32_t C_MAX_PARTICLES_IN_A_BATCH = 500;
 
 	ParticleSystem();
 

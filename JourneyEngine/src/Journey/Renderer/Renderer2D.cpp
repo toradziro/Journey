@@ -167,7 +167,7 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 	if (textureIndex == C_INVALID_INDEX)
 	{
 		textureIndex = m_currTextureSlot;
-		m_textureSlots[textureIndex] = textureToUse;
+		m_textureSlots[m_currTextureSlot] = textureToUse;
 		++m_currTextureSlot;
 	}
 

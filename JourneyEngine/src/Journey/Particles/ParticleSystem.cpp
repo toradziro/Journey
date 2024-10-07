@@ -36,7 +36,6 @@ void ParticleSystem::update(float dt)
 				particle.m_size = { lifetimeSize, lifetimeSize };
 
 				particle.m_lifeRemaning -= dt;
-				particle.m_lifeRemaning -= dt;
 				particle.m_position += particle.m_velocity * dt;
 				particle.m_rotation += 0.01f * dt;
 			}
