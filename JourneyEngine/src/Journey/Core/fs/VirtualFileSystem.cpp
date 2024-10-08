@@ -18,7 +18,7 @@ void VFS::init()
 	fs_path currentPath = std::filesystem::current_path();
 	
 	std::string currPathAsStr = currentPath.string();
-	uint32_t rootIt = currPathAsStr.find(C_ENGINE_NAME);
+	u32 rootIt = currPathAsStr.find(C_ENGINE_NAME);
 	if (rootIt == std::string::npos)
 	{
 		JNY_ASSERT(false, "Tried to load outside working repository - won't work");

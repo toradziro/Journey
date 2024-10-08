@@ -10,13 +10,13 @@
 namespace jny
 {
 
-enum class TextureOpt : uint8_t
+enum class TextureOpt : u8
 {
 	FlatColored = 0,
 	Textured,
 };
 
-enum class RotateOpt : uint8_t
+enum class RotateOpt : u8
 {
 	Rotated = 0,
 	AlignedByAxices
@@ -46,10 +46,10 @@ class Renderer2D : public ISingleton
 {
 	JNY_SINGLETON_TYPE(Renderer2D)
 public:
-	constexpr static	uint32_t C_MAX_QUADS_IN_A_BATCH = 10000;
-	constexpr static	uint32_t C_MAX_TEXTURE_SLOTS = 32;
-	constexpr static	uint32_t C_VERTICES_IN_QUAD = 4;
-	constexpr static	uint32_t C_INDICES_IN_QUAD = 6;
+	constexpr static	u32 C_MAX_QUADS_IN_A_BATCH = 10000;
+	constexpr static	u32 C_MAX_TEXTURE_SLOTS = 32;
+	constexpr static	u32 C_VERTICES_IN_QUAD = 4;
+	constexpr static	u32 C_INDICES_IN_QUAD = 6;
 
 	void init();
 	void shutdown();
@@ -81,11 +81,11 @@ private:
 
 	struct Statistic
 	{
-		uint32_t	m_drawCalls = 0;
-		uint32_t	m_quadCount = 0;
+		u32	m_drawCalls = 0;
+		u32	m_quadCount = 0;
 
-		uint32_t vertexCount() const { return m_quadCount * C_VERTICES_IN_QUAD; }
-		uint32_t indexCount() const { return m_quadCount * C_INDICES_IN_QUAD; }
+		u32 vertexCount() const { return m_quadCount * C_VERTICES_IN_QUAD; }
+		u32 indexCount() const { return m_quadCount * C_INDICES_IN_QUAD; }
 	};
 
 	std::array<Ref<Texture2D>, C_MAX_TEXTURE_SLOTS>	m_textureSlots;
@@ -103,8 +103,8 @@ private:
 	QuadVertex*										m_quadVertexBase = nullptr;
 	QuadVertex*										m_quadVertexPtr = nullptr;
 
-	uint32_t										m_currQuadIndex = 0;
-	uint32_t										m_currTextureSlot = 1; //-- 0 is for white texture
+	u32										m_currQuadIndex = 0;
+	u32										m_currTextureSlot = 1; //-- 0 is for white texture
 };
 
 } //-- jny

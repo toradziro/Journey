@@ -14,13 +14,13 @@ struct WindowData
 	using EventCallbackFn = std::function<void(Event&)>;
 
 	std::string_view	m_title;
-	uint32_t			m_width;
-	uint32_t			m_height;
+	u32			m_width;
+	u32			m_height;
 	float				m_dpiScale = 1.0f;
 	EventCallbackFn		m_eventCallback;
 	bool				m_vsyncEnabled = true;
 
-	WindowData(std::string_view title, uint32_t width, uint32_t height) :
+	WindowData(std::string_view title, u32 width, u32 height) :
 		m_title(title), m_width(width), m_height(height)
 	{
 	}
@@ -41,8 +41,8 @@ public:
 
 	void update();
 
-	uint32_t height() const { return m_data.m_height; }
-	uint32_t width() const { return m_data.m_width; }
+	u32 height() const { return m_data.m_height; }
+	u32 width() const { return m_data.m_width; }
 
 	void setEventCallback(const WindowData::EventCallbackFn& callback) { m_data.m_eventCallback = callback; }
 	

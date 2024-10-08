@@ -39,7 +39,7 @@ Ref<Texture2D> Texture2D::create(const std::string& texturePath)
 	return tex;
 }
 
-Ref<Texture2D> Texture2D::create(uint32_t width, uint32_t height)
+Ref<Texture2D> Texture2D::create(u32 width, u32 height)
 {
 	auto rendererApi = Application::subsystems().st<Renderer>().API();
 	Ref<Texture2D> tex = nullptr;

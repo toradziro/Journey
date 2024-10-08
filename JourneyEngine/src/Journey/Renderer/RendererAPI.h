@@ -12,7 +12,7 @@ class RendererAPI
 public:
 	virtual ~RendererAPI() = default;
 
-	enum class API : uint8_t
+	enum class API : u8
 	{
 		None = 0,
 		OpenGL
@@ -20,12 +20,12 @@ public:
 
 	virtual void init() = 0;
 
-	virtual void windowResized(uint32_t width, uint32_t height) = 0;
+	virtual void windowResized(u32 width, u32 height) = 0;
 
 	virtual void clear() = 0;
 	virtual void setClearColor(const glm::vec4& color) = 0;
 
-	virtual void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0) = 0;
+	virtual void drawIndexed(const Ref<VertexArray>& vertexArray, u32 count = 0) = 0;
 
 	inline API api() const { return m_API; }
 	void setApi(API api) { m_API = api; }

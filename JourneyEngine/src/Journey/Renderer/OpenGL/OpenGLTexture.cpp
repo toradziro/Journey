@@ -10,9 +10,9 @@ namespace jny
 OpenGLTexture2D::OpenGLTexture2D(const std::string& texturePath)
 	: m_path(texturePath)
 {
-	int32_t width = 0;
-	int32_t height = 0;
-	int32_t channelsInFile = 0;
+	i32 width = 0;
+	i32 height = 0;
+	i32 channelsInFile = 0;
 
 	//-- stbi_uc is a read image
 	stbi_set_flip_vertically_on_load(1);
@@ -43,7 +43,7 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& texturePath)
 	stbi_image_free(data);
 }
 
-OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
+OpenGLTexture2D::OpenGLTexture2D(u32 width, u32 height)
 	: m_width(width), m_height(height)
 {
 	//-- For internal format we need to set bits per channel to know how deep color is
@@ -68,22 +68,22 @@ OpenGLTexture2D::~OpenGLTexture2D()
 	glDeleteTextures(1, &m_rendererId);
 }
 
-uint32_t OpenGLTexture2D::width() const
+u32 OpenGLTexture2D::width() const
 {
 	return m_width;
 }
 
-uint32_t OpenGLTexture2D::height() const
+u32 OpenGLTexture2D::height() const
 {
 	return m_height;
 }
 
-void OpenGLTexture2D::setData(void* data, uint32_t size)
+void OpenGLTexture2D::setData(void* data, u32 size)
 {
 	glTextureSubImage2D(m_rendererId, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
 }
 
-void OpenGLTexture2D::bind(uint32_t slot) const
+void OpenGLTexture2D::bind(u32 slot) const
 {
 	glBindTextureUnit(slot, m_rendererId);
 }

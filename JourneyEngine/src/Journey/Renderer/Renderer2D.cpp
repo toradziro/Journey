@@ -11,9 +11,9 @@
 namespace
 {
 
-constexpr	uint32_t C_MAX_VERTICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Renderer2D::C_VERTICES_IN_QUAD;
-constexpr	uint32_t C_MAX_INDICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Renderer2D::C_INDICES_IN_QUAD;
-constexpr	uint32_t C_INVALID_INDEX = std::numeric_limits<uint32_t>::max();
+constexpr	u32 C_MAX_VERTICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Renderer2D::C_VERTICES_IN_QUAD;
+constexpr	u32 C_MAX_INDICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Renderer2D::C_INDICES_IN_QUAD;
+constexpr	u32 C_INVALID_INDEX = std::numeric_limits<u32>::max();
 
 } //-- unnamed
 
@@ -44,10 +44,10 @@ void Renderer2D::init()
 	m_quadVertexBase = new QuadVertex[C_MAX_VERTICES];
 
 	//-- Indices & Index buffer
-	uint32_t* indices = new uint32_t[C_MAX_INDICES];
+	u32* indices = new u32[C_MAX_INDICES];
 	
-	uint32_t offset = 0;
-	for (uint32_t i = 0; i < C_MAX_INDICES; i += C_INDICES_IN_QUAD)
+	u32 offset = 0;
+	for (u32 i = 0; i < C_MAX_INDICES; i += C_INDICES_IN_QUAD)
 	{
 		indices[i] = offset;
 		indices[i + 1] = offset + 1;
@@ -69,12 +69,12 @@ void Renderer2D::init()
 	m_textureShader->bind();
 
 	m_whiteTexture = Texture2D::create(1, 1);
-	uint32_t whiteTextureData = 0xffffffff;
+	u32 whiteTextureData = 0xffffffff;
 	m_whiteTexture->setData(static_cast<void*>(&whiteTextureData), sizeof(whiteTextureData));
 	m_textureSlots[0] = m_whiteTexture;
 
-	int32_t samplers[C_MAX_TEXTURE_SLOTS]{};
-	for (uint32_t i = 0; i < C_MAX_TEXTURE_SLOTS; ++i)
+	i32 samplers[C_MAX_TEXTURE_SLOTS]{};
+	for (u32 i = 0; i < C_MAX_TEXTURE_SLOTS; ++i)
 	{
 		samplers[i] = i;
 	}
@@ -110,8 +110,8 @@ void Renderer2D::endScene()
 {
 	PROFILE_FUNC;
 
-	uint32_t dataSize = static_cast<uint32_t>(
-		reinterpret_cast<uint8_t*>(m_quadVertexPtr) - reinterpret_cast<uint8_t*>(m_quadVertexBase)
+	u32 dataSize = static_cast<u32>(
+		reinterpret_cast<u8*>(m_quadVertexPtr) - reinterpret_cast<u8*>(m_quadVertexBase)
 	);
 	m_quadVertexBuffer->setData(m_quadVertexBase, dataSize);
 
@@ -122,7 +122,7 @@ void Renderer2D::flush()
 {
 	PROFILE_FUNC;
 
-	for (uint32_t i = 0; i < m_currTextureSlot; ++i)
+	for (u32 i = 0; i < m_currTextureSlot; ++i)
 	{
 		m_textureSlots[i]->bind(i);
 	}
@@ -154,8 +154,8 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 	}
 	JNY_ASSERT(textureToUse.raw() != nullptr, "Set texture on the quad");
 
-	uint32_t textureIndex = C_INVALID_INDEX;
-	for (uint32_t i = 0; i < m_currTextureSlot; ++i)
+	u32 textureIndex = C_INVALID_INDEX;
+	for (u32 i = 0; i < m_currTextureSlot; ++i)
 	{
 		if (m_textureSlots[i]->rendererId() == textureToUse->rendererId())
 		{
@@ -182,7 +182,7 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 
 	const float textureIndexCastedToFloat = static_cast<float>(textureIndex);
 
-	uint8_t idx = 0;
+	u8 idx = 0;
 	std::ranges::for_each(m_quadVertexPosition, [&](const auto& pos)
 		{
 			m_quadVertexPtr->m_position = transform * pos;

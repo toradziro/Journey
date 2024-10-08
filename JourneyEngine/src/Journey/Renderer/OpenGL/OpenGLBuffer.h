@@ -8,37 +8,37 @@ namespace jny
 class OpenGLVertexBuffer : public VertexBuffer
 {
 public:
-	OpenGLVertexBuffer(uint32_t size);
-	OpenGLVertexBuffer(float* vertices, uint32_t count);
+	OpenGLVertexBuffer(u32 size);
+	OpenGLVertexBuffer(float* vertices, u32 count);
 	virtual ~OpenGLVertexBuffer();
 
 	virtual void bind() const override;
 	virtual void unbind() const override;
 
-	virtual void setData(const void* data, uint32_t size) override;
+	virtual void setData(const void* data, u32 size) override;
 
 	virtual void setLayout(const BufferLayout& layout) override;
 	virtual const BufferLayout& layout() const override { return m_layout; }
 
 private:
 	BufferLayout	m_layout;
-	uint32_t		m_rendererId = 0;
+	u32		m_rendererId = 0;
 };
 
 class OpenGLIndexBuffer : public IndexBuffer
 {
 public:
-	OpenGLIndexBuffer(uint32_t* indices, uint32_t size);
+	OpenGLIndexBuffer(u32* indices, u32 size);
 	virtual ~OpenGLIndexBuffer();
 
 	virtual void bind() const override;
 	virtual void unbind() const override;
 
-	virtual uint32_t count() const override { return m_indicesCount; }
+	virtual u32 count() const override { return m_indicesCount; }
 
 private:
-	uint32_t m_rendererId = 0;
-	uint32_t m_indicesCount = 0;
+	u32 m_rendererId = 0;
+	u32 m_indicesCount = 0;
 };
 
 }

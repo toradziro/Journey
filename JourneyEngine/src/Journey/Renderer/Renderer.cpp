@@ -16,7 +16,7 @@ void Renderer::init()
 	Application::subsystems().st<RenderCommand>().init();
 }
 
-void Renderer::windowResized(uint32_t width, uint32_t height)
+void Renderer::windowResized(u32 width, u32 height)
 {
 	PROFILE_FUNC;
 

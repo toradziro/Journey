@@ -18,7 +18,7 @@ class WindowResizeEvent;
 
 class  Application
 {
-	static constexpr uint8_t		C_PROFILING_FRAMES = 20;
+	static constexpr u8		C_PROFILING_FRAMES = 20;
 	static constexpr const char*	C_PROFILE_INIT_FILE = "init.json";
 	static constexpr const char*	C_PROFILE_MAIN_LOOP_FILE = "main_loop.json";
 
@@ -57,7 +57,7 @@ public:
 private:
 	LayerStack	m_layers;
 	ImGuiLayer*	m_imGuiLayer = nullptr;
-	uint8_t		m_ciclingCount = 0;
+	u8		m_ciclingCount = 0;
 	bool		m_running = true;
 	bool		m_minimized = false;
 	bool		m_imGuiEnabled = true;

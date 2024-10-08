@@ -5,7 +5,7 @@
 namespace jny
 {
 
-enum class ShaderDataType : uint8_t
+enum class ShaderDataType : u8
 {
 	Bool,
 	Int,
@@ -27,7 +27,7 @@ enum class ShaderDataType : uint8_t
 namespace
 {
 
-uint32_t shaderDataTypeSize(ShaderDataType type)
+u32 shaderDataTypeSize(ShaderDataType type)
 {
 	switch (type)
 	{
@@ -52,7 +52,7 @@ uint32_t shaderDataTypeSize(ShaderDataType type)
 	return 0;
 }
 
-uint32_t componentsCount(ShaderDataType type)
+u32 componentsCount(ShaderDataType type)
 {
 	switch (type)
 	{
@@ -85,11 +85,11 @@ struct LayoutElement
 	//-- Crossplatfom way of describing layout variable type
 	ShaderDataType	m_type = ShaderDataType::None;
 	//-- Size in bytes of current layout element - need to collect offset & stride
-	uint32_t		m_size;
+	u32		m_size;
 	//-- Offset from the start of layout to current layout element
-	uint32_t		m_offset;
+	u32		m_offset;
 	//-- Amount of elements in a layout - vec3 - 3 floats
-	uint32_t		m_count;
+	u32		m_count;
 	//-- Is normalized data
 	bool			m_normilized;
 
@@ -118,7 +118,7 @@ public:
 	~BufferLayout() = default;
 
 	inline const LayoutData& elements() const { return m_elements; }
-	inline uint32_t stride() const { return m_stride; }
+	inline u32 stride() const { return m_stride; }
 
 	LayoutDataIterator begin() { return m_elements.begin(); }
 	LayoutDataIterator end() { return m_elements.end(); }
@@ -129,7 +129,7 @@ public:
 private:
 	void calculateOffsetAndStride()
 	{
-		uint32_t offset = 0;
+		u32 offset = 0;
 		
 		std::ranges::for_each(m_elements, [&offset](auto& element)
 			{
@@ -143,7 +143,7 @@ private:
 	//-- All layouts set for VertexArray
 	LayoutData m_elements;
 	//-- Full size of layout in bytes
-	uint32_t m_stride = 0;
+	u32 m_stride = 0;
 };
 
 class VertexBuffer : public ReferenceCounter
@@ -154,13 +154,13 @@ public:
 	virtual void bind() const = 0;
 	virtual void unbind() const = 0;
 
-	virtual void setData(const void* data, uint32_t size) = 0;
+	virtual void setData(const void* data, u32 size) = 0;
 
 	virtual void setLayout(const BufferLayout& layout) = 0;
 	virtual const BufferLayout& layout() const = 0;
 
-	static VertexBuffer* create(uint32_t count);
-	static VertexBuffer* create(float* vertices, uint32_t count);
+	static VertexBuffer* create(u32 count);
+	static VertexBuffer* create(float* vertices, u32 count);
 };
 
 class IndexBuffer : public ReferenceCounter
@@ -171,9 +171,9 @@ public:
 	virtual void bind() const = 0;
 	virtual void unbind() const = 0;
 
-	virtual uint32_t count() const = 0;
+	virtual u32 count() const = 0;
 
-	static IndexBuffer* create(uint32_t* indices, uint32_t count);
+	static IndexBuffer* create(u32* indices, u32 count);
 };
 
 } //-- jny

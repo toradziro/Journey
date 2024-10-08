@@ -47,8 +47,8 @@ void EditorLayer::update(float dt)
 	PROFILE_FUNC;
 
 	const auto& specs = m_framebuffer->specs();
-	if (static_cast<uint32_t>(m_viewportSize.x) != specs.m_width
-		|| static_cast<uint32_t>(m_viewportSize.y) != specs.m_height)
+	if (static_cast<u32>(m_viewportSize.x) != specs.m_width
+		|| static_cast<u32>(m_viewportSize.y) != specs.m_height)
 	{
 		m_framebuffer->resize({ std::max(m_viewportSize.x, 1.0f), std::max(m_viewportSize.y, 1.0f) });
 		m_orthoCameraCtrl.resize(m_viewportSize.x, m_viewportSize.y);
@@ -115,7 +115,7 @@ void EditorLayer::imGuiRender()
 		ImVec2 regionSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = regionSize;
 
-		uint64_t frameId = static_cast<uint64_t>(m_framebuffer->colorAttachment());
+		u64 frameId = static_cast<u64>(m_framebuffer->colorAttachment());
 		ImGui::Image(reinterpret_cast<void*>(frameId), m_viewportSize, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
 		ImGui::End();
 	}

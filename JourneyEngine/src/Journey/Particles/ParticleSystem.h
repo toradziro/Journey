@@ -24,7 +24,7 @@ struct ParticleProps
 class ParticleSystem
 {
 public:
-	static constexpr inline uint32_t C_MAX_PARTICLES_IN_A_BATCH = 500;
+	static constexpr inline u32 C_MAX_PARTICLES_IN_A_BATCH = 500;
 
 	ParticleSystem();
 
@@ -51,13 +51,13 @@ private:
 	};
 
 	std::vector<Particle>	m_particlePool;
-	uint32_t				m_poolIndex = C_MAX_PARTICLES_IN_A_BATCH - 1;
+	u32				m_poolIndex = C_MAX_PARTICLES_IN_A_BATCH - 1;
 
-	uint32_t				m_quadVA = 0;
+	u32				m_quadVA = 0;
 	Ref<Shader>				m_particleShader = nullptr;
-	int32_t					m_particleShaderViewProj = 0;
-	int32_t					m_particleShaderTransform = 0;
-	int32_t					m_particleShaderColor = 0;
+	i32					m_particleShaderViewProj = 0;
+	i32					m_particleShaderTransform = 0;
+	i32					m_particleShaderColor = 0;
 };
 
 } //-- jny

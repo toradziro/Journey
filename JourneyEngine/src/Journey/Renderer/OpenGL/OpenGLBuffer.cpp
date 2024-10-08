@@ -7,14 +7,14 @@ namespace jny
 {
 
 //------------------------------------------------------------------------------------ Vertex buffer
-OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+OpenGLVertexBuffer::OpenGLVertexBuffer(u32 size)
 {
 	glCreateBuffers(1, &m_rendererId);
 	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 	glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 }
 
-OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t count)
+OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, u32 count)
 {
 	glCreateBuffers(1, &m_rendererId);
 	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
@@ -36,7 +36,7 @@ void OpenGLVertexBuffer::unbind() const
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void OpenGLVertexBuffer::setData(const void* data, uint32_t size)
+void OpenGLVertexBuffer::setData(const void* data, u32 size)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
@@ -48,13 +48,13 @@ void OpenGLVertexBuffer::setLayout(const BufferLayout& layout)
 }
 
 //------------------------------------------------------------------------------------ Index buffer
-OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
+OpenGLIndexBuffer::OpenGLIndexBuffer(u32* indices, u32 count)
 	: m_indicesCount(count)
 {
 	glCreateBuffers(1, &m_rendererId);
 	glBindBuffer(GL_ARRAY_BUFFER, m_rendererId);
 	//-- Elements macro is indices in OpenGl
-	glBufferData(GL_ARRAY_BUFFER, m_indicesCount * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_indicesCount * sizeof(u32), indices, GL_STATIC_DRAW);
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer()

@@ -11,7 +11,7 @@ void RenderCommand::init()
 	m_RendererAPI->init();
 }
 
-void RenderCommand::windowResized(uint32_t width, uint32_t height)
+void RenderCommand::windowResized(u32 width, u32 height)
 {
 	m_RendererAPI->windowResized(width, height);
 }

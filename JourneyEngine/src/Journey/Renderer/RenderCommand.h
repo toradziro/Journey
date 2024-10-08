@@ -14,11 +14,11 @@ class RenderCommand : public ISingleton
 public:
 	void init();
 
-	void windowResized(uint32_t width, uint32_t height);
+	void windowResized(u32 width, u32 height);
 
 	void createRenderer(RendererAPI::API api);
 
-	void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t size = 0)
+	void drawIndexed(const Ref<VertexArray>& vertexArray, u32 size = 0)
 	{
 		PROFILE_FUNC;
 

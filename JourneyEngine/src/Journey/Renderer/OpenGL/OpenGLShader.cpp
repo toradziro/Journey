@@ -222,16 +222,16 @@ void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 
 void OpenGLShader::uploadUniformInt(const int value, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 
 	glUniform1i(location, value);
 }
 
-void OpenGLShader::uploadUniformIntArray(const int32_t* values, uint32_t count, std::string_view name) const
+void OpenGLShader::uploadUniformIntArray(const i32* values, u32 count, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 
@@ -240,7 +240,7 @@ void OpenGLShader::uploadUniformIntArray(const int32_t* values, uint32_t count, 
 
 void OpenGLShader::uploadUniformFloat(const float value, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 
@@ -249,7 +249,7 @@ void OpenGLShader::uploadUniformFloat(const float value, std::string_view name) 
 
 void OpenGLShader::uploadUniformFloat2(const glm::vec2& value, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 
@@ -258,7 +258,7 @@ void OpenGLShader::uploadUniformFloat2(const glm::vec2& value, std::string_view 
 
 void OpenGLShader::uploadUniformFloat3(const glm::vec3& value, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 
@@ -267,7 +267,7 @@ void OpenGLShader::uploadUniformFloat3(const glm::vec3& value, std::string_view 
 
 void OpenGLShader::uploadUniformFloat4(const glm::vec4& value, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 
@@ -276,7 +276,7 @@ void OpenGLShader::uploadUniformFloat4(const glm::vec4& value, std::string_view 
 
 void OpenGLShader::uploadUniformMat3(const glm::mat3& value, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 
@@ -285,7 +285,7 @@ void OpenGLShader::uploadUniformMat3(const glm::mat3& value, std::string_view na
 
 void OpenGLShader::uploadUniformMat4(const glm::mat4& value, std::string_view name) const
 {
-	int32_t location = glGetUniformLocation(m_rendererId, name.data());
+	i32 location = glGetUniformLocation(m_rendererId, name.data());
 
 	JNY_ASSERT(location != -1, "invalid location");
 

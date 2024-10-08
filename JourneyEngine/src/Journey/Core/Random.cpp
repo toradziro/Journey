@@ -11,7 +11,7 @@ Random::Random()
 
 float Random::genFloat()
 {
-	constexpr uint32_t C_MAX_VAL = std::numeric_limits<uint32_t>::max();
+	constexpr u32 C_MAX_VAL = std::numeric_limits<u32>::max();
 
 	return static_cast<float>(m_distribution(m_randomEngine)) / static_cast<float>(C_MAX_VAL);
 }

@@ -14,13 +14,13 @@ class Texture : public ReferenceCounter
 public:
 	virtual ~Texture() = default;
 
-	virtual uint32_t width() const = 0;
-	virtual uint32_t height() const = 0;
+	virtual u32 width() const = 0;
+	virtual u32 height() const = 0;
 
-	virtual void setData(void* data, uint32_t size) = 0;
+	virtual void setData(void* data, u32 size) = 0;
 
-	virtual void bind(uint32_t slot = 0) const = 0;
-	virtual uint32_t rendererId() const = 0;
+	virtual void bind(u32 slot = 0) const = 0;
+	virtual u32 rendererId() const = 0;
 };
 
 class Texture2D : public Texture
@@ -29,7 +29,7 @@ public:
 	virtual ~Texture2D() = default;
 
 	static Ref<Texture2D> create(const std::string& texturePath);
-	static Ref<Texture2D> create(uint32_t width, uint32_t height);
+	static Ref<Texture2D> create(u32 width, u32 height);
 };
 
 class SubTexture2D : public ReferenceCounter

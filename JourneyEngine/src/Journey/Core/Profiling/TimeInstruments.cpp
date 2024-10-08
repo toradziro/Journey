@@ -21,8 +21,8 @@ void InstrumentTimerScope::stop()
 {
 	TimePoint endPoint = std::chrono::high_resolution_clock::now();
 
-	int64_t startMs = std::chrono::duration_cast<std::chrono::microseconds>(m_startPoint.time_since_epoch()).count();
-	int64_t endMs = std::chrono::duration_cast<std::chrono::microseconds>(endPoint.time_since_epoch()).count();
+	i64 startMs = std::chrono::duration_cast<std::chrono::microseconds>(m_startPoint.time_since_epoch()).count();
+	i64 endMs = std::chrono::duration_cast<std::chrono::microseconds>(endPoint.time_since_epoch()).count();
 
 	m_stopped = true;
 

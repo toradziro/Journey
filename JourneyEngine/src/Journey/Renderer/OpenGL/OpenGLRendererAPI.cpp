@@ -17,7 +17,7 @@ void OpenGLRendererAPI::init()
 	glDepthFunc(GL_LESS);
 }
 
-void OpenGLRendererAPI::windowResized(uint32_t width, uint32_t height)
+void OpenGLRendererAPI::windowResized(u32 width, u32 height)
 {
 	glViewport(0, 0, width, height);
 }
@@ -32,11 +32,11 @@ void OpenGLRendererAPI::setClearColor(const glm::vec4& color)
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count)
+void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, u32 count)
 {
 	PROFILE_FUNC;
 
-	uint32_t indiciesCount = count == 0 ? vertexArray->indexBuffer()->count() : count;
+	u32 indiciesCount = count == 0 ? vertexArray->indexBuffer()->count() : count;
 
 	vertexArray->bind();
 	//-- Elements is indexes!

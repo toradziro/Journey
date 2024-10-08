@@ -17,7 +17,7 @@ public:
 	virtual void bind() override;
 	virtual void unbind() override;
 
-	virtual uint32_t colorAttachment() override { return m_colorAttachment; }
+	virtual u32 colorAttachment() override { return m_colorAttachment; }
 
 	virtual void resize(const glm::vec2& size) override;
 	void invalidate();
@@ -25,9 +25,9 @@ public:
 private:
 	FramebufferSpecs	m_specs;
 
-	uint32_t			m_colorAttachment = 0;
-	uint32_t			m_depthAttachment = 0;
-	uint32_t			m_rendererId = 0;
+	u32			m_colorAttachment = 0;
+	u32			m_depthAttachment = 0;
+	u32			m_rendererId = 0;
 };
 
 }

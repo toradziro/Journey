@@ -35,8 +35,8 @@ void OpenGLFramebuffer::unbind()
 
 void OpenGLFramebuffer::resize(const glm::vec2& size)
 {
-	m_specs.m_width = static_cast<uint32_t>(size.x);
-	m_specs.m_height = static_cast<uint32_t>(size.y);
+	m_specs.m_width = static_cast<u32>(size.x);
+	m_specs.m_height = static_cast<u32>(size.y);
 
 	invalidate();
 }

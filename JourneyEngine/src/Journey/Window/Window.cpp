@@ -79,8 +79,8 @@ void Window::init()
 		glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &monScaleX, &monScaleY);
 
 		m_data.m_dpiScale = std::max<float>(monScaleX, monScaleY);
-		m_data.m_width = static_cast<uint32_t>(static_cast<float>(m_data.m_width) * m_data.m_dpiScale);
-		m_data.m_height = static_cast<uint32_t>(static_cast<float>(m_data.m_height) * m_data.m_dpiScale);
+		m_data.m_width = static_cast<u32>(static_cast<float>(m_data.m_width) * m_data.m_dpiScale);
+		m_data.m_height = static_cast<u32>(static_cast<float>(m_data.m_height) * m_data.m_dpiScale);
 	}
 
 	Log::info("Creating window: width '{}' height '{}' title '{}'",
@@ -142,7 +142,7 @@ void Window::init()
 			}
 		});
 
-	glfwSetCharCallback(m_window, [](GLFWwindow* window, uint32_t charcode)
+	glfwSetCharCallback(m_window, [](GLFWwindow* window, u32 charcode)
 		{
 			WindowData* data = getDataPtrFromWindow(window);
 			KeyTypedEvent event(charcode);

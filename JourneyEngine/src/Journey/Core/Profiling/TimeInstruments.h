@@ -6,8 +6,8 @@ class Instrumentor;
 
 struct ProfileResult
 {
-	int64_t				m_startPoint;
-	int64_t				m_endPoint;
+	i64				m_startPoint;
+	i64				m_endPoint;
 	std::string_view	m_name;
 };
 

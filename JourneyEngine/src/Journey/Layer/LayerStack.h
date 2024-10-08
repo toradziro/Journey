@@ -56,7 +56,7 @@ public:
 
 private:
 	std::vector<Layer*>		m_layers;
-	uint32_t				m_position = 0;
+	u32				m_position = 0;
 };
 
 #ifdef JNY_PLATFORM_WINDOWS

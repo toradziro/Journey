@@ -1,5 +1,7 @@
 #pragma once
 
+#include "jnypch.h"
+
 namespace jny
 {
 
@@ -18,13 +20,13 @@ public:
 		--m_counter;
 	}
 
-	uint32_t refCount() const
+	u32 refCount() const
 	{
 		return m_counter.load();
 	}
 
 private:
-	std::atomic<uint32_t> m_counter = 0;
+	std::atomic<u32> m_counter = 0;
 };
 
 template <typename T>

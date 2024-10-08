@@ -16,7 +16,7 @@ class  Event
 private:
 	friend class EventDispatcher;
 public:
-	enum class EventType : uint16_t
+	enum class EventType : u16
 	{
 		None = 0,
 		

@@ -18,7 +18,7 @@ public:
 	virtual const std::string& path() const = 0;
 
 	virtual void uploadUniformInt(const int value, std::string_view name) const = 0;
-	virtual void uploadUniformIntArray(const int32_t* values, uint32_t count, std::string_view name) const = 0;
+	virtual void uploadUniformIntArray(const i32* values, u32 count, std::string_view name) const = 0;
 
 	virtual void uploadUniformFloat(const float value, std::string_view name) const = 0;
 	virtual void uploadUniformFloat2(const glm::vec2& value, std::string_view name) const = 0;

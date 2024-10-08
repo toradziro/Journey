@@ -8,7 +8,7 @@
 namespace jny
 {
 
-VertexBuffer* VertexBuffer::create(float* vertices, uint32_t count)
+VertexBuffer* VertexBuffer::create(float* vertices, u32 count)
 {
 	auto rendererApi = Application::subsystems().st<Renderer>().API();
 	VertexBuffer* buffer = nullptr;
@@ -29,7 +29,7 @@ VertexBuffer* VertexBuffer::create(float* vertices, uint32_t count)
 	return buffer;
 }
 
-jny::VertexBuffer* VertexBuffer::create(uint32_t size)
+jny::VertexBuffer* VertexBuffer::create(u32 size)
 {
 	auto rendererApi = Application::subsystems().st<Renderer>().API();
 	VertexBuffer* buffer = nullptr;
@@ -50,7 +50,7 @@ jny::VertexBuffer* VertexBuffer::create(uint32_t size)
 	return buffer;
 }
 
-IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t count)
+IndexBuffer* IndexBuffer::create(u32* indices, u32 count)
 {
 	auto rendererApi = Application::subsystems().st<Renderer>().API();
 	IndexBuffer* buffer = nullptr;
