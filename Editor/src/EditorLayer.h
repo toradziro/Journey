@@ -32,7 +32,7 @@ private:
 	Ref<Framebuffer>				m_framebuffer;
 	Application*					m_app;
 
-	float							m_FPS = 0.0f;
+	f32								m_FPS = 0.0f;
 	bool							m_tstOpt = false;
 	bool							m_viewportActive = false;
 };

@@ -20,10 +20,7 @@ void EditorLayer::attach()
 {
 	const auto& vfs = Application::subsystems().st<VFS>();
 
-	FramebufferSpecs specs;
-	specs.m_width = 1200;
-	specs.m_height = 800;
-	m_framebuffer = Framebuffer::create(specs);
+	m_framebuffer = Framebuffer::create({});
 
 	m_quad.m_textureOpt = TextureOpt::Textured;
 	m_quad.m_position = { -1.0f, -1.0f, 0.5f };

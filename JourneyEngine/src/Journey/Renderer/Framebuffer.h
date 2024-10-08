@@ -7,8 +7,8 @@ namespace jny
 
 struct FramebufferSpecs
 {
-	u32	m_width = 0;
-	u32	m_height = 0;
+	u32	m_width = 1;
+	u32	m_height = 1;
 	u32	m_samples = 1;
 
 	//-- rendering on the screen or not
