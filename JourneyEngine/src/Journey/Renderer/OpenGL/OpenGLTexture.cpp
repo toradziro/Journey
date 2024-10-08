@@ -33,7 +33,7 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& texturePath)
 
 	//-- Parameters about how texture will be scaled during rendering if
 	//-- our object coordinates will be not in 1x1 space
-	glTextureParameteri(m_rendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(m_rendererId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTextureParameteri(m_rendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -57,7 +57,7 @@ OpenGLTexture2D::OpenGLTexture2D(u32 width, u32 height)
 
 	//-- Parameters about how texture will be scaled during rendering if
 	//-- our object coordinates will be not in 1x1 space
-	glTextureParameteri(m_rendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(m_rendererId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTextureParameteri(m_rendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTextureParameteri(m_rendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);

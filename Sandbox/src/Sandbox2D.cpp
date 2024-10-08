@@ -6,6 +6,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+namespace
+{
+
+constexpr f32 C_SPEED_ROTATION = 1.0f;
+
+}
+
 Sandbox2D::Sandbox2D() :
 	Layer("Sandbox2Ds"),
 	m_orthoCameraCtrl(jny::Application::aspectRatio())
@@ -99,6 +106,7 @@ void Sandbox2D::update(float dt)
 	m_particleSystem.render();
 
 	renderer2D.drawQuad(m_quad2);
+	m_quad.m_rotation += C_SPEED_ROTATION * dt;
 	renderer2D.drawQuad(m_quad);
 	renderer2D.drawQuad(m_quad1);
 

@@ -7,7 +7,7 @@ namespace jny
 
 struct QuadCfg;
 
-void sampleTexture(QuadCfg& cfg, glm::vec2 sampledTextureCoords, const glm::vec2& spriteSize, const glm::vec2& cellsFromAtlas);
+void subTexture(QuadCfg& cfg, glm::vec2 subTextureCoord, const glm::vec2& spriteSize, const glm::vec2& cellsFromAtlas);
 
 class Texture : public ReferenceCounter
 {
@@ -49,7 +49,6 @@ private:
 	Ref<Texture2D>	m_texture;
 
 	//-- Offset in a sprite sheet for one index
-	//glm::vec2		m_offset; 
 	glm::vec2		m_textureCoordinates[4];
 };
 

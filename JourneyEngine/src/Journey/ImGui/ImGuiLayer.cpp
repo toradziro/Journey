@@ -13,6 +13,15 @@
 #include "Journey/Events/MouseEvent.h"
 #include "Journey/Events/KeyEvent.h"
 #include "Journey/Core/Profiling/TimeInstruments.h"
+#include "Journey/Core/fs/VirtualFileSystem.h"
+
+namespace
+{
+
+constexpr std::string_view C_CONFIG_FILE_NAME = "imgui.ini";
+constexpr std::string_view C_DEFAULT_LAYOUT_PATH = "editor/default_layout.ini";
+
+}
 
 namespace jny
 {
@@ -31,6 +40,7 @@ void ImGuiLayer::attach()
 	PROFILE_FUNC;
 
 	IMGUI_CHECKVERSION();
+
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -67,8 +77,13 @@ void ImGuiLayer::attach()
 	ImGui_ImplGlfw_InitForOpenGL(win.rawWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 410");
 
-	//-- TODO: Docking layout loading
-
+	if (!std::filesystem::exists(C_CONFIG_FILE_NAME))
+	{
+		auto& vfs = Application::subsystems().st<VFS>();
+		Ref<File> defaultLayout = vfs.loadFile(C_DEFAULT_LAYOUT_PATH);
+		std::string layoutAsStr = defaultLayout->toString();
+		ImGui::LoadIniSettingsFromMemory(layoutAsStr.c_str(), layoutAsStr.size());
+	}
 }
 
 void ImGuiLayer::detach()
