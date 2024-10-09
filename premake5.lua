@@ -24,6 +24,7 @@ IncludeDir["GLFW"] = "JourneyEngine/vendor/GLFW/include"
 IncludeDir["GLAD"] = "JourneyEngine/vendor/GLAD/include"
 IncludeDir["glm"] = "JourneyEngine/vendor/glm"
 IncludeDir["imgui"] = "JourneyEngine/vendor/imgui/"
+IncludeDir["entt"] = "JourneyEngine/vendor/entt/include"
 
 group "Dependencies"
 	-- For window management
@@ -134,6 +135,7 @@ project "JourneyEngine"
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.entt}",
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/stb_image"
 	}
@@ -194,6 +196,7 @@ function SetupAppProject(name)
 			"%{IncludeDir.glm}",
 			"%{IncludeDir.GLFW}",
 			"%{IncludeDir.GLAD}",
+			"%{IncludeDir.entt}",
 			"JourneyEngine/src"
 		}
 
