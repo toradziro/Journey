@@ -143,14 +143,14 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 	Ref<Texture2D> textureToUse = nullptr;
 	switch (cfg.m_textureOpt)
 	{
-	case TextureOpt::FlatColored:
-		textureToUse = m_whiteTexture;
-		break;
-	case TextureOpt::Textured:
-		textureToUse = cfg.m_texture;
-		break;
-	default:
-		break;
+		case TextureOpt::FlatColored:
+			textureToUse = m_whiteTexture;
+			break;
+		case TextureOpt::Textured:
+			textureToUse = cfg.m_texture;
+			break;
+		default:
+			break;
 	}
 	JNY_ASSERT(textureToUse.raw() != nullptr, "Set texture on the quad");
 
@@ -171,14 +171,17 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 		++m_currTextureSlot;
 	}
 
-	glm::mat4 transform = glm::mat4(1.0f);
-	transform = glm::translate(transform, cfg.m_position);
-	//-- Rotation is hard operation, so don't use it unless it's really necessary
-	if (cfg.m_rotateOpt == RotateOpt::Rotated)
+	glm::mat4 transform = cfg.m_transform;
+	if (!cfg.m_transformCalculated)
 	{
-		transform = glm::rotate(transform, cfg.m_rotation, { 0.0f, 0.0f, 1.0f });
+		transform = glm::translate(transform, cfg.m_position);
+		//-- Rotation is hard operation, so don't use it unless it's really necessary
+		if (cfg.m_rotateOpt == RotateOpt::Rotated)
+		{
+			transform = glm::rotate(transform, cfg.m_rotation, { 0.0f, 0.0f, 1.0f });
+		}
+		transform = glm::scale(transform, { cfg.m_size.x, cfg.m_size.y, 0.0f });
 	}
-	transform = glm::scale(transform, { cfg.m_size.x, cfg.m_size.y, 0.0f });
 
 	const float textureIndexCastedToFloat = static_cast<float>(textureIndex);
 

@@ -1,5 +1,8 @@
 #include "jnypch.h"
 #include "Scene.h"
+#include "Components.h"
+#include "Journey/Core/Application.h"
+#include "Journey/Renderer/Renderer2D.h"
 
 #include <glm/glm.hpp>
 
@@ -42,16 +45,34 @@ auto view = m_registry.view<TransfomComponent>();
 namespace jny
 {
 
-Scene::Scene()
-{
-}
+Scene::Scene() {}
 
-Scene::~Scene()
-{
-}
+Scene::~Scene() {}
 
 void Scene::update(f32 dt)
 {
+	auto& renderer2D = Application::subsystems().st<Renderer2D>();
+
+	auto group = m_registry.group<TransformComponent, SpriteComponent>();
+	for (auto& e : group)
+	{
+		auto& transform = group.get<TransformComponent>(e);
+		auto& sprite = group.get<SpriteComponent>(e);
+
+		QuadCfg quad;
+		quad.m_color = sprite.m_color;
+		quad.m_position = sprite.m_position;
+		quad.m_size = sprite.m_size;
+		if (sprite.m_texture)
+		{
+			quad.m_textureOpt = TextureOpt::Textured;
+			quad.m_texture = sprite.m_texture;
+		}
+		quad.m_transform = transform.m_transform;
+		quad.m_transformCalculated = true;
+
+		renderer2D.drawQuad(quad);
+	}
 }
 
 entt::entity Scene::createEntity()
