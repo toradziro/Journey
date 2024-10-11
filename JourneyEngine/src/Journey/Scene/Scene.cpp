@@ -50,4 +50,13 @@ Scene::~Scene()
 {
 }
 
+void Scene::update(f32 dt)
+{
+}
+
+entt::entity Scene::createEntity()
+{
+	return m_registry.create();
+}
+
 } //-- jny
