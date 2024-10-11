@@ -35,14 +35,26 @@ void EditorLayer::attach()
 	m_checkerboardTexture = m_backgroundQuad.m_texture;
 
 	m_orthoCameraCtrl.setZoomLevel(2.0f);
+
+	SpriteComponent sampleSpriteComponent;
+	sampleSpriteComponent.m_position = { -1.0f, -1.0f, 0.5f };
+	sampleSpriteComponent.m_size = { 1.0f, 1.0f, 0.0f };
+	sampleSpriteComponent.m_color = { 0.2f, 0.8f, 0.0f, 0.7f };
+	//sampleSpriteComponent.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
+
+	m_scene = Ref<Scene>::create();
+	auto sampleEntity = m_scene->createEntity();
+	m_scene->registry().emplace<TransformComponent>(sampleEntity);
+	m_scene->registry().emplace<SpriteComponent>(sampleEntity, std::move(sampleSpriteComponent));
 }
 
 void EditorLayer::detach() { }
 
-void EditorLayer::update(float dt)
+void EditorLayer::update(f32 dt)
 {
 	PROFILE_FUNC;
 
+	//-- Resizing viewport
 	const auto& specs = m_framebuffer->specs();
 	if (static_cast<u32>(m_viewportSize.x) != specs.m_width
 		|| static_cast<u32>(m_viewportSize.y) != specs.m_height)
@@ -51,6 +63,7 @@ void EditorLayer::update(float dt)
 		m_orthoCameraCtrl.resize(m_viewportSize.x, m_viewportSize.y);
 	}
 
+	//-- Update camera
 	if (m_viewportActive)
 	{
 		m_orthoCameraCtrl.update(dt);
@@ -67,6 +80,9 @@ void EditorLayer::update(float dt)
 
 	//-- Start rendering
 	renderer2D.beginScene(m_orthoCameraCtrl.camera());
+
+	//-- Updating our scene
+	m_scene->update(dt);
 
 	renderer2D.drawQuad(m_backgroundQuad);
 	renderer2D.drawQuad(m_quad);
