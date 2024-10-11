@@ -20,31 +20,27 @@ void EditorLayer::attach()
 {
 	const auto& vfs = Application::subsystems().st<VFS>();
 
+	//-- Create frambuffer to draw in it instead of directly drawing on screen
 	m_framebuffer = Framebuffer::create({});
-
-	m_quad.m_textureOpt = TextureOpt::Textured;
-	m_quad.m_position = { -1.0f, -1.0f, 0.5f };
-	m_quad.m_size = { 1.0f, 1.0f, 0.0f };
-	m_quad.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
-
-	m_backgroundQuad.m_textureOpt = TextureOpt::Textured;
-	m_backgroundQuad.m_position = { 0.0f, 0.0f, -0.4f };
-	m_backgroundQuad.m_size = { 10.0f, 10.0f, 0.0f };
-	m_backgroundQuad.m_tilingFactor = 10.0f;
-	m_backgroundQuad.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/checkerboard.png").string());
-	m_checkerboardTexture = m_backgroundQuad.m_texture;
-
+	//-- Zoom level allows us to not be too close to object
 	m_orthoCameraCtrl.setZoomLevel(2.0f);
 
+	//-- Let's test creating entity and components
 	SpriteComponent sampleSpriteComponent;
 	sampleSpriteComponent.m_position = { -1.0f, -1.0f, 0.5f };
 	sampleSpriteComponent.m_size = { 1.0f, 1.0f, 0.0f };
 	sampleSpriteComponent.m_color = { 0.2f, 0.8f, 0.0f, 0.7f };
-	//sampleSpriteComponent.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
+	sampleSpriteComponent.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
 
+	TransformComponent sampleTransformComponent;
+	sampleTransformComponent.m_transform = glm::translate(sampleTransformComponent.m_transform, sampleSpriteComponent.m_position);
+	sampleTransformComponent.m_transform = glm::scale(sampleTransformComponent.m_transform,
+		{ sampleSpriteComponent.m_size.x, sampleSpriteComponent.m_size.y, 0.0f });
+
+	//-- In scene all entities are living
 	m_scene = Ref<Scene>::create();
 	auto sampleEntity = m_scene->createEntity();
-	m_scene->registry().emplace<TransformComponent>(sampleEntity);
+	m_scene->registry().emplace<TransformComponent>(sampleEntity, std::move(sampleTransformComponent));
 	m_scene->registry().emplace<SpriteComponent>(sampleEntity, std::move(sampleSpriteComponent));
 }
 
@@ -83,9 +79,6 @@ void EditorLayer::update(f32 dt)
 
 	//-- Updating our scene
 	m_scene->update(dt);
-
-	renderer2D.drawQuad(m_backgroundQuad);
-	renderer2D.drawQuad(m_quad);
 
 	//-- End rendering
 	renderer2D.endScene();
@@ -133,7 +126,7 @@ void EditorLayer::imGuiRender()
 		ImGui::End();
 	}
 
-	ImGui::DragFloat2("Position", glm::value_ptr(m_quad.m_position), 0.01f);
+	//ImGui::DragFloat2("Position", glm::value_ptr(m_quad.m_position), 0.01f);
 	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 
 	const auto& stat = Application::subsystems().st<Renderer2D>().stats();

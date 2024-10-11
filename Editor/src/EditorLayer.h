@@ -22,9 +22,6 @@ public:
 private:
 	OrthographicCameraController	m_orthoCameraCtrl;
 
-	QuadCfg							m_quad;
-	QuadCfg							m_backgroundQuad;
-
 	glm::vec2						m_sampledTexture = { 2.0f, 3.0f };
 	ImVec2							m_viewportSize = { 0.0f, 0.0f };
 
