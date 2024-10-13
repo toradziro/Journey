@@ -39,9 +39,9 @@ void EditorLayer::attach()
 
 	//-- In scene all entities are living
 	m_scene = Ref<Scene>::create();
-	auto sampleEntity = m_scene->createEntity();
-	m_scene->registry().emplace<TransformComponent>(sampleEntity, std::move(sampleTransformComponent));
-	m_scene->registry().emplace<SpriteComponent>(sampleEntity, std::move(sampleSpriteComponent));
+	m_sampleE = m_scene->createEntity();
+	m_sampleE.addComponent<SpriteComponent>(std::move(sampleSpriteComponent));
+	m_sampleE.component<TransformComponent>() = std::move(sampleTransformComponent);
 }
 
 void EditorLayer::detach() { }
@@ -126,7 +126,13 @@ void EditorLayer::imGuiRender()
 		ImGui::End();
 	}
 
-	//ImGui::DragFloat2("Position", glm::value_ptr(m_quad.m_position), 0.01f);
+	if (m_sampleE)
+	{
+		auto& sc = m_sampleE.component<SpriteComponent>();
+		//ImGui::DragFloat2("Position", glm::value_ptr(sc.m_position), 0.01f);
+		ImGui::ColorEdit4("Color", glm::value_ptr(sc.m_color));
+	}
+	
 	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 
 	const auto& stat = Application::subsystems().st<Renderer2D>().stats();
