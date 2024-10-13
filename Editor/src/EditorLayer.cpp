@@ -42,6 +42,14 @@ void EditorLayer::attach()
 	m_sampleE = m_scene->createEntity();
 	m_sampleE.addComponent<SpriteComponent>(std::move(sampleSpriteComponent));
 	m_sampleE.component<TransformComponent>() = std::move(sampleTransformComponent);
+	m_sampleE.component<EntityNameComponent>().m_name = "Sample Quad";
+
+	m_cameraE = m_scene->createEntity();
+	m_cameraE.addComponent<CameraComponent>(
+		glm::ortho(-Application::aspectRatio(), Application::aspectRatio(),
+		-1.0f, 1.0f, -1.0f, 1.0f), true);
+
+	m_sampleE.component<EntityNameComponent>().m_name = "Camera";
 }
 
 void EditorLayer::detach() { }
@@ -75,13 +83,13 @@ void EditorLayer::update(f32 dt)
 	rc.clear();
 
 	//-- Start rendering
-	renderer2D.beginScene(m_orthoCameraCtrl.camera());
+	//renderer2D.beginScene(m_orthoCameraCtrl.camera());
 
 	//-- Updating our scene
 	m_scene->update(dt);
 
 	//-- End rendering
-	renderer2D.endScene();
+	//renderer2D.endScene();
 
 	m_framebuffer->unbind();
 

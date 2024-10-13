@@ -51,27 +51,48 @@ Scene::~Scene() {}
 
 void Scene::update(f32 dt)
 {
-	auto& renderer2D = Application::subsystems().st<Renderer2D>();
+	Camera* mainCamera = nullptr;
+	glm::mat4* mainCameraTransform = nullptr;
 
-	auto group = m_registry.group<TransformComponent, SpriteComponent>();
-	for (auto& e : group)
+	//-- If we use group here - it will own TransFrom components
+	//-- So we use view instead to let take ownership of it in next cicle
+	for (auto& e : m_registry.view<TransformComponent, CameraComponent>())
 	{
-		auto& transform = group.get<TransformComponent>(e);
-		auto& sprite = group.get<SpriteComponent>(e);
-
-		QuadCfg quad;
-		quad.m_color = sprite.m_color;
-		quad.m_position = sprite.m_position;
-		quad.m_size = sprite.m_size;
-		if (sprite.m_texture)
+		auto& cam = m_registry.get<CameraComponent>(e);
+		if (cam.m_primer)
 		{
-			quad.m_textureOpt = TextureOpt::Textured;
-			quad.m_texture = sprite.m_texture;
+			mainCamera = &cam.m_camera;
+			mainCameraTransform = &m_registry.get<TransformComponent>(e).m_transform;
 		}
-		quad.m_transform = transform.m_transform;
-		quad.m_transformCalculated = true;
+	}
+	
+	if (mainCamera)
+	{
+		auto& renderer2D = Application::subsystems().st<Renderer2D>();
+		renderer2D.beginScene(*mainCamera, *mainCameraTransform);
 
-		renderer2D.drawQuad(quad);
+		auto group = m_registry.group<TransformComponent, SpriteComponent>();
+		for (auto& e : group)
+		{
+			auto& transform = group.get<TransformComponent>(e);
+			auto& sprite = group.get<SpriteComponent>(e);
+
+			QuadCfg quad;
+			quad.m_color = sprite.m_color;
+			quad.m_position = sprite.m_position;
+			quad.m_size = sprite.m_size;
+			if (sprite.m_texture)
+			{
+				quad.m_textureOpt = TextureOpt::Textured;
+				quad.m_texture = sprite.m_texture;
+			}
+			quad.m_transform = transform.m_transform;
+			quad.m_transformCalculated = true;
+
+			renderer2D.drawQuad(quad);
+		}
+
+		renderer2D.endScene();
 	}
 }
 
