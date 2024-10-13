@@ -3,6 +3,7 @@
 #include "Journey/Core/Reference.h"
 #include "Journey/Core/SingletonInterface.h"
 #include "Journey/Renderer/OrthographicCamera.h"
+#include "Journey/Renderer/Camera.h"
 #include "Journey/Renderer/VertexArray.h"
 #include "Journey/Renderer/Shader.h"
 #include "Journey/Renderer/Texture.h"
@@ -59,6 +60,7 @@ public:
 	void shutdown();
 
 	void beginScene(const OrthographicCamera& camera);
+	void beginScene(const Camera& camera, const glm::mat4& transform);
 	void endScene();
 
 	void flush();
@@ -93,7 +95,6 @@ private:
 	};
 
 	std::array<Ref<Texture2D>, C_MAX_TEXTURE_SLOTS>	m_textureSlots;
-	const OrthographicCamera*						m_currCamera;
 	//-- Need to apply transformation matrix to
 	glm::vec4										m_quadVertexPosition[C_VERTICES_IN_QUAD];
 

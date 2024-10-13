@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 #include <Journey/Renderer/Texture.h>
+#include <Journey/Renderer/Camera.h>
 
 namespace jny
 {
@@ -37,4 +38,15 @@ struct EntityNameComponent
 	std::string	m_name = {};
 };
 
-}
+struct CameraComponent
+{
+	CameraComponent() = default;
+	CameraComponent(const CameraComponent&) = default;
+	CameraComponent(const glm::mat4& proj, bool primer = false) :
+		m_camera(proj), m_primer(primer) {}
+
+	Camera	m_camera;
+	bool	m_primer;
+};
+
+} //-- jny

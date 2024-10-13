@@ -103,7 +103,22 @@ void Renderer2D::beginScene(const OrthographicCamera& camera)
 	m_quadVertexPtr = m_quadVertexBase;
 	m_currQuadIndex = 0;
 	m_currTextureSlot = 1;
-	m_currCamera = &camera;
+}
+
+void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
+{
+	PROFILE_FUNC;
+
+	const glm::mat4 viewProj = camera.projection() * glm::inverse(transform);
+
+	m_quadVertexArray->bind();
+
+	m_textureShader->bind();
+	m_textureShader->uploadUniformMat4(viewProj, "u_vpMatrix");
+
+	m_quadVertexPtr = m_quadVertexBase;
+	m_currQuadIndex = 0;
+	m_currTextureSlot = 1;
 }
 
 void Renderer2D::endScene()
