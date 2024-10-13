@@ -21,10 +21,7 @@ Editor::Editor() :
 	this->pushLayer<EditorLayer>(static_cast<Application*>(this));
 }
 
-Editor::~Editor()
-{
-
-}
+Editor::~Editor() {}
 
 Application* createApplication()
 {

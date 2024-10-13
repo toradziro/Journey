@@ -1,6 +1,8 @@
 #pragma once
 
 #include "entt.hpp"
+#include "Entity.h"
+#include "Components.h"
 
 namespace jny
 {
@@ -13,8 +15,13 @@ public:
 
 	void update(f32 dt);
 
-	entt::entity createEntity();
-	entt::registry& registry() { return m_registry; }
+	Entity createEntity()
+	{
+		Entity e = Entity(&m_registry);
+		e.addComponent<TransformComponent>();
+		e.addComponent<EntityNameComponent>();
+		return e;
+	}
 
 private:
 	//-- Scene entities and components storage

@@ -29,6 +29,7 @@
 #include "Journey/Renderer/Framebuffer.h"
 
 #include "Journey/Scene/Scene.h"
+#include "Journey/Scene/Entity.h"
 #include "Journey/Scene/Components.h"
 #include "Journey/Particles/ParticleSystem.h"
 
