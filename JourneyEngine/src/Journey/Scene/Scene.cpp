@@ -54,9 +54,8 @@ void Scene::update(f32 dt)
 	Camera* mainCamera = nullptr;
 	glm::mat4* mainCameraTransform = nullptr;
 
-	//-- If we use group here - it will own TransFrom components
-	//-- So we use view instead to let take ownership of it in next cicle
-	for (auto& e : m_registry.view<TransformComponent, CameraComponent>())
+	//-- get in group allows to avoid owning component
+	for (auto& e : m_registry.group<CameraComponent>(entt::get<TransformComponent>))
 	{
 		auto& cam = m_registry.get<CameraComponent>(e);
 		if (cam.m_primer)
@@ -71,7 +70,7 @@ void Scene::update(f32 dt)
 		auto& renderer2D = Application::subsystems().st<Renderer2D>();
 		renderer2D.beginScene(*mainCamera, *mainCameraTransform);
 
-		auto group = m_registry.group<TransformComponent, SpriteComponent>();
+		auto group = m_registry.group<SpriteComponent>(entt::get<TransformComponent>);
 		for (auto& e : group)
 		{
 			auto& transform = group.get<TransformComponent>(e);
