@@ -42,11 +42,10 @@ struct CameraComponent
 {
 	CameraComponent() = default;
 	CameraComponent(const CameraComponent&) = default;
-	CameraComponent(const glm::mat4& proj, bool primer = false) :
-		m_camera(proj), m_primer(primer) {}
 
-	Camera	m_camera;
-	bool	m_primer;
+	Camera	m_camera = {};
+	bool	m_primer = false;
+	bool	m_fixedAspectRatio = false;
 };
 
 } //-- jny

@@ -14,6 +14,7 @@ public:
 	~Scene();
 
 	void update(f32 dt);
+	void onViewportResize(u32 width, u32 height);
 
 	Entity createEntity()
 	{
@@ -26,6 +27,9 @@ public:
 private:
 	//-- Scene entities and components storage
 	entt::registry	m_registry;
+
+	u32				m_viewportWidth = 0;
+	u32				m_viewportHeight = 0;
 };
 
 } //-- jny
