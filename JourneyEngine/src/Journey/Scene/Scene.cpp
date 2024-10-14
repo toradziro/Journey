@@ -3,6 +3,7 @@
 #include "Components.h"
 #include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer2D.h"
+#include "Journey/Renderer/OrthographicCameraController.h"
 
 #include <glm/glm.hpp>
 
@@ -92,6 +93,21 @@ void Scene::update(f32 dt)
 		}
 
 		renderer2D.endScene();
+	}
+}
+
+void Scene::onViewportResize(u32 width, u32 height)
+{
+	m_viewportWidth = width;
+	m_viewportHeight = height;
+
+	for (auto& e : m_registry.view<CameraComponent>())
+	{
+		auto& cam = m_registry.get<CameraComponent>(e);
+		if (!cam.m_fixedAspectRatio)
+		{
+			cam.m_camera.setViewportSize(m_viewportWidth, m_viewportHeight);
+		}
 	}
 }
 

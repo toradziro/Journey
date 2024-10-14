@@ -20,8 +20,6 @@ public:
 	void imGuiRender() override;
 
 private:
-	OrthographicCameraController	m_orthoCameraCtrl;
-
 	glm::vec2						m_sampledTexture = { 2.0f, 3.0f };
 	ImVec2							m_viewportSize = { 0.0f, 0.0f };
 

@@ -10,7 +10,6 @@ namespace jny
 
 EditorLayer::EditorLayer(Application* app) :
 	Layer("EditorLayers"),
-	m_orthoCameraCtrl(Application::aspectRatio()),
 	m_app(app)
 {
 	JNY_ASSERT(app != nullptr, "Use valid app");
@@ -23,7 +22,6 @@ void EditorLayer::attach()
 	//-- Create frambuffer to draw in it instead of directly drawing on screen
 	m_framebuffer = Framebuffer::create({});
 	//-- Zoom level allows us to not be too close to object
-	m_orthoCameraCtrl.setZoomLevel(2.0f);
 
 	//-- Let's test creating entity and components
 	SpriteComponent sampleSpriteComponent;
@@ -45,11 +43,8 @@ void EditorLayer::attach()
 	m_sampleE.component<EntityNameComponent>().m_name = "Sample Quad";
 
 	m_cameraE = m_scene->createEntity();
-	m_cameraE.addComponent<CameraComponent>(
-		glm::ortho(-Application::aspectRatio(), Application::aspectRatio(),
-		-1.0f, 1.0f, -1.0f, 1.0f), true);
-
-	m_sampleE.component<EntityNameComponent>().m_name = "Camera";
+	m_cameraE.addComponent<CameraComponent>().m_primer = true;
+	m_cameraE.component<EntityNameComponent>().m_name = "Camera";
 }
 
 void EditorLayer::detach() { }
@@ -64,13 +59,13 @@ void EditorLayer::update(f32 dt)
 		|| static_cast<u32>(m_viewportSize.y) != specs.m_height)
 	{
 		m_framebuffer->resize({ std::max(m_viewportSize.x, 1.0f), std::max(m_viewportSize.y, 1.0f) });
-		m_orthoCameraCtrl.resize(m_viewportSize.x, m_viewportSize.y);
+		m_scene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
 	}
 
 	//-- Update camera
 	if (m_viewportActive)
 	{
-		m_orthoCameraCtrl.update(dt);
+		//-- update camera props? maybe make static method in OCC?
 	}
 
 	auto& rc = Application::subsystems().st<RenderCommand>();
@@ -82,14 +77,8 @@ void EditorLayer::update(f32 dt)
 	rc.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	rc.clear();
 
-	//-- Start rendering
-	//renderer2D.beginScene(m_orthoCameraCtrl.camera());
-
 	//-- Updating our scene
 	m_scene->update(dt);
-
-	//-- End rendering
-	//renderer2D.endScene();
 
 	m_framebuffer->unbind();
 
@@ -100,7 +89,8 @@ void EditorLayer::onEvent(Event& event)
 {
 	PROFILE_FUNC;
 
-	m_orthoCameraCtrl.onEvent(event);
+	//-- now process events in entities?
+	//m_orthoCameraCtrl.onEvent(event);
 }
 
 void EditorLayer::imGuiRender()
