@@ -5,6 +5,7 @@
 
 #include <Journey/Renderer/Texture.h>
 #include <Journey/Renderer/Camera.h>
+#include <Journey/Scene/Entity.h>
 
 namespace jny
 {
@@ -46,6 +47,30 @@ struct CameraComponent
 	Camera	m_camera = {};
 	bool	m_primer = false;
 	bool	m_fixedAspectRatio = false;
+};
+
+struct NativeScriptComponent
+{
+	template<typename T>
+	void bind(Entity entity)
+	{
+		static_assert(std::is_base_of<IScript, T>::value, "Fix lol.");
+		m_createScript = [entity]()
+			{
+				return static_cast<IScript*>(new T(entity));
+			};
+
+		m_destroyScript = [entity](NativeScriptComponent& nsc)
+			{
+				delete nsc.m_script;
+				nsc.m_script = nullptr;
+			};
+	}
+
+	std::function<IScript*()>					m_createScript;
+	std::function<void(NativeScriptComponent&)>	m_destroyScript;
+
+	IScript*									m_script = nullptr;
 };
 
 } //-- jny
