@@ -45,6 +45,46 @@ void EditorLayer::attach()
 	m_cameraE = m_scene->createEntity();
 	m_cameraE.addComponent<CameraComponent>().m_primer = true;
 	m_cameraE.component<EntityNameComponent>().m_name = "Camera";
+
+	class CameraController : public Script<CameraController>
+	{
+	public:
+		CameraController(Entity& entity) : Script(entity) {}
+
+		void create() {}
+
+		void update(f32 dt)
+		{
+			auto& tc = component<TransformComponent>();
+			float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * dt;
+
+			auto& inputPollSystem = Application::subsystems().st<jny::InputPoll>();
+			if (inputPollSystem.keyPressed(GLFW_KEY_D))
+			{
+				//m_cameraPos.x += cameraSpeedWithDeltaTime;
+			}
+			else if (inputPollSystem.keyPressed(GLFW_KEY_A))
+			{
+				//m_cameraPos.x -= cameraSpeedWithDeltaTime;
+			}
+
+			if (inputPollSystem.keyPressed(GLFW_KEY_W))
+			{
+				//m_cameraPos.y += cameraSpeedWithDeltaTime;
+			}
+			else if (inputPollSystem.keyPressed(GLFW_KEY_S))
+			{
+				//m_cameraPos.y -= cameraSpeedWithDeltaTime;
+			}
+		}
+
+		void detach() {}
+
+	private:
+		f32	m_cameraMoveSpeed = 5.0f;
+	};
+
+	m_cameraE.addComponent<NativeScriptComponent>().bind<CameraController>(m_cameraE);
 }
 
 void EditorLayer::detach() { }
