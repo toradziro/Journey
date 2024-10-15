@@ -46,39 +46,43 @@ void EditorLayer::attach()
 	m_cameraE.addComponent<CameraComponent>().m_primer = true;
 	m_cameraE.component<EntityNameComponent>().m_name = "Camera";
 
-	class CameraController : public Script<CameraController>
+	class CameraController : public Script
 	{
 	public:
-		CameraController(Entity& entity) : Script(entity) {}
+		CameraController(Entity entity) : Script(entity) {}
 
-		void create() {}
+		void attach() override {}
 
-		void update(f32 dt)
+		void update(f32 dt) override
 		{
 			auto& tc = component<TransformComponent>();
 			float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * dt;
+			auto& cameraPos = tc.m_transform[3];
 
-			auto& inputPollSystem = Application::subsystems().st<jny::InputPoll>();
-			if (inputPollSystem.keyPressed(GLFW_KEY_D))
+			auto& inputPoll = Application::subsystems().st<jny::InputPoll>();
+			if (inputPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 			{
-				//m_cameraPos.x += cameraSpeedWithDeltaTime;
-			}
-			else if (inputPollSystem.keyPressed(GLFW_KEY_A))
-			{
-				//m_cameraPos.x -= cameraSpeedWithDeltaTime;
-			}
+				if (inputPoll.keyPressed(GLFW_KEY_D))
+				{
+					cameraPos.x += cameraSpeedWithDeltaTime;
+				}
+				else if (inputPoll.keyPressed(GLFW_KEY_A))
+				{
+					cameraPos.x -= cameraSpeedWithDeltaTime;
+				}
 
-			if (inputPollSystem.keyPressed(GLFW_KEY_W))
-			{
-				//m_cameraPos.y += cameraSpeedWithDeltaTime;
-			}
-			else if (inputPollSystem.keyPressed(GLFW_KEY_S))
-			{
-				//m_cameraPos.y -= cameraSpeedWithDeltaTime;
+				if (inputPoll.keyPressed(GLFW_KEY_W))
+				{
+					cameraPos.y += cameraSpeedWithDeltaTime;
+				}
+				else if (inputPoll.keyPressed(GLFW_KEY_S))
+				{
+					cameraPos.y -= cameraSpeedWithDeltaTime;
+				}
 			}
 		}
 
-		void detach() {}
+		void detach() override {}
 
 	private:
 		f32	m_cameraMoveSpeed = 5.0f;

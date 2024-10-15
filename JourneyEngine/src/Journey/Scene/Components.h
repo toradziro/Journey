@@ -54,10 +54,10 @@ struct NativeScriptComponent
 	template<typename T>
 	void bind(Entity entity)
 	{
-		static_assert(std::is_base_of<IScript, T>::value, "Fix lol.");
+		static_assert(std::is_base_of<Script, T>::value, "Fix lol.");
 		m_createScript = [entity]()
 			{
-				return static_cast<IScript*>(new T(entity));
+				return static_cast<Script*>(new T(entity));
 			};
 
 		m_destroyScript = [entity](NativeScriptComponent& nsc)
@@ -67,10 +67,10 @@ struct NativeScriptComponent
 			};
 	}
 
-	std::function<IScript*()>					m_createScript;
+	std::function<Script*()>					m_createScript;
 	std::function<void(NativeScriptComponent&)>	m_destroyScript;
 
-	IScript*									m_script = nullptr;
+	Script*										m_script = nullptr;
 };
 
 } //-- jny
