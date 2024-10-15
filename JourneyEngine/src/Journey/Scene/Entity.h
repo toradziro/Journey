@@ -69,20 +69,10 @@ private:
 	entt::registry*	m_registry = nullptr;
 };
 
-class IScript
+class Script
 {
 public:
-	virtual ~IScript() = default;
-	virtual void attach() = 0;
-	virtual void detach() = 0;
-	virtual void update() = 0;
-};
-
-template<typename Derived>
-class Script : public IScript
-{
-public:
-	Script(Entity& entity) : m_entity(entity) {}
+	explicit Script(Entity entity) : m_entity(entity) {}
 	virtual ~Script() = default;
 
 	template<typename T>
@@ -91,23 +81,12 @@ public:
 		return m_entity.component<T>();
 	}
 
-	virtual void attach()
-	{
-		static_cast<Derived*>(this)->attach();
-	}
-
-	virtual void detach()
-	{
-		static_cast<Derived*>(this)->detach();
-	}
-
-	virtual void update()
-	{
-		static_cast<Derived*>(this)->update();
-	}
+	virtual void attach() {}
+	virtual void detach() {}
+	virtual void update(f32 dt) {}
 
 private:
-	Entity& m_entity;
+	Entity m_entity;
 };
 
 }

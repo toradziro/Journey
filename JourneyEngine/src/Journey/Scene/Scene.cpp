@@ -55,6 +55,15 @@ void Scene::update(f32 dt)
 	Camera* mainCamera = nullptr;
 	glm::mat4* mainCameraTransform = nullptr;
 
+	m_registry.view<NativeScriptComponent>().each([dt](auto entity, auto& nsc)
+		{
+			if (nsc.m_script == nullptr)
+			{
+				nsc.m_script = nsc.m_createScript();
+				nsc.m_script->attach();
+			}
+			nsc.m_script->update(dt);
+		});
 	//-- get in group allows to avoid owning component
 	for (auto& e : m_registry.group<CameraComponent>(entt::get<TransformComponent>))
 	{
