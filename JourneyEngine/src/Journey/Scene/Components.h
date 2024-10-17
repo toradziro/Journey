@@ -62,7 +62,7 @@ struct NativeScriptComponent
 
 		m_destroyScript = [entity](NativeScriptComponent& nsc)
 			{
-				delete nsc.m_script;
+				delete static_cast<T*>(nsc.m_script);
 				nsc.m_script = nullptr;
 			};
 	}
