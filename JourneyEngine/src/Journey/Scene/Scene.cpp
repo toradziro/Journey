@@ -48,7 +48,14 @@ namespace jny
 
 Scene::Scene() {}
 
-Scene::~Scene() {}
+Scene::~Scene()
+{
+	m_registry.view<NativeScriptComponent>().each([](auto entity, auto& nsc)
+		{
+			nsc.m_script->detach();
+			nsc.m_destroyScript(nsc);
+		});
+}
 
 void Scene::update(f32 dt)
 {
