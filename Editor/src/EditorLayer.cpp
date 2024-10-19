@@ -89,6 +89,9 @@ void EditorLayer::attach()
 	};
 
 	m_cameraE.addComponent<NativeScriptComponent>().bind<CameraController>(m_cameraE);
+
+	//-- Scene Panel
+	m_sceneHierarchyPanel.setScene(m_scene);
 }
 
 void EditorLayer::detach() { }
@@ -104,12 +107,6 @@ void EditorLayer::update(f32 dt)
 	{
 		m_framebuffer->resize({ std::max(m_viewportSize.x, 1.0f), std::max(m_viewportSize.y, 1.0f) });
 		m_scene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
-	}
-
-	//-- Update camera
-	if (m_viewportActive)
-	{
-		//-- update camera props? maybe make static method in OCC?
 	}
 
 	auto& rc = Application::subsystems().st<RenderCommand>();
@@ -153,8 +150,6 @@ void EditorLayer::imGuiRender()
 		ImGui::EndMainMenuBar();
 	}
 
-	ImGui::Begin("TstWindow");
-
 	if (ImGui::Begin("Viewport"))
 	{
 		m_viewportActive = ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
@@ -168,20 +163,16 @@ void EditorLayer::imGuiRender()
 		ImGui::End();
 	}
 
-	if (m_sampleE)
-	{
-		auto& sc = m_sampleE.component<SpriteComponent>();
-		//ImGui::DragFloat2("Position", glm::value_ptr(sc.m_position), 0.01f);
-		ImGui::ColorEdit4("Color", glm::value_ptr(sc.m_color));
-	}
+	m_sceneHierarchyPanel.updateUI();
 	
-	ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
-
-	const auto& stat = Application::subsystems().st<Renderer2D>().stats();
-	ImGui::Text("Draw calls: %d", stat.m_drawCalls);
-	ImGui::Text("Quads count: %d", stat.m_quadCount);
-
-	ImGui::End();
+	if (ImGui::Begin("Statistics info"))
+	{
+		ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
+		const auto& stat = Application::subsystems().st<Renderer2D>().stats();
+		ImGui::Text("Draw calls: %d", stat.m_drawCalls);
+		ImGui::Text("Quads count: %d", stat.m_quadCount);
+		ImGui::End();
+	}
 }
 
 }

@@ -24,6 +24,12 @@ public:
 		return e;
 	}
 
+	//-- This method can be used only in Scene Panel!
+	entt::registry& registry()
+	{
+		return m_registry;
+	}
+
 private:
 	//-- Scene entities and components storage
 	entt::registry	m_registry;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Journey.h"
+#include "Panels/SceneHierarchy.h"
 
 struct ImVec2;
 
@@ -20,11 +21,12 @@ public:
 	void imGuiRender() override;
 
 private:
+	SceneHierarchy					m_sceneHierarchyPanel;
+
 	glm::vec2						m_sampledTexture = { 2.0f, 3.0f };
 	ImVec2							m_viewportSize = { 0.0f, 0.0f };
 
 	Ref<Scene>						m_scene;
-	Ref<Texture2D>					m_checkerboardTexture;
 	Ref<Framebuffer>				m_framebuffer;
 	Application*					m_app;
 

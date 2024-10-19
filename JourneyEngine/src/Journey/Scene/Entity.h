@@ -19,6 +19,7 @@ protected:
 
 public:
 	Entity() = default;
+	Entity(entt::entity entity, entt::registry* registry) : m_entity(entity), m_registry(registry) {}
 	Entity(const Entity& other) : m_entity(other.m_entity), m_registry(other.m_registry) { }
 	Entity operator=(const Entity& other)
 	{
