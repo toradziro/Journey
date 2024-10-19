@@ -17,7 +17,6 @@ namespace jny
 Editor::Editor() :
 	Application("Editor")
 {
-	//disableImGui();
 	this->pushLayer<EditorLayer>(static_cast<Application*>(this));
 }
 

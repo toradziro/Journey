@@ -1,6 +1,5 @@
 #pragma once
 
-#include "jnypch.h"
 #include <glm/glm.hpp>
 
 #include <Journey/Renderer/Texture.h>
