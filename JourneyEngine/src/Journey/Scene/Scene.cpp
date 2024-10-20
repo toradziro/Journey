@@ -60,7 +60,7 @@ Scene::~Scene()
 void Scene::update(f32 dt)
 {
 	Camera* mainCamera = nullptr;
-	glm::mat4* mainCameraTransform = nullptr;
+	glm::mat4 mainCameraTransform = {};
 
 	m_registry.view<NativeScriptComponent>().each([dt](auto /*entity*/, auto& nsc)
 		{
@@ -78,14 +78,14 @@ void Scene::update(f32 dt)
 		if (cam.m_primer)
 		{
 			mainCamera = &cam.m_camera;
-			mainCameraTransform = &m_registry.get<TransformComponent>(e).m_transform;
+			mainCameraTransform = m_registry.get<TransformComponent>(e).transform();
 		}
 	}
 	
 	if (mainCamera)
 	{
 		auto& renderer2D = Application::subsystems().st<Renderer2D>();
-		renderer2D.beginScene(*mainCamera, *mainCameraTransform);
+		renderer2D.beginScene(*mainCamera, mainCameraTransform);
 
 		auto group = m_registry.group<SpriteComponent>(entt::get<TransformComponent>);
 		for (auto& e : group)
@@ -95,15 +95,12 @@ void Scene::update(f32 dt)
 
 			QuadCfg quad;
 			quad.m_color = sprite.m_color;
-			quad.m_position = sprite.m_position;
-			quad.m_size = sprite.m_size;
 			if (sprite.m_texture)
 			{
 				quad.m_textureOpt = TextureOpt::Textured;
 				quad.m_texture = sprite.m_texture;
 			}
-			quad.m_transform = transform.m_transform;
-			quad.m_transformCalculated = true;
+			quad.m_transform = transform.transform();
 
 			renderer2D.drawQuad(quad);
 		}
@@ -125,6 +122,14 @@ void Scene::onViewportResize(u32 width, u32 height)
 			cam.m_camera.setViewportSize(m_viewportWidth, m_viewportHeight);
 		}
 	}
+}
+
+Entity Scene::createEntity()
+{
+	Entity e = Entity(&m_registry);
+	e.addComponent<TransformComponent>();
+	e.addComponent<EntityNameComponent>();
+	return e;
 }
 
 } //-- jny

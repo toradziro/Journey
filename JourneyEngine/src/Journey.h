@@ -31,7 +31,6 @@
 #include "Journey/Scene/Scene.h"
 #include "Journey/Scene/Entity.h"
 #include "Journey/Scene/Components.h"
-#include "Journey/Particles/ParticleSystem.h"
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
 #include "Journey/Core/Profiling/Utils.h"

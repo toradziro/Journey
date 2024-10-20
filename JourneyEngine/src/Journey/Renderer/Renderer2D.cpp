@@ -186,24 +186,12 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 		++m_currTextureSlot;
 	}
 
-	glm::mat4 transform = cfg.m_transform;
-	if (!cfg.m_transformCalculated)
-	{
-		transform = glm::translate(transform, cfg.m_position);
-		//-- Rotation is hard operation, so don't use it unless it's really necessary
-		if (cfg.m_rotateOpt == RotateOpt::Rotated)
-		{
-			transform = glm::rotate(transform, cfg.m_rotation, { 0.0f, 0.0f, 1.0f });
-		}
-		transform = glm::scale(transform, { cfg.m_size.x, cfg.m_size.y, 0.0f });
-	}
-
 	const float textureIndexCastedToFloat = static_cast<float>(textureIndex);
 
 	u8 idx = 0;
 	std::ranges::for_each(m_quadVertexPosition, [&](const auto& pos)
 		{
-			m_quadVertexPtr->m_position = transform * pos;
+			m_quadVertexPtr->m_position = cfg.m_transform * pos;
 			m_quadVertexPtr->m_color = cfg.m_color;
 			m_quadVertexPtr->m_textureCoordinate = cfg.m_texturesPos[idx];
 			m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
