@@ -1,11 +1,11 @@
 #pragma once
 
 #include "entt.hpp"
-#include "Entity.h"
-#include "Components.h"
 
 namespace jny
 {
+
+class Entity;
 
 class Scene : public ReferenceCounter
 {
@@ -16,13 +16,7 @@ public:
 	void update(f32 dt);
 	void onViewportResize(u32 width, u32 height);
 
-	Entity createEntity()
-	{
-		Entity e = Entity(&m_registry);
-		e.addComponent<TransformComponent>();
-		e.addComponent<EntityNameComponent>();
-		return e;
-	}
+	Entity createEntity();
 
 	//-- This method can be used only in Scene Panel!
 	entt::registry& registry()

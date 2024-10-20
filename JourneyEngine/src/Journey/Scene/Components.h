@@ -9,29 +9,46 @@
 namespace jny
 {
 
+static inline constexpr auto C_PROP_NAME_HS = entt::hashed_string::value("property_name");
+
+void registerComponents();
+
 struct TransformComponent
 {
+	static inline constexpr const char* C_COMPONENT_NAME = "Transform";
+
 	TransformComponent() = default;
 	TransformComponent(const TransformComponent&) = default;
 
-	glm::mat4	m_transform = { 1.0f };
+	glm::mat4 transform() const
+	{
+		glm::mat4 ret { 1.0f };
+		ret = glm::translate(ret, m_position);
+		ret = glm::rotate(ret, m_rotation, glm::vec3{ 0.0f, 0.0f, 1.0f });
+		ret = glm::scale(ret, m_scale);
+		return ret;
+	}
+
+	glm::vec3	m_position = {};
+	glm::vec3	m_scale = { 1.0f, 1.0f, 1.0f };
+	f32			m_rotation = 0.0f;
 };
 
 struct SpriteComponent
 {
+	static inline constexpr const char* C_COMPONENT_NAME = "Sprite";
+
 	SpriteComponent() = default;
 	SpriteComponent(const SpriteComponent&) = default;
 
 	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glm::vec3		m_position = { 1.0f, 1.0f, 0.0f };
-	glm::vec3		m_size = { 1.0f, 1.0f, 0.0f };
 	Ref<Texture2D>	m_texture = nullptr;
-	f32				m_rotation = { 0.0f };
-	f32				m_rotationDegrees = { 0.0f };
 };
 
 struct EntityNameComponent
 {
+	static inline constexpr const char* C_COMPONENT_NAME = "EntityName";
+
 	EntityNameComponent() = default;
 	EntityNameComponent(const EntityNameComponent&) = default;
 
@@ -40,6 +57,8 @@ struct EntityNameComponent
 
 struct CameraComponent
 {
+	static inline constexpr const char* C_COMPONENT_NAME = "Camera";
+
 	CameraComponent() = default;
 	CameraComponent(const CameraComponent&) = default;
 
@@ -50,6 +69,8 @@ struct CameraComponent
 
 struct NativeScriptComponent
 {
+	static inline constexpr const char* C_COMPONENT_NAME = "NativeScript";
+
 	template<typename T>
 	void bind(Entity entity)
 	{

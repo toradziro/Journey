@@ -28,10 +28,10 @@ struct QuadCfg
 	glm::mat4		m_transform = { 1.0f };
 
 	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glm::vec3		m_position = { 1.0f, 1.0f, 0.0f };
-	glm::vec3		m_size = { 1.0f, 1.0f, 0.0f };
-	f32				m_rotation = 0.0f;
-	f32				m_rotationDegrees = 0.0f;
+	//glm::vec3		m_position = { 1.0f, 1.0f, 0.0f };
+	//glm::vec3		m_size = { 1.0f, 1.0f, 0.0f };
+	//f32				m_rotation = 0.0f;
+	//f32				m_rotationDegrees = 0.0f;
 	f32				m_tilingFactor = 1.0f;
 	glm::vec2		m_texturesPos[4] = {
 								{ 0.0f, 0.0f },
@@ -44,7 +44,7 @@ struct QuadCfg
 	TextureOpt		m_textureOpt = TextureOpt::FlatColored;
 	RotateOpt		m_rotateOpt = RotateOpt::AlignedByAxices;
 
-	bool			m_transformCalculated = false;
+	//bool			m_transformCalculated = false;
 };
 
 class Renderer2D : public ISingleton

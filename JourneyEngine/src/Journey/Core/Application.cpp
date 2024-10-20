@@ -16,6 +16,8 @@
 #include "Journey/Core/Profiling/TimeInstruments.h"
 #include "Journey/Core/Random.h"
 
+#include "Journey/Scene/Components.h"
+
 namespace jny
 {
 
@@ -64,6 +66,8 @@ Application::Application(const std::string_view& name)
 
 	m_imGuiLayer = pushOverlay<ImGuiLayer>();
 	s_sHolder->st<Instrumentor>().endSession();
+
+	registerComponents();
 }
 
 Application::~Application()

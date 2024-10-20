@@ -25,21 +25,15 @@ void EditorLayer::attach()
 
 	//-- Let's test creating entity and components
 	SpriteComponent sampleSpriteComponent;
-	sampleSpriteComponent.m_position = { -1.0f, -1.0f, 0.5f };
-	sampleSpriteComponent.m_size = { 1.0f, 1.0f, 0.0f };
 	sampleSpriteComponent.m_color = { 0.2f, 0.8f, 0.0f, 0.7f };
 	sampleSpriteComponent.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
-
-	TransformComponent sampleTransformComponent;
-	sampleTransformComponent.m_transform = glm::translate(sampleTransformComponent.m_transform, sampleSpriteComponent.m_position);
-	sampleTransformComponent.m_transform = glm::scale(sampleTransformComponent.m_transform,
-		{ sampleSpriteComponent.m_size.x, sampleSpriteComponent.m_size.y, 0.0f });
 
 	//-- In scene all entities are living
 	m_scene = Ref<Scene>::create();
 	m_sampleE = m_scene->createEntity();
 	m_sampleE.addComponent<SpriteComponent>(std::move(sampleSpriteComponent));
-	m_sampleE.component<TransformComponent>() = std::move(sampleTransformComponent);
+	m_sampleE.component<TransformComponent>().m_position = { 0.0f, 0.0f, 0.0f };
+	m_sampleE.component<TransformComponent>().m_scale = { 1.0f, 1.0f, 0.0f };
 	m_sampleE.component<EntityNameComponent>().m_name = "Sample Quad";
 
 	m_cameraE = m_scene->createEntity();
@@ -57,7 +51,7 @@ void EditorLayer::attach()
 		{
 			auto& tc = component<TransformComponent>();
 			float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * dt;
-			auto& cameraPos = tc.m_transform[3];
+			auto& cameraPos = tc.m_position;
 
 			auto& inputPoll = Application::subsystems().st<jny::InputPoll>();
 			if (inputPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
