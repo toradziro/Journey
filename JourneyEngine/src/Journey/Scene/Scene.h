@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entt.hpp"
+#include "Journey/Core/Reference.h"
 
 namespace jny
 {

@@ -7,14 +7,14 @@
 namespace jny
 {
 
-class SceneHierarchy final : public IPanel
+class EntityProperties final : public IPanel
 {
 public:
-	SceneHierarchy(const Ref<EditorContext>& ctx);
-	~SceneHierarchy();
+	EntityProperties(const Ref<EditorContext>& ctx);
+	~EntityProperties();
 
 	virtual void update(f32 dt) override;
 	virtual void updateUI() override;
 };
 
-} //-- jny
+}

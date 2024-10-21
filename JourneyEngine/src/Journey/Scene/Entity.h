@@ -58,9 +58,21 @@ public:
 		return m_registry->all_of<T>(m_entity);
 	}
 
+	entt::entity entityId() const { return m_entity; }
+
 	operator bool() const
 	{
 		return m_registry != nullptr && m_entity != entt::null;
+	}
+
+	bool operator==(const Entity& other) const
+	{
+		return m_registry == other.m_registry && m_entity == other.m_entity;
+	}
+
+	bool operator!=(const Entity& other) const
+	{
+		return !(*this == other);
 	}
 
 private:
