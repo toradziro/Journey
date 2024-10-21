@@ -1,5 +1,7 @@
 #include "jnypch.h"
 #include "EditorLayer.h"
+#include "Panels/SceneHierarchy.h"
+#include "Panels/EntityProperties.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,6 +12,7 @@ namespace jny
 
 EditorLayer::EditorLayer(Application* app) :
 	Layer("EditorLayers"),
+	m_context(new EditorContext),
 	m_app(app)
 {
 	JNY_ASSERT(app != nullptr, "Use valid app");
@@ -18,6 +21,9 @@ EditorLayer::EditorLayer(Application* app) :
 void EditorLayer::attach()
 {
 	const auto& vfs = Application::subsystems().st<VFS>();
+
+	m_panels.push_back(new SceneHierarchy(m_context));
+	m_panels.push_back(new EntityProperties(m_context));
 
 	//-- Create frambuffer to draw in it instead of directly drawing on screen
 	m_framebuffer = Framebuffer::create({});
@@ -29,14 +35,14 @@ void EditorLayer::attach()
 	sampleSpriteComponent.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
 
 	//-- In scene all entities are living
-	m_scene = Ref<Scene>::create();
-	m_sampleE = m_scene->createEntity();
+	m_context->m_currentScene = Ref<Scene>::create();
+	m_sampleE = m_context->m_currentScene->createEntity();
 	m_sampleE.addComponent<SpriteComponent>(std::move(sampleSpriteComponent));
 	m_sampleE.component<TransformComponent>().m_position = { 0.0f, 0.0f, 0.0f };
 	m_sampleE.component<TransformComponent>().m_scale = { 1.0f, 1.0f, 0.0f };
 	m_sampleE.component<EntityNameComponent>().m_name = "Sample Quad";
 
-	m_cameraE = m_scene->createEntity();
+	m_cameraE = m_context->m_currentScene->createEntity();
 	m_cameraE.addComponent<CameraComponent>().m_primer = true;
 	m_cameraE.component<EntityNameComponent>().m_name = "Camera";
 
@@ -83,12 +89,16 @@ void EditorLayer::attach()
 	};
 
 	m_cameraE.addComponent<NativeScriptComponent>().bind<CameraController>(m_cameraE);
-
-	//-- Scene Panel
-	m_sceneHierarchyPanel.setScene(m_scene);
 }
 
-void EditorLayer::detach() { }
+void EditorLayer::detach()
+{
+	for (auto* panel : m_panels)
+	{
+		delete panel;
+	}
+	m_panels.clear();
+}
 
 void EditorLayer::update(f32 dt)
 {
@@ -100,7 +110,7 @@ void EditorLayer::update(f32 dt)
 		|| static_cast<u32>(m_viewportSize.y) != specs.m_height)
 	{
 		m_framebuffer->resize({ std::max(m_viewportSize.x, 1.0f), std::max(m_viewportSize.y, 1.0f) });
-		m_scene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
+		m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
 	}
 
 	auto& rc = Application::subsystems().st<RenderCommand>();
@@ -113,7 +123,7 @@ void EditorLayer::update(f32 dt)
 	rc.clear();
 
 	//-- Updating our scene
-	m_scene->update(dt);
+	m_context->m_currentScene->update(dt);
 
 	m_framebuffer->unbind();
 
@@ -157,7 +167,10 @@ void EditorLayer::imGuiRender()
 		ImGui::End();
 	}
 
-	m_sceneHierarchyPanel.updateUI();
+	for (auto* panel : m_panels)
+	{
+		panel->updateUI();
+	}
 	
 	if (ImGui::Begin("Statistics info"))
 	{

@@ -197,6 +197,7 @@ function SetupAppProject(name)
 			"%{IncludeDir.GLFW}",
 			"%{IncludeDir.GLAD}",
 			"%{IncludeDir.entt}",
+			"%{prj.name}/src",
 			"JourneyEngine/src"
 		}
 
