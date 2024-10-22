@@ -43,7 +43,7 @@ void drawComponent(entt::id_type typeId, T& obj)
 			std::string imGuiId = fmt::format("##{}float", propName);
 
 			float val = fieldData.cast<float>();
-			if (ImGui::DragFloat(imGuiId.data(), &val))
+			if (ImGui::DragFloat(imGuiId.data(), &val, 0.01f))
 			{
 				data.set(obj, val);
 			}
@@ -87,7 +87,7 @@ void drawComponent(entt::id_type typeId, T& obj)
 
 			glm::vec3 val = fieldData.cast<glm::vec3>();
 			ImGui::PushItemWidth(-FLT_MIN);
-			if (ImGui::DragFloat3(imGuiId.data(), glm::value_ptr(val)))
+			if (ImGui::DragFloat3(imGuiId.data(), glm::value_ptr(val), 0.01f))
 			{
 				data.set(obj, val);
 			}
