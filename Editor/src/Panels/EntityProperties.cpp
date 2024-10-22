@@ -60,8 +60,26 @@ void drawComponent(entt::id_type typeId, T& obj)
 		}
 		else if (fieldDataType == entt::resolve<std::string>())
 		{
-			std::string val = fieldData.cast<std::string>();
-			ImGui::TextUnformatted(val.data());
+			std::string imGuiId = fmt::format("##{}str", propName);
+
+			std::string& val = fieldData.cast<std::string&>();
+			const i32 C_BUF_LENGTH = 1024;
+
+			char buff[C_BUF_LENGTH];
+			memset(buff, 0, C_BUF_LENGTH);
+			//-- No use strcpy since copiler considers in unsafe
+			for (u32 i = 0; i < val.size(); ++i)
+			{
+				buff[i] = val[i];
+			}
+
+			ImGui::PushItemWidth(-FLT_MIN);
+
+			if (ImGui::InputText(imGuiId.c_str(), buff, C_BUF_LENGTH))
+			{
+				val = std::string(buff);
+				data.set(obj, val);
+			}
 		}
 		else if (fieldDataType == entt::resolve<glm::vec3>())
 		{
@@ -106,6 +124,7 @@ void drawComponent(entt::entity entity, entt::registry& registry, Entity& innerE
 
 void drawComponents(Entity& innerEntity, Ref<Scene>	m_scene)
 {
+	drawComponent<EntityNameComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
 	drawComponent<TransformComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
 	drawComponent<SpriteComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
 	drawComponent<CameraComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
