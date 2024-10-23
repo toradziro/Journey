@@ -9,6 +9,14 @@
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
 
+#ifdef JNY_PLATFORM_WINDOWS
+	#define GLFW_EXPOSE_NATIVE_WIN32
+	#include <GLFW/glfw3native.h>
+	#include <Windows.h>
+	#include <Dwmapi.h >
+	#pragma comment(lib, "dwmapi.lib")
+#endif
+
 namespace
 {
 
@@ -16,6 +24,15 @@ static jny::WindowData* getDataPtrFromWindow(GLFWwindow* window)
 {
 	JNY_ASSERT(window != nullptr, "Win nullptr")
 	return (jny::WindowData*)glfwGetWindowUserPointer(window);
+}
+
+bool enableDarkTitleBar(HWND hwnd)
+{
+	const DWORD DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+	BOOL useDarkMode = TRUE;
+	HRESULT hr = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &useDarkMode, sizeof(useDarkMode));
+	return SUCCEEDED(hr);
 }
 
 } //-- unnamed
@@ -88,6 +105,15 @@ void Window::init()
 
 	m_window = glfwCreateWindow(static_cast<int>(m_data.m_width), static_cast<int>(m_data.m_height),
 		m_data.m_title.data(), nullptr, nullptr);
+
+#ifdef JNY_PLATFORM_WINDOWS
+	HWND hwnd = glfwGetWin32Window(m_window);
+	if (hwnd != nullptr)
+	{
+		enableDarkTitleBar(hwnd);
+	}
+#endif
+
 
 	//-- Init for context will be called inside its constructor
 	m_context = std::make_unique<OpenGlContext>(m_window);
