@@ -34,6 +34,13 @@ void drawComponent(entt::id_type typeId, T& obj)
 		{
 			ImGui::TextUnformatted("Unknown prop");
 		}
+
+		const char* formatStr = "%0.3f";
+		if (auto prop = data.prop(C_FORMAT_STR_HS); prop)
+		{
+			formatStr = prop.value().cast<const char*>();
+		}
+
 		ImGui::TableNextColumn();
 		auto fieldDataType = fieldData.type();
 
@@ -46,6 +53,12 @@ void drawComponent(entt::id_type typeId, T& obj)
 			if (ImGui::DragFloat(imGuiId.data(), &val, 0.01f))
 			{
 				data.set(obj, val);
+			}
+
+			if (auto prop = data.prop(C_ON_PROP_CHANGE_HS); prop)
+			{
+				auto onChangeCall = prop.value().cast<std::function<void(T&, f32)>>();
+				onChangeCall(obj, val);
 			}
 		}
 		else if (fieldDataType == entt::resolve<bool>())
@@ -87,7 +100,7 @@ void drawComponent(entt::id_type typeId, T& obj)
 
 			glm::vec3 val = fieldData.cast<glm::vec3>();
 			ImGui::PushItemWidth(-FLT_MIN);
-			if (ImGui::DragFloat3(imGuiId.data(), glm::value_ptr(val), 0.01f))
+			if (ImGui::DragFloat3(imGuiId.data(), glm::value_ptr(val), 0.01f, 0.0f, 100.0f))
 			{
 				data.set(obj, val);
 			}
@@ -113,7 +126,7 @@ void drawComponent(entt::entity entity, entt::registry& registry, Entity& innerE
 	{
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
-		if (ImGui::TreeNode(T::C_COMPONENT_NAME))
+		if (ImGui::TreeNodeEx(T::C_COMPONENT_NAME, ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			entt::id_type typeId = entt::hashed_string::value(T::C_COMPONENT_NAME);
 			drawComponent<T>(typeId, innerEntity.component<T>());

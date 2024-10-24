@@ -22,6 +22,8 @@ private:
 	void setProjection();
 
 private:
+	friend void registerComponents();
+
 	glm::mat4	m_projection = { 1.0f };
 	f32			m_zoom = 10.0f;
 	f32			m_near = -1.0f;

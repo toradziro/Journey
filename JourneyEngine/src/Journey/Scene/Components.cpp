@@ -1,5 +1,6 @@
 #include "jnypch.h"
 #include "Components.h"
+#include "Journey/Renderer/Camera.h"
 
 #include <entt.hpp>
 
@@ -53,7 +54,8 @@ void registerComponents()
 	//-- Transform component
 	entt::meta<TransformComponent>()
 		.type(entt::hashed_string(TransformComponent::C_COMPONENT_NAME))
-		.data<&TransformComponent::m_position>(entt::hashed_string("Position")).prop(C_PROP_NAME_HS, "Position")
+		.data<&TransformComponent::m_position>(entt::hashed_string("Position"))
+			.prop(C_PROP_NAME_HS, "Position")
 		.data<&TransformComponent::m_scale>(entt::hashed_string("Scale")).prop(C_PROP_NAME_HS, "Scale")
 		.data<&TransformComponent::m_rotation>(entt::hashed_string("Rotation")).prop(C_PROP_NAME_HS, "Rotation");
 	//-- SpriteComponent
@@ -68,7 +70,13 @@ void registerComponents()
 	//-- CameraComponent
 	entt::meta<CameraComponent>()
 		.type(entt::hashed_string(CameraComponent::C_COMPONENT_NAME))
-		.data<&CameraComponent::m_primer>(entt::hashed_string("isMainCamera")).prop(C_PROP_NAME_HS, "Main Camera");
+		.data<&CameraComponent::m_primer>(entt::hashed_string("isMainCamera")).prop(C_PROP_NAME_HS, "Main Camera")
+		.data<&CameraComponent::m_zoom>(entt::hashed_string("cameraZoom"))
+			.prop(C_PROP_NAME_HS, "Distance")
+			.prop(C_ON_PROP_CHANGE_HS, std::function<void(CameraComponent&, f32)>([](CameraComponent& component, f32 val)
+				{
+					component.m_camera.setZoom(val);
+				}));
 	//-- NativeScriptComponent
 	entt::meta<NativeScriptComponent>()
 		.type(entt::hashed_string(NativeScriptComponent::C_COMPONENT_NAME));

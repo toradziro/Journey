@@ -10,6 +10,8 @@ namespace jny
 {
 
 static inline constexpr auto C_PROP_NAME_HS = entt::hashed_string::value("property_name");
+static inline constexpr auto C_ON_PROP_CHANGE_HS = entt::hashed_string::value("on_propety_change");
+static inline constexpr auto C_FORMAT_STR_HS = entt::hashed_string::value("format_string");
 
 void registerComponents();
 
@@ -63,6 +65,7 @@ struct CameraComponent
 	CameraComponent(const CameraComponent&) = default;
 
 	Camera	m_camera = {};
+	f32		m_zoom = 10.0f;
 	bool	m_primer = false;
 	bool	m_fixedAspectRatio = false;
 };

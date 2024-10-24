@@ -1,5 +1,6 @@
 #include "jnypch.h"
 #include "Camera.h"
+#include "Journey/Scene/Components.h"
 
 namespace jny
 {
