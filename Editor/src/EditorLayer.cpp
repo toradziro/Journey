@@ -148,12 +148,18 @@ void EditorLayer::imGuiRender()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::MenuItem("TstOpt", NULL, &m_tstOpt);
+			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
 	}
+	
+	if (m_openDemo)
+	{
+		ImGui::ShowDemoWindow(&m_openDemo);
+	}
 
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
 	if (ImGui::Begin("Viewport"))
 	{
 		m_viewportActive = ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
@@ -166,6 +172,7 @@ void EditorLayer::imGuiRender()
 		ImGui::Image(reinterpret_cast<void*>(frameId), m_viewportSize, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
 		ImGui::End();
 	}
+	ImGui::PopStyleVar();
 
 	for (auto* panel : m_panels)
 	{
