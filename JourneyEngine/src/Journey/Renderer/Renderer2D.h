@@ -7,6 +7,7 @@
 #include "Journey/Renderer/VertexArray.h"
 #include "Journey/Renderer/Shader.h"
 #include "Journey/Renderer/Texture.h"
+#include "Journey/Scene/Components.h"
 
 namespace jny
 {
@@ -60,7 +61,7 @@ public:
 	void shutdown();
 
 	void beginScene(const OrthographicCamera& camera);
-	void beginScene(const Camera& camera, const glm::mat4& transform);
+	void beginScene(const CameraComponent& camera, const glm::mat4& transform);
 	void endScene();
 
 	void flush();

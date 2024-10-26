@@ -71,11 +71,18 @@ void registerComponents()
 	entt::meta<CameraComponent>()
 		.type(entt::hashed_string(CameraComponent::C_COMPONENT_NAME))
 		.data<&CameraComponent::m_primer>(entt::hashed_string("isMainCamera")).prop(C_PROP_NAME_HS, "Main Camera")
+		.data<&CameraComponent::m_perspective>(entt::hashed_string("isPerspective")).prop(C_PROP_NAME_HS, "Is Perspective")
 		.data<&CameraComponent::m_zoom>(entt::hashed_string("cameraZoom"))
-			.prop(C_PROP_NAME_HS, "Distance")
+			.prop(C_PROP_NAME_HS, "Ortho Distance")
 			.prop(C_ON_PROP_CHANGE_HS, std::function<void(CameraComponent&, f32)>([](CameraComponent& component, f32 val)
 				{
 					component.m_camera.setZoom(val);
+				}))
+		.data<&CameraComponent::m_fov>(entt::hashed_string("cameraFov"))
+			.prop(C_PROP_NAME_HS, "Perspective FOV")
+			.prop(C_ON_PROP_CHANGE_HS, std::function<void(CameraComponent&, f32)>([](CameraComponent& component, f32 val)
+				{
+					component.m_perspectiveCamera.setFov(val);
 				}));
 	//-- NativeScriptComponent
 	entt::meta<NativeScriptComponent>()

@@ -105,7 +105,7 @@ void Renderer2D::beginScene(const OrthographicCamera& camera)
 	m_currTextureSlot = 1;
 }
 
-void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
+void Renderer2D::beginScene(const CameraComponent& camera, const glm::mat4& transform)
 {
 	PROFILE_FUNC;
 

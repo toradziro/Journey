@@ -64,10 +64,34 @@ struct CameraComponent
 	CameraComponent() = default;
 	CameraComponent(const CameraComponent&) = default;
 
-	Camera	m_camera = {};
-	f32		m_zoom = 10.0f;
-	bool	m_primer = false;
-	bool	m_fixedAspectRatio = false;
+	glm::mat4 projection() const
+	{
+		if (m_perspective)
+		{
+			return m_perspectiveCamera.projection();
+		}
+		else
+		{
+			return m_camera.projection();
+		}
+	}
+
+	void onViewportResize(u32 w, u32 h)
+	{
+		//-- Need to avoid -(nan)
+		u32 uw = std::max<u32>(1, w);
+		u32 uh = std::max<u32>(1, h);
+		m_camera.setViewportSize(uw, uh);
+		m_perspectiveCamera.setViewportSize(uw, uh);
+	}
+
+	Camera				m_camera = {};
+	PerspectiveCamera	m_perspectiveCamera = {};
+	f32					m_zoom = 10.0f; //-- works with ortho only
+	f32					m_fov = 45.0f; //-- works with perspective only
+	bool				m_primer = false;
+	bool				m_fixedAspectRatio = false;
+	bool				m_perspective = false;
 };
 
 struct NativeScriptComponent

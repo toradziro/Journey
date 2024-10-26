@@ -29,8 +29,8 @@ private:
 	//-- Scene entities and components storage
 	entt::registry	m_registry;
 
-	u32				m_viewportWidth = 0;
-	u32				m_viewportHeight = 0;
+	u32				m_viewportWidth = 1;
+	u32				m_viewportHeight = 1;
 };
 
 } //-- jny

@@ -59,7 +59,7 @@ Scene::~Scene()
 
 void Scene::update(f32 dt)
 {
-	Camera* mainCamera = nullptr;
+	CameraComponent* mainCamera = nullptr;
 	glm::mat4 mainCameraTransform = {};
 
 	m_registry.view<NativeScriptComponent>().each([dt](auto /*entity*/, auto& nsc)
@@ -77,7 +77,7 @@ void Scene::update(f32 dt)
 		auto& cam = m_registry.get<CameraComponent>(e);
 		if (cam.m_primer)
 		{
-			mainCamera = &cam.m_camera;
+			mainCamera = &cam;
 			mainCameraTransform = m_registry.get<TransformComponent>(e).transform();
 		}
 	}
@@ -119,7 +119,7 @@ void Scene::onViewportResize(u32 width, u32 height)
 		auto& cam = m_registry.get<CameraComponent>(e);
 		if (!cam.m_fixedAspectRatio)
 		{
-			cam.m_camera.setViewportSize(m_viewportWidth, m_viewportHeight);
+			cam.onViewportResize(m_viewportWidth, m_viewportHeight);
 		}
 	}
 }

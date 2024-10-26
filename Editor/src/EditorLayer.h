@@ -32,6 +32,7 @@ private:
 	Application*					m_app;
 
 	Entity							m_sampleE;
+	Entity							m_sampleE2;
 	Entity							m_cameraE;
 
 	f32								m_FPS = 0.0f;

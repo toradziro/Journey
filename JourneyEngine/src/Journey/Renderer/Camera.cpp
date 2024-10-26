@@ -58,4 +58,46 @@ void Camera::setProjection()
 		m_near, m_far);
 }
 
+void PerspectiveCamera::setViewportSize(u32 w, u32 h)
+{
+	m_aspectRatio = static_cast<f32>(w) / static_cast<f32>(h);
+	setProjection();
+}
+
+void PerspectiveCamera::setProps(f32 fov, f32 _near, f32 _far)
+{
+	m_fov = fov;
+	m_near = _near;
+	m_far = _far;
+	setProjection();
+}
+
+void PerspectiveCamera::setFov(f32 fov)
+{
+	m_fov = fov;
+	setProjection();
+}
+
+void PerspectiveCamera::setNear(f32 _near)
+{
+	m_near = _near;
+	setProjection();
+}
+
+void PerspectiveCamera::setFar(f32 _far)
+{
+	m_far = _far;
+	setProjection();
+}
+
+const glm::mat4& PerspectiveCamera::projection() const
+{
+	return m_projection;
+}
+
+void PerspectiveCamera::setProjection()
+{
+	m_projection = glm::perspective(glm::radians(m_fov), m_aspectRatio, m_near, m_far);
+}
+
 }
