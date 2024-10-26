@@ -50,15 +50,18 @@ void drawComponent(entt::id_type typeId, T& obj)
 			std::string imGuiId = fmt::format("##{}float", propName);
 
 			float val = fieldData.cast<float>();
-			if (ImGui::DragFloat(imGuiId.data(), &val, 0.01f))
+			bool valueChanged = ImGui::DragFloat(imGuiId.data(), &val, 0.01f);
+			if (valueChanged)
 			{
-				data.set(obj, val);
-			}
-
-			if (auto prop = data.prop(C_ON_PROP_CHANGE_HS); prop)
-			{
-				auto onChangeCall = prop.value().cast<std::function<void(T&, f32)>>();
-				onChangeCall(obj, val);
+				if (auto prop = data.prop(C_ON_PROP_CHANGE_HS); prop)
+				{
+					auto onChangeCall = prop.value().cast<std::function<void(T&, f32)>>();
+					onChangeCall(obj, val);
+				}
+				else
+				{
+					data.set(obj, val);
+				}
 			}
 		}
 		else if (fieldDataType == entt::resolve<bool>())
@@ -97,12 +100,21 @@ void drawComponent(entt::id_type typeId, T& obj)
 		else if (fieldDataType == entt::resolve<glm::vec3>())
 		{
 			std::string imGuiId = fmt::format("##{}float3", propName);
-
 			glm::vec3 val = fieldData.cast<glm::vec3>();
+
 			ImGui::PushItemWidth(-FLT_MIN);
-			if (ImGui::DragFloat3(imGuiId.data(), glm::value_ptr(val), 0.01f, 0.0f, 100.0f))
+			bool valueChanged = ImGui::DragFloat3(imGuiId.data(), glm::value_ptr(val), 0.01f);
+			if (valueChanged)
 			{
-				data.set(obj, val);
+				if (auto prop = data.prop(C_ON_PROP_CHANGE_HS); prop)
+				{
+					auto onChangeCall = prop.value().cast<std::function<void(T&, glm::vec3)>>();
+					onChangeCall(obj, val);
+				}
+				else
+				{
+					data.set(obj, val);
+				}
 			}
 		}
 		else if (fieldDataType == entt::resolve<glm::vec4>())

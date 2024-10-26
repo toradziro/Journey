@@ -1,6 +1,9 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <Journey/Renderer/Texture.h>
 #include <Journey/Renderer/Camera.h>
@@ -26,14 +29,15 @@ struct TransformComponent
 	{
 		glm::mat4 ret { 1.0f };
 		ret = glm::translate(ret, m_position);
-		ret = glm::rotate(ret, m_rotation, glm::vec3{ 0.0f, 0.0f, 1.0f });
+		glm::mat4 rotationMatrix = glm::toMat4(glm::normalize(glm::quat(glm::radians(m_rotation))));
+		ret = ret * rotationMatrix;
 		ret = glm::scale(ret, m_scale);
 		return ret;
 	}
 
 	glm::vec3	m_position = {};
 	glm::vec3	m_scale = { 1.0f, 1.0f, 1.0f };
-	f32			m_rotation = 0.0f;
+	glm::vec3	m_rotation = { 0.0f, 0.0f, 0.0f };
 };
 
 struct SpriteComponent
