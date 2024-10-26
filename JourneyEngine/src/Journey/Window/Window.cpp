@@ -1,5 +1,8 @@
 #include "jnypch.h"
 
+#include "Journey/Core/Application.h"
+#include "Journey/Core/fs/VirtualFileSystem.h"
+
 #include "Window.h"
 #include "Journey/Log/Log.h"
 #include "Journey/Events/ApplicationEvent.h"
@@ -8,6 +11,7 @@
 #include "Journey/Renderer/OpenGL/OpenGlContext.h"
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
+#include "stb_image.h"
 
 #ifdef JNY_PLATFORM_WINDOWS
 	#define GLFW_EXPOSE_NATIVE_WIN32
@@ -26,6 +30,7 @@ static jny::WindowData* getDataPtrFromWindow(GLFWwindow* window)
 	return (jny::WindowData*)glfwGetWindowUserPointer(window);
 }
 
+#ifdef JNY_PLATFORM_WINDOWS
 bool enableDarkTitleBar(HWND hwnd)
 {
 	const DWORD DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
@@ -33,6 +38,25 @@ bool enableDarkTitleBar(HWND hwnd)
 	BOOL useDarkMode = TRUE;
 	HRESULT hr = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &useDarkMode, sizeof(useDarkMode));
 	return SUCCEEDED(hr);
+}
+#endif
+
+void setWindowIcon(GLFWwindow* window)
+{
+	constexpr const char* C_ICON_PATH = "assets/textures/gate.png";
+	
+	GLFWimage icon = {};
+	int channels = 0;
+
+	const auto & vfs = jny::Application::subsystems().st<jny::VFS>();
+	auto path = vfs.virtualToNativePath(C_ICON_PATH).string();
+
+	icon.pixels = stbi_load(path.c_str(), &icon.width, &icon.height, &channels, 4);
+	if (icon.pixels)
+	{
+		glfwSetWindowIcon(window, 1, &icon);
+		stbi_image_free(icon.pixels);
+	}
 }
 
 } //-- unnamed
@@ -113,7 +137,7 @@ void Window::init()
 		enableDarkTitleBar(hwnd);
 	}
 #endif
-
+	setWindowIcon(m_window);
 
 	//-- Init for context will be called inside its constructor
 	m_context = std::make_unique<OpenGlContext>(m_window);
