@@ -7,7 +7,7 @@ namespace jny
 {
 
 using fs_path = std::filesystem::path;
-
+namespace fs = std::filesystem;
 
 struct File : public ReferenceCounter
 {

@@ -11,7 +11,7 @@ namespace jny
 {
 
 template<typename T>
-void drawComponent(entt::id_type typeId, T& obj)
+void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 {
 	//-- Get properties of type
 	entt::meta_type metaType = entt::resolve(typeId);
@@ -42,6 +42,12 @@ void drawComponent(entt::id_type typeId, T& obj)
 		}
 
 		ImGui::TableNextColumn();
+		if (auto prop = data.prop(C_CASTOM_UI_DRAW); prop)
+		{
+			auto customDraw = prop.value().cast<std::function<void(T&, entt::entity)>>();
+			customDraw(obj, e);
+			return;
+		}
 		auto fieldDataType = fieldData.type();
 
 		//-- Type updating handling
@@ -141,7 +147,7 @@ void drawComponent(entt::entity entity, entt::registry& registry, Entity& innerE
 		if (ImGui::TreeNodeEx(T::C_COMPONENT_NAME, ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			entt::id_type typeId = entt::hashed_string::value(T::C_COMPONENT_NAME);
-			drawComponent<T>(typeId, innerEntity.component<T>());
+			drawComponent<T>(typeId, innerEntity.component<T>(), entity);
 			ImGui::TreePop();
 		}
 	}

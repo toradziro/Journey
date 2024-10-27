@@ -15,6 +15,7 @@
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
 #include "Journey/Core/Random.h"
+#include "Journey/ResourceManagers/TextureManager.h"
 
 #include "Journey/Scene/Components.h"
 
@@ -36,9 +37,11 @@ Application::Application(const std::string_view& name)
 	s_sHolder->add<VFS>();
 	s_sHolder->st<VFS>().init();
 
+	s_sHolder->add<TextureManager>();
+	s_sHolder->st<TextureManager>().init();
+
 	//-- Create main window
 	s_sHolder->add<Window>(WindowData(name, 1200, 800));
-
 	//-- Prepare to process events
 	s_sHolder->st<Window>().setEventCallback([this](Event& _event)
 		{

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "Journey/ResourceManagers/TextureManager.h"
 
 namespace jny
 {
@@ -21,12 +22,17 @@ public:
 
 	virtual void bind(u32 slot = 0) const = 0;
 	virtual u32 rendererId() const = 0;
+
+	virtual std::string path() const = 0;
 };
 
 class Texture2D : public Texture
 {
 public:
 	virtual ~Texture2D() = default;
+
+private:
+	friend TextureManager;
 
 	static Ref<Texture2D> create(const std::string& texturePath);
 	static Ref<Texture2D> create(u32 width, u32 height);

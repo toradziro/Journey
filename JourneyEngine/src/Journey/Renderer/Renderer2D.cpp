@@ -5,6 +5,7 @@
 #include "Journey/Renderer/RenderCommand.h"
 #include "Journey/Core/Application.h"
 #include "Journey/Core/Profiling/TimeInstruments.h"
+#include "Journey/ResourceManagers/TextureManager.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -68,7 +69,8 @@ void Renderer2D::init()
 	m_textureShader = shaderLib.load("assets/shaders/Texture.glsl");
 	m_textureShader->bind();
 
-	m_whiteTexture = Texture2D::create(1, 1);
+	auto& textureManager = Application::subsystems().st<TextureManager>();
+	m_whiteTexture = textureManager.create("white_texture", 1, 1);
 	u32 whiteTextureData = 0xffffffff;
 	m_whiteTexture->setData(static_cast<void*>(&whiteTextureData), sizeof(whiteTextureData));
 	m_textureSlots[0] = m_whiteTexture;

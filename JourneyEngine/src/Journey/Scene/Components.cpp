@@ -1,6 +1,9 @@
 #include "jnypch.h"
 #include "Components.h"
 #include "Journey/Renderer/Camera.h"
+#include "Journey/ImGui/Controls/DropDownList.h"
+#include "Journey/ResourceManagers/TextureManager.h"
+#include "Journey/Core/Application.h"
 
 #include <entt.hpp>
 
@@ -61,7 +64,40 @@ void registerComponents()
 	//-- SpriteComponent
 	entt::meta<SpriteComponent>()
 		.type(entt::hashed_string(SpriteComponent::C_COMPONENT_NAME))
-		.data<&SpriteComponent::m_color>(entt::hashed_string("Color")).prop(C_PROP_NAME_HS, "Color");
+		.data<&SpriteComponent::m_color>(entt::hashed_string("Color")).prop(C_PROP_NAME_HS, "Color")
+		.data<&SpriteComponent::m_texture>(entt::hashed_string("Texture")).prop(C_PROP_NAME_HS, "Texture")
+			.prop(C_CASTOM_UI_DRAW,
+				std::function<void(SpriteComponent&, entt::entity)>([](SpriteComponent& component, entt::entity e)
+				{
+					u32 currSelectedTexture = DropDownList::C_INVALID_INDEX;
+
+					auto& textureManager = Application::subsystems().st<TextureManager>();
+					const auto& textureAssetsPaths = textureManager.allTexturesOnDisk();
+					if (component.m_texture)
+					{
+						for (u32 i = 0; i < textureAssetsPaths.size(); ++i)
+						{
+							if (textureAssetsPaths[i] == component.m_texture->path())
+							{
+								currSelectedTexture = i;
+								break;
+							}
+						}
+					}
+
+					std::vector<std::string> pathsAsStrs;
+					pathsAsStrs.reserve(textureAssetsPaths.size());
+					for (const auto& path : textureAssetsPaths)
+					{
+						pathsAsStrs.push_back(path.generic_string());
+					}
+
+					std::string label = fmt::format("##textureSelector{}", static_cast<u32>(e));
+					if (DropDownList(pathsAsStrs, label, currSelectedTexture).draw())
+					{
+						component.m_texture = textureManager.create(textureAssetsPaths[currSelectedTexture].generic_string());
+					}
+				}));
 		//.data<&SpriteComponent::m_texture>;
 	//-- EntityNameComponent
 	entt::meta<EntityNameComponent>()

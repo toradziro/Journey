@@ -15,6 +15,7 @@ namespace jny
 static inline constexpr auto C_PROP_NAME_HS = entt::hashed_string::value("property_name");
 static inline constexpr auto C_ON_PROP_CHANGE_HS = entt::hashed_string::value("on_propety_change");
 static inline constexpr auto C_FORMAT_STR_HS = entt::hashed_string::value("format_string");
+static inline constexpr auto C_CASTOM_UI_DRAW = entt::hashed_string::value("castom_ui_draw");
 
 void registerComponents();
 

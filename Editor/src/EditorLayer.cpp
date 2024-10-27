@@ -2,6 +2,7 @@
 #include "EditorLayer.h"
 #include "Panels/SceneHierarchy.h"
 #include "Panels/EntityProperties.h"
+#include "Journey/ResourceManagers/TextureManager.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,6 +22,7 @@ EditorLayer::EditorLayer(Application* app) :
 void EditorLayer::attach()
 {
 	const auto& vfs = Application::subsystems().st<VFS>();
+	auto& textureManager = Application::subsystems().st<TextureManager>();
 
 	m_panels.push_back(new SceneHierarchy(m_context));
 	m_panels.push_back(new EntityProperties(m_context));
@@ -32,7 +34,10 @@ void EditorLayer::attach()
 	//-- Let's test creating entity and components
 	SpriteComponent sampleSpriteComponent;
 	sampleSpriteComponent.m_color = { 0.2f, 0.8f, 0.0f, 0.7f };
-	sampleSpriteComponent.m_texture = Texture2D::create(vfs.virtualToNativePath("assets/textures/bomb.png").string());
+	sampleSpriteComponent.m_texture = textureManager.create
+	(
+		vfs.virtualToNativePath("assets/textures/bomb.png").lexically_normal().generic_string()
+	);
 
 	SpriteComponent sampleSpriteComponent2;
 	sampleSpriteComponent2.m_color = { 0.8f, 0.8f, 0.0f, 1.0f };

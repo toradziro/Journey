@@ -20,6 +20,7 @@ public:
 	virtual void setData(void* data, u32 size) override;
 
 	virtual void bind(u32 slot = 0) const override;
+	virtual std::string path() const override { return m_path; }
 
 private:
 	std::string	m_path;
