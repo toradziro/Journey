@@ -18,6 +18,8 @@ public:
 
 private:
 	void drawContextMenu();
+	void resetSelection();
+	void selectEntity(Entity e);
 };
 
 } //-- jny

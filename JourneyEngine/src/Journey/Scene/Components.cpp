@@ -79,14 +79,17 @@ void registerComponents()
 						{
 							if (textureAssetsPaths[i] == component.m_texture->path())
 							{
-								currSelectedTexture = i;
+								//-- Plus one needs to handle no texture
+								currSelectedTexture = i + 1;
 								break;
 							}
 						}
 					}
 
 					std::vector<std::string> pathsAsStrs;
-					pathsAsStrs.reserve(textureAssetsPaths.size());
+					pathsAsStrs.reserve(textureAssetsPaths.size() + 1);
+					//-- If we want plain squad with no texture
+					pathsAsStrs.push_back("None");
 					for (const auto& path : textureAssetsPaths)
 					{
 						pathsAsStrs.push_back(path.generic_string());
@@ -95,7 +98,18 @@ void registerComponents()
 					std::string label = fmt::format("##textureSelector{}", static_cast<u32>(e));
 					if (DropDownList(pathsAsStrs, label, currSelectedTexture).draw())
 					{
-						component.m_texture = textureManager.create(textureAssetsPaths[currSelectedTexture].generic_string());
+						if (currSelectedTexture == 0)
+						{
+							component.m_texture = {};
+						}
+						else
+						{
+							component.m_texture = textureManager.create
+							(
+								//-- So here we need to sub that one
+								textureAssetsPaths[currSelectedTexture - 1].generic_string()
+							);
+						}
 					}
 				}));
 		//.data<&SpriteComponent::m_texture>;

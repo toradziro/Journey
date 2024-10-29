@@ -47,11 +47,11 @@ void SceneHierarchy::updateUI()
 				bool nodeExpanded = ImGui::TreeNodeEx(entityName.data(), flags);
 				if (ImGui::IsItemClicked(ImGuiMouseButton_Left) || ImGui::IsItemClicked(ImGuiMouseButton_Right))
 				{
-					ctx()->m_selectedEntity = innerEntity;
+					selectEntity(innerEntity);
 				}
 				if (ImGui::IsKeyPressed(ImGuiKey_Escape))
 				{
-					ctx()->m_selectedEntity = {};
+					resetSelection();
 				}
 				if (nodeExpanded)
 				{
@@ -67,11 +67,10 @@ void SceneHierarchy::drawContextMenu()
 	const ImVec2 regionMin = ImGui::GetWindowContentRegionMin();
 	const ImVec2 regionMax = ImGui::GetWindowContentRegionMax();
 	const ImVec2 mousePos = ImGui::GetMousePos();
-	const bool isMouseInWindow = mousePos.x > regionMin.x && mousePos.x < regionMax.x
-		&& mousePos.y > regionMin.y && mousePos.y < regionMax.y;
 
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && isMouseInWindow)
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::IsWindowHovered())
 	{
+		resetSelection();
 		ImGui::OpenPopup("##contextMenu");
 	}
 	if (ImGui::BeginPopupContextItem("##contextMenu"))
@@ -91,11 +90,21 @@ void SceneHierarchy::drawContextMenu()
 				auto& scene = ctx()->m_currentScene;
 				auto newEntity = scene->createEntity();
 				newEntity.component<EntityNameComponent>().m_name = "New entity";
-				ctx()->m_selectedEntity = newEntity;
+				selectEntity(newEntity);
 			}
 		}
 		ImGui::EndPopup();
 	}
+}
+
+void SceneHierarchy::resetSelection()
+{
+	ctx()->m_selectedEntity = {};
+}
+
+void SceneHierarchy::selectEntity(Entity e)
+{
+	ctx()->m_selectedEntity = e;
 }
 
 } //-- jny
