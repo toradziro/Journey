@@ -53,7 +53,7 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 		//-- Type updating handling
 		if (fieldDataType == entt::resolve<float>())
 		{
-			std::string imGuiId = fmt::format("##{}float", propName);
+			std::string imGuiId = fmt::format("##{}{}float", propName, static_cast<u32>(e));
 
 			float val = fieldData.cast<float>();
 			bool valueChanged = ImGui::DragFloat(imGuiId.data(), &val, 0.1f);
@@ -72,7 +72,7 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 		}
 		else if (fieldDataType == entt::resolve<bool>())
 		{
-			std::string imGuiId = fmt::format("##{}bool", propName);
+			const std::string imGuiId = fmt::format("##{}{}bool", propName, static_cast<u32>(e));
 
 			bool val = fieldData.cast<bool>();
 			if (ImGui::Checkbox(imGuiId.data(), &val))
@@ -82,7 +82,7 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 		}
 		else if (fieldDataType == entt::resolve<std::string>())
 		{
-			std::string imGuiId = fmt::format("##{}str", propName);
+			const std::string imGuiId = fmt::format("##{}{}str", propName, static_cast<u32>(e));
 
 			std::string& val = fieldData.cast<std::string&>();
 			const i32 C_BUF_LENGTH = 1024;
@@ -96,21 +96,21 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 			}
 
 			ImGui::PushItemWidth(-FLT_MIN);
-
 			if (ImGui::InputText(imGuiId.c_str(), buff, C_BUF_LENGTH))
 			{
 				val = std::string(buff);
 				data.set(obj, val);
 			}
+			ImGui::PopItemWidth();
 		}
 		else if (fieldDataType == entt::resolve<glm::vec3>())
 		{
-			std::string imGuiIdX = fmt::format("##{}{}float3x", propName, static_cast<u32>(e));
-			std::string imGuiIdY = fmt::format("##{}{}float3y", propName, static_cast<u32>(e));
-			std::string imGuiIdZ = fmt::format("##{}{}float3z", propName, static_cast<u32>(e));
+			const std::string imGuiIdX = fmt::format("##{}{}float3x", propName, static_cast<u32>(e));
+			const std::string imGuiIdY = fmt::format("##{}{}float3y", propName, static_cast<u32>(e));
+			const std::string imGuiIdZ = fmt::format("##{}{}float3z", propName, static_cast<u32>(e));
 			glm::vec3 val = fieldData.cast<glm::vec3>();
-			float lettersSize = ImGui::CalcTextSize("XYZ").x;
-			float itemWidth = (ImGui::GetColumnWidth() / 3.0f) - lettersSize;
+			const float lettersSize = ImGui::CalcTextSize("XYZ").x;
+			const float itemWidth = (ImGui::GetColumnWidth() / 3.0f) - lettersSize;
 
 			bool valueChanged = false;
 			ImGui::AlignTextToFramePadding();
@@ -149,7 +149,7 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 		}
 		else if (fieldDataType == entt::resolve<glm::vec4>())
 		{
-			std::string imGuiId = fmt::format("##{}float4", propName);
+			const std::string imGuiId = fmt::format("##{}{}float4", propName, static_cast<u32>(e));
 
 			glm::vec4 val = fieldData.cast<glm::vec4>();
 			ImGui::PushItemWidth(-FLT_MIN);
@@ -157,6 +157,7 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 			{
 				data.set(obj, val);
 			}
+			ImGui::PopItemWidth();
 		}
 	}
 }
