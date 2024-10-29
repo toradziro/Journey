@@ -56,7 +56,7 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 			std::string imGuiId = fmt::format("##{}float", propName);
 
 			float val = fieldData.cast<float>();
-			bool valueChanged = ImGui::DragFloat(imGuiId.data(), &val, 0.01f);
+			bool valueChanged = ImGui::DragFloat(imGuiId.data(), &val, 0.1f);
 			if (valueChanged)
 			{
 				if (auto prop = data.prop(C_ON_PROP_CHANGE_HS); prop)
@@ -105,11 +105,35 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 		}
 		else if (fieldDataType == entt::resolve<glm::vec3>())
 		{
-			std::string imGuiId = fmt::format("##{}float3", propName);
+			std::string imGuiIdX = fmt::format("##{}{}float3x", propName, static_cast<u32>(e));
+			std::string imGuiIdY = fmt::format("##{}{}float3y", propName, static_cast<u32>(e));
+			std::string imGuiIdZ = fmt::format("##{}{}float3z", propName, static_cast<u32>(e));
 			glm::vec3 val = fieldData.cast<glm::vec3>();
+			float lettersSize = ImGui::CalcTextSize("XYZ").x;
+			float itemWidth = (ImGui::GetColumnWidth() / 3.0f) - lettersSize;
 
-			ImGui::PushItemWidth(-FLT_MIN);
-			bool valueChanged = ImGui::DragFloat3(imGuiId.data(), glm::value_ptr(val), 0.01f);
+			bool valueChanged = false;
+			ImGui::AlignTextToFramePadding();
+			ImGui::TextUnformatted("X");
+			ImGui::SameLine();
+			ImGui::PushItemWidth(itemWidth);
+			valueChanged |= ImGui::DragFloat(imGuiIdX.c_str(), &val.x, 0.1f);
+			ImGui::PopItemWidth();
+
+			ImGui::SameLine();
+			ImGui::TextUnformatted("Y");
+			ImGui::SameLine();
+			ImGui::PushItemWidth(itemWidth);
+			valueChanged |= ImGui::DragFloat(imGuiIdY.c_str(), &val.y, 0.1f);
+			ImGui::PopItemWidth();
+
+			ImGui::SameLine();
+			ImGui::TextUnformatted("Z");
+			ImGui::SameLine();
+			ImGui::PushItemWidth(itemWidth);
+			valueChanged |= ImGui::DragFloat(imGuiIdZ.c_str(), &val.z, 0.1f);
+			ImGui::PopItemWidth();
+
 			if (valueChanged)
 			{
 				if (auto prop = data.prop(C_ON_PROP_CHANGE_HS); prop)
