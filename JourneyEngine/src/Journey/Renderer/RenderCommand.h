@@ -22,7 +22,7 @@ public:
 	{
 		PROFILE_FUNC;
 
-		m_RendererAPI->drawIndexed(vertexArray);
+		m_RendererAPI->drawIndexed(vertexArray, size);
 	}
 
 	void setClearColor(const glm::vec4& color)

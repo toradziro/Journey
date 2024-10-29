@@ -132,4 +132,14 @@ Entity Scene::createEntity()
 	return e;
 }
 
+void Scene::removeEntity(Entity e)
+{
+	m_registry.destroy(e.m_entity);
+}
+
+void Scene::removeEntity(entt::entity e)
+{
+	m_registry.destroy(e);
+}
+
 } //-- jny

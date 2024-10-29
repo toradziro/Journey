@@ -18,6 +18,8 @@ public:
 	void onViewportResize(u32 width, u32 height);
 
 	Entity createEntity();
+	void removeEntity(Entity e);
+	void removeEntity(entt::entity e);
 
 	//-- This method can be used only in Scene Panel!
 	entt::registry& registry()

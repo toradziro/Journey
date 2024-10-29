@@ -30,6 +30,8 @@ void SceneHierarchy::updateUI()
 	//-- TODO: change begin to scoped wrapper
 	if (ImGui::Begin("Scene Hierarchy"))
 	{
+		drawContextMenu();
+
 		entt::registry& registry = ctx()->m_currentScene->registry();
 		registry.view<entt::entity>().each([&](entt::entity entity)
 			{
@@ -43,16 +45,13 @@ void SceneHierarchy::updateUI()
 				}
 				//-- TODO: change begin to scoped wrapper
 				bool nodeExpanded = ImGui::TreeNodeEx(entityName.data(), flags);
-				if (ImGui::IsItemClicked())
+				if (ImGui::IsItemClicked(ImGuiMouseButton_Left) || ImGui::IsItemClicked(ImGuiMouseButton_Right))
 				{
-					if (ctx()->m_selectedEntity == innerEntity)
-					{
-						ctx()->m_selectedEntity = {};
-					}
-					else
-					{
-						ctx()->m_selectedEntity = innerEntity;
-					}
+					ctx()->m_selectedEntity = innerEntity;
+				}
+				if (ImGui::IsKeyPressed(ImGuiKey_Escape))
+				{
+					ctx()->m_selectedEntity = {};
 				}
 				if (nodeExpanded)
 				{
@@ -61,6 +60,42 @@ void SceneHierarchy::updateUI()
 			});
 	}
 	ImGui::End();
+}
+
+void SceneHierarchy::drawContextMenu()
+{
+	const ImVec2 regionMin = ImGui::GetWindowContentRegionMin();
+	const ImVec2 regionMax = ImGui::GetWindowContentRegionMax();
+	const ImVec2 mousePos = ImGui::GetMousePos();
+	const bool isMouseInWindow = mousePos.x > regionMin.x && mousePos.x < regionMax.x
+		&& mousePos.y > regionMin.y && mousePos.y < regionMax.y;
+
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && isMouseInWindow)
+	{
+		ImGui::OpenPopup("##contextMenu");
+	}
+	if (ImGui::BeginPopupContextItem("##contextMenu"))
+	{
+		const bool anyEntitySelected = ctx()->m_selectedEntity.entityId() != entt::null;
+		if (anyEntitySelected)
+		{
+			if (ImGui::MenuItem("Remove Entity"))
+			{
+				ctx()->m_currentScene->removeEntity(ctx()->m_selectedEntity);
+			}
+		}
+		else
+		{
+			if (ImGui::MenuItem("New Entity"))
+			{
+				auto& scene = ctx()->m_currentScene;
+				auto newEntity = scene->createEntity();
+				newEntity.component<EntityNameComponent>().m_name = "New entity";
+				ctx()->m_selectedEntity = newEntity;
+			}
+		}
+		ImGui::EndPopup();
+	}
 }
 
 } //-- jny

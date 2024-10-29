@@ -139,13 +139,15 @@ void Renderer2D::flush()
 {
 	PROFILE_FUNC;
 
-	for (u32 i = 0; i < m_currTextureSlot; ++i)
+	if (m_currQuadIndex != 0)
 	{
-		m_textureSlots[i]->bind(i);
+		for (u32 i = 0; i < m_currTextureSlot; ++i)
+		{
+			m_textureSlots[i]->bind(i);
+		}
+		Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray, m_currQuadIndex);
+		m_frameStat.m_drawCalls++;
 	}
-
-	Application::subsystems().st<RenderCommand>().drawIndexed(m_quadVertexArray, m_currQuadIndex);
-	m_frameStat.m_drawCalls++;
 }
 
 void Renderer2D::drawQuad(const QuadCfg& cfg)

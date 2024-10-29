@@ -45,7 +45,9 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 		if (auto prop = data.prop(C_CASTOM_UI_DRAW); prop)
 		{
 			auto customDraw = prop.value().cast<std::function<void(T&, entt::entity)>>();
+			ImGui::PushItemWidth(-FLT_MIN);
 			customDraw(obj, e);
+			ImGui::PopItemWidth();
 			return;
 		}
 		auto fieldDataType = fieldData.type();

@@ -15,6 +15,9 @@ public:
 
 	virtual void update(f32 dt) override;
 	virtual void updateUI() override;
+
+private:
+	void drawContextMenu();
 };
 
 } //-- jny
