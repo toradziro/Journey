@@ -116,21 +116,27 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 
 			bool valueChanged = false;
 			ImGui::AlignTextToFramePadding();
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.7f, 0.0f, 0.0f, 0.9f });
 			ImGui::TextUnformatted("X");
+			ImGui::PopStyleColor();
 			ImGui::SameLine();
 			ImGui::PushItemWidth(itemWidth);
 			valueChanged |= ImGui::DragFloat(imGuiIdX.c_str(), &val.x, 0.1f);
 			ImGui::PopItemWidth();
 
 			ImGui::SameLine();
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f, 0.7f, 0.0f, 0.9f });
 			ImGui::TextUnformatted("Y");
+			ImGui::PopStyleColor();
 			ImGui::SameLine();
 			ImGui::PushItemWidth(itemWidth);
 			valueChanged |= ImGui::DragFloat(imGuiIdY.c_str(), &val.y, 0.1f);
 			ImGui::PopItemWidth();
 
 			ImGui::SameLine();
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f, 0.0f, 0.7f, 0.9f });
 			ImGui::TextUnformatted("Z");
+			ImGui::PopStyleColor();
 			ImGui::SameLine();
 			ImGui::PushItemWidth(itemWidth);
 			valueChanged |= ImGui::DragFloat(imGuiIdZ.c_str(), &val.z, 0.1f);
