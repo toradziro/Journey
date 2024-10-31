@@ -216,6 +216,23 @@ void EntityProperties::updateUI()
 			constexpr auto tableName = "##conponentsTable";
 			constexpr auto tableFlags = ImGuiTableFlags_Resizable | ImGuiTableFlags_NoBordersInBodyUntilResize;
 
+			if (ImGui::Button("Add Component"))
+			{
+				ImGui::OpenPopup("##addComponentPopup");
+			}
+			if (ImGui::BeginPopup("##addComponentPopup"))
+			{
+				if (!ctx()->m_selectedEntity.hasComponent<SpriteComponent>() && ImGui::Selectable("Sprite Component"))
+				{
+					ctx()->m_selectedEntity.addComponent<SpriteComponent>();
+				}
+				else if (!ctx()->m_selectedEntity.hasComponent<CameraComponent>() && ImGui::Selectable("Camera Component"))
+				{
+					ctx()->m_selectedEntity.addComponent<CameraComponent>();
+				}
+				ImGui::EndPopup();
+			}
+
 			if (ImGui::BeginTable(tableName, 2, tableFlags, ImGui::GetContentRegionAvail()))
 			{
 				drawComponents(ctx()->m_selectedEntity, ctx()->m_currentScene);
