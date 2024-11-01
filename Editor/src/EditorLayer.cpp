@@ -196,7 +196,7 @@ void EditorLayer::imGuiRender()
 	{
 		panel->updateUI();
 	}
-	
+
 	if (ImGui::Begin("Statistics info"))
 	{
 		ImGui::Text("FPS: %d", static_cast<int>(m_FPS));

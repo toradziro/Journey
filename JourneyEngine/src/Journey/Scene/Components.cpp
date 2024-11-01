@@ -126,12 +126,14 @@ void registerComponents()
 			.prop(C_PROP_NAME_HS, "Ortho Distance")
 			.prop(C_ON_PROP_CHANGE_HS, std::function<void(CameraComponent&, f32)>([](CameraComponent& component, f32 val)
 				{
+					component.m_zoom = val;
 					component.m_camera.setZoom(val);
 				}))
 		.data<&CameraComponent::m_fov>(entt::hashed_string("cameraFov"))
 			.prop(C_PROP_NAME_HS, "Perspective FOV")
 			.prop(C_ON_PROP_CHANGE_HS, std::function<void(CameraComponent&, f32)>([](CameraComponent& component, f32 val)
 				{
+					component.m_fov = val;
 					component.m_perspectiveCamera.setFov(val);
 				}));
 	//-- NativeScriptComponent
