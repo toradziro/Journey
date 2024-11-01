@@ -37,7 +37,7 @@ public:
 	}
 
 	template<typename T, typename... Args>
-	T& removeComponent(Args&&... args)
+	auto removeComponent(Args&&... args)
 	{
 		JNY_ASSERT(hasComponent<T>(), "No here yet");
 

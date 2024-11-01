@@ -171,16 +171,33 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 }
 
 template<typename T>
-void drawComponent(entt::entity entity, entt::registry& registry, Entity& innerEntity)
+void drawContextMenu(entt::registry& registry, Entity& innerEntity)
 {
-	if (registry.all_of<T>(entity))
+	if (ImGui::BeginPopupContextItem("##componentsContextMenu"))
+	{
+		if (ImGui::MenuItem("Remove Component"))
+		{
+			innerEntity.removeComponent<T>();
+		}
+		ImGui::EndPopup();
+	}
+}
+
+template<typename T>
+void drawComponent(entt::registry& registry, Entity& innerEntity)
+{
+	if (registry.all_of<T>(innerEntity.entityId()))
 	{
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
 		if (ImGui::TreeNodeEx(T::C_COMPONENT_NAME, ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			entt::id_type typeId = entt::hashed_string::value(T::C_COMPONENT_NAME);
-			drawComponent<T>(typeId, innerEntity.component<T>(), entity);
+			drawContextMenu<T>(registry, innerEntity);
+			if (innerEntity.hasComponent<T>())
+			{
+				drawComponent<T>(typeId, innerEntity.component<T>(), innerEntity.entityId());
+			}
 			ImGui::TreePop();
 		}
 	}
@@ -188,10 +205,10 @@ void drawComponent(entt::entity entity, entt::registry& registry, Entity& innerE
 
 void drawComponents(Entity& innerEntity, Ref<Scene>	m_scene)
 {
-	drawComponent<EntityNameComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
-	drawComponent<TransformComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
-	drawComponent<SpriteComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
-	drawComponent<CameraComponent>(innerEntity.entityId(), m_scene->registry(), innerEntity);
+	drawComponent<EntityNameComponent>(m_scene->registry(), innerEntity);
+	drawComponent<TransformComponent>(m_scene->registry(), innerEntity);
+	drawComponent<SpriteComponent>(m_scene->registry(), innerEntity);
+	drawComponent<CameraComponent>(m_scene->registry(), innerEntity);
 }
 
 EntityProperties::EntityProperties(const Ref<EditorContext>& ctx) :
