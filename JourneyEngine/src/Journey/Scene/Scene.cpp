@@ -1,9 +1,9 @@
 #include "jnypch.h"
 #include "Scene.h"
-#include "Components.h"
 #include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer2D.h"
 #include "Journey/Renderer/OrthographicCameraController.h"
+#include "Components.h"
 
 #include <glm/glm.hpp>
 
@@ -126,7 +126,7 @@ void Scene::onViewportResize(u32 width, u32 height)
 
 Entity Scene::createEntity()
 {
-	Entity e = Entity(&m_registry);
+	Entity e = Entity(this);
 	e.addComponent<TransformComponent>();
 	e.addComponent<EntityNameComponent>();
 	return e;
@@ -140,6 +140,11 @@ void Scene::removeEntity(Entity e)
 void Scene::removeEntity(entt::entity e)
 {
 	m_registry.destroy(e);
+}
+
+void Scene::onComponentCreation(CameraComponent& c)
+{
+	c.onViewportResize(m_viewportWidth, m_viewportHeight);
 }
 
 } //-- jny

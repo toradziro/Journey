@@ -12,19 +12,19 @@ namespace jny
 class Entity
 {
 protected:
-	Entity(entt::registry* registry) : m_registry(registry)
+	Entity(Scene* scene) : m_scene(scene)
 	{
-		m_entity = m_registry->create();
+		m_entity = m_scene->registry().create();
 	}
 
 public:
 	Entity() = default;
-	Entity(entt::entity entity, entt::registry* registry) : m_entity(entity), m_registry(registry) {}
-	Entity(const Entity& other) : m_entity(other.m_entity), m_registry(other.m_registry) { }
+	Entity(entt::entity entity, Scene* scene) : m_entity(entity), m_scene(scene) {}
+	Entity(const Entity& other) : m_entity(other.m_entity), m_scene(other.m_scene) { }
 	Entity operator=(const Entity& other)
 	{
 		m_entity = other.m_entity;
-		m_registry = other.m_registry;
+		m_scene = other.m_scene;
 		return *this;
 	}
 
@@ -32,8 +32,9 @@ public:
 	T& addComponent(Args&&... args)
 	{
 		JNY_ASSERT(!hasComponent<T>(), "Already here");
-
-		return m_registry->emplace<T>(m_entity, std::forward<Args>(args)...);
+		T& c = m_scene->registry().emplace<T>(m_entity, std::forward<Args>(args)...);
+		m_scene->onComponentCreation(c);
+		return c;
 	}
 
 	template<typename T, typename... Args>
@@ -41,7 +42,7 @@ public:
 	{
 		JNY_ASSERT(hasComponent<T>(), "No here yet");
 
-		return m_registry->remove<T>(m_entity);
+		return m_scene->registry().remove<T>(m_entity);
 	}
 
 	template<typename T>
@@ -49,25 +50,25 @@ public:
 	{
 		JNY_ASSERT(hasComponent<T>(), "No here yet");
 
-		return m_registry->get<T>(m_entity);
+		return m_scene->registry().get<T>(m_entity);
 	}
 
 	template<typename T>
 	bool hasComponent()
 	{
-		return m_registry->all_of<T>(m_entity);
+		return m_scene->registry().all_of<T>(m_entity);
 	}
 
 	entt::entity entityId() const { return m_entity; }
 
 	operator bool() const
 	{
-		return m_registry != nullptr && m_entity != entt::null;
+		return m_scene != nullptr && m_entity != entt::null;
 	}
 
 	bool operator==(const Entity& other) const
 	{
-		return m_registry == other.m_registry && m_entity == other.m_entity;
+		return m_scene == other.m_scene && m_entity == other.m_entity;
 	}
 
 	bool operator!=(const Entity& other) const
@@ -79,7 +80,7 @@ private:
 	friend class Scene;
 
 	entt::entity	m_entity = entt::null;
-	entt::registry*	m_registry = nullptr;
+	Scene*			m_scene = nullptr;
 };
 
 class Script

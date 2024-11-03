@@ -35,7 +35,7 @@ void SceneHierarchy::updateUI()
 		entt::registry& registry = ctx()->m_currentScene->registry();
 		registry.view<entt::entity>().each([&](entt::entity entity)
 			{
-				Entity innerEntity(entity, &ctx()->m_currentScene->registry());
+				Entity innerEntity(entity, ctx()->m_currentScene.raw());
 
 				const std::string_view entityName = innerEntity.component<EntityNameComponent>().m_name;
 				int flags = ImGuiTreeNodeFlags_OpenOnArrow;
@@ -44,7 +44,7 @@ void SceneHierarchy::updateUI()
 					flags |= ImGuiTreeNodeFlags_Selected;
 				}
 				//-- TODO: change begin to scoped wrapper
-				bool nodeExpanded = ImGui::TreeNodeEx(entityName.data(), flags);
+				bool nodeExpanded = ImGui::TreeNodeEx(entityName.empty() ? "_" : entityName.data(), flags);
 				if (ImGui::IsItemClicked(ImGuiMouseButton_Left) || ImGui::IsItemClicked(ImGuiMouseButton_Right))
 				{
 					selectEntity(innerEntity);

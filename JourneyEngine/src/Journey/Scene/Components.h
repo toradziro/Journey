@@ -13,6 +13,7 @@ namespace jny
 {
 
 static inline constexpr auto C_PROP_NAME_HS = entt::hashed_string::value("property_name");
+static inline constexpr auto C_PROP_REMOVABLE = entt::hashed_string::value("componet_removable");
 static inline constexpr auto C_ON_PROP_CHANGE_HS = entt::hashed_string::value("on_propety_change");
 static inline constexpr auto C_FORMAT_STR_HS = entt::hashed_string::value("format_string");
 static inline constexpr auto C_CASTOM_UI_DRAW = entt::hashed_string::value("castom_ui_draw");
@@ -28,12 +29,12 @@ struct TransformComponent
 
 	glm::mat4 transform() const
 	{
-		glm::mat4 ret { 1.0f };
-		ret = glm::translate(ret, m_position);
+		glm::mat4 transform { 1.0f };
+		transform = glm::translate(transform, m_position);
 		glm::mat4 rotationMatrix = glm::toMat4(glm::normalize(glm::quat(glm::radians(m_rotation))));
-		ret = ret * rotationMatrix;
-		ret = glm::scale(ret, m_scale);
-		return ret;
+		transform = transform * rotationMatrix;
+		transform = glm::scale(transform, m_scale);
+		return transform;
 	}
 
 	glm::vec3	m_position = {};
@@ -96,7 +97,7 @@ struct CameraComponent
 	f32					m_fov = 45.0f; //-- works with perspective only
 	bool				m_primer = false;
 	bool				m_fixedAspectRatio = false;
-	bool				m_perspective = false;
+	bool				m_perspective = true;
 };
 
 struct NativeScriptComponent

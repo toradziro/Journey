@@ -7,6 +7,11 @@ namespace jny
 {
 
 class Entity;
+struct TransformComponent;
+struct SpriteComponent;
+struct EntityNameComponent;
+struct CameraComponent;
+struct NativeScriptComponent;
 
 class Scene : public ReferenceCounter
 {
@@ -28,6 +33,14 @@ public:
 	}
 
 private:
+	void onComponentCreation(TransformComponent& c) {}
+	void onComponentCreation(SpriteComponent&c ) {}
+	void onComponentCreation(EntityNameComponent& c) {}
+	void onComponentCreation(CameraComponent& c);
+	void onComponentCreation(NativeScriptComponent& c) {}
+
+private:
+	friend class Entity;
 	//-- Scene entities and components storage
 	entt::registry	m_registry;
 
