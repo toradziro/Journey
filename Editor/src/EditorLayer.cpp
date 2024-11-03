@@ -44,19 +44,20 @@ void EditorLayer::attach()
 
 	//-- In scene all entities are living
 	m_context->m_currentScene = Ref<Scene>::create();
-	m_sampleE = m_context->m_currentScene->createEntity();
+	auto& currScene = m_context->m_currentScene;
+	m_sampleE = currScene->createEntity();
 	m_sampleE.addComponent<SpriteComponent>(std::move(sampleSpriteComponent));
 	m_sampleE.component<TransformComponent>().m_position = { -1.0f, 0.0f, -2.0f };
 	m_sampleE.component<TransformComponent>().m_scale = { 1.0f, 1.0f, 0.0f };
 	m_sampleE.component<EntityNameComponent>().m_name = "Sample Quad";
 
-	m_sampleE2 = m_context->m_currentScene->createEntity();
+	m_sampleE2 = currScene->createEntity();
 	m_sampleE2.addComponent<SpriteComponent>(std::move(sampleSpriteComponent2));
 	m_sampleE2.component<TransformComponent>().m_position = { 1.0f, 0.0f, -4.0f };
 	m_sampleE2.component<TransformComponent>().m_scale = { 1.0f, 1.0f, 0.0f };
 	m_sampleE2.component<EntityNameComponent>().m_name = "Sample Quad 2";
 
-	m_cameraE = m_context->m_currentScene->createEntity();
+	m_cameraE = currScene->createEntity();
 	m_cameraE.addComponent<CameraComponent>().m_primer = true;
 	m_cameraE.component<EntityNameComponent>().m_name = "Camera";
 	m_cameraE.component<TransformComponent>().m_position = { 0.0f, 0.0f, 5.0f };

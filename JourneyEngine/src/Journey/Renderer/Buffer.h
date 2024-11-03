@@ -24,9 +24,6 @@ enum class ShaderDataType : u8
 	None
 };
 
-namespace
-{
-
 u32 shaderDataTypeSize(ShaderDataType type)
 {
 	switch (type)
@@ -56,14 +53,14 @@ u32 componentsCount(ShaderDataType type)
 {
 	switch (type)
 	{
-		case ShaderDataType::Bool:		return 1;
-		case ShaderDataType::Int:		return 1;
-		case ShaderDataType::Int2:		return 2;
-		case ShaderDataType::Int3:		return 3;
-		case ShaderDataType::Int4:		return 4;
+		case ShaderDataType::Bool:		[[fallthrough]];
+		case ShaderDataType::Int:		[[fallthrough]];
 		case ShaderDataType::Float:		return 1;
+		case ShaderDataType::Int2:		[[fallthrough]];
 		case ShaderDataType::Float2:	return 2;
+		case ShaderDataType::Int3:		[[fallthrough]];
 		case ShaderDataType::Float3:	return 3;
+		case ShaderDataType::Int4:		[[fallthrough]];
 		case ShaderDataType::Float4:	return 4;
 		//-- 3x3 matrix
 		case ShaderDataType::Mat3:		return 3 * 3;
@@ -76,8 +73,6 @@ u32 componentsCount(ShaderDataType type)
 	JNY_ASSERT(false, "Invalid type");
 	return 0;
 }
-
-} //-- unnamed
 
 struct LayoutElement
 {

@@ -233,10 +233,6 @@ EntityProperties::EntityProperties(const Ref<EditorContext>& ctx) :
 {
 }
 
-EntityProperties::~EntityProperties()
-{
-}
-
 void EntityProperties::update(f32 dt)
 {
 }

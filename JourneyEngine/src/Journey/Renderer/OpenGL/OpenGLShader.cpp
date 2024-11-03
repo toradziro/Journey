@@ -88,7 +88,6 @@ void OpenGLShader::unbind() const
 OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 {
 	constexpr std::string_view C_WIN_LINEBREAK = "\r\n";
-	constexpr std::string_view C_LIN_LINEBREAK = "\n";
 	constexpr std::string_view C_TOKEN = "#type";
 
 	ShaderSources shaderSources;
@@ -100,10 +99,11 @@ OpenGLShader::ShaderSources OpenGLShader::preprocess(const std::string& source)
 	std::string_view linebreak = C_WIN_LINEBREAK;
 	if (source.find(C_WIN_LINEBREAK) == std::string::npos)
 	{
+		constexpr std::string_view C_LIN_LINEBREAK = "\n";
 		linebreak = C_LIN_LINEBREAK;
 	}
 
-	while (pos < source.size() && pos != std::string::npos)
+	while (pos < source.size())
 	{
 		size_t lineEnd = source.find(linebreak, pos);
 		std::string line = source.substr(pos, lineEnd - pos);

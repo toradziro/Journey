@@ -4,10 +4,6 @@
 namespace jny
 {
 
-LayerStack::LayerStack()
-{
-}
-
 LayerStack::~LayerStack()
 {
 	std::ranges::for_each(m_layers, [](auto& layer)

@@ -9,7 +9,10 @@
 namespace jny
 {
 
-void subTexture(QuadCfg& cfg, glm::vec2 subTexture, const glm::vec2& spriteSize, const glm::vec2& cellsFromAtlas)
+void subTexture(QuadCfg& cfg
+	, const glm::vec2& subTexture
+	, const glm::vec2& spriteSize
+	, const glm::vec2& cellsFromAtlas)
 {
 	Ref<SubTexture2D> sbt = SubTexture2D::createFromCoords(subTexture, spriteSize, cellsFromAtlas, cfg.m_texture);
 

@@ -11,7 +11,7 @@ class EntityProperties final : public IPanel
 {
 public:
 	EntityProperties(const Ref<EditorContext>& ctx);
-	~EntityProperties();
+	~EntityProperties() = default;
 
 	virtual void update(f32 dt) override;
 	virtual void updateUI() override;

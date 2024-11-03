@@ -24,7 +24,7 @@ namespace jny
 
 std::unique_ptr<SingletonHolder> Application::s_sHolder;
 
-Application::Application(const std::string_view& name)
+Application::Application(const std::string_view name)
 {
 	PROFILE_FUNC;
 
@@ -83,7 +83,9 @@ void Application::run()
 {
 	PROFILE_FUNC;
 
-	s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_MAIN_LOOP_FILE);
+	auto& instrumentor = s_sHolder->st<Instrumentor>();
+
+	instrumentor.beginSession(C_PROFILE_MAIN_LOOP_FILE);
 
 	std::chrono::duration<float> deltaTime = {};
 	while (m_running)
@@ -92,8 +94,8 @@ void Application::run()
 
 		if (m_ciclingCount == C_PROFILING_FRAMES)
 		{
-			s_sHolder->st<Instrumentor>().endSession();
-			s_sHolder->st<Instrumentor>().beginSession(C_PROFILE_MAIN_LOOP_FILE);
+			instrumentor.endSession();
+			instrumentor.beginSession(C_PROFILE_MAIN_LOOP_FILE);
 
 			m_ciclingCount = 0;
 		}
@@ -127,7 +129,7 @@ void Application::run()
 		++m_ciclingCount;
 	}
 
-	s_sHolder->st<Instrumentor>().endSession();
+	instrumentor.endSession();
 }
 
 void Application::onEvent(Event& event)

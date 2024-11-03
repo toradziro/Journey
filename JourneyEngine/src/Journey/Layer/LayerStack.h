@@ -17,7 +17,7 @@ public:
 	using LayerStackPos = std::vector<Layer*>::iterator;
 	using LayerReverseIt = std::vector<Layer*>::reverse_iterator;
 
-	LayerStack();
+	LayerStack() = default;
 	~LayerStack();
 
 	template<typename T, typename ...Args>

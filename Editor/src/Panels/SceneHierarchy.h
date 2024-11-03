@@ -11,7 +11,7 @@ class SceneHierarchy final : public IPanel
 {
 public:
 	SceneHierarchy(const Ref<EditorContext>& ctx);
-	~SceneHierarchy();
+	~SceneHierarchy() = default;
 
 	virtual void update(f32 dt) override;
 	virtual void updateUI() override;

@@ -48,7 +48,7 @@ void Renderer2D::init()
 	u32* indices = new u32[C_MAX_INDICES];
 	
 	u32 offset = 0;
-	for (u32 i = 0; i < C_MAX_INDICES; i += C_INDICES_IN_QUAD)
+	for (u32 i = 0; i < C_MAX_INDICES - 5; i += C_INDICES_IN_QUAD)
 	{
 		indices[i] = offset;
 		indices[i + 1] = offset + 1;
@@ -186,7 +186,7 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 	if (textureIndex == C_INVALID_INDEX)
 	{
 		textureIndex = m_currTextureSlot;
-		m_textureSlots[m_currTextureSlot] = textureToUse;
+		m_textureSlots[m_currTextureSlot] = std::move(textureToUse);
 		++m_currTextureSlot;
 	}
 

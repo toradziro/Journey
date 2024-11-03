@@ -24,7 +24,7 @@ void RenderCommand::createRenderer(RendererAPI::API api)
 		JNY_ASSERT(false, "Can't be none");
 		break;
 	case RendererAPI::API::OpenGL:
-		m_RendererAPI = std::unique_ptr<RendererAPI>(new OpenGLRendererAPI);
+		m_RendererAPI = std::make_unique<OpenGLRendererAPI>();
 		break;
 	default:
 		JNY_ASSERT(false, "Create valid renderer API");

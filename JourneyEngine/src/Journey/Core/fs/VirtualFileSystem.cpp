@@ -19,10 +19,6 @@ void VFS::init()
 	
 	std::string currPathAsStr = currentPath.string();
 	u32 rootIt = currPathAsStr.find(C_ENGINE_NAME);
-	if (rootIt == std::string::npos)
-	{
-		JNY_ASSERT(false, "Tried to load outside working repository - won't work");
-	}
 	currPathAsStr = currPathAsStr.substr(0, rootIt + C_ENGINE_NAME.size());
 
 	m_vfsPath = currPathAsStr;
@@ -43,9 +39,10 @@ Ref<File> VFS::loadFile(const fs_path& path) const
 		size_t size = in.tellg();
 		if (size != -1)
 		{
-			readFile->m_buffer.resize(size, 0);
+			auto& buffer = readFile->m_buffer;
+			buffer.resize(size, 0);
 			in.seekg(0, std::ios::beg);
-			in.read(readFile->m_buffer.data(), readFile->m_buffer.size());
+			in.read(buffer.data(), buffer.size());
 			in.close();
 		}
 		else

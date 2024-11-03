@@ -14,10 +14,6 @@ SceneHierarchy::SceneHierarchy(const Ref<EditorContext>& ctx) :
 {
 }
 
-SceneHierarchy::~SceneHierarchy()
-{
-}
-
 void SceneHierarchy::update(f32 dt)
 {
 	//-- Here we will may want have some logic like selected entity processing

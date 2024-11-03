@@ -92,7 +92,7 @@ void registerComponents()
 					pathsAsStrs.push_back("None");
 					for (const auto& path : textureAssetsPaths)
 					{
-						pathsAsStrs.push_back(path.generic_string());
+						pathsAsStrs.emplace_back(path.generic_string());
 					}
 
 					std::string label = fmt::format("##textureSelector{}", static_cast<u32>(e));
