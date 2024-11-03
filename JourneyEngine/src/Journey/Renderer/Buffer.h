@@ -5,6 +5,9 @@
 namespace jny
 {
 
+namespace
+{
+
 enum class ShaderDataType : u8
 {
 	Bool,
@@ -47,6 +50,8 @@ u32 shaderDataTypeSize(ShaderDataType type)
 
 	JNY_ASSERT(false, "Invalid Type");
 	return 0;
+}
+
 }
 
 u32 componentsCount(ShaderDataType type)

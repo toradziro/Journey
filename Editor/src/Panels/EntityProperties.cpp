@@ -206,7 +206,10 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 			| ImGuiTreeNodeFlags_OpenOnArrow
 			| ImGuiTreeNodeFlags_Framed
 			| ImGuiTreeNodeFlags_SpanFullWidth;
-		if (ImGui::TreeNodeEx(T::C_COMPONENT_NAME, flags))
+		const bool nodePressed = ImGui::TreeNodeEx(T::C_COMPONENT_NAME, flags);
+		ImGui::PopStyleVar();
+
+		if (nodePressed)
 		{
 			entt::id_type typeId = entt::hashed_string::value(T::C_COMPONENT_NAME);
 			drawContextMenu<T>(typeId, registry, innerEntity);
@@ -216,7 +219,6 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 			}
 			ImGui::TreePop();
 		}
-		ImGui::PopStyleVar();
 	}
 }
 
