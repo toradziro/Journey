@@ -248,13 +248,14 @@ void EntityProperties::updateUI()
 			}
 			if (ImGui::BeginPopup("##addComponentPopup"))
 			{
-				if (!ctx()->m_selectedEntity.hasComponent<SpriteComponent>() && ImGui::Selectable("Sprite Component"))
+				auto& selectedEntity = ctx()->m_selectedEntity;
+				if (!selectedEntity.hasComponent<SpriteComponent>() && ImGui::Selectable("Sprite Component"))
 				{
-					ctx()->m_selectedEntity.addComponent<SpriteComponent>();
+					selectedEntity.addComponent<SpriteComponent>();
 				}
-				else if (!ctx()->m_selectedEntity.hasComponent<CameraComponent>() && ImGui::Selectable("Camera Component"))
+				else if (!selectedEntity.hasComponent<CameraComponent>() && ImGui::Selectable("Camera Component"))
 				{
-					ctx()->m_selectedEntity.addComponent<CameraComponent>();
+					selectedEntity.addComponent<CameraComponent>();
 				}
 				ImGui::EndPopup();
 			}

@@ -1,6 +1,6 @@
 #pragma once
 
-#define BIT(x) (1 << x)
+#define BIT(x) (1 << (x))
 
 #include "Journey/Log/Log.h"
 
