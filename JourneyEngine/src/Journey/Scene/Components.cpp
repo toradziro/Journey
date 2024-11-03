@@ -61,9 +61,9 @@ void registerComponents()
 			.prop(C_PROP_NAME_HS, "Position")
 		.data<&TransformComponent::m_scale>(entt::hashed_string("Scale")).prop(C_PROP_NAME_HS, "Scale")
 		.data<&TransformComponent::m_rotation>(entt::hashed_string("Rotation")).prop(C_PROP_NAME_HS, "Rotation");
-	//-- SpriteComponent
+	//-- Sprite Component
 	entt::meta<SpriteComponent>()
-		.type(entt::hashed_string(SpriteComponent::C_COMPONENT_NAME))
+		.type(entt::hashed_string(SpriteComponent::C_COMPONENT_NAME)).prop(C_PROP_REMOVABLE)
 		.data<&SpriteComponent::m_color>(entt::hashed_string("Color")).prop(C_PROP_NAME_HS, "Color")
 		.data<&SpriteComponent::m_texture>(entt::hashed_string("Texture")).prop(C_PROP_NAME_HS, "Texture")
 			.prop(C_CASTOM_UI_DRAW,
@@ -119,7 +119,7 @@ void registerComponents()
 		.data<&EntityNameComponent::m_name>(entt::hashed_string("Name")).prop(C_PROP_NAME_HS, "Name");
 	//-- CameraComponent
 	entt::meta<CameraComponent>()
-		.type(entt::hashed_string(CameraComponent::C_COMPONENT_NAME))
+		.type(entt::hashed_string(CameraComponent::C_COMPONENT_NAME)).prop(C_PROP_REMOVABLE)
 		.data<&CameraComponent::m_primer>(entt::hashed_string("isMainCamera")).prop(C_PROP_NAME_HS, "Main Camera")
 		.data<&CameraComponent::m_perspective>(entt::hashed_string("isPerspective")).prop(C_PROP_NAME_HS, "Is Perspective")
 		.data<&CameraComponent::m_zoom>(entt::hashed_string("cameraZoom"))

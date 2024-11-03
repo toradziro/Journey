@@ -171,11 +171,20 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 }
 
 template<typename T>
-void drawContextMenu(entt::registry& registry, Entity& innerEntity)
+void drawContextMenu(entt::id_type typeId, entt::registry& registry, Entity& innerEntity)
 {
 	if (ImGui::BeginPopupContextItem("##componentsContextMenu"))
 	{
-		if (ImGui::MenuItem("Remove Component"))
+		bool enabled = false;
+
+		//-- Check if component removable
+		entt::meta_type metaType = entt::resolve(typeId);
+		if (auto prop = metaType.prop(C_PROP_REMOVABLE); prop)
+		{
+			enabled = true;
+		}
+
+		if (ImGui::MenuItem("Remove Component", nullptr, false, enabled))
 		{
 			innerEntity.removeComponent<T>();
 		}
@@ -193,7 +202,7 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 		if (ImGui::TreeNodeEx(T::C_COMPONENT_NAME, ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			entt::id_type typeId = entt::hashed_string::value(T::C_COMPONENT_NAME);
-			drawContextMenu<T>(registry, innerEntity);
+			drawContextMenu<T>(typeId, registry, innerEntity);
 			if (innerEntity.hasComponent<T>())
 			{
 				drawComponent<T>(typeId, innerEntity.component<T>(), innerEntity.entityId());
