@@ -116,7 +116,7 @@ void ImGuiLayer::attach()
 	auto& win = Application::subsystems().st<Window>();
 
 	ImGui::GetStyle().ScaleAllSizes(win.dpiScale());
-	float fontSize = 17.0f * win.dpiScale();
+	float fontSize = 18.0f * win.dpiScale();
 
 	io.Fonts->Clear();
 
@@ -126,7 +126,8 @@ void ImGuiLayer::attach()
 	fontConfig.PixelSnapH = true;
 
 	//io.Fonts->AddFontFromFileTTF("../resources/fonts/noto_fonts.ttf", fontSize, &fontConfig);
-	io.Fonts->AddFontFromFileTTF("../resources/fonts/roboto.ttf", fontSize, &fontConfig);
+	//io.Fonts->AddFontFromFileTTF("../resources/fonts/roboto.ttf", fontSize, &fontConfig);
+	io.Fonts->AddFontFromFileTTF("../resources/fonts/open_sans.ttf", fontSize, &fontConfig);
 
 	io.Fonts->Build();
 
