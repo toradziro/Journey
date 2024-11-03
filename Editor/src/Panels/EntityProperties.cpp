@@ -199,7 +199,12 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 	{
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
-		if (ImGui::TreeNodeEx(T::C_COMPONENT_NAME, ImGuiTreeNodeFlags_DefaultOpen))
+		const auto flags = ImGuiTreeNodeFlags_SpanAllColumns
+			| ImGuiTreeNodeFlags_DefaultOpen
+			| ImGuiTreeNodeFlags_OpenOnArrow
+			| ImGuiTreeNodeFlags_Framed
+			| ImGuiTreeNodeFlags_SpanFullWidth;
+		if (ImGui::TreeNodeEx(T::C_COMPONENT_NAME, flags))
 		{
 			entt::id_type typeId = entt::hashed_string::value(T::C_COMPONENT_NAME);
 			drawContextMenu<T>(typeId, registry, innerEntity);

@@ -38,7 +38,7 @@ void SceneHierarchy::updateUI()
 				Entity innerEntity(entity, ctx()->m_currentScene.raw());
 
 				const std::string_view entityName = innerEntity.component<EntityNameComponent>().m_name;
-				int flags = ImGuiTreeNodeFlags_OpenOnArrow;
+				int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanFullWidth;
 				if (ctx()->m_selectedEntity.entityId() == entity)
 				{
 					flags |= ImGuiTreeNodeFlags_Selected;
