@@ -199,6 +199,8 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 	{
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
+		constexpr ImVec2 framePaddingSize = { 1.0f, 0.0f };
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, framePaddingSize);
 		const auto flags = ImGuiTreeNodeFlags_SpanAllColumns
 			| ImGuiTreeNodeFlags_DefaultOpen
 			| ImGuiTreeNodeFlags_OpenOnArrow
@@ -214,6 +216,7 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 			}
 			ImGui::TreePop();
 		}
+		ImGui::PopStyleVar();
 	}
 }
 
