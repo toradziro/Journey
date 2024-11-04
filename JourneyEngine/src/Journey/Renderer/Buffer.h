@@ -5,7 +5,7 @@
 namespace jny
 {
 
-namespace
+namespace buff_utils
 {
 
 enum class ShaderDataType : u8
@@ -27,73 +27,26 @@ enum class ShaderDataType : u8
 	None
 };
 
-u32 shaderDataTypeSize(ShaderDataType type)
-{
-	switch (type)
-	{
-		case ShaderDataType::Bool:		return sizeof(bool);
-		case ShaderDataType::Int:		return sizeof(int);
-		case ShaderDataType::Int2:		return sizeof(int) * 2;
-		case ShaderDataType::Int3:		return sizeof(int) * 3;
-		case ShaderDataType::Int4:		return sizeof(int) * 4;
-		case ShaderDataType::Float:		return sizeof(float);
-		case ShaderDataType::Float2:	return sizeof(float) * 2;
-		case ShaderDataType::Float3:	return sizeof(float) * 3;
-		case ShaderDataType::Float4:	return sizeof(float) * 4;
-		//-- 3x3 matrix
-		case ShaderDataType::Mat3:		return sizeof(float) * 3 * 3;
-		//-- 4x4 matrix
-		case ShaderDataType::Mat4:		return sizeof(float) * 4 * 4;
-		default:
-			break;
-	}
+u32 shaderDataTypeSize(ShaderDataType type);
+u32 componentsCount(buff_utils::ShaderDataType type);
 
-	JNY_ASSERT(false, "Invalid Type");
-	return 0;
-}
-
-}
-
-u32 componentsCount(ShaderDataType type)
-{
-	switch (type)
-	{
-		case ShaderDataType::Bool:		[[fallthrough]];
-		case ShaderDataType::Int:		[[fallthrough]];
-		case ShaderDataType::Float:		return 1;
-		case ShaderDataType::Int2:		[[fallthrough]];
-		case ShaderDataType::Float2:	return 2;
-		case ShaderDataType::Int3:		[[fallthrough]];
-		case ShaderDataType::Float3:	return 3;
-		case ShaderDataType::Int4:		[[fallthrough]];
-		case ShaderDataType::Float4:	return 4;
-		//-- 3x3 matrix
-		case ShaderDataType::Mat3:		return 3 * 3;
-		//-- 4x4 matrix
-		case ShaderDataType::Mat4:		return 4 * 4;
-		default:
-			break;
-	}
-
-	JNY_ASSERT(false, "Invalid type");
-	return 0;
 }
 
 struct LayoutElement
 {
-	std::string		m_varName;
+	std::string					m_varName;
 	//-- Crossplatfom way of describing layout variable type
-	ShaderDataType	m_type = ShaderDataType::None;
+	buff_utils::ShaderDataType	m_type = buff_utils::ShaderDataType::None;
 	//-- Size in bytes of current layout element - need to collect offset & stride
-	u32		m_size;
+	u32							m_size;
 	//-- Offset from the start of layout to current layout element
-	u32		m_offset;
+	u32							m_offset;
 	//-- Amount of elements in a layout - vec3 - 3 floats
-	u32		m_count;
+	u32							m_count;
 	//-- Is normalized data
-	bool			m_normilized;
+	bool						m_normilized;
 
-	LayoutElement(ShaderDataType type, const std::string& name, bool normalized = false)
+	LayoutElement(buff_utils::ShaderDataType type, const std::string& name, bool normalized = false)
 		: m_varName(name),
 		m_type(type),
 		m_size(shaderDataTypeSize(type)),

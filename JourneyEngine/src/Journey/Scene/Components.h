@@ -110,7 +110,8 @@ struct NativeScriptComponent
 		static_assert(std::is_base_of<Script, T>::value, "Fix lol.");
 		m_createScript = [entity]()
 			{
-				return static_cast<Script*>(new T(entity));
+				static_assert(std::is_base_of<Script, T>::value, "T must be derived from Script.");
+				return new T(entity);
 			};
 
 		m_destroyScript = [entity](NativeScriptComponent& nsc)

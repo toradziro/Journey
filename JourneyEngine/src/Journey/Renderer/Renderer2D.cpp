@@ -32,11 +32,11 @@ void Renderer2D::init()
 	m_quadVertexBuffer = Ref<VertexBuffer>(VertexBuffer::create(C_MAX_VERTICES * sizeof(QuadVertex)));
 	//-- Setting up vertex attribute array (layout for providing data splitting in shader)
 	BufferLayout::LayoutData layoutData = {
-		{ ShaderDataType::Float3, "a_Position" },
-		{ ShaderDataType::Float4, "a_Color" },
-		{ ShaderDataType::Float2, "a_TexturePos" },
-		{ ShaderDataType::Float, "a_TextureIndex" },
-		{ ShaderDataType::Float, "a_TilingFactor" }
+		{ buff_utils::ShaderDataType::Float3, "a_Position" },
+		{ buff_utils::ShaderDataType::Float4, "a_Color" },
+		{ buff_utils::ShaderDataType::Float2, "a_TexturePos" },
+		{ buff_utils::ShaderDataType::Float, "a_TextureIndex" },
+		{ buff_utils::ShaderDataType::Float, "a_TilingFactor" }
 	};
 	BufferLayout layout = BufferLayout(std::move(layoutData));
 	m_quadVertexBuffer->setLayout(layout);

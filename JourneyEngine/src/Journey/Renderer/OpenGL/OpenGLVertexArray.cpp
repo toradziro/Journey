@@ -8,8 +8,9 @@ namespace jny
 namespace
 {
 
-GLenum toOpenGLType(ShaderDataType type)
+GLenum toOpenGLType(buff_utils::ShaderDataType type)
 {
+	using namespace buff_utils;
 	switch (type)
 	{
 		case ShaderDataType::Bool:		return GL_BOOL;
