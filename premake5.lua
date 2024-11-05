@@ -25,6 +25,7 @@ IncludeDir["GLAD"] = "JourneyEngine/vendor/GLAD/include"
 IncludeDir["glm"] = "JourneyEngine/vendor/glm"
 IncludeDir["imgui"] = "JourneyEngine/vendor/imgui/"
 IncludeDir["entt"] = "JourneyEngine/vendor/entt/include"
+IncludeDir["yaml_cpp"] = "JourneyEngine/vendor/yaml-cpp/include/"
 
 group "Dependencies"
 	-- For window management
@@ -32,6 +33,7 @@ group "Dependencies"
 	-- For modern OpenGL
 	include "JourneyEngine/vendor/GLAD"
 	include "JourneyEngine/vendor/imgui"
+	include "JourneyEngine/vendor/yaml-cpp"
 group ""
 
 -- Function to add compiler warnings
@@ -136,6 +138,7 @@ project "JourneyEngine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}",
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/stb_image"
 	}
@@ -145,6 +148,7 @@ project "JourneyEngine"
 		"GLFW",
 		"GLAD",
 		"opengl32.lib",
+		"yaml-cpp",
 		"imgui"
 	}
 
@@ -197,6 +201,7 @@ function SetupAppProject(name)
 			"%{IncludeDir.GLFW}",
 			"%{IncludeDir.GLAD}",
 			"%{IncludeDir.entt}",
+			"%{IncludeDir.yaml_cpp}",
 			"%{prj.name}/src",
 			"JourneyEngine/src"
 		}
