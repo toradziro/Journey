@@ -147,6 +147,7 @@ void EditorLayer::update(f32 dt)
 	m_framebuffer->unbind();
 
 	m_FPS = 1.0f / dt;
+	m_dt = dt;
 }
 
 void EditorLayer::onEvent(Event& event)
@@ -201,6 +202,7 @@ void EditorLayer::imGuiRender()
 	if (ImGui::Begin("Statistics info"))
 	{
 		ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
+		ImGui::Text("Time spent on a call: %.1f ms", m_dt * 1000.0f);
 		const auto& stat = Application::subsystems().st<Renderer2D>().stats();
 		ImGui::Text("Draw calls: %d", stat.m_drawCalls);
 		ImGui::Text("Quads count: %d", stat.m_quadCount);

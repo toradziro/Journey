@@ -36,6 +36,7 @@ private:
 	Entity							m_cameraE;
 
 	f32								m_FPS = 0.0f;
+	f32								m_dt = 0.0f;
 	bool							m_openDemo = false;
 	bool							m_viewportActive = false;
 };
