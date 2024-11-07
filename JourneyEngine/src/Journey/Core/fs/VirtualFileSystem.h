@@ -32,6 +32,7 @@ public:
 	void		init();
 
 	Ref<File>	loadFile(const fs_path& path) const;
+	Ref<File>	createFile(const fs_path& path) const;
 	void		writeFile(const Ref<File>& file) const;
 	
 	fs_path		virtualToNativePath(const fs_path& path) const;

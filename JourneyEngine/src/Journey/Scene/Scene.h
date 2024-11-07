@@ -2,6 +2,7 @@
 
 #include "entt.hpp"
 #include "Journey/Core/Reference.h"
+#include "SceneSerializer.h"
 
 namespace jny
 {
@@ -32,6 +33,11 @@ public:
 		return m_registry;
 	}
 
+	std::string name() const { return m_sceneName; }
+	void setName(const std::string& name) { m_sceneName = name; }
+
+	void serializeScene(const std::string& filename);
+
 private:
 	void onComponentCreation(TransformComponent& c) {}
 	void onComponentCreation(SpriteComponent&c ) {}
@@ -41,8 +47,11 @@ private:
 
 private:
 	friend class Entity;
+	friend class SceneSerializer;
 	//-- Scene entities and components storage
 	entt::registry	m_registry;
+
+	std::string		m_sceneName = "Untitled";
 
 	u32				m_viewportWidth = 1;
 	u32				m_viewportHeight = 1;

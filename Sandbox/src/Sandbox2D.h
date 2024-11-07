@@ -15,15 +15,4 @@ public:
 	void imGuiRender() override;
 
 private:
-	jny::OrthographicCameraController	m_orthoCameraCtrl;
-	jny::ParticleSystem					m_particleSystem;
-
-	jny::QuadCfg						m_quad;
-	jny::QuadCfg						m_quad1;
-	jny::QuadCfg						m_quad2;
-	jny::QuadCfg						m_backgroundQuad;
-
-	glm::vec2							m_sampledTexture = { 2.0f, 3.0f };
-
-	jny::Ref<jny::Texture2D>			m_checkerboardTexture;
 };

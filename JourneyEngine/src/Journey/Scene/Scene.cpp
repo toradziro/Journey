@@ -142,6 +142,12 @@ void Scene::removeEntity(entt::entity e)
 	m_registry.destroy(e);
 }
 
+void Scene::serializeScene(const std::string& filename)
+{
+	SceneSerializer s(this);
+	s.serialize(filename);
+}
+
 void Scene::onComponentCreation(CameraComponent& c)
 {
 	c.onViewportResize(m_viewportWidth, m_viewportHeight);

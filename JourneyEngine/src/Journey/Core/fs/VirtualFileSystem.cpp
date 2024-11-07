@@ -58,9 +58,21 @@ Ref<File> VFS::loadFile(const fs_path& path) const
 	return readFile;
 }
 
+Ref<File> VFS::createFile(const fs_path& path) const
+{
+	Ref<File> file = Ref<File>::create();
+	file->m_virtualPath = path;
+	file->m_nativePath = virtualToNativePath(path);
+
+	return file;
+}
+
 void VFS::writeFile(const Ref<File>& file) const
 {
-	std::ofstream out(file->m_nativePath, std::ios::out | std::ios::trunc | std::ios::binary);
+	std::ofstream out(file->m_nativePath, std::ios::out
+		| std::ios::trunc
+		| std::ios::binary);
+
 	if (out)
 	{
 		out.write(file->m_buffer.data(), file->m_buffer.size());

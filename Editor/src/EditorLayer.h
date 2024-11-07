@@ -22,6 +22,9 @@ public:
 	void imGuiRender() override;
 
 private:
+	void saveSceneUI();
+
+private:
 	Ref<EditorContext>				m_context;
 	std::vector<IPanel*>			m_panels;
 
@@ -39,6 +42,9 @@ private:
 	f32								m_dt = 0.0f;
 	bool							m_openDemo = false;
 	bool							m_viewportActive = false;
+	//-- TODO: move to other class
+	bool							m_saveScene = false;
+	std::string						m_sceneFilename = "";
 };
 
 }

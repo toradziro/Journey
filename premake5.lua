@@ -36,6 +36,11 @@ group "Dependencies"
 	include "JourneyEngine/vendor/yaml-cpp"
 group ""
 
+defines
+{
+	"YAML_CPP_STATIC_DEFINE"
+}
+
 -- Function to add compiler warnings
 function AddCompilerWarnings()
 	filter "system:windows"
@@ -152,6 +157,11 @@ project "JourneyEngine"
 		"imgui"
 	}
 
+	defines
+	{
+		"YAML_CPP_STATIC_DEFINE"
+	}
+
 	filter "system:windows"
 		systemversion "latest"
 		defines
@@ -209,6 +219,11 @@ function SetupAppProject(name)
 		links
 		{
 			"JourneyEngine"
+		}
+
+		defines
+		{
+			"YAML_CPP_STATIC_DEFINE"
 		}
 
 		filter "system:windows"

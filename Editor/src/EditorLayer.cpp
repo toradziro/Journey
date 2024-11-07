@@ -164,11 +164,18 @@ void EditorLayer::imGuiRender()
 
 	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 
+	saveSceneUI();
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
 			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
+			if (ImGui::MenuItem("Save Scene"))
+			{
+				m_saveScene = true;
+				m_sceneFilename = m_context->m_currentScene->name();
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -206,6 +213,49 @@ void EditorLayer::imGuiRender()
 		const auto& stat = Application::subsystems().st<Renderer2D>().stats();
 		ImGui::Text("Draw calls: %d", stat.m_drawCalls);
 		ImGui::Text("Quads count: %d", stat.m_quadCount);
+		ImGui::End();
+	}
+}
+
+void EditorLayer::saveSceneUI()
+{
+	if (m_saveScene)
+	{
+		constexpr ImVec2 winSize = { 250.0f, 150.0f };
+		ImVec2 winSizeWithDpi = { winSize.x * ImGui::GetWindowDpiScale()
+			, winSize.y * ImGui::GetWindowDpiScale() };
+
+		ImGui::SetNextWindowSize(winSizeWithDpi);
+
+		ImGui::Begin("Save Scene", &m_saveScene);
+		const i32 C_BUF_LENGTH = 1024;
+
+		char buff[C_BUF_LENGTH];
+		memset(buff, 0, C_BUF_LENGTH);
+		//-- No use strcpy since copiler considers in unsafe
+		for (u32 i = 0; i < m_sceneFilename.size(); ++i)
+		{
+			buff[i] = m_sceneFilename[i];
+		}
+		if (ImGui::InputText("##sceneSaving", buff, C_BUF_LENGTH))
+		{
+			m_sceneFilename = buff;
+		}
+
+		constexpr ImVec2 buttonSize = { 60.0f, 30.0f };
+		ImVec2 btnSizeWithDpi = { buttonSize.x * ImGui::GetWindowDpiScale()
+			, buttonSize.y * ImGui::GetWindowDpiScale() };
+
+		if (ImGui::Button("Save", btnSizeWithDpi))
+		{
+			m_context->m_currentScene->serializeScene(m_sceneFilename);
+			m_saveScene = false;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", btnSizeWithDpi))
+		{
+			m_saveScene = false;
+		}
 		ImGui::End();
 	}
 }
