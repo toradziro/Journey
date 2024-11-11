@@ -103,4 +103,51 @@ private:
 	Entity m_entity;
 };
 
+/*
+example:
+	class CameraController : public Script
+	{
+	public:
+		CameraController(Entity entity) : Script(entity) {}
+
+		void attach() override {}
+
+		void update(f32 dt) override
+		{
+			auto& tc = component<TransformComponent>();
+			float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * dt;
+			auto& cameraPos = tc.m_position;
+
+			auto& inputPoll = Application::subsystems().st<jny::InputPoll>();
+			if (inputPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+			{
+				if (inputPoll.keyPressed(GLFW_KEY_D))
+				{
+					cameraPos.x += cameraSpeedWithDeltaTime;
+				}
+				else if (inputPoll.keyPressed(GLFW_KEY_A))
+				{
+					cameraPos.x -= cameraSpeedWithDeltaTime;
+				}
+
+				if (inputPoll.keyPressed(GLFW_KEY_W))
+				{
+					cameraPos.y += cameraSpeedWithDeltaTime;
+				}
+				else if (inputPoll.keyPressed(GLFW_KEY_S))
+				{
+					cameraPos.y -= cameraSpeedWithDeltaTime;
+				}
+			}
+		}
+
+		void detach() override {}
+
+	private:
+		f32	m_cameraMoveSpeed = 5.0f;
+	};
+
+	m_cameraE.addComponent<NativeScriptComponent>().bind<CameraController>(m_cameraE);
+*/
+
 }

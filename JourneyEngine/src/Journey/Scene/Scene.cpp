@@ -55,6 +55,9 @@ Scene::~Scene()
 			nsc.m_script->detach();
 			nsc.m_destroyScript(nsc);
 		});
+
+	auto view = m_registry.view<EntityNameComponent>();
+	m_registry.destroy(view.begin(), view.end());
 }
 
 void Scene::update(f32 dt)
@@ -88,6 +91,8 @@ void Scene::update(f32 dt)
 		renderer2D.beginScene(*mainCamera, mainCameraTransform);
 
 		auto group = m_registry.group<SpriteComponent>(entt::get<TransformComponent>);
+		std::vector<QuadCfg> drawList;
+		drawList.reserve(group.size());
 		for (auto& e : group)
 		{
 			auto& transform = group.get<TransformComponent>(e);
@@ -101,10 +106,20 @@ void Scene::update(f32 dt)
 				quad.m_texture = sprite.m_texture;
 			}
 			quad.m_transform = transform.transform();
+			quad.m_zDepth = transform.m_position.z;
 
-			renderer2D.drawQuad(quad);
+			drawList.push_back(quad);
 		}
 
+		std::ranges::sort(drawList, [](const auto& quad1, const auto& quad2)
+			{
+				return quad1.m_zDepth < quad2.m_zDepth;
+			});
+
+		for (auto& quad : drawList)
+		{
+			renderer2D.drawQuad(quad);
+		}
 		renderer2D.endScene();
 	}
 }
@@ -142,10 +157,17 @@ void Scene::removeEntity(entt::entity e)
 	m_registry.destroy(e);
 }
 
-void Scene::serializeScene(const std::string& filename)
+void Scene::serialize(const std::string& filename)
 {
+	setName(filename);
 	SceneSerializer s(this);
 	s.serialize(filename);
+}
+
+void Scene::deserialize(const std::string& filename)
+{
+	SceneSerializer s(this);
+	s.deserialize(filename);
 }
 
 void Scene::onComponentCreation(CameraComponent& c)

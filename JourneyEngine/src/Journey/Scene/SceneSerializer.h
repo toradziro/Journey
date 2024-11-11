@@ -2,10 +2,18 @@
 
 #include "Journey/Core/Reference.h"
 
+namespace YAML
+{
+
+class Emitter;
+
+}
+
 namespace jny
 {
 
 class Scene;
+class Entity;
 
 class SceneSerializer
 {
@@ -21,6 +29,8 @@ public:
 	void runtimeDeserialize();
 
 private:
+	void serializeEntity(YAML::Emitter& sFile, Entity e);
+
 	Ref<Scene>	m_scene;
 };
 

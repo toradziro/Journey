@@ -23,6 +23,7 @@ public:
 
 private:
 	void saveSceneUI();
+	void loadSceneUI();
 
 private:
 	Ref<EditorContext>				m_context;
@@ -34,16 +35,13 @@ private:
 	Ref<Framebuffer>				m_framebuffer;
 	Application*					m_app;
 
-	Entity							m_sampleE;
-	Entity							m_sampleE2;
-	Entity							m_cameraE;
-
 	f32								m_FPS = 0.0f;
 	f32								m_dt = 0.0f;
 	bool							m_openDemo = false;
 	bool							m_viewportActive = false;
 	//-- TODO: move to other class
 	bool							m_saveScene = false;
+	bool							m_loadScene = false;
 	std::string						m_sceneFilename = "";
 };
 

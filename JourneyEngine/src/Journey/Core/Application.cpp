@@ -16,6 +16,7 @@
 #include "Journey/Core/Profiling/TimeInstruments.h"
 #include "Journey/Core/Random.h"
 #include "Journey/ResourceManagers/TextureManager.h"
+#include "Journey/ResourceManagers/ScenesManager.h"
 
 #include "Journey/Scene/Components.h"
 
@@ -39,6 +40,9 @@ Application::Application(const std::string_view name)
 
 	s_sHolder->add<TextureManager>();
 	s_sHolder->st<TextureManager>().init();
+
+	s_sHolder->add<ScenesManager>();
+	s_sHolder->st<ScenesManager>().init();
 
 	//-- Create main window
 	s_sHolder->add<Window>(WindowData(name, 1200, 800));
@@ -88,6 +92,8 @@ void Application::run()
 	instrumentor.beginSession(C_PROFILE_MAIN_LOOP_FILE);
 
 	std::chrono::duration<float> deltaTime = {};
+	auto managersLastUpdate = std::chrono::high_resolution_clock::now();
+	const auto updateInterval = std::chrono::seconds(6);
 	while (m_running)
 	{
 		PROFILE_SCOPE("Application::run::main_cicle");
@@ -122,8 +128,15 @@ void Application::run()
 		}
 
 		s_sHolder->st<Window>().update();
-
 		auto endTime = std::chrono::high_resolution_clock::now();
+		
+		auto managersUpdateDelay = endTime - managersLastUpdate;
+		if (managersUpdateDelay >= updateInterval)
+		{
+			updateManagers(deltaTime.count());
+			managersLastUpdate = endTime;
+		}
+
 		deltaTime = endTime - startTime;
 
 		++m_ciclingCount;
@@ -196,6 +209,13 @@ float Application::aspectRatio()
 {
 	return static_cast<float>(Application::subsystems().st<Window>().width()) /
 		static_cast<float>(Application::subsystems().st<Window>().height());
+}
+
+void Application::updateManagers(f32 dt)
+{
+	//-- TODO: Deffirent service for Managers not with other singletones
+	s_sHolder->st<TextureManager>().update(dt);
+	s_sHolder->st<ScenesManager>().update(dt);
 }
 
 } //-- jny

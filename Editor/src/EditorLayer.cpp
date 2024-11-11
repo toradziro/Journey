@@ -3,6 +3,8 @@
 #include "Panels/SceneHierarchy.h"
 #include "Panels/EntityProperties.h"
 #include "Journey/ResourceManagers/TextureManager.h"
+#include "Journey/ResourceManagers/ScenesManager.h"
+#include "Journey/ImGui/Controls/DropDownList.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -29,82 +31,7 @@ void EditorLayer::attach()
 
 	//-- Create frambuffer to draw in it instead of directly drawing on screen
 	m_framebuffer = Framebuffer::create({});
-	//-- Zoom level allows us to not be too close to object
-
-	//-- Let's test creating entity and components
-	SpriteComponent sampleSpriteComponent;
-	sampleSpriteComponent.m_color = { 0.2f, 0.8f, 0.0f, 0.7f };
-	sampleSpriteComponent.m_texture = textureManager.create
-	(
-		vfs.virtualToNativePath("assets/textures/bomb.png").lexically_normal().generic_string()
-	);
-
-	SpriteComponent sampleSpriteComponent2;
-	sampleSpriteComponent2.m_color = { 0.8f, 0.8f, 0.0f, 1.0f };
-
-	//-- In scene all entities are living
 	m_context->m_currentScene = Ref<Scene>::create();
-	auto& currScene = m_context->m_currentScene;
-	m_sampleE = currScene->createEntity();
-	m_sampleE.addComponent<SpriteComponent>(std::move(sampleSpriteComponent));
-	m_sampleE.component<TransformComponent>().m_position = { -1.0f, 0.0f, -2.0f };
-	m_sampleE.component<TransformComponent>().m_scale = { 1.0f, 1.0f, 0.0f };
-	m_sampleE.component<EntityNameComponent>().m_name = "Sample Quad";
-
-	m_sampleE2 = currScene->createEntity();
-	m_sampleE2.addComponent<SpriteComponent>(std::move(sampleSpriteComponent2));
-	m_sampleE2.component<TransformComponent>().m_position = { 1.0f, 0.0f, -4.0f };
-	m_sampleE2.component<TransformComponent>().m_scale = { 1.0f, 1.0f, 0.0f };
-	m_sampleE2.component<EntityNameComponent>().m_name = "Sample Quad 2";
-
-	m_cameraE = currScene->createEntity();
-	m_cameraE.addComponent<CameraComponent>().m_primer = true;
-	m_cameraE.component<EntityNameComponent>().m_name = "Camera";
-	m_cameraE.component<TransformComponent>().m_position = { 0.0f, 0.0f, 5.0f };
-
-	class CameraController : public Script
-	{
-	public:
-		CameraController(Entity entity) : Script(entity) {}
-
-		void attach() override {}
-
-		void update(f32 dt) override
-		{
-			auto& tc = component<TransformComponent>();
-			float cameraSpeedWithDeltaTime = m_cameraMoveSpeed * dt;
-			auto& cameraPos = tc.m_position;
-
-			auto& inputPoll = Application::subsystems().st<jny::InputPoll>();
-			if (inputPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
-			{
-				if (inputPoll.keyPressed(GLFW_KEY_D))
-				{
-					cameraPos.x += cameraSpeedWithDeltaTime;
-				}
-				else if (inputPoll.keyPressed(GLFW_KEY_A))
-				{
-					cameraPos.x -= cameraSpeedWithDeltaTime;
-				}
-
-				if (inputPoll.keyPressed(GLFW_KEY_W))
-				{
-					cameraPos.y += cameraSpeedWithDeltaTime;
-				}
-				else if (inputPoll.keyPressed(GLFW_KEY_S))
-				{
-					cameraPos.y -= cameraSpeedWithDeltaTime;
-				}
-			}
-		}
-
-		void detach() override {}
-
-	private:
-		f32	m_cameraMoveSpeed = 5.0f;
-	};
-
-	m_cameraE.addComponent<NativeScriptComponent>().bind<CameraController>(m_cameraE);
 }
 
 void EditorLayer::detach()
@@ -164,7 +91,14 @@ void EditorLayer::imGuiRender()
 
 	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 
-	saveSceneUI();
+	if (m_saveScene)
+	{
+		saveSceneUI();
+	}
+	if (m_loadScene)
+	{
+		loadSceneUI();
+	}
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -174,6 +108,11 @@ void EditorLayer::imGuiRender()
 			if (ImGui::MenuItem("Save Scene"))
 			{
 				m_saveScene = true;
+				m_sceneFilename = m_context->m_currentScene->name();
+			}
+			if (ImGui::MenuItem("Load Scene"))
+			{
+				m_loadScene = true;
 				m_sceneFilename = m_context->m_currentScene->name();
 			}
 			ImGui::EndMenu();
@@ -208,6 +147,7 @@ void EditorLayer::imGuiRender()
 
 	if (ImGui::Begin("Statistics info"))
 	{
+		ImGui::Text("Current Scene: %s", m_context->m_currentScene->name().c_str());
 		ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 		ImGui::Text("Time spent on a call: %.1f ms", m_dt * 1000.0f);
 		const auto& stat = Application::subsystems().st<Renderer2D>().stats();
@@ -219,45 +159,76 @@ void EditorLayer::imGuiRender()
 
 void EditorLayer::saveSceneUI()
 {
-	if (m_saveScene)
+	constexpr ImVec2 winSize = { 250.0f, 150.0f };
+	ImVec2 winSizeWithDpi = { winSize.x * ImGui::GetWindowDpiScale()
+		, winSize.y * ImGui::GetWindowDpiScale() };
+
+	ImGui::SetNextWindowSize(winSizeWithDpi);
+
+	ImGui::Begin("Save Scene", &m_saveScene);
+	const i32 C_BUF_LENGTH = 1024;
+
+	char buff[C_BUF_LENGTH];
+	memset(buff, 0, C_BUF_LENGTH);
+	//-- No use strcpy since copiler considers in unsafe
+	for (u32 i = 0; i < m_sceneFilename.size(); ++i)
 	{
-		constexpr ImVec2 winSize = { 250.0f, 150.0f };
-		ImVec2 winSizeWithDpi = { winSize.x * ImGui::GetWindowDpiScale()
-			, winSize.y * ImGui::GetWindowDpiScale() };
-
-		ImGui::SetNextWindowSize(winSizeWithDpi);
-
-		ImGui::Begin("Save Scene", &m_saveScene);
-		const i32 C_BUF_LENGTH = 1024;
-
-		char buff[C_BUF_LENGTH];
-		memset(buff, 0, C_BUF_LENGTH);
-		//-- No use strcpy since copiler considers in unsafe
-		for (u32 i = 0; i < m_sceneFilename.size(); ++i)
-		{
-			buff[i] = m_sceneFilename[i];
-		}
-		if (ImGui::InputText("##sceneSaving", buff, C_BUF_LENGTH))
-		{
-			m_sceneFilename = buff;
-		}
-
-		constexpr ImVec2 buttonSize = { 60.0f, 30.0f };
-		ImVec2 btnSizeWithDpi = { buttonSize.x * ImGui::GetWindowDpiScale()
-			, buttonSize.y * ImGui::GetWindowDpiScale() };
-
-		if (ImGui::Button("Save", btnSizeWithDpi))
-		{
-			m_context->m_currentScene->serializeScene(m_sceneFilename);
-			m_saveScene = false;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Cancel", btnSizeWithDpi))
-		{
-			m_saveScene = false;
-		}
-		ImGui::End();
+		buff[i] = m_sceneFilename[i];
 	}
+	if (ImGui::InputText("##sceneSaving", buff, C_BUF_LENGTH))
+	{
+		m_sceneFilename = buff;
+	}
+
+	constexpr ImVec2 buttonSize = { 60.0f, 30.0f };
+	ImVec2 btnSizeWithDpi = { buttonSize.x * ImGui::GetWindowDpiScale()
+		, buttonSize.y * ImGui::GetWindowDpiScale() };
+
+	if (ImGui::Button("Save", btnSizeWithDpi))
+	{
+		m_context->m_currentScene->serialize(m_sceneFilename);
+		m_saveScene = false;
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Cancel", btnSizeWithDpi))
+	{
+		m_saveScene = false;
+	}
+	ImGui::End();
+}
+
+void EditorLayer::loadSceneUI()
+{
+	constexpr ImVec2 winSize = { 250.0f, 150.0f };
+	ImVec2 winSizeWithDpi = { winSize.x * ImGui::GetWindowDpiScale()
+		, winSize.y * ImGui::GetWindowDpiScale() };
+
+	ImGui::SetNextWindowSize(winSizeWithDpi);
+
+	ImGui::Begin("Load Scene", &m_loadScene);
+
+	u32 currSelectedScene = DropDownList::C_INVALID_INDEX;
+
+	auto& scenesManager = Application::subsystems().st<ScenesManager>();
+	const auto& scenesAssetsPaths = scenesManager.allScenesOnDisk();
+
+	std::vector<std::string> pathsAsStrs;
+	pathsAsStrs.reserve(scenesAssetsPaths.size());
+	for (const auto& path : scenesAssetsPaths)
+	{
+		pathsAsStrs.emplace_back(path.generic_string());
+	}
+
+	std::string label = fmt::format("##scenesSelector");
+	if (DropDownList(pathsAsStrs, label, currSelectedScene).draw())
+	{
+		m_context->m_currentScene = scenesManager.create(scenesAssetsPaths[currSelectedScene].string());
+		m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
+		m_context->m_selectedEntity = {};
+		m_loadScene = false;
+	}
+
+	ImGui::End();
 }
 
 }

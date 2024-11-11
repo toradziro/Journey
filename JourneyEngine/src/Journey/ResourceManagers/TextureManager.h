@@ -19,6 +19,8 @@ public:
 	Ref<Texture2D>		create(const std::string& texturePath);
 	Ref<Texture2D>		create(const std::string& textureName, u32 width, u32 height);
 
+	void				update(float dt);
+
 	const std::vector<fs_path>& allTexturesOnDisk() const { return m_assetsPaths; }
 
 private:

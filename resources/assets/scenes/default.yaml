@@ -1,0 +1,36 @@
+Scene: default
+Entities:
+  - entity_id: 2
+    EntityName:
+      m_name: Camera
+    Transform:
+      m_position: [0, 0, 5]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 1]
+    Camera:
+      m_zoom: 10
+      m_fov: 45
+      m_primer: true
+      m_fixedAspectRatio: false
+      m_perspective: true
+
+  - entity_id: 1
+    EntityName:
+      m_name: Sample Quad 2
+    Transform:
+      m_position: [1, 0, -4]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 0]
+    Sprite:
+      m_color: [0.800000012, 0.800000012, 0, 1]
+
+  - entity_id: 0
+    EntityName:
+      m_name: Sample Quad
+    Transform:
+      m_position: [-1, 0, -2]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 0]
+    Sprite:
+      m_color: [0.200000003, 0.800000012, 0, 0.699999988]
+      m_texture: D:/dev/Journey/resources/assets/textures/bomb.png

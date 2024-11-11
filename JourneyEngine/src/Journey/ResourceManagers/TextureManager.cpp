@@ -60,4 +60,30 @@ Ref<Texture2D> TextureManager::create(const std::string& textureName, u32 width,
 	return res;
 }
 
+void TextureManager::update(float dt)
+{
+	auto& vfs = Application::subsystems().st<VFS>();
+	fs_path nativePath = vfs.virtualToNativePath(C_TEXTURE_FOLDER_PATH);
+
+	for (auto it = m_assetsPaths.begin(); it != m_assetsPaths.end(); ++it)
+	{
+		if (!fs::exists(*it))
+		{
+			it = m_assetsPaths.erase(it);
+		}
+	}
+
+	for (const auto& entry : fs::recursive_directory_iterator(nativePath))
+	{
+		if (!entry.is_directory())
+		{
+			auto pos = std::find(m_assetsPaths.begin(), m_assetsPaths.end(), entry.path());
+			if (pos == m_assetsPaths.end())
+			{
+				m_assetsPaths.push_back(entry.path());
+			}
+		}
+	}
+}
+
 }

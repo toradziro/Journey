@@ -33,6 +33,7 @@ struct QuadCfg
 	//glm::vec3		m_size = { 1.0f, 1.0f, 0.0f };
 	//f32				m_rotation = 0.0f;
 	//f32				m_rotationDegrees = 0.0f;
+	f32				m_zDepth = 0.0f;
 	f32				m_tilingFactor = 1.0f;
 	glm::vec2		m_texturesPos[4] = {
 								{ 0.0f, 0.0f },

@@ -55,9 +55,12 @@ public:
 	static inline SingletonHolder& subsystems() { JNY_ASSERT(s_sHolder.get() != nullptr, "Don't know this systyem"); return *s_sHolder; }
 
 private:
+	void updateManagers(f32 dt);
+
+private:
 	LayerStack	m_layers;
 	ImGuiLayer*	m_imGuiLayer = nullptr;
-	u8		m_ciclingCount = 0;
+	u8			m_ciclingCount = 0;
 	bool		m_running = true;
 	bool		m_minimized = false;
 	bool		m_imGuiEnabled = true;
