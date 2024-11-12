@@ -21,6 +21,10 @@ public:
 	void onEvent(Event& event) override;
 	void imGuiRender() override;
 
+	void openScene();
+	void saveSceneAs();
+	void newScene();
+
 private:
 	void saveSceneUI();
 	void loadSceneUI();

@@ -92,18 +92,18 @@ void EditorLayer::onEvent(Event& event)
 				{
 					if (e.keyCode() == GLFW_KEY_S)
 					{
-						m_saveScene = true;
+						saveSceneAs();
 						return true;
 					}
 				}
 				if (e.keyCode() == GLFW_KEY_O)
 				{
-					m_loadScene = true;
+					openScene();
 					return true;
 				}
 				if (e.keyCode() == GLFW_KEY_N)
 				{
-					m_context->m_currentScene = Ref<Scene>::create();
+					newScene();
 					return true;
 				}
 			}
@@ -132,18 +132,15 @@ void EditorLayer::imGuiRender()
 		{
 			if (ImGui::MenuItem("New", "Ctrl+N"))
 			{
-				m_context->m_currentScene = Ref<Scene>::create();
-				m_context->m_selectedEntity = {};
+				newScene();
 			}
 			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 			{
-				m_saveScene = true;
-				m_sceneFilename = m_context->m_currentScene->name();
+				saveSceneAs();
 			}
 			if (ImGui::MenuItem("Open...", "Ctrl+O"))
 			{
-				m_loadScene = true;
-				m_sceneFilename = m_context->m_currentScene->name();
+				openScene();
 			}
 			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
 			ImGui::EndMenu();
@@ -186,6 +183,24 @@ void EditorLayer::imGuiRender()
 		ImGui::Text("Quads count: %d", stat.m_quadCount);
 		ImGui::End();
 	}
+}
+
+void EditorLayer::openScene()
+{
+	m_loadScene = true;
+	m_sceneFilename = m_context->m_currentScene->name();
+}
+
+void EditorLayer::saveSceneAs()
+{
+	m_saveScene = true;
+	m_sceneFilename = m_context->m_currentScene->name();
+}
+
+void EditorLayer::newScene()
+{
+	m_context->m_currentScene = Ref<Scene>::create();
+	m_context->m_selectedEntity = {};
 }
 
 void EditorLayer::saveSceneUI()
