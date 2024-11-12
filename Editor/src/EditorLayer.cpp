@@ -81,8 +81,34 @@ void EditorLayer::onEvent(Event& event)
 {
 	PROFILE_FUNC;
 
-	//-- now process events in entities?
-	//m_orthoCameraCtrl.onEvent(event);
+	EventDispatcher ed(event);
+	auto& inputPollSystem = Application::subsystems().st<jny::InputPoll>();
+	ed.dispatch<KeyPressedEvent>([&](KeyPressedEvent& e)
+		{
+			//-- Shortcuts
+			if (inputPollSystem.keyPressed(GLFW_KEY_LEFT_CONTROL))
+			{
+				if (inputPollSystem.keyPressed(GLFW_KEY_LEFT_SHIFT))
+				{
+					if (e.keyCode() == GLFW_KEY_S)
+					{
+						m_saveScene = true;
+						return true;
+					}
+				}
+				if (e.keyCode() == GLFW_KEY_O)
+				{
+					m_loadScene = true;
+					return true;
+				}
+				if (e.keyCode() == GLFW_KEY_N)
+				{
+					m_context->m_currentScene = Ref<Scene>::create();
+					return true;
+				}
+			}
+			return false;
+		});
 }
 
 void EditorLayer::imGuiRender()
@@ -104,17 +130,22 @@ void EditorLayer::imGuiRender()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
-			if (ImGui::MenuItem("Save Scene"))
+			if (ImGui::MenuItem("New", "Ctrl+N"))
+			{
+				m_context->m_currentScene = Ref<Scene>::create();
+				m_context->m_selectedEntity = {};
+			}
+			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 			{
 				m_saveScene = true;
 				m_sceneFilename = m_context->m_currentScene->name();
 			}
-			if (ImGui::MenuItem("Load Scene"))
+			if (ImGui::MenuItem("Open...", "Ctrl+O"))
 			{
 				m_loadScene = true;
 				m_sceneFilename = m_context->m_currentScene->name();
 			}
+			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -165,36 +196,38 @@ void EditorLayer::saveSceneUI()
 
 	ImGui::SetNextWindowSize(winSizeWithDpi);
 
-	ImGui::Begin("Save Scene", &m_saveScene);
-	const i32 C_BUF_LENGTH = 1024;
+	if (ImGui::Begin("Save Scene", &m_saveScene, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+	{
+		const i32 C_BUF_LENGTH = 1024;
 
-	char buff[C_BUF_LENGTH];
-	memset(buff, 0, C_BUF_LENGTH);
-	//-- No use strcpy since copiler considers in unsafe
-	for (u32 i = 0; i < m_sceneFilename.size(); ++i)
-	{
-		buff[i] = m_sceneFilename[i];
-	}
-	if (ImGui::InputText("##sceneSaving", buff, C_BUF_LENGTH))
-	{
-		m_sceneFilename = buff;
-	}
+		char buff[C_BUF_LENGTH];
+		memset(buff, 0, C_BUF_LENGTH);
+		//-- No use strcpy since copiler considers in unsafe
+		for (u32 i = 0; i < m_sceneFilename.size(); ++i)
+		{
+			buff[i] = m_sceneFilename[i];
+		}
+		if (ImGui::InputText("##sceneSaving", buff, C_BUF_LENGTH))
+		{
+			m_sceneFilename = buff;
+		}
 
-	constexpr ImVec2 buttonSize = { 60.0f, 30.0f };
-	ImVec2 btnSizeWithDpi = { buttonSize.x * ImGui::GetWindowDpiScale()
-		, buttonSize.y * ImGui::GetWindowDpiScale() };
+		constexpr ImVec2 buttonSize = { 60.0f, 30.0f };
+		ImVec2 btnSizeWithDpi = { buttonSize.x * ImGui::GetWindowDpiScale()
+			, buttonSize.y * ImGui::GetWindowDpiScale() };
 
-	if (ImGui::Button("Save", btnSizeWithDpi))
-	{
-		m_context->m_currentScene->serialize(m_sceneFilename);
-		m_saveScene = false;
+		if (ImGui::Button("Save", btnSizeWithDpi))
+		{
+			m_context->m_currentScene->serialize(m_sceneFilename);
+			m_saveScene = false;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", btnSizeWithDpi))
+		{
+			m_saveScene = false;
+		}
+		ImGui::End();
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("Cancel", btnSizeWithDpi))
-	{
-		m_saveScene = false;
-	}
-	ImGui::End();
 }
 
 void EditorLayer::loadSceneUI()
@@ -205,30 +238,31 @@ void EditorLayer::loadSceneUI()
 
 	ImGui::SetNextWindowSize(winSizeWithDpi);
 
-	ImGui::Begin("Load Scene", &m_loadScene);
-
-	u32 currSelectedScene = DropDownList::C_INVALID_INDEX;
-
-	auto& scenesManager = Application::subsystems().st<ScenesManager>();
-	const auto& scenesAssetsPaths = scenesManager.allScenesOnDisk();
-
-	std::vector<std::string> pathsAsStrs;
-	pathsAsStrs.reserve(scenesAssetsPaths.size());
-	for (const auto& path : scenesAssetsPaths)
+	if (ImGui::Begin("Load Scene", &m_loadScene, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
 	{
-		pathsAsStrs.emplace_back(path.generic_string());
-	}
+		u32 currSelectedScene = DropDownList::C_INVALID_INDEX;
 
-	std::string label = fmt::format("##scenesSelector");
-	if (DropDownList(pathsAsStrs, label, currSelectedScene).draw())
-	{
-		m_context->m_currentScene = scenesManager.create(scenesAssetsPaths[currSelectedScene].string());
-		m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
-		m_context->m_selectedEntity = {};
-		m_loadScene = false;
-	}
+		auto& scenesManager = Application::subsystems().st<ScenesManager>();
+		const auto& scenesAssetsPaths = scenesManager.allScenesOnDisk();
 
-	ImGui::End();
+		std::vector<std::string> pathsAsStrs;
+		pathsAsStrs.reserve(scenesAssetsPaths.size());
+		for (const auto& path : scenesAssetsPaths)
+		{
+			pathsAsStrs.emplace_back(path.generic_string());
+		}
+
+		std::string label = fmt::format("##scenesSelector");
+		if (DropDownList(pathsAsStrs, label, currSelectedScene).draw())
+		{
+			m_context->m_currentScene = scenesManager.create(scenesAssetsPaths[currSelectedScene].string());
+			m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
+			m_context->m_selectedEntity = {};
+			m_loadScene = false;
+		}
+
+		ImGui::End();
+	}
 }
 
 }
