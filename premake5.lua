@@ -101,8 +101,8 @@ project "JourneyEngine"
 		"%{prj.name}/vendor/stb_image/**.h",
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		
-		"%{prj.name}/vendor/ImGuizmo/**.h",
-		"%{prj.name}/vendor/ImGuizmo/**.cpp"
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	includedirs
