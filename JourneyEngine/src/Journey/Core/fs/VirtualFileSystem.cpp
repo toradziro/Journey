@@ -18,7 +18,7 @@ void VFS::init()
 	fs_path currentPath = std::filesystem::current_path();
 	
 	std::string currPathAsStr = currentPath.string();
-	u32 rootIt = currPathAsStr.find(C_ENGINE_NAME);
+	u64 rootIt = currPathAsStr.find(C_ENGINE_NAME);
 	currPathAsStr = currPathAsStr.substr(0, rootIt + C_ENGINE_NAME.size());
 
 	m_vfsPath = currPathAsStr;

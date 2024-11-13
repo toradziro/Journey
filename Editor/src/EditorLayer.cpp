@@ -53,7 +53,11 @@ void EditorLayer::update(f32 dt)
 		|| static_cast<u32>(m_viewportSize.y) != specs.m_height)
 	{
 		m_framebuffer->resize({ std::max(m_viewportSize.x, 1.0f), std::max(m_viewportSize.y, 1.0f) });
-		m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
+		m_context->m_currentScene->onViewportResize
+		(
+			static_cast<u32>(m_viewportSize.x),
+			static_cast<u32>(m_viewportSize.y)
+		);
 	}
 
 	//m_sampleE2.component<TransformComponent>().m_rotation.x += 15.0f * dt;

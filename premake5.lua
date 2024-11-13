@@ -26,6 +26,7 @@ IncludeDir["glm"] = "JourneyEngine/vendor/glm"
 IncludeDir["imgui"] = "JourneyEngine/vendor/imgui/"
 IncludeDir["entt"] = "JourneyEngine/vendor/entt/include"
 IncludeDir["yaml_cpp"] = "JourneyEngine/vendor/yaml-cpp/include/"
+IncludeDir["ImGuizmo"] = "JourneyEngine/vendor/ImGuizmo/"
 
 group "Dependencies"
 	-- For window management
@@ -38,53 +39,19 @@ group ""
 
 defines
 {
-	"YAML_CPP_STATIC_DEFINE"
+	"YAML_CPP_STATIC_DEFINE",
+	"IMGUI_DEFINE_MATH_OPERATORS"
 }
 
 -- Function to add compiler warnings
 function AddCompilerWarnings()
-	filter "system:windows"
-		buildoptions
-		{
-			"/utf-8",
-			"/w44265",                         -- Somewhat equivalent to -Wextra
-			"/permissive-",                    -- Equivalent to -Wpedantic
-			"/w44263",                         -- Equivalent to -Wctor-dtor-privacy
-			"/w44862",                         -- Equivalent to -Wnon-virtual-dtor
-			"/w44271",                         -- Equivalent to -Wold-style-cast
-			"/w44459",                         -- Equivalent to -Woverloaded-virtual
-			"/w44263",                         -- Equivalent to -Wsign-promo
-			"/w44860",                         -- Equivalent to -Wduplicated-branches
-			"/w44861",                         -- Equivalent to -Wduplicated-cond
-			"/w44265",                         -- Equivalent to -Wfloat-equal
-			"/w44267",                         -- Equivalent to -Wshadow=compatible-local
-			"/w44266",                         -- Equivalent to -Wcast-qual
-			"/w44265",                         -- Equivalent to -Wconversion
-			"/w44268",                         -- Equivalent to -Wzero-as-null-pointer-constant
-			"/w44266",                         -- Equivalent to -Wextra-semi
-			"/w44472",                         -- Equivalent to -Wsign-conversion
-			"/w44262",                         -- Equivalent to -Wlogical-op
-		}
-
 	filter "system:linux"
 		buildoptions
 		{
 			"-Wall",                           -- Enable most common warnings
 			"-Wextra",                         -- Even more common errors will be checked
 			"-Wpedantic",                      -- And moooore
-			"-Wctor-dtor-privacy",             -- Check if class with private constructor is used by any friends
-			"-Wnon-virtual-dtor",              -- If you have virtual member funcs - don’t forget to have virtual ~
-			"-Woverloaded-virtual",            -- We don’t overload virtual funcs, only overriding
-			"-Wsign-promo",                    -- Overloading is not really accurate
-			"-Wduplicated-cond",               -- Same, but with else if
-			"-Wfloat-equal",                   -- Warning for float comparison
-			"-Wshadow=compatible-local",       -- Shadowing warnings for local variables
-			"-Wcast-qual",                     -- Warning for const qualification casts
-			"-Wconversion",                    -- Warning for implicit type conversions
-			"-Wextra-semi",                    -- Extra semicolon warnings
-			"-Wlogical-op",                    -- Warning for logical operations
 			"-Werror",                         -- Treat warnings as errors
-			"-pedantic-errors"                 -- Treat pedantic warnings as errors
 		}
 end
 
@@ -132,7 +99,10 @@ project "JourneyEngine"
 		"%{prj.name}/src/**.cpp",
 
 		"%{prj.name}/vendor/stb_image/**.h",
-		"%{prj.name}/vendor/stb_image/**.cpp"
+		"%{prj.name}/vendor/stb_image/**.cpp",
+		
+		"%{prj.name}/vendor/ImGuizmo/**.h",
+		"%{prj.name}/vendor/ImGuizmo/**.cpp"
 	}
 
 	includedirs
@@ -144,6 +114,7 @@ project "JourneyEngine"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.ImGuizmo}",
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/stb_image"
 	}
@@ -212,6 +183,7 @@ function SetupAppProject(name)
 			"%{IncludeDir.GLAD}",
 			"%{IncludeDir.entt}",
 			"%{IncludeDir.yaml_cpp}",
+			"%{IncludeDir.ImGuizmo}",
 			"%{prj.name}/src",
 			"JourneyEngine/src"
 		}
@@ -223,7 +195,8 @@ function SetupAppProject(name)
 
 		defines
 		{
-			"YAML_CPP_STATIC_DEFINE"
+			"YAML_CPP_STATIC_DEFINE",
+			"IMGUI_DEFINE_MATH_OPERATORS"
 		}
 
 		filter "system:windows"
