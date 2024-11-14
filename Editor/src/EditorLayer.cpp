@@ -192,7 +192,9 @@ void EditorLayer::imGuiRender()
 			glm::mat4 modelMat = entityTc.transform();
 
 			ImGuizmo::MODE mode = ImGuizmo::LOCAL;
-			ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
+			//ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
+			//ImGuizmo::OPERATION operation = ImGuizmo::SCALE;
+			ImGuizmo::OPERATION operation = ImGuizmo::ROTATE;
 
 			if (ImGuizmo::Manipulate
 				(
