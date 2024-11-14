@@ -170,6 +170,19 @@ void Scene::deserialize(const std::string& filename)
 	s.deserialize(filename);
 }
 
+Entity Scene::activeCameraEntity()
+{
+	for (const auto e : m_registry.view<CameraComponent>())
+	{
+		auto& cam = m_registry.get<CameraComponent>(e);
+		if (cam.m_primer)
+		{
+			return { e, this };
+		}
+	}
+	return {};
+}
+
 void Scene::onComponentCreation(CameraComponent& c)
 {
 	c.onViewportResize(m_viewportWidth, m_viewportHeight);

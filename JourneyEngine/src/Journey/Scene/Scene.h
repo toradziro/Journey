@@ -39,6 +39,8 @@ public:
 	void serialize(const std::string& filename);
 	void deserialize(const std::string& filename);
 
+	Entity activeCameraEntity();
+
 private:
 	void onComponentCreation(TransformComponent& c) {}
 	void onComponentCreation(SpriteComponent&c ) {}

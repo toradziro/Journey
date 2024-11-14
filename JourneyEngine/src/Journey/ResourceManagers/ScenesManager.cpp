@@ -15,7 +15,7 @@ constexpr const char* C_SCENES_FOLDER_PATH = "assets/scenes";
 
 std::string fromNativeToVirtual(const std::string& native)
 {
-	u32 pos = native.find(std::string(C_SCENES_FOLDER_PATH));
+	u64 pos = native.find(std::string(C_SCENES_FOLDER_PATH));
 	if (pos != std::string::npos)
 	{
 		return native.substr(pos);

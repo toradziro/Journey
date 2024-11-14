@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <ImGuizmo.h>
 
 namespace jny
 {
@@ -168,6 +170,60 @@ void EditorLayer::imGuiRender()
 
 		u64 frameId = static_cast<u64>(m_framebuffer->colorAttachment());
 		ImGui::Image(reinterpret_cast<void*>(frameId), m_viewportSize, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
+		
+		//-- Gizmos
+		if (m_context->m_selectedEntity)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			float width = ImGui::GetWindowWidth();
+			float height = ImGui::GetWindowHeight();
+			float posX = ImGui::GetWindowPos().x;
+			float posY = ImGui::GetWindowPos().y;
+			ImGuizmo::SetRect(posX, posY, width, height);
+
+			auto e = m_context->m_currentScene->activeCameraEntity();
+			auto& cc = e.component<CameraComponent>();
+			auto& tc = e.component<TransformComponent>();
+			auto& entityTc = m_context->m_selectedEntity.component<TransformComponent>();
+			glm::mat4 viewMat = glm::inverse(tc.transform());
+			glm::mat4 projMat = cc.m_perspectiveCamera.projection();
+			glm::mat4 modelMat = entityTc.transform();
+
+			ImGuizmo::MODE mode = ImGuizmo::LOCAL;
+			ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
+
+			if (ImGuizmo::Manipulate
+				(
+					glm::value_ptr(viewMat),
+					glm::value_ptr(projMat),
+					operation,
+					mode,
+					glm::value_ptr(modelMat)
+				))
+			{
+				glm::vec3 position, scale, skew;
+				glm::quat rotation;
+				glm::vec4 perspective;
+
+				glm::decompose(
+					modelMat,
+					scale,
+					rotation,
+					position,
+					skew,
+					perspective
+				);
+
+				glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(rotation));
+
+				entityTc.m_position = position;
+				entityTc.m_rotation = eulerRotation;
+				entityTc.m_scale = scale;
+			}
+		}
+		
 		ImGui::End();
 	}
 	ImGui::PopStyleVar();

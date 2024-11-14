@@ -1,10 +1,6 @@
 #include "jnypch.h"
 #include "ImGuiLayer.h"
 
-#include "imgui.h"
-
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_glfw.h"
 
 #include "Journey/Core/Application.h"
 #include "Journey/Window/Window.h"
@@ -14,6 +10,11 @@
 #include "Journey/Events/KeyEvent.h"
 #include "Journey/Core/Profiling/TimeInstruments.h"
 #include "Journey/Core/fs/VirtualFileSystem.h"
+
+#include <imgui.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
+#include <ImGuizmo.h>
 
 namespace
 {
@@ -209,6 +210,7 @@ void ImGuiLayer::begin()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 }
 
 void ImGuiLayer::end()
