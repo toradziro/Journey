@@ -10,7 +10,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
-#include <ImGuizmo.h>
 
 namespace jny
 {
@@ -96,21 +95,44 @@ void EditorLayer::onEvent(Event& event)
 			{
 				if (inputPollSystem.keyPressed(GLFW_KEY_LEFT_SHIFT))
 				{
+					//-- Save As
 					if (e.keyCode() == GLFW_KEY_S)
 					{
 						saveSceneAs();
 						return true;
 					}
 				}
+				//-- Open
 				if (e.keyCode() == GLFW_KEY_O)
 				{
 					openScene();
 					return true;
 				}
+				//-- New scene
 				if (e.keyCode() == GLFW_KEY_N)
 				{
 					newScene();
 					return true;
+				}
+				//-- Translate Gizmo
+				if (e.keyCode() == GLFW_KEY_W)
+				{
+					setTranslateGizmo();
+				}
+				//-- Rotate Gizmo
+				if (e.keyCode() == GLFW_KEY_E)
+				{
+					setRotateGizmo();
+				}
+				//-- Scale Gizmo
+				if (e.keyCode() == GLFW_KEY_R)
+				{
+					setScaleGizmo();
+				}
+				//-- Selection mode
+				if (e.keyCode() == GLFW_KEY_Q)
+				{
+					setSelectMode();
 				}
 			}
 			return false;
@@ -132,27 +154,7 @@ void EditorLayer::imGuiRender()
 		loadSceneUI();
 	}
 
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("New", "Ctrl+N"))
-			{
-				newScene();
-			}
-			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-			{
-				saveSceneAs();
-			}
-			if (ImGui::MenuItem("Open...", "Ctrl+O"))
-			{
-				openScene();
-			}
-			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
-			ImGui::EndMenu();
-		}
-		ImGui::EndMainMenuBar();
-	}
+	drawMenuBar();
 	
 	if (m_openDemo)
 	{
@@ -171,79 +173,21 @@ void EditorLayer::imGuiRender()
 		u64 frameId = static_cast<u64>(m_framebuffer->colorAttachment());
 		ImGui::Image(reinterpret_cast<void*>(frameId), m_viewportSize, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
 		
-		//-- Gizmos
-		if (m_context->m_selectedEntity)
+		drawViewportToolbar();
+		if (m_showGizmo)
 		{
-			ImGuizmo::SetOrthographic(false);
-			ImGuizmo::SetDrawlist();
-
-			float width = ImGui::GetWindowWidth();
-			float height = ImGui::GetWindowHeight();
-			float posX = ImGui::GetWindowPos().x;
-			float posY = ImGui::GetWindowPos().y;
-			ImGuizmo::SetRect(posX, posY, width, height);
-
-			auto e = m_context->m_currentScene->activeCameraEntity();
-			auto& cc = e.component<CameraComponent>();
-			auto& tc = e.component<TransformComponent>();
-			auto& entityTc = m_context->m_selectedEntity.component<TransformComponent>();
-			glm::mat4 viewMat = glm::inverse(tc.transform());
-			glm::mat4 projMat = cc.m_perspectiveCamera.projection();
-			glm::mat4 modelMat = entityTc.transform();
-
-			ImGuizmo::MODE mode = ImGuizmo::LOCAL;
-			//ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
-			//ImGuizmo::OPERATION operation = ImGuizmo::SCALE;
-			ImGuizmo::OPERATION operation = ImGuizmo::ROTATE;
-
-			if (ImGuizmo::Manipulate
-				(
-					glm::value_ptr(viewMat),
-					glm::value_ptr(projMat),
-					operation,
-					mode,
-					glm::value_ptr(modelMat)
-				))
-			{
-				glm::vec3 position, scale, skew;
-				glm::quat rotation;
-				glm::vec4 perspective;
-
-				glm::decompose(
-					modelMat,
-					scale,
-					rotation,
-					position,
-					skew,
-					perspective
-				);
-
-				glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(rotation));
-
-				entityTc.m_position = position;
-				entityTc.m_rotation = eulerRotation;
-				entityTc.m_scale = scale;
-			}
+			drawGizmos();
 		}
 		
 		ImGui::End();
 	}
 	ImGui::PopStyleVar();
 
+	drawStats();
+
 	for (auto* panel : m_panels)
 	{
 		panel->updateUI();
-	}
-
-	if (ImGui::Begin("Statistics info"))
-	{
-		ImGui::Text("Current Scene: %s", m_context->m_currentScene->name().c_str());
-		ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
-		ImGui::Text("Time spent on a call: %.1f ms", m_dt * 1000.0f);
-		const auto& stat = Application::subsystems().st<Renderer2D>().stats();
-		ImGui::Text("Draw calls: %d", stat.m_drawCalls);
-		ImGui::Text("Quads count: %d", stat.m_quadCount);
-		ImGui::End();
 	}
 }
 
@@ -340,6 +284,162 @@ void EditorLayer::loadSceneUI()
 
 		ImGui::End();
 	}
+}
+
+void EditorLayer::drawMenuBar()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("New", "Ctrl+N"))
+			{
+				newScene();
+			}
+			if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+			{
+				saveSceneAs();
+			}
+			if (ImGui::MenuItem("Open...", "Ctrl+O"))
+			{
+				openScene();
+			}
+			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+}
+
+void EditorLayer::drawStats()
+{
+	if (ImGui::Begin("Statistics info"))
+	{
+		ImGui::Text("Current Scene: %s", m_context->m_currentScene->name().c_str());
+		ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
+		ImGui::Text("Time spent on a call: %.1f ms", m_dt * 1000.0f);
+		const auto& stat = Application::subsystems().st<Renderer2D>().stats();
+		ImGui::Text("Draw calls: %d", stat.m_drawCalls);
+		ImGui::Text("Quads count: %d", stat.m_quadCount);
+		ImGui::End();
+	}
+}
+
+void EditorLayer::drawGizmos()
+{
+	//-- Gizmos
+	if (m_context->m_selectedEntity)
+	{
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::SetDrawlist();
+
+		float width = ImGui::GetWindowWidth();
+		float height = ImGui::GetWindowHeight();
+		float posX = ImGui::GetWindowPos().x;
+		float posY = ImGui::GetWindowPos().y;
+		ImGuizmo::SetRect(posX, posY, width, height);
+
+		auto e = m_context->m_currentScene->activeCameraEntity();
+		auto& cc = e.component<CameraComponent>();
+		auto& tc = e.component<TransformComponent>();
+		auto& entityTc = m_context->m_selectedEntity.component<TransformComponent>();
+		glm::mat4 viewMat = glm::inverse(tc.transform());
+		glm::mat4 projMat = cc.m_perspectiveCamera.projection();
+		glm::mat4 modelMat = entityTc.transform();
+
+		if (ImGuizmo::Manipulate
+		(
+			glm::value_ptr(viewMat),
+			glm::value_ptr(projMat),
+			m_gizmoData.m_gizmoType,
+			m_gizmoData.m_coordinateType,
+			glm::value_ptr(modelMat)
+		))
+		{
+			glm::vec3 position, scale, skew;
+			glm::quat rotation;
+			glm::vec4 perspective;
+
+			glm::decompose(
+				modelMat,
+				scale,
+				rotation,
+				position,
+				skew,
+				perspective
+			);
+
+			glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(rotation));
+
+			entityTc.m_position = position;
+			entityTc.m_rotation = eulerRotation;
+			entityTc.m_scale = scale;
+		}
+	}
+}
+
+void EditorLayer::setSelectMode()
+{
+	m_showGizmo = false;
+}
+
+void EditorLayer::setTranslateGizmo()
+{
+	m_gizmoData.m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+	m_showGizmo = true;
+}
+
+void EditorLayer::setRotateGizmo()
+{
+	m_gizmoData.m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+	m_showGizmo = true;
+}
+
+void EditorLayer::setScaleGizmo()
+{
+	m_gizmoData.m_gizmoType = ImGuizmo::OPERATION::SCALE;
+	m_showGizmo = true;
+}
+
+void EditorLayer::drawViewportToolbar()
+{
+	const float toolbarPosX = 5.0f * ImGui::GetWindowDpiScale();
+	const float toolbarPosY = 30.0f * ImGui::GetWindowDpiScale();
+
+	const ImVec2 cursorToRestore = ImGui::GetCursorPos();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.35f, 0.35f, 0.35f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+
+	{
+		ImGui::SetCursorPos( { toolbarPosX, toolbarPosY } );
+		if (ImGui::Button("Select"))
+		{
+			setSelectMode();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("T"))
+		{
+			setTranslateGizmo();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("R"))
+		{
+			setRotateGizmo();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("S"))
+		{
+			setScaleGizmo();
+		}
+	}
+
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+
+	ImGui::SetCursorPos(cursorToRestore);
 }
 
 }

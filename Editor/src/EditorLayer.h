@@ -3,11 +3,18 @@
 #include "Journey.h"
 #include "Panels/Panel.h"
 #include "Context.h"
+#include <ImGuizmo.h>
 
 struct ImVec2;
 
 namespace jny
 {
+
+struct GizmoData
+{
+	ImGuizmo::OPERATION	m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE		m_coordinateType = ImGuizmo::MODE::LOCAL;
+};
 
 class EditorLayer : public Layer
 {
@@ -29,6 +36,16 @@ private:
 	void saveSceneUI();
 	void loadSceneUI();
 
+	void drawMenuBar();
+	void drawStats();
+	void drawGizmos();
+	void drawViewportToolbar();
+
+	void setSelectMode();
+	void setTranslateGizmo();
+	void setRotateGizmo();
+	void setScaleGizmo();
+
 private:
 	Ref<EditorContext>				m_context;
 	std::vector<IPanel*>			m_panels;
@@ -38,6 +55,9 @@ private:
 
 	Ref<Framebuffer>				m_framebuffer;
 	Application*					m_app;
+
+	GizmoData						m_gizmoData;
+	bool							m_showGizmo = false;
 
 	f32								m_FPS = 0.0f;
 	f32								m_dt = 0.0f;
