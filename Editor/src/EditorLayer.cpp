@@ -171,7 +171,13 @@ void EditorLayer::imGuiRender()
 		m_viewportSize = regionSize;
 
 		u64 frameId = static_cast<u64>(m_framebuffer->colorAttachment());
-		ImGui::Image(reinterpret_cast<void*>(frameId), m_viewportSize, ImVec2{ 0.0f, 1.0f }, ImVec2{ 1.0f, 0.0f });
+		ImGui::Image
+		(
+			reinterpret_cast<void*>(frameId),
+			m_viewportSize,
+			ImVec2{ 0.0f, 1.0f },
+			ImVec2{ 1.0f, 0.0f }
+		);
 		
 		drawViewportToolbar();
 		if (m_showGizmo)
@@ -339,13 +345,38 @@ void EditorLayer::drawGizmos()
 		float posY = ImGui::GetWindowPos().y;
 		ImGuizmo::SetRect(posX, posY, width, height);
 
+		//-- camera
 		auto e = m_context->m_currentScene->activeCameraEntity();
 		auto& cc = e.component<CameraComponent>();
 		auto& tc = e.component<TransformComponent>();
-		auto& entityTc = m_context->m_selectedEntity.component<TransformComponent>();
 		glm::mat4 viewMat = glm::inverse(tc.transform());
 		glm::mat4 projMat = cc.m_perspectiveCamera.projection();
+
+		//-- selecte entity data
+		auto& entityTc = m_context->m_selectedEntity.component<TransformComponent>();
+		glm::vec3& origRotation = entityTc.m_rotation;
 		glm::mat4 modelMat = entityTc.transform();
+
+		//-- snapping
+		//-- TODO: add possibility to set snapping val
+		bool snapped = false;
+		float snapVal = 0.0f;
+		if (Application::subsystems().st<InputPoll>().keyPressed(GLFW_KEY_LEFT_CONTROL))
+		{
+			snapped = true;
+			if (m_gizmoData.m_gizmoType == ImGuizmo::OPERATION::TRANSLATE)
+			{
+				snapVal = 0.5f;
+			}
+			else if (m_gizmoData.m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+			{
+				snapVal = 45.0f;
+			}
+			else if (m_gizmoData.m_gizmoType == ImGuizmo::OPERATION::SCALE)
+			{
+				snapVal = 0.25f;
+			}
+		}
 
 		if (ImGuizmo::Manipulate
 		(
@@ -353,7 +384,9 @@ void EditorLayer::drawGizmos()
 			glm::value_ptr(projMat),
 			m_gizmoData.m_gizmoType,
 			m_gizmoData.m_coordinateType,
-			glm::value_ptr(modelMat)
+			glm::value_ptr(modelMat),
+			nullptr,
+			&snapVal
 		))
 		{
 			glm::vec3 position, scale, skew;
@@ -370,9 +403,10 @@ void EditorLayer::drawGizmos()
 			);
 
 			glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(rotation));
+			glm::vec3 deltaRotation = origRotation - eulerRotation;
 
 			entityTc.m_position = position;
-			entityTc.m_rotation = eulerRotation;
+			entityTc.m_rotation -= deltaRotation;
 			entityTc.m_scale = scale;
 		}
 	}
