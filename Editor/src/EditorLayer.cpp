@@ -377,6 +377,7 @@ void EditorLayer::drawGizmos()
 				snapVal = 0.25f;
 			}
 		}
+		glm::vec3 computedSnap = { snapVal, snapVal, snapVal };
 
 		if (ImGuizmo::Manipulate
 		(
@@ -386,7 +387,7 @@ void EditorLayer::drawGizmos()
 			m_gizmoData.m_coordinateType,
 			glm::value_ptr(modelMat),
 			nullptr,
-			&snapVal
+			glm::value_ptr(computedSnap)
 		))
 		{
 			glm::vec3 position, scale, skew;
