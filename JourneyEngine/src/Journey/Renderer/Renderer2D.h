@@ -2,7 +2,6 @@
 
 #include "Journey/Core/Reference.h"
 #include "Journey/Core/SingletonInterface.h"
-#include "Journey/Renderer/OrthographicCamera.h"
 #include "Journey/Renderer/Camera.h"
 #include "Journey/Renderer/VertexArray.h"
 #include "Journey/Renderer/Shader.h"
@@ -61,7 +60,7 @@ public:
 	void init();
 	void shutdown();
 
-	void beginScene(const OrthographicCamera& camera);
+	void beginScene(const EditorCamera& camera);
 	void beginScene(const CameraComponent& camera, const glm::mat4& transform);
 	void endScene();
 

@@ -13,7 +13,7 @@ namespace jny
 struct GizmoData
 {
 	ImGuizmo::OPERATION	m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
-	ImGuizmo::MODE		m_coordinateType = ImGuizmo::MODE::WORLD;
+	ImGuizmo::MODE		m_coordinateType = ImGuizmo::MODE::LOCAL;
 };
 
 class EditorLayer : public Layer

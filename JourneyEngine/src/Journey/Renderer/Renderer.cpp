@@ -23,17 +23,6 @@ void Renderer::windowResized(u32 width, u32 height)
 	Application::subsystems().st<RenderCommand>().windowResized(width, height);
 }
 
-void Renderer::beginScene(const OrthographicCamera& camera)
-{
-	PROFILE_FUNC;
-
-	m_sceneData.m_vpMatrix = camera.viewProjectionMatrix();
-}
-
-void Renderer::endScene()
-{
-}
-
 void Renderer::submit(const Ref<VertexArray>& vertexArray,
 	const Ref<Shader>& shader,
 	const glm::mat4& objTransform) const

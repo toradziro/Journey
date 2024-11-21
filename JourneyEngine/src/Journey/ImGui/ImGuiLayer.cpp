@@ -114,17 +114,6 @@ void ImGuiLayer::attach()
 	style.FrameRounding = 8.0f;
 	style.TabRounding = 8.0f;
 
-	//ImGuizmo::Style& gStyle = ImGuizmo::GetStyle();
-
-	//gStyle.TranslationLineThickness = 6.0f;
-	//gStyle.RotationLineThickness = 8.0f;
-	//gStyle.ScaleLineThickness = 6.0f;
-
-	//gStyle.TranslationLineArrowSize = 9.0f;
-	//gStyle.ScaleLineCircleSize = 9.0f;
-
-	//gStyle.RotationOuterLineThickness = 4.0f;
-
 	auto& win = Application::subsystems().st<Window>();
 
 	ImGui::GetStyle().ScaleAllSizes(win.dpiScale());

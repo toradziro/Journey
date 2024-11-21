@@ -2,7 +2,6 @@
 
 #include "Journey/Core/SingletonInterface.h"
 #include "RenderCommand.h"
-#include "OrthographicCamera.h"
 #include "Shader.h"
 
 namespace jny
@@ -17,9 +16,6 @@ public:
 	void init();
 
 	void windowResized(u32 width, u32 height);
-
-	void beginScene(const OrthographicCamera& camera);
-	void endScene();
 
 	void submit(const Ref<VertexArray>& vertexArray,
 		const Ref<Shader>& shader,

@@ -93,14 +93,14 @@ void Renderer2D::shutdown()
 	delete[] m_quadVertexBase;
 }
 
-void Renderer2D::beginScene(const OrthographicCamera& camera)
+void Renderer2D::beginScene(const EditorCamera& camera)
 {
 	PROFILE_FUNC;
 
 	m_quadVertexArray->bind();
 
 	m_textureShader->bind();
-	m_textureShader->uploadUniformMat4(camera.viewProjectionMatrix(), "u_vpMatrix");
+	m_textureShader->uploadUniformMat4(camera.VPMatrix(), "u_vpMatrix");
 
 	m_quadVertexPtr = m_quadVertexBase;
 	m_currQuadIndex = 0;

@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer2D.h"
-#include "Journey/Renderer/OrthographicCameraController.h"
 #include "Components.h"
 
 #include <glm/glm.hpp>
@@ -122,6 +121,44 @@ void Scene::update(f32 dt)
 		}
 		renderer2D.endScene();
 	}
+}
+
+void Scene::editorModeUpdate(f32 dt, const EditorCamera& camera)
+{
+	auto& renderer2D = Application::subsystems().st<Renderer2D>();
+	renderer2D.beginScene(camera);
+
+	auto group = m_registry.group<SpriteComponent>(entt::get<TransformComponent>);
+	std::vector<QuadCfg> drawList;
+	drawList.reserve(group.size());
+	for (auto& e : group)
+	{
+		auto& transform = group.get<TransformComponent>(e);
+		auto& sprite = group.get<SpriteComponent>(e);
+
+		QuadCfg quad;
+		quad.m_color = sprite.m_color;
+		if (sprite.m_texture)
+		{
+			quad.m_textureOpt = TextureOpt::Textured;
+			quad.m_texture = sprite.m_texture;
+		}
+		quad.m_transform = transform.transform();
+		quad.m_zDepth = transform.m_position.z;
+
+		drawList.push_back(quad);
+	}
+
+	std::ranges::sort(drawList, [](const auto& quad1, const auto& quad2)
+		{
+			return quad1.m_zDepth < quad2.m_zDepth;
+		});
+
+	for (auto& quad : drawList)
+	{
+		renderer2D.drawQuad(quad);
+	}
+	renderer2D.endScene();
 }
 
 void Scene::onViewportResize(u32 width, u32 height)

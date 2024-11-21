@@ -48,17 +48,20 @@ void EditorLayer::update(f32 dt)
 {
 	PROFILE_FUNC;
 
+	if (m_viewportActive)
+	{
+		m_context->m_editorCamera.update(dt);
+	}
+
 	//-- Resizing viewport
 	const auto& specs = m_framebuffer->specs();
-	if (static_cast<u32>(m_viewportSize.x) != specs.m_width
-		|| static_cast<u32>(m_viewportSize.y) != specs.m_height)
+	u32 wCasted = std::max<u32>(1, static_cast<u32>(m_viewportSize.x));
+	u32 hCasted = std::max<u32>(1, static_cast<u32>(m_viewportSize.y));
+	if (wCasted != specs.m_width || hCasted != specs.m_height)
 	{
 		m_framebuffer->resize({ std::max(m_viewportSize.x, 1.0f), std::max(m_viewportSize.y, 1.0f) });
-		m_context->m_currentScene->onViewportResize
-		(
-			static_cast<u32>(m_viewportSize.x),
-			static_cast<u32>(m_viewportSize.y)
-		);
+		m_context->m_currentScene->onViewportResize(wCasted, hCasted);
+		m_context->m_editorCamera.onViewportResize(wCasted, hCasted);
 	}
 
 	//m_sampleE2.component<TransformComponent>().m_rotation.x += 15.0f * dt;
@@ -74,7 +77,8 @@ void EditorLayer::update(f32 dt)
 	rc.clear();
 
 	//-- Updating our scene
-	m_context->m_currentScene->update(dt);
+	//m_context->m_currentScene->update(dt);
+	m_context->m_currentScene->editorModeUpdate(dt, m_context->m_editorCamera);
 
 	m_framebuffer->unbind();
 
@@ -137,6 +141,10 @@ void EditorLayer::onEvent(Event& event)
 			}
 			return false;
 		});
+	if (m_viewportActive)
+	{
+		m_context->m_editorCamera.onEvent(event);
+	}
 }
 
 void EditorLayer::imGuiRender()
@@ -346,11 +354,8 @@ void EditorLayer::drawGizmos()
 		ImGuizmo::SetRect(posX, posY, width, height);
 
 		//-- camera
-		auto e = m_context->m_currentScene->activeCameraEntity();
-		auto& cc = e.component<CameraComponent>();
-		auto& tc = e.component<TransformComponent>();
-		glm::mat4 viewMat = glm::inverse(tc.transform());
-		glm::mat4 projMat = cc.m_perspectiveCamera.projection();
+		glm::mat4 viewMat = m_context->m_editorCamera.viewMatrix();
+		glm::mat4 projMat = m_context->m_editorCamera.projMatrix();
 
 		//-- selecte entity data
 		auto& entityTc = m_context->m_selectedEntity.component<TransformComponent>();

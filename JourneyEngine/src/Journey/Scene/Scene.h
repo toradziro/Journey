@@ -2,6 +2,7 @@
 
 #include "entt.hpp"
 #include "Journey/Core/Reference.h"
+#include "Journey/Renderer/EditorCamera.h"
 #include "SceneSerializer.h"
 
 namespace jny
@@ -21,6 +22,7 @@ public:
 	~Scene();
 
 	void update(f32 dt);
+	void editorModeUpdate(f32 dt, const EditorCamera& camera);
 	void onViewportResize(u32 width, u32 height);
 
 	Entity createEntity();
