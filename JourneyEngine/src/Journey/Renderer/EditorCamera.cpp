@@ -27,49 +27,42 @@ void EditorCamera::update(f32 dt)
 	m_lastDt = dt;
 
 	auto& iPoll = Application::subsystems().st<InputPoll>();
-	glm::vec3 offset = { 0.0f, 0.0f, 0.0f };
 	const float moveStep = m_moveSpeed * dt;
 	if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
 	{
-		if (!m_rightMouseButtonPressedLastFrame)
-		{
-			auto [mx, my] = iPoll.mousePos();
-			m_mousePos = { mx, my };
-			m_rightMouseButtonPressedLastFrame = true;
-		}
+		auto [mx, my] = iPoll.mousePos();
+		m_mousePos = { mx, my };
+		
 		if (iPoll.keyPressed(GLFW_KEY_W))
 		{
-			offset.z += moveStep;
+			m_cameraPos += moveStep * m_cameraFront;
+			updateView();
 		}
 		if (iPoll.keyPressed(GLFW_KEY_S))
 		{
-			offset.z -= moveStep;
+			m_cameraPos -= moveStep * m_cameraFront;
+			updateView();
 		}
 		if (iPoll.keyPressed(GLFW_KEY_A))
 		{
-			offset.x -= moveStep;
+			m_cameraPos -= glm::normalize(glm::cross(m_cameraFront, m_cameraUp)) * moveStep;
+			updateView();
 		}
 		if (iPoll.keyPressed(GLFW_KEY_D))
 		{
-			offset.x += moveStep;
+			m_cameraPos += glm::normalize(glm::cross(m_cameraFront, m_cameraUp)) * moveStep;
+			updateView();
 		}
 		if (iPoll.keyPressed(GLFW_KEY_Q))
 		{
-			offset.y -= moveStep;
+			m_cameraPos -= moveStep * m_cameraUp;
+			updateView();
 		}
 		if (iPoll.keyPressed(GLFW_KEY_E))
 		{
-			offset.y += moveStep;
-		}
-		if (offset.x != 0.0f || offset.y != 0.0f || offset.z != 0.0f)
-		{
-			move(offset);
+			m_cameraPos += moveStep * m_cameraUp;
 			updateView();
 		}
-	}
-	else
-	{
-		m_rightMouseButtonPressedLastFrame = false;
 	}
 }
 
@@ -79,7 +72,7 @@ void EditorCamera::onEvent(Event& e)
 	auto& iPoll = Application::subsystems().st<jny::InputPoll>();
 	ed.dispatch<MouseMovedEvent>([&](MouseMovedEvent& e)
 		{
-			if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT) && m_rightMouseButtonPressedLastFrame)
+			if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
 			{
 				if (e.getX() != m_mousePos.first || e.getY() != m_mousePos.second)
 				{
@@ -112,33 +105,7 @@ const glm::mat4 EditorCamera::projMatrix() const
 
 void EditorCamera::rotate(f32 deltaX, f32 deltaY)
 {
-	const float rotationSpeed = 0.05f;
-
-	float angleX = deltaX * rotationSpeed * m_lastDt;
-	float angleY = deltaY * rotationSpeed * m_lastDt;
-
-	glm::vec3 right = glm::normalize(glm::rotate(m_orientation, glm::vec3(1.0f, 0.0f, 0.0f)));
-	glm::vec3 up = glm::normalize(glm::rotate(m_orientation, glm::vec3(0.0f, 1.0f, 0.0f)));
-
-	glm::quat qPitch = glm::angleAxis(-angleY, right);
-	glm::quat qYaw = glm::angleAxis(-angleX, up);
-
-	m_orientation = glm::normalize(qYaw * m_orientation * qPitch);
-
-	updateView();
-}
-
-void EditorCamera::move(const glm::vec3& offset)
-{
-	glm::vec3 forward = glm::normalize(glm::rotate(m_orientation, glm::vec3(0.0f, 0.0f, -1.0f)));
-	glm::vec3 right = glm::normalize(glm::rotate(m_orientation, glm::vec3(1.0f, 0.0f, 0.0f)));
-	glm::vec3 up = glm::normalize(glm::rotate(m_orientation, glm::vec3(0.0f, 1.0f, 0.0f)));
-
-	m_position += right * offset.x;
-	m_position += up * offset.y;
-	m_position += forward * offset.z;
-
-	updateView();
+	//updateView();
 }
 
 void EditorCamera::onViewportResize(u32 viewportW, u32 viewportH)
@@ -148,8 +115,7 @@ void EditorCamera::onViewportResize(u32 viewportW, u32 viewportH)
 
 void EditorCamera::updateView()
 {
-	glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_position) * glm::mat4_cast(m_orientation);
-	m_viewMatrix = glm::inverse(transform);
+	m_viewMatrix = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraFront, m_cameraUp);
 }
 
 }

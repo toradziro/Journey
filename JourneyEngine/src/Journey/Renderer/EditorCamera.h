@@ -14,7 +14,10 @@ namespace jny
 class EditorCamera
 {
 public:
-	EditorCamera() = default;
+	EditorCamera()
+	{
+		updateView();
+	}
 	EditorCamera(f32 aspectRatio
 		, f32 fov = 45.0f
 		, f32 nearPlane = 0.01f
@@ -30,7 +33,7 @@ public:
 	const glm::mat4 viewMatrix() const;
 	const glm::mat4 projMatrix() const;
 	void rotate(f32 deltaX, f32 deltaY);
-	void move(const glm::vec3& offset);
+	//void move(const glm::vec3& offset);
 
 	void onViewportResize(u32 viewportW, u32 viewportH);
 
@@ -39,21 +42,16 @@ private:
 
 private:
 	PerspectiveCamera	m_camera;
-	glm::vec3			m_position = { 0.0f, 0.0f, 0.0f };
-	glm::quat			m_orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-
 	glm::mat4			m_viewMatrix = glm::mat4(1.0f);
-
 	std::pair<u32, u32>	m_mousePos = { 0, 0 };
+
+	glm::vec3			m_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+	glm::vec3			m_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3			m_cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	f32					m_aspectRatio = 1.0f;
 	f32					m_moveSpeed = 5.0f;
 	f32					m_lastDt = 0.0f;
-
-	f32					m_yaw = 0.0f;
-	f32					m_pitch = 0.0f;
-
-	bool				m_rightMouseButtonPressedLastFrame = false;
 };
 
 }

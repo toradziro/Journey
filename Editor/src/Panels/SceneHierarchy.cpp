@@ -77,6 +77,7 @@ void SceneHierarchy::drawContextMenu()
 			if (ImGui::MenuItem("Remove Entity"))
 			{
 				ctx()->m_currentScene->removeEntity(ctx()->m_selectedEntity);
+				ctx()->m_selectedEntity = {};
 			}
 		}
 		else

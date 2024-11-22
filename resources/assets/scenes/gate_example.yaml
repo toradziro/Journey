@@ -1,17 +1,39 @@
 Scene: gate_example
 Entities:
-  - entity_id: 6
+  - entity_id: 4
     EntityName:
-      m_name: BombEntity
+      m_name: main_hero
     Transform:
-      m_position: [0.5, -0.5, -7.69999981]
+      m_position: [-1.54021907, 0.520490646, -6.9000001]
       m_rotation: [0, 0, 0]
       m_scale: [1, 1, 1]
     Sprite:
       m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/bomb.png
+      m_texture: D:/dev/Journey/resources/assets/textures/gg2.png
 
-  - entity_id: 5
+  - entity_id: 3
+    EntityName:
+      m_name: GateEntity
+    Transform:
+      m_position: [-1.9851501, 0.98652792, -9.39999962]
+      m_rotation: [0, 0, 0]
+      m_scale: [1.20000005, 1.20000005, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/gate.png
+
+  - entity_id: 2
+    EntityName:
+      m_name: Checkerboard
+    Transform:
+      m_position: [0, 0, -9.69999981]
+      m_rotation: [0, 0, 0]
+      m_scale: [10, 10, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/checkerboard.png
+
+  - entity_id: 1
     EntityName:
       m_name: Sample Camera
     Transform:
@@ -25,55 +47,13 @@ Entities:
       m_fixedAspectRatio: false
       m_perspective: true
 
-  - entity_id: 4
-    EntityName:
-      m_name: Checkerboard
-    Transform:
-      m_position: [0, 0, -9.69999981]
-      m_rotation: [0, 0, 0]
-      m_scale: [10, 10, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/checkerboard.png
-
-  - entity_id: 3
-    EntityName:
-      m_name: GateEntity
-    Transform:
-      m_position: [-2.79999995, 2.5999999, -9.39999962]
-      m_rotation: [0, 0, 0]
-      m_scale: [1.20000005, 1.20000005, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/gate.png
-
-  - entity_id: 2
-    EntityName:
-      m_name: Sample Icon
-    Transform:
-      m_position: [-2.29999995, 0, -6.9000001]
-      m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/icon_path.png
-
-  - entity_id: 1
-    EntityName:
-      m_name: Red Quad
-    Transform:
-      m_position: [2.29999995, 2.0999999, -6.4000001]
-      m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
-    Sprite:
-      m_color: [0.826254845, 0.236072794, 0.236072794, 1]
-
   - entity_id: 0
     EntityName:
-      m_name: Blue Quad
+      m_name: BombEntity
     Transform:
-      m_position: [2.29999995, 1.39999998, -5.9000001]
+      m_position: [-1.08335924, 0.184500664, -7.69999981]
       m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
+      m_scale: [0.200000003, 0.200000003, 1]
     Sprite:
-      m_color: [0.183136806, 0.729729772, 0.723398566, 1]
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/bomb.png
