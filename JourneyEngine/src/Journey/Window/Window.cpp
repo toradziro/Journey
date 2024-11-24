@@ -99,6 +99,16 @@ void Window::setVSync(bool enabled)
 	}
 }
 
+void Window::hideCursor()
+{
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void Window::unhideCursor()
+{
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
 void Window::init()
 {
 	PROFILE_FUNC;

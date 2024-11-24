@@ -39,11 +39,12 @@ public:
 
 private:
 	void updateView();
+	void updateMousePos();
 
 private:
 	PerspectiveCamera	m_camera;
 	glm::mat4			m_viewMatrix = glm::mat4(1.0f);
-	std::pair<u32, u32>	m_mousePos = { 0, 0 };
+	std::pair<f32, f32>	m_mousePos = { 0, 0 };
 
 	glm::vec3			m_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	glm::vec3			m_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -52,6 +53,10 @@ private:
 	f32					m_aspectRatio = 1.0f;
 	f32					m_moveSpeed = 5.0f;
 	f32					m_lastDt = 0.0f;
+	f32					m_rotationSpeed = 0.07f;
+
+	f32					m_yaw = -90.0f;
+	f32					m_pitch = 0.0f;
 };
 
 }

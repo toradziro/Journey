@@ -3,6 +3,7 @@
 #include "Journey/Core/Application.h"
 #include "Journey/Core/InputPoll.h"
 #include "Journey/Events/MouseEvent.h"
+#include "Journey/Window/Window.h"
 
 #include <glfw/glfw3.h>
 
@@ -30,9 +31,6 @@ void EditorCamera::update(f32 dt)
 	const float moveStep = m_moveSpeed * dt;
 	if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
 	{
-		auto [mx, my] = iPoll.mousePos();
-		m_mousePos = { mx, my };
-		
 		if (iPoll.keyPressed(GLFW_KEY_W))
 		{
 			m_cameraPos += moveStep * m_cameraFront;
@@ -74,15 +72,29 @@ void EditorCamera::onEvent(Event& e)
 		{
 			if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
 			{
-				if (e.getX() != m_mousePos.first || e.getY() != m_mousePos.second)
-				{
-					f32 deltaX = e.getX() - m_mousePos.first;
-					f32 deltaY = e.getY() - m_mousePos.second;
+				f32 deltaX = e.getX() - m_mousePos.first;
+				f32 deltaY = e.getY() - m_mousePos.second;
 
-					rotate(deltaX, deltaY);
+				rotate(deltaX, deltaY);
+				updateMousePos();
+			}
+			return true;
+		});
 
-					m_mousePos = { e.getX(), e.getY() };
-				}
+	ed.dispatch<MouseButtonPressedEvent>([&](MouseButtonPressedEvent& e)
+		{
+			if (e.buttonCode() == GLFW_MOUSE_BUTTON_RIGHT)
+			{
+				updateMousePos();
+				Application::subsystems().st<Window>().hideCursor();
+			}
+			return true;
+		});
+	ed.dispatch<MouseButtonReleasedEvent>([&](MouseButtonReleasedEvent& e)
+		{
+			if (e.buttonCode() == GLFW_MOUSE_BUTTON_RIGHT)
+			{
+				Application::subsystems().st<Window>().unhideCursor();
 			}
 			return true;
 		});
@@ -105,7 +117,22 @@ const glm::mat4 EditorCamera::projMatrix() const
 
 void EditorCamera::rotate(f32 deltaX, f32 deltaY)
 {
-	//updateView();
+	m_yaw += deltaX * m_rotationSpeed;
+	m_pitch -= deltaY * m_rotationSpeed;
+
+	if (m_pitch > 89.0f)
+	{
+		m_pitch = 89.0f;
+	}
+	if (m_pitch < -89.0f)
+	{
+		m_pitch = -89.0f;
+	}
+
+	m_cameraFront.x = cos(glm::radians(m_pitch)) * cos(glm::radians(m_yaw));
+	m_cameraFront.y = sin(glm::radians(m_pitch));
+	m_cameraFront.z = cos(glm::radians(m_pitch)) * sin(glm::radians(m_yaw));
+	updateView();
 }
 
 void EditorCamera::onViewportResize(u32 viewportW, u32 viewportH)
@@ -116,6 +143,13 @@ void EditorCamera::onViewportResize(u32 viewportW, u32 viewportH)
 void EditorCamera::updateView()
 {
 	m_viewMatrix = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraFront, m_cameraUp);
+}
+
+void EditorCamera::updateMousePos()
+{
+	auto& iPoll = Application::subsystems().st<InputPoll>();
+	auto [mx, my] = iPoll.mousePos();
+	m_mousePos = { mx, my };
 }
 
 }

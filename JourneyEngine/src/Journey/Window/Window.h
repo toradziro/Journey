@@ -39,6 +39,9 @@ class  Window : public ISingleton
 public:
 	~Window();
 
+	void init();
+	void shutdown();
+
 	void update();
 
 	u32 height() const { return m_data.m_height; }
@@ -49,8 +52,8 @@ public:
 	void setVSync(bool enabled);
 	bool isVSync() const { return m_data.m_vsyncEnabled; }
 
-	void init();
-	void shutdown();
+	void hideCursor();
+	void unhideCursor();
 
 	float dpiScale() const { return m_data.m_dpiScale; }
 
