@@ -63,6 +63,8 @@ private:
 	WindowData						m_data;
 	std::unique_ptr<GraphicContext> m_context;
 	GLFWwindow*						m_window;
+
+	bool							m_fullScreen = true;
 };
 
 #ifdef JNY_PLATFORM_WINDOWS

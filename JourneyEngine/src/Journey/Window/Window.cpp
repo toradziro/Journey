@@ -137,8 +137,13 @@ void Window::init()
 	Log::info("Creating window: width '{}' height '{}' title '{}'",
 		m_data.m_width, m_data.m_height, m_data.m_title);
 
-	m_window = glfwCreateWindow(static_cast<int>(m_data.m_width), static_cast<int>(m_data.m_height),
+	m_window = glfwCreateWindow(static_cast<i32>(m_data.m_width), static_cast<i32>(m_data.m_height),
 		m_data.m_title.data(), nullptr, nullptr);
+
+	if (m_fullScreen)
+	{
+		glfwMaximizeWindow(m_window);
+	}
 
 #ifdef JNY_PLATFORM_WINDOWS
 	HWND hwnd = glfwGetWin32Window(m_window);
