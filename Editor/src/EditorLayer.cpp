@@ -31,7 +31,11 @@ void EditorLayer::attach()
 	m_panels.push_back(new EntityProperties(m_context));
 
 	//-- Create frambuffer to draw in it instead of directly drawing on screen
-	m_framebuffer = Framebuffer::create({});
+	FramebufferSpecs specs;
+	specs.m_width = 1200;
+	specs.m_height = 800;
+	specs.m_textureDescription = { FrambufferTextureFormat::DEPTH24STENCIL8, FrambufferTextureFormat::RGBA8 };
+	m_framebuffer = Framebuffer::create(std::move(specs));
 	m_context->m_currentScene = Ref<Scene>::create();
 }
 

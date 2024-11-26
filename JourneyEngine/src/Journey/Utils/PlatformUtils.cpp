@@ -25,7 +25,7 @@ std::string windowsOpenFileDialog(const char* filter)
 	ofn.nMaxFile = sizeof(file);
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-	if (GetOpenFileNameA(&ofn) == TRUE)	//-- Call the dialog
+	if (GetOpenFileNameA(&ofn) != FALSE)	//-- Call the dialog
 	{
 		return ofn.lpstrFile;	//-- Store the result
 	}
@@ -44,7 +44,7 @@ std::string windowsSaveFileDialog(const char* filter)
 	ofn.nMaxFile = sizeof(file);
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-	if (GetSaveFileNameA(&ofn) == TRUE)	//-- Call the dialog
+	if (GetSaveFileNameA(&ofn) != FALSE)	//-- Call the dialog
 	{
 		return ofn.lpstrFile;	//-- Store the result
 	}

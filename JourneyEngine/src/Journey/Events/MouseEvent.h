@@ -43,17 +43,17 @@ public:
 	EVENT_CATEGORY(Event::EventCategory::Mouse | Event::EventCategory::Input)
 	EVENT_CLASS_TYPE(MouseMoved)
 
-	MouseMovedEvent(float x, float y) : m_mouseX(x), m_mouseY(y) {}
+	MouseMovedEvent(f32 x, f32 y) : m_mouseX(x), m_mouseY(y) {}
 	~MouseMovedEvent() = default;
 
 	std::string toString() const override { return fmt::format("MouseMovedEvent: x: {}, y: {}", m_mouseX, m_mouseY); }
 	
-	float getX() const { return m_mouseX; }
-	float getY() const { return m_mouseY; }
+	f32 getX() const { return m_mouseX; }
+	f32 getY() const { return m_mouseY; }
 
 private:
-	float m_mouseX;
-	float m_mouseY;
+	f32 m_mouseX;
+	f32 m_mouseY;
 };
 
 class  MouseScrolledEvent : public Event

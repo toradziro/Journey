@@ -159,8 +159,7 @@ void SceneSerializer::deserialize(const std::string& filename)
 				if (auto texture = sc["m_texture"]; texture)
 				{
 					std::string tPath = texture.as<std::string>();
-					auto textureP = Application::subsystems().st<TextureManager>().create(tPath);
-					realSc.m_texture = textureP;
+					realSc.m_texture = Application::subsystems().st<TextureManager>().create(tPath);
 				}
 				realSc.m_color = sc["m_color"].as<glm::vec4>();
 			}

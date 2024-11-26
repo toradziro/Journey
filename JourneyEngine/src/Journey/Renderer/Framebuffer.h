@@ -5,14 +5,49 @@
 namespace jny
 {
 
+enum class FrambufferTextureFormat
+{
+	None = 0,
+
+	//-- Color
+	RGBA8,
+
+	//-- Depth/stencil
+	DEPTH24STENCIL8,
+
+	Depth = DEPTH24STENCIL8
+};
+
+struct FrambufferTextureSpecification
+{
+	FrambufferTextureSpecification() = default;
+	FrambufferTextureSpecification(FrambufferTextureFormat tFormat) :
+		m_textureFormat(tFormat)
+	{ }
+
+	FrambufferTextureFormat m_textureFormat;
+};
+
+struct FrambufferTextureDescription
+{
+	FrambufferTextureDescription() = default;
+	FrambufferTextureDescription(std::initializer_list<FrambufferTextureSpecification> specs) :
+		m_textureSpecs(specs)
+	{ }
+
+	std::vector<FrambufferTextureSpecification> m_textureSpecs;
+};
+
 struct FramebufferSpecs
 {
-	u32	m_width = 1;
-	u32	m_height = 1;
-	u32	m_samples = 1;
+	FrambufferTextureDescription	m_textureDescription;
+
+	u32								m_width = 1;
+	u32								m_height = 1;
+	u32								m_samples = 1;
 
 	//-- rendering on the screen or not
-	bool		m_swapChainTarget = false;
+	bool							m_swapChainTarget = false;
 };
 
 class Framebuffer : public ReferenceCounter
