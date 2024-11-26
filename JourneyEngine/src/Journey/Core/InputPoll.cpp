@@ -23,7 +23,7 @@ bool InputPoll::mouseButtonPressed(int button)
 	return state == GLFW_PRESS;
 }
 
-jny::MousePos InputPoll::mousePos()
+MousePos InputPoll::mousePos()
 {
 	auto& win = Application::subsystems().st<Window>();
 
@@ -31,7 +31,7 @@ jny::MousePos InputPoll::mousePos()
 	double ypos = 0.0;
 
 	glfwGetCursorPos(win.rawWindow(), &xpos, &ypos);
-	return { (float)xpos, float(ypos) };
+	return { static_cast<f32>(xpos), static_cast<f32>(ypos) };
 }
 
 } //-- jny

@@ -33,7 +33,6 @@ public:
 	const glm::mat4 viewMatrix() const;
 	const glm::mat4 projMatrix() const;
 	void rotate(f32 deltaX, f32 deltaY);
-	//void move(const glm::vec3& offset);
 
 	void onViewportResize(u32 viewportW, u32 viewportH);
 
@@ -44,7 +43,7 @@ private:
 private:
 	PerspectiveCamera	m_camera;
 	glm::mat4			m_viewMatrix = glm::mat4(1.0f);
-	std::pair<f32, f32>	m_mousePos = { 0, 0 };
+	std::pair<f32, f32>	m_mousePos = { 0.0f, 0.0f };
 
 	glm::vec3			m_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	glm::vec3			m_cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);

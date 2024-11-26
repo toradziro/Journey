@@ -8,8 +8,6 @@ namespace jny
 
 struct QuadCfg;
 
-void subTexture(QuadCfg& cfg, glm::vec2 subTextureCoord, const glm::vec2& spriteSize, const glm::vec2& cellsFromAtlas);
-
 class Texture : public ReferenceCounter
 {
 public:

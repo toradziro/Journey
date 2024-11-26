@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entt.hpp"
+#include <entt.hpp>
 #include "Journey/Core/Reference.h"
 #include "Journey/Renderer/EditorCamera.h"
 #include "SceneSerializer.h"

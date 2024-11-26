@@ -148,8 +148,8 @@ void EditorCamera::updateView()
 void EditorCamera::updateMousePos()
 {
 	auto& iPoll = Application::subsystems().st<InputPoll>();
-	auto [mx, my] = iPoll.mousePos();
-	m_mousePos = { mx, my };
+	MousePos mPos = iPoll.mousePos();
+	m_mousePos = std::pair<f32, f32>(mPos.x, mPos.y);
 }
 
 }
