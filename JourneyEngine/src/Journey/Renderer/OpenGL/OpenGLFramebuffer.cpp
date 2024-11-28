@@ -8,9 +8,37 @@
 namespace jny
 {
 
+static bool isDepthFormat(FrambufferTextureFormat format)
+{
+	switch (format)
+	{
+	case FrambufferTextureFormat::None:
+		return false;
+	case FrambufferTextureFormat::RGBA8:
+		return false;
+	case FrambufferTextureFormat::DEPTH24STENCIL8:
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
+
 OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecs& specs) :
 	m_specs(specs)
 {
+	for (const auto& att : m_specs.m_textureDescription.m_textureSpecs)
+	{
+		if (isDepthFormat(att.m_textureFormat))
+		{
+			m_depthBufferFormat = att.m_textureFormat;
+		}
+		else
+		{
+			m_colorAttachmentsFormats.push_back(att.m_textureFormat);
+		}
+	}
+
 	invalidate();
 }
 
@@ -53,7 +81,13 @@ void OpenGLFramebuffer::invalidate()
 
 	glCreateFramebuffers(1, &m_rendererId);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_rendererId);
-	
+
+	//-- Attachments
+	for (const auto& txtColorFormat : m_colorAttachmentsFormats)
+	{
+
+	}
+
 	glCreateTextures(GL_TEXTURE_2D, 1, &m_colorAttachment);
 	glBindTexture(GL_TEXTURE_2D, m_colorAttachment);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_specs.m_width, m_specs.m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);

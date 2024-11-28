@@ -25,9 +25,12 @@ public:
 private:
 	FramebufferSpecs	m_specs;
 
-	u32			m_colorAttachment = 0;
-	u32			m_depthAttachment = 0;
-	u32			m_rendererId = 0;
+	u32					m_colorAttachment = 0;
+	u32					m_depthAttachment = 0;
+	u32					m_rendererId = 0;
+
+	std::vector<FrambufferTextureFormat>	m_colorAttachmentsFormats;
+	FrambufferTextureFormat					m_depthBufferFormat = FrambufferTextureFormat::None;
 };
 
 }
