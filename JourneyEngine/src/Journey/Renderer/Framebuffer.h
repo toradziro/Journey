@@ -62,7 +62,7 @@ public:
 	virtual void unbind() = 0;
 	virtual void resize(const glm::vec2& size) = 0;
 
-	virtual u32 colorAttachment() = 0;
+	virtual u32 colorAttachment(u32 index = 0) = 0;
 
 	static Ref<Framebuffer> create(const FramebufferSpecs& specs);
 };

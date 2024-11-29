@@ -17,20 +17,25 @@ public:
 	virtual void bind() override;
 	virtual void unbind() override;
 
-	virtual u32 colorAttachment() override { return m_colorAttachment; }
+	virtual u32 colorAttachment(u32 index = 0) override { return m_colorAttachments[0]; }
 
 	virtual void resize(const glm::vec2& size) override;
 	void invalidate();
 
 private:
+	void createColorTextures();
+	void createDepthTexture();
+
+private:
 	FramebufferSpecs	m_specs;
 
-	u32					m_colorAttachment = 0;
 	u32					m_depthAttachment = 0;
 	u32					m_rendererId = 0;
 
 	std::vector<FrambufferTextureFormat>	m_colorAttachmentsFormats;
 	FrambufferTextureFormat					m_depthBufferFormat = FrambufferTextureFormat::None;
+
+	std::vector<u32>	m_colorAttachments;
 };
 
 }
