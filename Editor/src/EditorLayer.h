@@ -59,6 +59,8 @@ private:
 	GizmoData						m_gizmoData;
 	bool							m_showGizmo = false;
 
+	u32								m_frambufferIndex = 0;
+
 	f32								m_FPS = 0.0f;
 	f32								m_dt = 0.0f;
 	bool							m_openDemo = false;

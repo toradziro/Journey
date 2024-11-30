@@ -17,7 +17,7 @@ public:
 	virtual void bind() override;
 	virtual void unbind() override;
 
-	virtual u32 colorAttachment(u32 index = 0) override { return m_colorAttachments[0]; }
+	virtual u32 colorAttachment(u32 index = 0) override;
 
 	virtual void resize(const glm::vec2& size) override;
 	void invalidate();

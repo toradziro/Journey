@@ -60,6 +60,12 @@ void OpenGLFramebuffer::unbind()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+u32 OpenGLFramebuffer::colorAttachment(u32 index)
+{
+	JNY_ASSERT(index < m_colorAttachments.size(), "");
+	return m_colorAttachments[index];
+}
+
 void OpenGLFramebuffer::resize(const glm::vec2& size)
 {
 	m_specs.m_width = static_cast<u32>(size.x);

@@ -173,7 +173,7 @@ void OpenGLShader::compile(const OpenGLShader::ShaderSources& sources)
 			}
 			shaders.push_back(shader);
 		});
-
+		
 	//-- Shaders are successfully compiled.
 	//-- Now time to link them together into a program.
 	//-- Get a program object.

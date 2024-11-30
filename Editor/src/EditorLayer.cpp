@@ -34,7 +34,12 @@ void EditorLayer::attach()
 	FramebufferSpecs specs;
 	specs.m_width = 1200;
 	specs.m_height = 800;
-	specs.m_textureDescription = { FrambufferTextureFormat::DEPTH24STENCIL8, FrambufferTextureFormat::RGBA8 };
+	specs.m_textureDescription = {
+		FrambufferTextureFormat::DEPTH24STENCIL8,
+		FrambufferTextureFormat::RGBA8,
+		FrambufferTextureFormat::RGBA8,
+		FrambufferTextureFormat::RGBA8
+	};
 	m_framebuffer = Framebuffer::create(std::move(specs));
 	m_context->m_currentScene = Ref<Scene>::create();
 }
@@ -142,6 +147,20 @@ void EditorLayer::onEvent(Event& event)
 				{
 					setSelectMode();
 				}
+
+				//-- Framebuffer test
+				if (e.keyCode() == GLFW_KEY_1)
+				{
+					m_frambufferIndex = 0;
+				}
+				if (e.keyCode() == GLFW_KEY_2)
+				{
+					m_frambufferIndex = 1;
+				}
+				if (e.keyCode() == GLFW_KEY_3)
+				{
+					m_frambufferIndex = 2;
+				}
 			}
 			return false;
 		});
@@ -182,7 +201,7 @@ void EditorLayer::imGuiRender()
 		ImVec2 regionSize = ImGui::GetContentRegionAvail();
 		m_viewportSize = regionSize;
 
-		u64 frameId = static_cast<u64>(m_framebuffer->colorAttachment());
+		u64 frameId = static_cast<u64>(m_framebuffer->colorAttachment(m_frambufferIndex));
 		ImGui::Image
 		(
 			reinterpret_cast<void*>(frameId),

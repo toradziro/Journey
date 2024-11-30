@@ -11,6 +11,7 @@ uniform mat4 u_vpMatrix;
 
 out vec2 v_TexturePos;
 out vec4 v_Color;
+
 flat out float v_TextureIndex;
 flat out float v_TilingFactor;
 
@@ -28,9 +29,12 @@ void main()
 #version 330 core
 
 layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 colorTst;
+layout(location = 2) out vec4 colorTst1;
 
 in vec2 v_TexturePos;
 in vec4 v_Color;
+
 flat in float v_TextureIndex;
 flat in float v_TilingFactor;
 
@@ -77,4 +81,6 @@ void main()
 		default: texColor = v_Color; break;
 	}
 	color = texColor;
+	colorTst1 = vec4(v_TexturePos, 0.0, 1.0);
+	colorTst = vec4(vec3(v_TextureIndex / 32.0), 1.0);
 }
