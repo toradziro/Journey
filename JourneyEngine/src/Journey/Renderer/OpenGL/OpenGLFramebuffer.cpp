@@ -143,6 +143,10 @@ void OpenGLFramebuffer::createColorTextures()
 				format = GL_RGBA;
 				internalFormat = GL_RGBA8;
 				break;
+			case FrambufferTextureFormat::RED_INTEGER:
+				format = GL_RED_INTEGER;
+				internalFormat = GL_R32I;
+				break;
 			default:
 				JNY_ASSERT(false, "");
 				break;

@@ -56,6 +56,8 @@ private:
 
 	f32					m_yaw = -90.0f;
 	f32					m_pitch = 0.0f;
+
+	bool				m_startProcessMovementEvents = false;
 };
 
 }

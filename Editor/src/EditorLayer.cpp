@@ -38,7 +38,7 @@ void EditorLayer::attach()
 		FrambufferTextureFormat::DEPTH24STENCIL8,
 		FrambufferTextureFormat::RGBA8,
 		FrambufferTextureFormat::RGBA8,
-		FrambufferTextureFormat::RGBA8
+		FrambufferTextureFormat::RED_INTEGER
 	};
 	m_framebuffer = Framebuffer::create(std::move(specs));
 	m_context->m_currentScene = Ref<Scene>::create();

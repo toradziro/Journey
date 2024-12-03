@@ -72,31 +72,29 @@ void EditorCamera::onEvent(Event& e)
 		{
 			if (iPoll.mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
 			{
+				if (!m_startProcessMovementEvents)
+				{
+					m_startProcessMovementEvents = true;
+					m_mousePos.first = e.getX();
+					m_mousePos.second = e.getY();
+				}
 				f32 deltaX = e.getX() - m_mousePos.first;
 				f32 deltaY = e.getY() - m_mousePos.second;
 
 				rotate(deltaX, deltaY);
 				updateMousePos();
+				return true;
 			}
-			return true;
+			return false;
 		});
 
-	ed.dispatch<MouseButtonPressedEvent>([&](MouseButtonPressedEvent& e)
-		{
-			if (e.buttonCode() == GLFW_MOUSE_BUTTON_RIGHT)
-			{
-				updateMousePos();
-				Application::subsystems().st<Window>().hideCursor();
-			}
-			return true;
-		});
 	ed.dispatch<MouseButtonReleasedEvent>([&](MouseButtonReleasedEvent& e)
 		{
 			if (e.buttonCode() == GLFW_MOUSE_BUTTON_RIGHT)
 			{
-				Application::subsystems().st<Window>().unhideCursor();
+				m_startProcessMovementEvents = false;
 			}
-			return true;
+			return false;
 		});
 }
 
