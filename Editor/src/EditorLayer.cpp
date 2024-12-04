@@ -73,9 +73,6 @@ void EditorLayer::update(f32 dt)
 		m_context->m_editorCamera.onViewportResize(wCasted, hCasted);
 	}
 
-	//m_sampleE2.component<TransformComponent>().m_rotation.x += 15.0f * dt;
-	//m_sampleE.component<TransformComponent>().m_rotation.y += 15.0f * dt;
-
 	auto& rc = Application::subsystems().st<RenderCommand>();
 	auto& renderer2D = Application::subsystems().st<Renderer2D>();
 

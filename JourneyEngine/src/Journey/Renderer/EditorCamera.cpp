@@ -7,6 +7,13 @@
 
 #include <glfw/glfw3.h>
 
+namespace
+{
+
+constexpr glm::vec3 C_WORLD_UP = { 0.0f, 1.0f, 0.0f };
+
+}
+
 namespace jny
 {
 
@@ -130,6 +137,9 @@ void EditorCamera::rotate(f32 deltaX, f32 deltaY)
 	m_cameraFront.x = cos(glm::radians(m_pitch)) * cos(glm::radians(m_yaw));
 	m_cameraFront.y = sin(glm::radians(m_pitch));
 	m_cameraFront.z = cos(glm::radians(m_pitch)) * sin(glm::radians(m_yaw));
+
+	m_cameraRight = glm::normalize(glm::cross(m_cameraFront, C_WORLD_UP));
+	m_cameraUp = glm::normalize(glm::cross(m_cameraRight, m_cameraFront));
 	updateView();
 }
 
