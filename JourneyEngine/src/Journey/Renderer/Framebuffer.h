@@ -64,6 +64,7 @@ public:
 	virtual void resize(const glm::vec2& size) = 0;
 
 	virtual u32 colorAttachment(u32 index = 0) = 0;
+	virtual int readbackPixel(u32 index, i32 x, i32 y) = 0;
 
 	static Ref<Framebuffer> create(const FramebufferSpecs& specs);
 };

@@ -66,6 +66,16 @@ u32 OpenGLFramebuffer::colorAttachment(u32 index)
 	return m_colorAttachments[index];
 }
 
+int OpenGLFramebuffer::readbackPixel(u32 index, i32 x, i32 y)
+{
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
+	//-- x and y are how big region we want to read from buffer
+	//-- type is type of data we are reading 
+	int pixel = 0;
+	glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel);
+	return pixel;
+}
+
 void OpenGLFramebuffer::resize(const glm::vec2& size)
 {
 	m_specs.m_width = static_cast<u32>(size.x);

@@ -53,6 +53,8 @@ private:
 	glm::vec2						m_sampledTexture = { 2.0f, 3.0f };
 	ImVec2							m_viewportSize = { 0.0f, 0.0f };
 
+	std::pair<ImVec2, ImVec2>		m_viewportBounds = {};
+
 	Ref<Framebuffer>				m_framebuffer;
 	Application*					m_app;
 
@@ -60,11 +62,13 @@ private:
 	bool							m_showGizmo = false;
 
 	u32								m_frambufferIndex = 0;
+	u32								m_frambufferPickingIndex = 0;
 
 	f32								m_FPS = 0.0f;
 	f32								m_dt = 0.0f;
 	bool							m_openDemo = false;
 	bool							m_viewportActive = false;
+	bool							m_selectEntity = false;
 	//-- TODO: move to other class
 	bool							m_saveScene = false;
 	bool							m_loadScene = false;

@@ -18,6 +18,7 @@ public:
 	virtual void unbind() override;
 
 	virtual u32 colorAttachment(u32 index = 0) override;
+	virtual int readbackPixel(u32 index, i32 x, i32 y) override;
 
 	virtual void resize(const glm::vec2& size) override;
 	void invalidate();

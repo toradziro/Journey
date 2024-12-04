@@ -40,6 +40,8 @@ void EditorLayer::attach()
 		FrambufferTextureFormat::RGBA8,
 		FrambufferTextureFormat::RED_INTEGER
 	};
+	//-- FrambufferTextureFormat::RED_INTEGER
+	m_frambufferPickingIndex = 2;
 	m_framebuffer = Framebuffer::create(std::move(specs));
 	m_context->m_currentScene = Ref<Scene>::create();
 }
@@ -85,6 +87,26 @@ void EditorLayer::update(f32 dt)
 	//-- Updating our scene
 	//m_context->m_currentScene->update(dt);
 	m_context->m_currentScene->editorModeUpdate(dt, m_context->m_editorCamera);
+
+	ImVec2 mousePos = ImGui::GetMousePos();
+	mousePos.x -= m_viewportBounds.first.x;
+	mousePos.y -= m_viewportBounds.first.y;
+	//-- Texture UV coordinates are going from left down corner
+	//-- so we need to flip our y axe
+	mousePos.y = m_viewportSize.y - mousePos.y;
+
+	int mouseFrameX = static_cast<int>(mousePos.x);
+	int mouseFrameY = static_cast<int>(mousePos.y);
+	if (mouseFrameX >= 0 &&
+		mouseFrameY >= 0 &&
+		mouseFrameX <= static_cast<int>(m_viewportSize.x) &&
+		mouseFrameY <= static_cast<int>(m_viewportSize.y) &&
+		m_selectEntity)
+	{
+		int pixel = m_framebuffer->readbackPixel(m_frambufferPickingIndex, mouseFrameX, mouseFrameY);
+		Log::info("Readback pixel: {}", pixel);
+		m_selectEntity = false;
+	}
 
 	m_framebuffer->unbind();
 
@@ -154,16 +176,20 @@ void EditorLayer::onEvent(Event& event)
 				{
 					m_frambufferIndex = 1;
 				}
-				if (e.keyCode() == GLFW_KEY_3)
-				{
-					m_frambufferIndex = 2;
-				}
 			}
 			return false;
 		});
 	if (m_viewportActive)
 	{
 		m_context->m_editorCamera.onEvent(event);
+		ed.dispatch<MouseButtonPressedEvent>([&](MouseButtonPressedEvent& e)
+			{
+				if (e.buttonCode() == GLFW_MOUSE_BUTTON_LEFT)
+				{
+					m_selectEntity = true;
+				}
+				return true;
+			});
 	}
 }
 
@@ -190,13 +216,14 @@ void EditorLayer::imGuiRender()
 	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
-	if (ImGui::Begin("Viewport"))
+	if (ImGui::Begin("Viewport", 0, ImGuiWindowFlags_NoScrollbar))
 	{
+		ImVec2 offset = ImGui::GetCursorPos();
+
 		m_viewportActive = ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
 		m_app->imGuiLayer()->setUpMarkEventsProcessed(!m_viewportActive);
 
-		ImVec2 regionSize = ImGui::GetContentRegionAvail();
-		m_viewportSize = regionSize;
+		m_viewportSize = ImGui::GetContentRegionAvail();
 
 		u64 frameId = static_cast<u64>(m_framebuffer->colorAttachment(m_frambufferIndex));
 		ImGui::Image
@@ -206,6 +233,11 @@ void EditorLayer::imGuiRender()
 			ImVec2{ 0.0f, 1.0f },
 			ImVec2{ 1.0f, 0.0f }
 		);
+		const ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 windowLeftCorner = ImGui::GetWindowPos() + offset;
+		ImVec2 windowRightCorner = windowLeftCorner + windowSize;
+		m_viewportBounds.first = std::move(windowLeftCorner);
+		m_viewportBounds.second = std::move(windowRightCorner);
 		
 		drawViewportToolbar();
 		if (m_showGizmo)
