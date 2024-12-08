@@ -14,6 +14,7 @@ public:
 
 	virtual void clear() override;
 	virtual void setClearColor(const glm::vec4& color) override;
+	virtual void clearRedIntTexture(u32 textureIndex, i32 value) override;
 
 	virtual void drawIndexed(const Ref<VertexArray>& vertexArray, u32 count = 0) override;
 };

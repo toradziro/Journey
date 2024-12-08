@@ -32,6 +32,11 @@ void OpenGLRendererAPI::setClearColor(const glm::vec4& color)
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
+void OpenGLRendererAPI::clearRedIntTexture(u32 textureIndex, i32 value)
+{
+	glClearTexImage(textureIndex, 0, GL_RED_INTEGER, GL_INT, &value);
+}
+
 void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, u32 count)
 {
 	PROFILE_FUNC;

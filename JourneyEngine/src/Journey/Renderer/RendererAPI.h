@@ -24,6 +24,7 @@ public:
 
 	virtual void clear() = 0;
 	virtual void setClearColor(const glm::vec4& color) = 0;
+	virtual void clearRedIntTexture(u32 textureIndex, i32 value) = 0;
 
 	virtual void drawIndexed(const Ref<VertexArray>& vertexArray, u32 count = 0) = 0;
 

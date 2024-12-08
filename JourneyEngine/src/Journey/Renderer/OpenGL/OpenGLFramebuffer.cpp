@@ -16,6 +16,8 @@ static bool isDepthFormat(FrambufferTextureFormat format)
 		return false;
 	case FrambufferTextureFormat::RGBA8:
 		return false;
+	case FrambufferTextureFormat::RED_INTEGER:
+		return false;
 	case FrambufferTextureFormat::DEPTH24STENCIL8:
 		return true;
 	default:

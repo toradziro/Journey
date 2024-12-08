@@ -83,6 +83,7 @@ void EditorLayer::update(f32 dt)
 
 	rc.setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	rc.clear();
+	rc.clearRedIntTexture(m_framebuffer->colorAttachment(m_frambufferPickingIndex), -1);
 
 	//-- Updating our scene
 	//m_context->m_currentScene->update(dt);
