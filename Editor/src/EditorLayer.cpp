@@ -189,7 +189,7 @@ void EditorLayer::onEvent(Event& event)
 		m_context->m_editorCamera.onEvent(event);
 		ed.dispatch<MouseButtonPressedEvent>([&](MouseButtonPressedEvent& e)
 			{
-				if (e.buttonCode() == GLFW_MOUSE_BUTTON_LEFT)
+				if (e.buttonCode() == GLFW_MOUSE_BUTTON_LEFT && !ImGuizmo::IsOver())
 				{
 					m_selectEntity = true;
 				}
