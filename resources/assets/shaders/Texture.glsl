@@ -6,6 +6,7 @@ layout(location = 1) in vec4 a_Color;
 layout(location = 2) in vec2 a_TexturePos;
 layout(location = 3) in float a_TextureIndex;
 layout(location = 4) in float a_TilingFactor;
+layout(location = 5) in int a_entityId;
 
 uniform mat4 u_vpMatrix;
 
@@ -14,6 +15,7 @@ out vec4 v_Color;
 
 flat out float v_TextureIndex;
 flat out float v_TilingFactor;
+flat out int v_entityId;
 
 void main()
 {
@@ -21,6 +23,7 @@ void main()
 	v_TexturePos = a_TexturePos;
 	v_TextureIndex = a_TextureIndex;
 	v_TilingFactor = a_TilingFactor;
+	v_entityId = a_entityId;
 	gl_Position = u_vpMatrix * vec4(a_Position, 1.0f);
 }
 
@@ -37,6 +40,7 @@ in vec4 v_Color;
 
 flat in float v_TextureIndex;
 flat in float v_TilingFactor;
+flat in int v_entityId;
 
 uniform sampler2D u_textures[32];
 
@@ -82,5 +86,5 @@ void main()
 	}
 	color = texColor;
 	colorDepth = vec4(v_TexturePos, 1.0, 1.0);
-	entityId = 50;
+	entityId = v_entityId;
 }

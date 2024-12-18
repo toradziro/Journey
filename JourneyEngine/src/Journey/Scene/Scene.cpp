@@ -137,6 +137,7 @@ void Scene::editorModeUpdate(f32 dt, const EditorCamera& camera)
 		auto& sprite = group.get<SpriteComponent>(e);
 
 		QuadCfg quad;
+		quad.m_entityId = static_cast<i32>(e);
 		quad.m_color = sprite.m_color;
 		if (sprite.m_texture)
 		{

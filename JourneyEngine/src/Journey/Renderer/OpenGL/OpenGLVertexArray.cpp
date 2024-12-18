@@ -74,14 +74,39 @@ void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 			//-- type - data type for every element in that layout
 			//-- stride - size in bytes for all of elements in this layout (corresponding to vertex)
 			//-- offset - how much bytes need to shift in vertexes to reach a start address of this layout from the start of the vertex
-			glVertexAttribPointer(
-				m_vertexBufferIndexOffset,
-				element.m_count,
-				toOpenGLType(element.m_type),
-				element.m_normilized ? GL_TRUE : GL_FALSE,
-				vertexBuffer->layout().stride(),
-				reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
-			);
+			switch (element.m_type)
+			{
+			case buff_utils::ShaderDataType::Bool: [[fallthrough]];
+			case buff_utils::ShaderDataType::Int: [[fallthrough]];
+			case buff_utils::ShaderDataType::Int2:	[[fallthrough]];
+			case buff_utils::ShaderDataType::Int3:	[[fallthrough]];
+			case buff_utils::ShaderDataType::Int4:
+				glVertexAttribIPointer(
+					m_vertexBufferIndexOffset,
+					element.m_count,
+					toOpenGLType(element.m_type),
+					vertexBuffer->layout().stride(),
+					reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
+				);
+				break;
+			case buff_utils::ShaderDataType::Float:	[[fallthrough]];
+			case buff_utils::ShaderDataType::Float2:[[fallthrough]];
+			case buff_utils::ShaderDataType::Float3:[[fallthrough]];
+			case buff_utils::ShaderDataType::Float4:[[fallthrough]];
+			case buff_utils::ShaderDataType::Mat3:	[[fallthrough]];
+			case buff_utils::ShaderDataType::Mat4:
+				glVertexAttribPointer(
+					m_vertexBufferIndexOffset,
+					element.m_count,
+					toOpenGLType(element.m_type),
+					element.m_normilized ? GL_TRUE : GL_FALSE,
+					vertexBuffer->layout().stride(),
+					reinterpret_cast<void*>(static_cast<uintptr_t>(element.m_offset))
+				);
+				break;
+			default:
+				break;
+			}
 
 			++m_vertexBufferIndexOffset;
 		});

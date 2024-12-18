@@ -104,8 +104,12 @@ void EditorLayer::update(f32 dt)
 		mouseFrameY <= static_cast<int>(m_viewportSize.y) &&
 		m_selectEntity)
 	{
-		int pixel = m_framebuffer->readbackPixel(m_frambufferPickingIndex, mouseFrameX, mouseFrameY);
-		Log::info("Readback pixel: {}", pixel);
+		int entityId = m_framebuffer->readbackPixel(m_frambufferPickingIndex, mouseFrameX, mouseFrameY);
+		if (entityId == -1)
+		{
+			m_context->m_selectedEntity = {};
+		}
+		m_context->m_selectedEntity = Entity(entt::entity(entityId), m_context->m_currentScene.raw());
 		m_selectEntity = false;
 	}
 

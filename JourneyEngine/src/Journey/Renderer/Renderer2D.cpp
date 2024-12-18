@@ -36,7 +36,8 @@ void Renderer2D::init()
 		{ buff_utils::ShaderDataType::Float4, "a_Color" },
 		{ buff_utils::ShaderDataType::Float2, "a_TexturePos" },
 		{ buff_utils::ShaderDataType::Float, "a_TextureIndex" },
-		{ buff_utils::ShaderDataType::Float, "a_TilingFactor" }
+		{ buff_utils::ShaderDataType::Float, "a_TilingFactor" },
+		{ buff_utils::ShaderDataType::Int, "a_entityId" }
 	};
 	BufferLayout layout = BufferLayout(std::move(layoutData));
 	m_quadVertexBuffer->setLayout(layout);
@@ -200,6 +201,7 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 			m_quadVertexPtr->m_textureCoordinate = cfg.m_texturesPos[idx];
 			m_quadVertexPtr->m_textureIndex = textureIndexCastedToFloat;
 			m_quadVertexPtr->m_tilingFactor = cfg.m_tilingFactor;
+			m_quadVertexPtr->m_entityId = cfg.m_entityId;
 			m_quadVertexPtr++;
 			++idx;
 		});
