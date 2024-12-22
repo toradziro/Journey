@@ -1,7 +1,7 @@
 #include "jnypch.h"
 #include "Framebuffer.h"
 #include "Journey/Core/Application.h"
-#include "Journey/Renderer/Renderer.h"
+#include "Journey/Renderer/Renderer2D.h"
 #include "Journey/Renderer/OpenGL/OpenGLFramebuffer.h"
 
 namespace jny
@@ -9,7 +9,7 @@ namespace jny
 
 Ref<Framebuffer> Framebuffer::create(const FramebufferSpecs& specs)
 {
-	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
 	Ref<Framebuffer> buffer;
 
 	switch (rendererApi)

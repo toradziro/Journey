@@ -1,7 +1,7 @@
 #include "jnypch.h"
 #include "Shader.h"
 #include "Journey/Core/Application.h"
-#include "Journey/Renderer/Renderer.h"
+#include "Journey/Renderer/Renderer2D.h"
 #include "Journey/Renderer/OpenGL/OpenGLShader.h"
 
 namespace jny
@@ -9,7 +9,7 @@ namespace jny
 
 Shader* Shader::create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 {
-	const auto api = Application::subsystems().st<Renderer>().API();
+	const auto api = Application::subsystems().st<RenderCommand>().api();
 	Shader* shader = nullptr;
 
 	switch (api)
@@ -29,7 +29,7 @@ Shader* Shader::create(const std::string& name, const std::string& vertexSrc, co
 
 jny::Shader* Shader::create(const std::string& path)
 {
-	const auto api = Application::subsystems().st<Renderer>().API();
+	const auto api = Application::subsystems().st<RenderCommand>().api();
 	Shader* shader = nullptr;
 
 	switch (api)

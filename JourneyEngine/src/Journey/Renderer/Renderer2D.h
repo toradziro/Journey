@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RenderCommand.h"
 #include "Journey/Core/Reference.h"
 #include "Journey/Core/SingletonInterface.h"
 #include "Journey/Renderer/Camera.h"
@@ -67,6 +68,8 @@ public:
 	//-- Statistics
 	void resetStatistics() { m_frameStat = {}; }
 	const auto& stats() const { return m_frameStat; }
+
+	void windowResized(u32 width, u32 height);
 
 private:
 	void startNextBatch();

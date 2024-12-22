@@ -25,6 +25,8 @@ void Renderer2D::init()
 {
 	PROFILE_FUNC;
 
+	Application::subsystems().st<RenderCommand>().init();
+
 	//-- Vertex array
 	m_quadVertexArray = Ref<VertexArray>(VertexArray::create());
 
@@ -218,6 +220,11 @@ void Renderer2D::startNextBatch()
 	m_quadVertexPtr = m_quadVertexBase;
 	m_currQuadIndex = 0;
 	m_currTextureSlot = 1;
+}
+
+void Renderer2D::windowResized(u32 width, u32 height)
+{
+	Application::subsystems().st<RenderCommand>().windowResized(width, height);
 }
 
 } //-- jny

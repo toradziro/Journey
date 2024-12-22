@@ -1,7 +1,5 @@
 #include "jnypch.h"
 #include "Texture.h"
-
-#include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/OpenGL/OpenGLTexture.h"
 #include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer2D.h"
@@ -24,7 +22,7 @@ void subTexture(QuadCfg& cfg
 
 Ref<Texture2D> Texture2D::create(const std::string& texturePath)
 {
-	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
 	Ref<Texture2D> tex = nullptr;
 
 	switch (rendererApi)
@@ -44,7 +42,7 @@ Ref<Texture2D> Texture2D::create(const std::string& texturePath)
 
 Ref<Texture2D> Texture2D::create(u32 width, u32 height)
 {
-	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
 	Ref<Texture2D> tex = nullptr;
 
 	switch (rendererApi)

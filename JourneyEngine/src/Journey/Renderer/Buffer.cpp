@@ -3,7 +3,7 @@
 #include "Journey/Core/Core.h"
 #include "Journey/Renderer/OpenGL/OpenGLBuffer.h"
 #include "Journey/Core/Application.h"
-#include "Journey/Renderer/Renderer.h"
+#include "Journey/Renderer/Renderer2D.h"
 
 namespace jny
 {
@@ -67,7 +67,7 @@ u32 componentsCount(buff_utils::ShaderDataType type)
 
 VertexBuffer* VertexBuffer::create(float* vertices, u32 count)
 {
-	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
 	VertexBuffer* buffer = nullptr;
 
 	switch (rendererApi)
@@ -88,7 +88,7 @@ VertexBuffer* VertexBuffer::create(float* vertices, u32 count)
 
 jny::VertexBuffer* VertexBuffer::create(u32 size)
 {
-	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
 	VertexBuffer* buffer = nullptr;
 
 	switch (rendererApi)
@@ -109,7 +109,7 @@ jny::VertexBuffer* VertexBuffer::create(u32 size)
 
 IndexBuffer* IndexBuffer::create(u32* indices, u32 count)
 {
-	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
 	IndexBuffer* buffer = nullptr;
 
 	switch (rendererApi)

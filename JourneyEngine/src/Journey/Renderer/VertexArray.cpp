@@ -1,7 +1,7 @@
 #include "jnypch.h"
 #include "VertexArray.h"
 #include "Journey/Core/Application.h"
-#include "Journey/Renderer/Renderer.h"
+#include "Journey/Renderer/Renderer2D.h"
 #include "Journey/Renderer/OpenGL/OpenGLVertexArray.h"
 
 namespace jny
@@ -9,7 +9,7 @@ namespace jny
 
 VertexArray* VertexArray::create()
 {
-	auto rendererApi = Application::subsystems().st<Renderer>().API();
+	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
 	VertexArray* buffer = nullptr;
 
 	switch (rendererApi)

@@ -10,7 +10,6 @@
 #include "Journey/Core/fs/VirtualFileSystem.h"
 
 #include "Journey/Renderer/Renderer2D.h"
-#include "Journey/Renderer/Renderer.h"
 #include "Journey/Renderer/RenderCommand.h"
 
 #include "Journey/Core/Profiling/TimeInstruments.h"
@@ -62,12 +61,8 @@ Application::Application(const std::string_view name)
 	//-- RenderCommnad is a holder for API implementation and also caller for rendering methods
 	s_sHolder->add<RenderCommand>();
 	s_sHolder->st<RenderCommand>().createRenderer(RendererAPI::API::OpenGL);
-	
-	//-- Interface for rendering
-	s_sHolder->add<Renderer>();
-	s_sHolder->st<Renderer>().init();
 
-	//-- And for 2D rendering as well
+	//-- Renderer interface
 	s_sHolder->add<Renderer2D>();
 	s_sHolder->st<Renderer2D>().init();
 
@@ -188,7 +183,7 @@ bool Application::windowResizeEvent(WindowResizeEvent& e)
 	}
 	m_minimized = false;
 
-	s_sHolder->st<Renderer>().windowResized(w, h);
+	s_sHolder->st<Renderer2D>().windowResized(w, h);
 
 	return false;
 }
