@@ -29,6 +29,8 @@ class VFS : ISingleton
 	JNY_SINGLETON_TYPE(VirtualFileSystem)
 
 public:
+	constexpr static std::string_view	C_RESOURCE_DIR_NAME = "resources/";
+
 	void		init();
 
 	Ref<File>	loadFile(const fs_path& path) const;
@@ -36,9 +38,10 @@ public:
 	void		writeFile(const Ref<File>& file) const;
 	
 	fs_path		virtualToNativePath(const fs_path& path) const;
+	fs_path		rootResourcesPath() const { return m_vfsPath; }
 
 private:
-	fs_path	m_vfsPath = {};
+	fs_path		m_vfsPath = {};
 };
 
 }

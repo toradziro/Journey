@@ -2,6 +2,7 @@
 #include "EditorLayer.h"
 #include "Panels/SceneHierarchy.h"
 #include "Panels/EntityProperties.h"
+#include "Panels/AssetBrowser.h"
 #include "Journey/ResourceManagers/TextureManager.h"
 #include "Journey/ResourceManagers/ScenesManager.h"
 #include "Journey/ImGui/Controls/DropDownList.h"
@@ -29,6 +30,7 @@ void EditorLayer::attach()
 
 	m_panels.push_back(new SceneHierarchy(m_context));
 	m_panels.push_back(new EntityProperties(m_context));
+	m_panels.push_back(new AssetBrowser(m_context));
 
 	//-- Create frambuffer to draw in it instead of directly drawing on screen
 	FramebufferSpecs specs;

@@ -6,7 +6,6 @@ namespace
 {
 
 constexpr std::string_view	C_ENGINE_NAME = "Journey";
-constexpr std::string_view	C_RESOURCE_DIR_NAME = "resources/";
 
 }
 
