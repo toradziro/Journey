@@ -29,7 +29,7 @@ class VFS : ISingleton
 	JNY_SINGLETON_TYPE(VirtualFileSystem)
 
 public:
-	constexpr static std::string_view	C_RESOURCE_DIR_NAME = "resources/";
+	constexpr static std::string_view	C_RESOURCE_DIR_NAME = "resources";
 
 	void		init();
 
