@@ -110,10 +110,6 @@ void ImGuiLayer::attach()
 	style.Colors[ImGuiCol_Button].y = 0.555f;
 	style.Colors[ImGuiCol_Button].z = 0.555f;
 
-	style.WindowRounding = 8.0f;
-	style.FrameRounding = 8.0f;
-	style.TabRounding = 8.0f;
-
 	auto& win = Application::subsystems().st<Window>();
 
 	ImGui::GetStyle().ScaleAllSizes(win.dpiScale());
