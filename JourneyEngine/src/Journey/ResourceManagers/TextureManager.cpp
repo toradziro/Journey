@@ -9,19 +9,28 @@ namespace jny
 {
 
 constexpr const char*	C_TEXTURE_FOLDER_PATH = "assets/textures";
+constexpr const char*	C_EDITOR_TEXTURES_PATH = "editor/icons";
 
 void TextureManager::init()
 {
 	auto& vfs = Application::subsystems().st<VFS>();
-	fs_path nativePath = vfs.virtualToNativePath(C_TEXTURE_FOLDER_PATH);
 
-	for (const auto& entry : fs::recursive_directory_iterator(nativePath))
-	{
-		if (!entry.is_directory())
+	auto pathCollect = [&](fs_path nativePath)
 		{
-			m_assetsPaths.push_back(entry.path());
-		}
-	}
+			for (const auto& entry : fs::recursive_directory_iterator(nativePath))
+			{
+				if (!entry.is_directory())
+				{
+					m_assetsPaths.push_back(entry.path());
+				}
+			}
+		};
+
+	fs_path projectTexturesNativePath = vfs.virtualToNativePath(C_TEXTURE_FOLDER_PATH);
+	fs_path editorTexturesNativePath = vfs.virtualToNativePath(C_EDITOR_TEXTURES_PATH);
+	pathCollect(projectTexturesNativePath);
+	pathCollect(editorTexturesNativePath);
+
 	Log::info("Textures paths loaded");
 }
 
