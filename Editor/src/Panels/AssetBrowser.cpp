@@ -178,12 +178,14 @@ void AssetBrowser::drawContent()
 	using ButtonCallback = std::function<void(void)>;
 
 	constexpr float C_BUTTON_SIZE = 48.0f;
+	const ImVec2 buttonSizeWithDpi = ImVec2{ C_BUTTON_SIZE, C_BUTTON_SIZE } * ImGui::GetWindowDpiScale();
 	const auto drawButton = [&](ImTextureID rendererId, ButtonCallback callback, std::string text)
 		{
+
 			ImGui::ImageButton
 			(
 				rendererId,
-				{ C_BUTTON_SIZE, C_BUTTON_SIZE },
+				buttonSizeWithDpi,
 				ImVec2{ 0.0f, 1.0f },
 				ImVec2{ 1.0f, 0.0f }
 			);
