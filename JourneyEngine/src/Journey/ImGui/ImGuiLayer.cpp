@@ -19,8 +19,10 @@
 namespace
 {
 
-constexpr std::string_view C_CONFIG_FILE_NAME = "imgui.ini";
-constexpr std::string_view C_DEFAULT_LAYOUT_PATH = "editor/default_layout.ini";
+constexpr std::string_view	C_CONFIG_FILE_NAME = "imgui.ini";
+constexpr std::string_view	C_DEFAULT_LAYOUT_PATH = "editor/default_layout.ini";
+constexpr const char*		C_REGULAR_FONTS = "../resources/fonts/open_sans.ttf";
+constexpr const char*		C_PIXEL_FONTS = "../resources/fonts/pixel_font.ttf";
 
 }
 
@@ -113,7 +115,8 @@ void ImGuiLayer::attach()
 	auto& win = Application::subsystems().st<Window>();
 
 	ImGui::GetStyle().ScaleAllSizes(win.dpiScale());
-	float fontSize = 18.0f * win.dpiScale();
+	float regularFontSize = 18.0f * win.dpiScale();
+	float pixelFontSize = 16.0f * win.dpiScale();
 
 	io.Fonts->Clear();
 
@@ -122,9 +125,10 @@ void ImGuiLayer::attach()
 	fontConfig.OversampleV = 1;
 	fontConfig.PixelSnapH = true;
 
-	//io.Fonts->AddFontFromFileTTF("../resources/fonts/noto_fonts.ttf", fontSize, &fontConfig);
-	//io.Fonts->AddFontFromFileTTF("../resources/fonts/roboto.ttf", fontSize, &fontConfig);
-	io.Fonts->AddFontFromFileTTF("../resources/fonts/open_sans.ttf", fontSize, &fontConfig);
+	m_regularFont = io.Fonts->AddFontFromFileTTF(C_REGULAR_FONTS, regularFontSize, &fontConfig);
+	m_pixelFont = io.Fonts->AddFontFromFileTTF(C_PIXEL_FONTS, pixelFontSize, &fontConfig);
+
+	m_currFont = m_pixelFont;
 
 	io.Fonts->Build();
 
@@ -199,6 +203,21 @@ void ImGuiLayer::imGuiRender()
 	}
 }
 
+void ImGuiLayer::setFont(Font font)
+{
+	switch (font)
+	{
+	case Font::Pixel:
+		m_currFont = m_pixelFont;
+		break;
+	case Font::Regular:
+		m_currFont = m_regularFont;
+		break;
+	default:
+		break;
+	}
+}
+
 void ImGuiLayer::begin()
 {
 	PROFILE_FUNC;
@@ -206,6 +225,8 @@ void ImGuiLayer::begin()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	ImGui::PushFont(m_currFont);
+
 	ImGuizmo::BeginFrame();
 }
 
@@ -218,6 +239,7 @@ void ImGuiLayer::end()
 
 	io.DisplaySize = ImVec2((float)win.width(), (float)win.height());
 
+	ImGui::PopFont();
 	ImGui::Render();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -380,6 +380,18 @@ void EditorLayer::drawMenuBar()
 			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("View"))
+		{
+			if (ImGui::MenuItem("Fonts Regular"))
+			{
+				m_app->imGuiLayer()->setFont(ImGuiLayer::Font::Regular);
+			}
+			if (ImGui::MenuItem("Fonts Pixel"))
+			{
+				m_app->imGuiLayer()->setFont(ImGuiLayer::Font::Pixel);
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMainMenuBar();
 	}
 }
