@@ -177,18 +177,20 @@ void AssetBrowser::drawContent()
 	using dir_recurse_it = std::filesystem::recursive_directory_iterator;
 	using ButtonCallback = std::function<void(void)>;
 
-	constexpr float C_BUTTON_SIZE = 48.0f;
+	constexpr float C_BUTTON_SIZE = 96.0f;
 	const ImVec2 buttonSizeWithDpi = ImVec2{ C_BUTTON_SIZE, C_BUTTON_SIZE } * ImGui::GetWindowDpiScale();
 	const auto drawButton = [&](ImTextureID rendererId, ButtonCallback callback, std::string text)
 		{
-
+			ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
 			ImGui::ImageButton
 			(
 				rendererId,
 				buttonSizeWithDpi,
 				ImVec2{ 0.0f, 1.0f },
-				ImVec2{ 1.0f, 0.0f }
+				ImVec2{ 1.0f, 0.0f },
+				0
 			);
+			ImGui::PopStyleColor();
 
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
@@ -239,9 +241,14 @@ void AssetBrowser::drawContent()
 				}
 				//-- Actual drawing
 				u64 iconRendererId = static_cast<u64>(iconTexture->rendererId());
-				auto onClickCallback = [&]()
+				auto onClickCallback = [&, dirIt]()
 					{
-						//-- TODO: Process here scene open and text editors
+						if (format == ResourceType::Scene)
+						{
+							m_ctx->m_selectedEntity = {};
+							m_ctx->m_currentScene = Ref<Scene>::create();
+							m_ctx->m_currentScene->deserialize(dirIt.path().filename().string());
+						}
 					};
 				drawButton(reinterpret_cast<void*>(iconRendererId), onClickCallback, filename);
 			}

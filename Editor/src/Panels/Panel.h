@@ -17,7 +17,7 @@ public:
 
 	Ref<EditorContext>& ctx() { return m_ctx; }
 
-private:
+protected:
 	Ref<EditorContext>	m_ctx;
 };
 
