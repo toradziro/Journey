@@ -401,6 +401,15 @@ void EditorLayer::drawStats()
 	if (ImGui::Begin("Statistics info"))
 	{
 		ImGui::Text("Current Scene: %s", m_context->m_currentScene->name().c_str());
+		if (m_context->m_selectedEntity)
+		{
+			std::string name = m_context->m_selectedEntity.component<EntityNameComponent>().m_name;
+			ImGui::Text("Selected entity: %s", name.c_str());
+		}
+		else
+		{
+			ImGui::Text("Selected entity: <none>");
+		}
 		ImGui::Text("FPS: %d", static_cast<int>(m_FPS));
 		ImGui::Text("Time spent on a call: %.1f ms", m_dt * 1000.0f);
 		const auto& stat = Application::subsystems().st<Renderer2D>().stats();
