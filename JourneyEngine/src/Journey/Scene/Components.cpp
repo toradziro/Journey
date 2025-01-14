@@ -4,6 +4,7 @@
 #include "Journey/ImGui/Controls/DropDownList.h"
 #include "Journey/ResourceManagers/TextureManager.h"
 #include "Journey/Core/Application.h"
+#include "imgui.h"
 
 #include <entt.hpp>
 
@@ -96,6 +97,7 @@ void registerComponents()
 					}
 
 					std::string label = fmt::format("##textureSelector{}", static_cast<u32>(e));
+					ImVec2 cursorPos = ImGui::GetCursorPos();
 					if (DropDownList(pathsAsStrs, label, currSelectedTexture).draw())
 					{
 						if (currSelectedTexture == 0)
@@ -110,6 +112,25 @@ void registerComponents()
 								textureAssetsPaths[currSelectedTexture - 1].generic_string()
 							);
 						}
+					}
+					constexpr ImVec2 C_DRAG_AND_DROP_TARGET_SIZE = { 300.0f, 20.0f };
+					const ImVec2 ddSizeWithDpi = {
+						C_DRAG_AND_DROP_TARGET_SIZE.x * ImGui::GetWindowDpiScale(),
+						C_DRAG_AND_DROP_TARGET_SIZE.y * ImGui::GetWindowDpiScale()
+					};
+					ImGui::SetCursorPos(cursorPos);
+					ImGui::InvisibleButton("##dragAndDropTarget", ddSizeWithDpi);
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_BROWSER_ITEM"))
+						{
+							fs_path path(std::string(static_cast<const char*>(payload->Data), payload->DataSize));
+							if (path.extension() == ".png")
+							{
+								component.m_texture = textureManager.create(path.generic_string());
+							}
+						}
+						ImGui::EndDragDropTarget();
 					}
 				}));
 		//.data<&SpriteComponent::m_texture>;

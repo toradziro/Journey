@@ -28,11 +28,13 @@ public:
 	void onEvent(Event& event) override;
 	void imGuiRender() override;
 
-	void openScene();
+	void openSceneUI();
 	void saveSceneAs();
 	void newScene();
 
 private:
+	void openScene(std::string scenePath);
+
 	void saveSceneUI();
 	void loadSceneUI();
 
@@ -68,10 +70,9 @@ private:
 	f32								m_dt = 0.0f;
 	bool							m_openDemo = false;
 	bool							m_viewportActive = false;
-	bool							m_selectEntity = false;
 	//-- TODO: move to other class
 	bool							m_saveScene = false;
-	bool							m_loadScene = false;
+	bool							m_loadSceneUI = false;
 	std::string						m_sceneFilename = "";
 };
 

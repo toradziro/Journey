@@ -21,7 +21,7 @@ void TextureManager::init()
 			{
 				if (!entry.is_directory())
 				{
-					m_assetsPaths.push_back(entry.path());
+					m_assetsPaths.push_back(jny::normalizePath(entry.path()));
 				}
 			}
 		};
@@ -36,17 +36,19 @@ void TextureManager::init()
 
 Ref<Texture2D> TextureManager::create(const std::string& texturePath)
 {
+	std::string normalizedPath = jny::normalizePath(texturePath);
+
 	Ref<Texture2D> res = nullptr;
-	if (m_textureLibrary.count(texturePath))
+	if (m_textureLibrary.count(normalizedPath))
 	{
-		res = m_textureLibrary[texturePath];
+		res = m_textureLibrary[normalizedPath];
 		return res;
 	}
 
-	if (auto it = std::ranges::find(m_assetsPaths, texturePath); it != m_assetsPaths.end())
+	if (auto it = std::ranges::find(m_assetsPaths, normalizedPath); it != m_assetsPaths.end())
 	{
-		res = Texture2D::create(texturePath);
-		m_textureLibrary[texturePath] = res;
+		res = Texture2D::create(normalizedPath);
+		m_textureLibrary[normalizedPath] = res;
 		return res;
 	}
 	JNY_ASSERT(false, "Add to assets folder!");

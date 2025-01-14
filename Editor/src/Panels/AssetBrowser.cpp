@@ -15,6 +15,8 @@ constexpr std::string_view	C_TXT_ICON = "editor/icons/txt_icon.png";
 constexpr std::string_view	C_SHADER_ICON = "editor/icons/shader_icon.png";
 constexpr std::string_view	C_SCENE_ICON = "editor/icons/scene_icon.png";
 constexpr std::string_view	C_FONT_ICON = "editor/icons/font_icon.png";
+constexpr float				C_BUTTON_SIZE = 96.0f;
+
 
 enum class ResourceType : u8
 {
@@ -28,21 +30,9 @@ enum class ResourceType : u8
 	None
 };
 
-std::string normalizePath(jny::fs_path path)
-{
-	std::string res = path.string();
-	size_t startPos = 0;
-	while ((startPos = res.find('\\', startPos)) != std::string::npos)
-	{
-		res.replace(startPos, 1, "/");
-		startPos += 1;
-	}
-	return res;
-}
-
 std::string convertToVfsPath(jny::fs_path path)
 {
-	std::string currPathAsStr = normalizePath(path);
+	std::string currPathAsStr = jny::normalizePath(path);
 	u64 rootIt = currPathAsStr.find(jny::VFS::C_RESOURCE_DIR_NAME);
 	currPathAsStr = currPathAsStr.substr(rootIt + jny::VFS::C_RESOURCE_DIR_NAME.size(), currPathAsStr.size());
 	if (currPathAsStr.empty())
@@ -87,7 +77,7 @@ jny::Ref<jny::Texture2D> loadIcon(ResourceType type)
 	return res;
 }
 
-ResourceType nameToFormat(std::string extention)
+ResourceType nameToResourceType(std::string extention)
 {
 	if (extention == ".png")
 	{
@@ -115,6 +105,51 @@ ResourceType nameToFormat(std::string extention)
 		return ResourceType::Font;
 	}
 	return ResourceType::None;
+}
+
+using ButtonCallback = std::function<void(void)>;
+
+void drawButtonInGrid(
+	ImTextureID		rendererId,
+	ButtonCallback	callback,
+	std::string		text,
+	ResourceType	resType,
+	jny::fs_path	fullPath = {})
+{
+	const ImVec2 buttonSizeWithDpi = ImVec2{ C_BUTTON_SIZE, C_BUTTON_SIZE } *ImGui::GetWindowDpiScale();
+
+	ImGui::PushID(fullPath.string().c_str());
+
+	ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
+	ImGui::ImageButton
+	(
+		rendererId,
+		buttonSizeWithDpi,
+		ImVec2{ 0.0f, 1.0f },
+		ImVec2{ 1.0f, 0.0f },
+		0
+	);
+
+	if (resType != ResourceType::Directory)
+	{
+		if (ImGui::BeginDragDropSource())
+		{
+			std::string itemPath = jny::normalizePath(fullPath);
+			ImGui::SetDragDropPayload("ASSET_BROWSER_ITEM", itemPath.c_str(), itemPath.size(), ImGuiCond_Always);
+			ImGui::EndDragDropSource();
+		}
+	}
+
+	ImGui::PopStyleColor();
+
+	if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+	{
+		callback();
+	}
+
+	ImGui::TextWrapped("%s", text.c_str());
+
+	ImGui::PopID();
 }
 
 }
@@ -175,30 +210,6 @@ void AssetBrowser::drawContent()
 {
 	using dir_it = std::filesystem::directory_iterator;
 	using dir_recurse_it = std::filesystem::recursive_directory_iterator;
-	using ButtonCallback = std::function<void(void)>;
-
-	constexpr float C_BUTTON_SIZE = 96.0f;
-	const ImVec2 buttonSizeWithDpi = ImVec2{ C_BUTTON_SIZE, C_BUTTON_SIZE } * ImGui::GetWindowDpiScale();
-	const auto drawButton = [&](ImTextureID rendererId, ButtonCallback callback, std::string text)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
-			ImGui::ImageButton
-			(
-				rendererId,
-				buttonSizeWithDpi,
-				ImVec2{ 0.0f, 1.0f },
-				ImVec2{ 1.0f, 0.0f },
-				0
-			);
-			ImGui::PopStyleColor();
-
-			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-			{
-				callback();
-			}
-
-			ImGui::TextWrapped("%s", text.c_str());
-		};
 
 	int column = 0;
 	if (ImGui::BeginTable("##ContentGrid", 6, ImGuiTableFlags_SizingFixedFit))
@@ -224,33 +235,44 @@ void AssetBrowser::drawContent()
 					{
 						m_currPath = normalizePath(path);
 					};
-				drawButton(reinterpret_cast<void*>(iconRendererId), onClickCallback, filename);
+				drawButtonInGrid(
+					reinterpret_cast<void*>(iconRendererId),
+					onClickCallback,
+					filename,
+					ResourceType::Directory
+				);
 			}
 			else
 			{
 				Ref<Texture2D> iconTexture;
-				auto format = nameToFormat(path.extension().string());
-				if (format == ResourceType::Texture)
+				ResourceType resourceType = nameToResourceType(path.extension().string());
+				if (resourceType == ResourceType::Texture)
 				{
 					auto& tm = jny::Application::subsystems().st<jny::TextureManager>();
 					iconTexture = tm.create(path.string());
 				}
 				else
 				{
-					iconTexture = loadIcon(format);
+					iconTexture = loadIcon(resourceType);
 				}
 				//-- Actual drawing
 				u64 iconRendererId = static_cast<u64>(iconTexture->rendererId());
 				auto onClickCallback = [&, dirIt]()
 					{
-						if (format == ResourceType::Scene)
+						if (resourceType == ResourceType::Scene)
 						{
 							m_ctx->m_selectedEntity = {};
 							m_ctx->m_currentScene = Ref<Scene>::create();
 							m_ctx->m_currentScene->deserialize(dirIt.path().filename().string());
 						}
 					};
-				drawButton(reinterpret_cast<void*>(iconRendererId), onClickCallback, filename);
+				drawButtonInGrid(
+					reinterpret_cast<void*>(iconRendererId),
+					onClickCallback,
+					filename,
+					resourceType,
+					dirIt.path()
+				);
 			}
 		}
 		ImGui::EndTable();

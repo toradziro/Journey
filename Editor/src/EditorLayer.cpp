@@ -104,7 +104,7 @@ void EditorLayer::update(f32 dt)
 		mouseFrameY >= 0 &&
 		mouseFrameX <= static_cast<int>(m_viewportSize.x) &&
 		mouseFrameY <= static_cast<int>(m_viewportSize.y) &&
-		m_selectEntity)
+		ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 	{
 		int entityId = m_framebuffer->readbackPixel(m_frambufferPickingIndex, mouseFrameX, mouseFrameY);
 		if (entityId == -1)
@@ -112,7 +112,6 @@ void EditorLayer::update(f32 dt)
 			m_context->m_selectedEntity = {};
 		}
 		m_context->m_selectedEntity = Entity(entt::entity(entityId), m_context->m_currentScene.raw());
-		m_selectEntity = false;
 	}
 
 	m_framebuffer->unbind();
@@ -144,7 +143,7 @@ void EditorLayer::onEvent(Event& event)
 				//-- Open
 				if (e.keyCode() == GLFW_KEY_O)
 				{
-					openScene();
+					openSceneUI();
 					return true;
 				}
 				//-- New scene
@@ -189,14 +188,6 @@ void EditorLayer::onEvent(Event& event)
 	if (m_viewportActive)
 	{
 		m_context->m_editorCamera.onEvent(event);
-		ed.dispatch<MouseButtonPressedEvent>([&](MouseButtonPressedEvent& e)
-			{
-				if (e.buttonCode() == GLFW_MOUSE_BUTTON_LEFT && !ImGuizmo::IsOver())
-				{
-					m_selectEntity = true;
-				}
-				return true;
-			});
 	}
 }
 
@@ -210,7 +201,7 @@ void EditorLayer::imGuiRender()
 	{
 		saveSceneUI();
 	}
-	if (m_loadScene)
+	if (m_loadSceneUI)
 	{
 		loadSceneUI();
 	}
@@ -245,6 +236,19 @@ void EditorLayer::imGuiRender()
 		ImVec2 windowRightCorner = windowLeftCorner + windowSize;
 		m_viewportBounds.first = std::move(windowLeftCorner);
 		m_viewportBounds.second = std::move(windowRightCorner);
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_BROWSER_ITEM"))
+			{
+				fs_path path(std::string(static_cast<const char*>(payload->Data), payload->DataSize));
+				if (path.extension() == ".yaml")
+				{
+					openScene(path.string());
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
 		
 		drawViewportToolbar();
 		if (m_showGizmo)
@@ -252,6 +256,7 @@ void EditorLayer::imGuiRender()
 			drawGizmos();
 		}
 		
+
 		ImGui::End();
 	}
 	ImGui::PopStyleVar();
@@ -264,9 +269,17 @@ void EditorLayer::imGuiRender()
 	}
 }
 
-void EditorLayer::openScene()
+void EditorLayer::openScene(std::string scenePath)
 {
-	m_loadScene = true;
+	auto& scenesManager = Application::subsystems().st<ScenesManager>();
+	m_context->m_selectedEntity = {};
+	m_context->m_currentScene = scenesManager.create(scenePath);
+	m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
+}
+
+void EditorLayer::openSceneUI()
+{
+	m_loadSceneUI = true;
 	m_sceneFilename = m_context->m_currentScene->name();
 }
 
@@ -332,12 +345,11 @@ void EditorLayer::loadSceneUI()
 
 	ImGui::SetNextWindowSize(winSizeWithDpi);
 
-	if (ImGui::Begin("Load Scene", &m_loadScene, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+	if (ImGui::Begin("Load Scene", &m_loadSceneUI, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
 	{
 		u32 currSelectedScene = DropDownList::C_INVALID_INDEX;
 
-		auto& scenesManager = Application::subsystems().st<ScenesManager>();
-		const auto& scenesAssetsPaths = scenesManager.allScenesOnDisk();
+		const auto& scenesAssetsPaths = Application::subsystems().st<ScenesManager>().allScenesOnDisk();
 
 		std::vector<std::string> pathsAsStrs;
 		pathsAsStrs.reserve(scenesAssetsPaths.size());
@@ -349,10 +361,8 @@ void EditorLayer::loadSceneUI()
 		std::string label = fmt::format("##scenesSelector");
 		if (DropDownList(pathsAsStrs, label, currSelectedScene).draw())
 		{
-			m_context->m_currentScene = scenesManager.create(scenesAssetsPaths[currSelectedScene].string());
-			m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
-			m_context->m_selectedEntity = {};
-			m_loadScene = false;
+			openScene(scenesAssetsPaths[currSelectedScene].string());
+			m_loadSceneUI = false;
 		}
 
 		ImGui::End();
@@ -375,7 +385,7 @@ void EditorLayer::drawMenuBar()
 			}
 			if (ImGui::MenuItem("Open...", "Ctrl+O"))
 			{
-				openScene();
+				openSceneUI();
 			}
 			ImGui::MenuItem("Show Demo Window", NULL, &m_openDemo);
 			ImGui::EndMenu();

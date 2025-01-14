@@ -36,7 +36,7 @@ void ScenesManager::init()
 	{
 		if (!entry.is_directory())
 		{
-			m_assetsPaths.push_back(entry.path());
+			m_assetsPaths.push_back(jny::normalizePath(entry.path()));
 		}
 	}
 	Log::info("Scenes paths loaded");
@@ -45,17 +45,10 @@ void ScenesManager::init()
 Ref<Scene> ScenesManager::create(const std::string& scenePath)
 {
 	Ref<Scene> res = nullptr;
-	//if (m_scenesLibrary.count(scenePath))
-	//{
-	//	res = m_scenesLibrary[scenePath];
-	//	return res;
-	//}
-
 	if (auto it = std::ranges::find(m_assetsPaths, scenePath); it != m_assetsPaths.end())
 	{
 		res = Ref<Scene>::create();
 		res->deserialize(it->filename().string());
-		//m_scenesLibrary[scenePath] = res;
 		return res;
 	}
 	JNY_ASSERT(false, "Add to assets folder!");

@@ -89,4 +89,17 @@ fs_path VFS::virtualToNativePath(const fs_path& path) const
 	return res;
 }
 
+//-- Support funcs
+std::string normalizePath(jny::fs_path path)
+{
+	std::string res = path.string();
+	size_t startPos = 0;
+	while ((startPos = res.find('\\', startPos)) != std::string::npos)
+	{
+		res.replace(startPos, 1, "/");
+		startPos += 1;
+	}
+	return res;
+}
+
 }

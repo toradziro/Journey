@@ -23,7 +23,7 @@ private:
 	void			drawToolbar();
 	void			drawContent();
 
-	fs_path	m_currPath = {};
+	fs_path			m_currPath = {};
 };
 
 }

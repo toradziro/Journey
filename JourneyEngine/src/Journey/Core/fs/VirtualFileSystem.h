@@ -44,4 +44,6 @@ private:
 	fs_path		m_vfsPath = {};
 };
 
+std::string normalizePath(jny::fs_path path);
+
 }
