@@ -1,21 +1,10 @@
 Scene: gate_example
 Entities:
-  - entity_id: 4
+  - entity_id: 5
     EntityName:
-      m_name: bomb
+      m_name: camera
     Transform:
-      m_position: [-1.08335924, 0.184500664, -7.69999981]
-      m_rotation: [0, 0, 0]
-      m_scale: [0.200000003, 0.200000003, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/bomb.png
-
-  - entity_id: 3
-    EntityName:
-      m_name: game_camera
-    Transform:
-      m_position: [0, 0, 1]
+      m_position: [0, 0, 0]
       m_rotation: [0, 0, 0]
       m_scale: [1, 1, 1]
     Camera:
@@ -24,6 +13,28 @@ Entities:
       m_primer: true
       m_fixedAspectRatio: false
       m_perspective: true
+
+  - entity_id: 4
+    EntityName:
+      m_name: main_hero
+    Transform:
+      m_position: [-1.54021907, 0.520490646, -6.9000001]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/gg2.png
+
+  - entity_id: 3
+    EntityName:
+      m_name: gate
+    Transform:
+      m_position: [-1.9851501, 0.98652792, -9.39999962]
+      m_rotation: [0, 0, 0]
+      m_scale: [1.20000005, 1.20000005, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/gate.png
 
   - entity_id: 2
     EntityName:
@@ -38,22 +49,25 @@ Entities:
 
   - entity_id: 1
     EntityName:
-      m_name: gate
+      m_name: game_camera
     Transform:
-      m_position: [-1.9851501, 0.98652792, -9.39999962]
+      m_position: [0, 0, 1]
       m_rotation: [0, 0, 0]
-      m_scale: [1.20000005, 1.20000005, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/gate.png
+      m_scale: [1, 1, 1]
+    Camera:
+      m_zoom: 10
+      m_fov: 45
+      m_primer: true
+      m_fixedAspectRatio: false
+      m_perspective: true
 
   - entity_id: 0
     EntityName:
-      m_name: main_hero
+      m_name: bomb
     Transform:
-      m_position: [-1.54021907, 0.520490646, -6.9000001]
+      m_position: [-1.08335924, 0.184500664, -7.69999981]
       m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
+      m_scale: [0.200000003, 0.200000003, 1]
     Sprite:
       m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/gg2.png
+      m_texture: D:/dev/Journey/resources/assets/textures/bomb.png

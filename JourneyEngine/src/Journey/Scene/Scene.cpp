@@ -33,8 +33,8 @@ if (m_registry.all_of<TransfomComponent>(sampleEntity))
 //-- Or it has at least one of passed components types?
 if (m_registry.any_of<TransfomComponent>(sampleEntity)){}
 
-//-- Containers of tupeles with entt to data
-//-- group will collect etities with filtering
+//-- Containers of tuples with entt to data
+//-- group will collect entities with filtering
 //-- here we will have all entities that have AND TransfomComponent AND MeshComponent but WITHOUT MovableComponent
 auto group = m_registry.group<TransfomComponent, MeshComponent>(entt::get<>, entt::exclude<MovableComponent>);
 //-- view will collect all entities that have this particular component
