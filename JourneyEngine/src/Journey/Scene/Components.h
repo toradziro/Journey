@@ -85,46 +85,33 @@ struct CameraComponent
 	void onViewportResize(u32 w, u32 h)
 	{
 		//-- Need to avoid -(nan)
-		u32 uw = std::max<u32>(1, w);
-		u32 uh = std::max<u32>(1, h);
-		m_camera.setViewportSize(uw, uh);
-		m_perspectiveCamera.setViewportSize(uw, uh);
+		m_viewportW = std::max<u32>(1, w);
+		m_viewportH = std::max<u32>(1, h);
+		m_camera.setViewportSize(m_viewportW, m_viewportH);
+		m_perspectiveCamera.setViewportSize(m_viewportW, m_viewportH);
 	}
 
 	Camera				m_camera = {};
 	PerspectiveCamera	m_perspectiveCamera = {};
 	f32					m_zoom = 10.0f; //-- works with ortho only
 	f32					m_fov = 45.0f; //-- works with perspective only
+
+	u32					m_viewportW = 1;
+	u32					m_viewportH = 1;
+
 	bool				m_primer = false;
 	bool				m_fixedAspectRatio = false;
 	bool				m_perspective = true;
 };
 
-struct NativeScriptComponent
+struct MainHeroComponent
 {
-	static inline constexpr const char* C_COMPONENT_NAME = "NativeScript";
+	static inline constexpr const char* C_COMPONENT_NAME = "Main Hero";
 
-	template<typename T>
-	void bind(Entity entity)
-	{
-		static_assert(std::is_base_of<Script, T>::value, "Fix lol.");
-		m_createScript = [entity]()
-			{
-				static_assert(std::is_base_of<Script, T>::value, "T must be derived from Script.");
-				return new T(entity);
-			};
+	MainHeroComponent() = default;
+	MainHeroComponent(const MainHeroComponent&) = default;
 
-		m_destroyScript = [entity](NativeScriptComponent& nsc)
-			{
-				delete static_cast<T*>(nsc.m_script);
-				nsc.m_script = nullptr;
-			};
-	}
-
-	std::function<Script*()>					m_createScript;
-	std::function<void(NativeScriptComponent&)>	m_destroyScript;
-
-	Script*										m_script = nullptr;
+	f32		m_movementSpeed = 5.0f;
 };
 
 } //-- jny

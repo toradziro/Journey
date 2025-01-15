@@ -16,6 +16,12 @@ struct GizmoData
 	ImGuizmo::MODE		m_coordinateType = ImGuizmo::MODE::LOCAL;
 };
 
+enum class SceneMode : u8
+{
+	Game,
+	Editor
+};
+
 class EditorLayer : public Layer
 {
 public:
@@ -48,6 +54,9 @@ private:
 	void setRotateGizmo();
 	void setScaleGizmo();
 
+	void switchToGameMode();
+	void switchToEditorMode();
+
 private:
 	Ref<EditorContext>				m_context;
 	std::vector<IPanel*>			m_panels;
@@ -74,6 +83,8 @@ private:
 	bool							m_saveScene = false;
 	bool							m_loadSceneUI = false;
 	std::string						m_sceneFilename = "";
+
+	SceneMode						m_sceneMode = SceneMode::Editor;
 };
 
 }

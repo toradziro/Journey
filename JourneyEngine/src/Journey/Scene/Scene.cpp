@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer2D.h"
+#include "Journey/Systems/MainHeroSystem.h"
 #include "Components.h"
 
 #include <glm/glm.hpp>
@@ -45,16 +46,13 @@ auto view = m_registry.view<TransfomComponent>();
 namespace jny
 {
 
-Scene::Scene() {}
+Scene::Scene()
+{
+	m_gameSystems.push_back(new MainHeroSystem(m_registry));
+}
 
 Scene::~Scene()
 {
-	m_registry.view<NativeScriptComponent>().each([](auto /*entity*/, auto& nsc)
-		{
-			nsc.m_script->detach();
-			nsc.m_destroyScript(nsc);
-		});
-
 	auto view = m_registry.view<EntityNameComponent>();
 	m_registry.destroy(view.begin(), view.end());
 }
@@ -64,19 +62,21 @@ void Scene::update(f32 dt)
 	CameraComponent* mainCamera = nullptr;
 	glm::mat4 mainCameraTransform = {};
 
-	m_registry.view<NativeScriptComponent>().each([dt](auto /*entity*/, auto& nsc)
+	std::ranges::for_each(m_gameSystems, [dt](auto& s)
 		{
-			if (nsc.m_script == nullptr)
-			{
-				nsc.m_script = nsc.m_createScript();
-				nsc.m_script->attach();
-			}
-			nsc.m_script->update(dt);
+			s->update(dt);
 		});
+
 	//-- get in group allows to avoid owning component
 	for (auto& e : m_registry.group<CameraComponent>(entt::get<TransformComponent>))
 	{
 		auto& cam = m_registry.get<CameraComponent>(e);
+		
+		if (cam.m_viewportH != m_viewportHeight || cam.m_viewportW != m_viewportWidth)
+		{
+			cam.onViewportResize(m_viewportWidth, m_viewportHeight);
+		}
+
 		if (cam.m_primer)
 		{
 			mainCamera = &cam;
@@ -219,6 +219,22 @@ Entity Scene::activeCameraEntity()
 		}
 	}
 	return {};
+}
+
+void Scene::switchToGameMode()
+{
+	std::ranges::for_each(m_gameSystems, [](auto& s)
+		{
+			s->attach();
+		});
+}
+
+void Scene::switchToEditorMode()
+{
+	std::ranges::for_each(m_gameSystems, [](auto& s)
+		{
+			s->detach();
+		});
 }
 
 void Scene::onComponentCreation(CameraComponent& c)

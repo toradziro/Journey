@@ -14,6 +14,8 @@ struct EditorContext : public ReferenceCounter
 	Ref<Scene>		m_currentScene;
 	EditorCamera	m_editorCamera;
 	Entity			m_selectedEntity;
+
+	bool			m_sceneChanged = false;
 };
 
 } //-- jny

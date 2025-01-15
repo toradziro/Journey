@@ -24,6 +24,8 @@ Entities:
     Sprite:
       m_color: [1, 1, 1, 1]
       m_texture: D:/dev/Journey/resources/assets/textures/gg2.png
+    Main Hero:
+      m_movementSpeed: 4.5
 
   - entity_id: 3
     EntityName:

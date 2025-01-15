@@ -107,6 +107,15 @@ void SceneSerializer::serializeEntity(YAML::Emitter& sFile, Entity e)
 		sFile << Key << "m_perspective" << Value << c.m_perspective;
 		sFile << EndMap;
 	}
+
+	if (e.hasComponent<MainHeroComponent>())
+	{
+		auto& c = e.component<MainHeroComponent>();
+		sFile << Key << c.C_COMPONENT_NAME;
+		sFile << BeginMap;
+		sFile << Key << "m_movementSpeed" << Value << c.m_movementSpeed;
+		sFile << EndMap;
+	}
 }
 
 void SceneSerializer::deserialize(const std::string& filename)
@@ -162,6 +171,15 @@ void SceneSerializer::deserialize(const std::string& filename)
 					realSc.m_texture = Application::subsystems().st<TextureManager>().create(tPath);
 				}
 				realSc.m_color = sc["m_color"].as<glm::vec4>();
+			}
+
+			if (auto mhc = eSpecs[MainHeroComponent::C_COMPONENT_NAME]; mhc)
+			{
+				auto& realMhc = createdE.addComponent<MainHeroComponent>();
+				if (auto moveSpeed = mhc["m_movementSpeed"]; moveSpeed)
+				{
+					realMhc.m_movementSpeed = moveSpeed.as<f32>();
+				}
 			}
 		}
 	}

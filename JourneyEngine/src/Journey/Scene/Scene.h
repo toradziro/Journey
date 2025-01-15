@@ -3,6 +3,7 @@
 #include <entt.hpp>
 #include "Journey/Core/Reference.h"
 #include "Journey/Renderer/EditorCamera.h"
+#include "Journey/Systems/SystemInterface.h"
 #include "SceneSerializer.h"
 
 namespace jny
@@ -13,7 +14,7 @@ struct TransformComponent;
 struct SpriteComponent;
 struct EntityNameComponent;
 struct CameraComponent;
-struct NativeScriptComponent;
+struct MainHeroComponent;
 
 class Scene : public ReferenceCounter
 {
@@ -43,23 +44,28 @@ public:
 
 	Entity activeCameraEntity();
 
+	void switchToGameMode();
+	void switchToEditorMode();
+
 private:
 	void onComponentCreation(TransformComponent& c) {}
 	void onComponentCreation(SpriteComponent&c ) {}
 	void onComponentCreation(EntityNameComponent& c) {}
 	void onComponentCreation(CameraComponent& c);
-	void onComponentCreation(NativeScriptComponent& c) {}
+	void onComponentCreation(MainHeroComponent& c) {}
 
 private:
 	friend class Entity;
 	friend class SceneSerializer;
 	//-- Scene entities and components storage
-	entt::registry	m_registry;
+	entt::registry				m_registry;
 
-	std::string		m_sceneName = "Untitled";
+	std::string					m_sceneName = "Untitled";
 
-	u32				m_viewportWidth = 1;
-	u32				m_viewportHeight = 1;
+	std::vector<Ref<System>>	m_gameSystems;
+
+	u32							m_viewportWidth = 1;
+	u32							m_viewportHeight = 1;
 };
 
 } //-- jny

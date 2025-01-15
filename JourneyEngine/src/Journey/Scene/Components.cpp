@@ -54,6 +54,7 @@ void registerComponents()
 		.data<&glm::vec4::g>(entt::hashed_string("g")).prop(C_PROP_NAME_HS, "g")
 		.data<&glm::vec4::b>(entt::hashed_string("b")).prop(C_PROP_NAME_HS, "b")
 		.data<&glm::vec4::a>(entt::hashed_string("a")).prop(C_PROP_NAME_HS, "a");
+
 	//-- Add reflection of components
 	//-- Transform component
 	entt::meta<TransformComponent>()
@@ -62,6 +63,7 @@ void registerComponents()
 			.prop(C_PROP_NAME_HS, "Position")
 		.data<&TransformComponent::m_scale>(entt::hashed_string("Scale")).prop(C_PROP_NAME_HS, "Scale")
 		.data<&TransformComponent::m_rotation>(entt::hashed_string("Rotation")).prop(C_PROP_NAME_HS, "Rotation");
+
 	//-- Sprite Component
 	entt::meta<SpriteComponent>()
 		.type(entt::hashed_string(SpriteComponent::C_COMPONENT_NAME)).prop(C_PROP_REMOVABLE)
@@ -133,11 +135,12 @@ void registerComponents()
 						ImGui::EndDragDropTarget();
 					}
 				}));
-		//.data<&SpriteComponent::m_texture>;
+	
 	//-- EntityNameComponent
 	entt::meta<EntityNameComponent>()
 		.type(entt::hashed_string(EntityNameComponent::C_COMPONENT_NAME))
 		.data<&EntityNameComponent::m_name>(entt::hashed_string("Name")).prop(C_PROP_NAME_HS, "Name");
+	
 	//-- CameraComponent
 	entt::meta<CameraComponent>()
 		.type(entt::hashed_string(CameraComponent::C_COMPONENT_NAME)).prop(C_PROP_REMOVABLE)
@@ -157,9 +160,12 @@ void registerComponents()
 					component.m_fov = val;
 					component.m_perspectiveCamera.setFov(val);
 				}));
-	//-- NativeScriptComponent
-	entt::meta<NativeScriptComponent>()
-		.type(entt::hashed_string(NativeScriptComponent::C_COMPONENT_NAME));
+
+	entt::meta<MainHeroComponent>()
+		.type(entt::hashed_string(MainHeroComponent::C_COMPONENT_NAME))
+		.prop(C_PROP_NAME_HS, "Main hero")
+		.prop(C_PROP_REMOVABLE)
+		.data<&MainHeroComponent::m_movementSpeed>(entt::hashed_string("moveSpeed")).prop(C_PROP_NAME_HS, "Move Speed");
 }
 
 } //-- jny

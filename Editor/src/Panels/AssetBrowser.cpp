@@ -116,7 +116,7 @@ void drawButtonInGrid(
 	ResourceType	resType,
 	jny::fs_path	fullPath = {})
 {
-	const ImVec2 buttonSizeWithDpi = ImVec2{ C_BUTTON_SIZE, C_BUTTON_SIZE } *ImGui::GetWindowDpiScale();
+	const ImVec2 buttonSizeWithDpi = ImVec2{ C_BUTTON_SIZE, C_BUTTON_SIZE } * ImGui::GetWindowDpiScale();
 
 	ImGui::PushID(fullPath.string().c_str());
 
@@ -264,6 +264,7 @@ void AssetBrowser::drawContent()
 							m_ctx->m_selectedEntity = {};
 							m_ctx->m_currentScene = Ref<Scene>::create();
 							m_ctx->m_currentScene->deserialize(dirIt.path().filename().string());
+							m_ctx->m_sceneChanged = true;
 						}
 					};
 				drawButtonInGrid(

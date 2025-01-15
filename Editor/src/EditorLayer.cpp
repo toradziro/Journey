@@ -61,9 +61,11 @@ void EditorLayer::update(f32 dt)
 {
 	PROFILE_FUNC;
 
-	if (m_viewportActive)
+	if (m_context->m_sceneChanged)
 	{
-		m_context->m_editorCamera.update(dt);
+		m_sceneMode = SceneMode::Editor;
+		m_context->m_sceneChanged = false;
+		m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
 	}
 
 	//-- Resizing viewport
@@ -88,8 +90,18 @@ void EditorLayer::update(f32 dt)
 	rc.clearRedIntTexture(m_framebuffer->colorAttachment(m_frambufferPickingIndex), -1);
 
 	//-- Updating our scene
-	//m_context->m_currentScene->update(dt);
-	m_context->m_currentScene->editorModeUpdate(dt, m_context->m_editorCamera);
+	if (m_sceneMode == SceneMode::Editor)
+	{
+		if (m_viewportActive)
+		{
+			m_context->m_editorCamera.update(dt);
+		}
+		m_context->m_currentScene->editorModeUpdate(dt, m_context->m_editorCamera);
+	}
+	else
+	{
+		m_context->m_currentScene->update(dt);
+	}
 
 	ImVec2 mousePos = ImGui::GetMousePos();
 	mousePos.x -= m_viewportBounds.first.x;
@@ -275,6 +287,7 @@ void EditorLayer::openScene(std::string scenePath)
 	m_context->m_selectedEntity = {};
 	m_context->m_currentScene = scenesManager.create(scenePath);
 	m_context->m_currentScene->onViewportResize(static_cast<u32>(m_viewportSize.x), static_cast<u32>(m_viewportSize.y));
+	m_sceneMode = SceneMode::Editor;
 }
 
 void EditorLayer::openSceneUI()
@@ -531,6 +544,24 @@ void EditorLayer::setScaleGizmo()
 	m_showGizmo = true;
 }
 
+void EditorLayer::switchToGameMode()
+{
+	if (m_context->m_currentScene)
+	{
+		m_context->m_currentScene->switchToGameMode();
+		m_sceneMode = SceneMode::Game;
+	}
+}
+
+void EditorLayer::switchToEditorMode()
+{
+	if (m_context->m_currentScene)
+	{
+		m_context->m_currentScene->switchToEditorMode();
+		m_sceneMode = SceneMode::Editor;
+	}
+}
+
 void EditorLayer::drawViewportToolbar()
 {
 	const float toolbarPosX = 5.0f * ImGui::GetWindowDpiScale();
@@ -568,6 +599,57 @@ void EditorLayer::drawViewportToolbar()
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
+
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.4f, 0.4f, 0.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.35f, 0.35f, 0.35f, 0.4f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.5f, 0.5f, 0.4f));
+
+		constexpr std::string_view	C_PLAY_BUTTON_PATH = "editor/icons/play_button.png";
+		constexpr std::string_view	C_STOP_BUTTON_PATH = "editor/icons/stop_button.png";
+
+		constexpr float				C_BUTTON_SIZE = 48.0f;
+
+		const float availableSpaceX = ImGui::GetContentRegionAvail().x;
+		ImGui::SetCursorPos( { (availableSpaceX / 2.0f) - (C_BUTTON_SIZE / 2.0f) , toolbarPosY } );
+
+		auto& tm = jny::Application::subsystems().st<jny::TextureManager>();
+		auto& vfs = jny::Application::subsystems().st<jny::VFS>();
+		Ref<Texture2D> icon = nullptr;
+
+		switch (m_sceneMode)
+		{
+			case SceneMode::Game:
+				icon = tm.create(vfs.virtualToNativePath(C_STOP_BUTTON_PATH).string());
+				break;
+			case SceneMode::Editor:
+				icon = tm.create(vfs.virtualToNativePath(C_PLAY_BUTTON_PATH).string());
+				break;
+			default:
+				break;
+		}
+
+		const ImVec2 buttonSizeWithDpi = ImVec2{ C_BUTTON_SIZE, C_BUTTON_SIZE } * ImGui::GetWindowDpiScale();
+		if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<u64>(icon->rendererId())),
+			buttonSizeWithDpi,
+			ImVec2{ 0.0f, 1.0f },
+			ImVec2{ 1.0f, 0.0f },
+			0))
+		{
+			if (m_sceneMode == SceneMode::Editor)
+			{
+				switchToGameMode();
+			}
+			else
+			{
+				switchToEditorMode();
+			}
+		}
+
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+	}
 
 	ImGui::SetCursorPos(cursorToRestore);
 }
