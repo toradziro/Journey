@@ -27,6 +27,7 @@ IncludeDir["imgui"] = "JourneyEngine/vendor/imgui/"
 IncludeDir["entt"] = "JourneyEngine/vendor/entt/include"
 IncludeDir["yaml_cpp"] = "JourneyEngine/vendor/yaml-cpp/include/"
 IncludeDir["ImGuizmo"] = "JourneyEngine/vendor/ImGuizmo/"
+IncludeDir["box2d"] = "JourneyEngine/vendor/box2d/include"
 
 group "Dependencies"
 	-- For window management
@@ -35,6 +36,7 @@ group "Dependencies"
 	include "JourneyEngine/vendor/GLAD"
 	include "JourneyEngine/vendor/imgui"
 	include "JourneyEngine/vendor/yaml-cpp"
+	include "JourneyEngine/vendor/box2d"
 group ""
 
 defines
@@ -115,6 +117,7 @@ project "JourneyEngine"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.box2d}",
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/stb_image"
 	}
@@ -125,7 +128,8 @@ project "JourneyEngine"
 		"GLAD",
 		"opengl32.lib",
 		"yaml-cpp",
-		"imgui"
+		"imgui",
+		"box2d"
 	}
 
 	defines
@@ -184,6 +188,7 @@ function SetupAppProject(name)
 			"%{IncludeDir.entt}",
 			"%{IncludeDir.yaml_cpp}",
 			"%{IncludeDir.ImGuizmo}",
+			"%{IncludeDir.box2d}",
 			"%{prj.name}/src",
 			"JourneyEngine/src"
 		}
@@ -212,6 +217,7 @@ function SetupAppProject(name)
 				"GLFW",
 				"Glad",
 				"ImGui",
+				"box2d",
 				"Xrandr",
 				"Xi",
 				"GLU",
