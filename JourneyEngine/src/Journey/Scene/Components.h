@@ -8,6 +8,7 @@
 #include <Journey/Renderer/Texture.h>
 #include <Journey/Renderer/Camera.h>
 #include <Journey/Scene/Entity.h>
+#include <box2d/box2d.h>
 
 namespace jny
 {
@@ -106,12 +107,55 @@ struct CameraComponent
 
 struct MainHeroComponent
 {
-	static inline constexpr const char* C_COMPONENT_NAME = "Main Hero";
+	static inline constexpr const char* C_COMPONENT_NAME = "MainHero";
 
 	MainHeroComponent() = default;
 	MainHeroComponent(const MainHeroComponent&) = default;
 
 	f32		m_movementSpeed = 5.0f;
+};
+
+enum class BodyType : u8
+{
+	Static,
+	Dynamic,
+	Kinematic
+};
+
+struct RigidBodyComponent
+{
+	static inline constexpr const char* C_COMPONENT_NAME = "RigidBody";
+
+	BodyType	m_bodyType = BodyType::Static;
+
+	float	m_angularDamping = 0.0f;	//-- Angular damping is use to reduce the angular velocity.
+	float	m_angularVelocity = 0.0f;	//-- The initial angular velocity of the body. Radians per second.
+	float	m_gravityScale = 1.0f;		//-- Scale the gravity applied to this body. Non-dimensional.
+
+	float	m_linearDamping = 0.0f;		//-- Linear damping is use to reduce the linear velocity.
+	//-- The damping parameter can be larger than 1 but the damping effect becomes 
+	//-- sensitive to the time step when the damping parameter is large.
+	//-- Generally linear damping is undesirable because it makes objects move slowly as if they are floating.
+
+	//-- The initial linear velocity of the body's origin. Typically in meters per second.
+	glm::vec2	m_linearVelocity = { 0.0f, 0.0f };
+
+	bool		m_allowFastRotation = false;
+	bool		m_fixedRotation = false;	//-- Should this body be prevented from rotating? Useful for characters.
+	bool		m_isBullet = false;			//-- Treat this body as high speed object that performs continuous
+	//-- collision detection against dynamic and kinematic bodies, but not other bullet bodies.
+
+	b2BodyId	m_internalBoxId;
+};
+
+struct BoxColliderComponent
+{
+	static inline constexpr const char* C_COMPONENT_NAME = "BoxCollider";
+
+	float	m_size = 0.5f;
+	float	m_density = 1.0f;
+	float	m_friction = 0.6f;
+	float	m_restitution = 0.1f;
 };
 
 } //-- jny

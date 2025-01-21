@@ -116,7 +116,8 @@ void EditorLayer::update(f32 dt)
 		mouseFrameY >= 0 &&
 		mouseFrameX <= static_cast<int>(m_viewportSize.x) &&
 		mouseFrameY <= static_cast<int>(m_viewportSize.y) &&
-		ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		ImGui::IsMouseClicked(ImGuiMouseButton_Left) &&
+		!ImGuizmo::IsOver() && !ImGuizmo::IsUsing())
 	{
 		int entityId = m_framebuffer->readbackPixel(m_frambufferPickingIndex, mouseFrameX, mouseFrameY);
 		if (entityId == -1)

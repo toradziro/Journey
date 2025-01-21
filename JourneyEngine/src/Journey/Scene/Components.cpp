@@ -161,11 +161,56 @@ void registerComponents()
 					component.m_perspectiveCamera.setFov(val);
 				}));
 
+	//-- Main hero example
 	entt::meta<MainHeroComponent>()
 		.type(entt::hashed_string(MainHeroComponent::C_COMPONENT_NAME))
 		.prop(C_PROP_NAME_HS, "Main hero")
 		.prop(C_PROP_REMOVABLE)
 		.data<&MainHeroComponent::m_movementSpeed>(entt::hashed_string("moveSpeed")).prop(C_PROP_NAME_HS, "Move Speed");
+
+	//-- Physic come here
+	entt::meta<RigidBodyComponent>()
+		.type(entt::hashed_string(RigidBodyComponent::C_COMPONENT_NAME))
+		.prop(C_PROP_NAME_HS, "Rigid body")
+		.prop(C_PROP_REMOVABLE)
+		.data<&RigidBodyComponent::m_bodyType>(entt::hashed_string("m_bodyType")).prop(C_PROP_NAME_HS, "Body Type")
+			.prop(C_CASTOM_UI_DRAW,
+				std::function<void(RigidBodyComponent&, entt::entity)>([](RigidBodyComponent& component, entt::entity e)
+				{
+					std::vector<std::string> bodyTypes = { "Static", "Dynamic", "Kinematic" };
+					std::string label = fmt::format("##RigidBodyType{}", static_cast<u32>(e));
+					u32 currSelected = static_cast<u32>(component.m_bodyType);
+					if (DropDownList(bodyTypes, label, currSelected).draw())
+					{
+						component.m_bodyType = static_cast<BodyType>(currSelected);
+					}
+				}))
+		.data<&RigidBodyComponent::m_angularDamping>(entt::hashed_string("m_angularDamping")).prop(C_PROP_NAME_HS, "Angular Damping")
+		.data<&RigidBodyComponent::m_angularVelocity>(entt::hashed_string("m_angularVelocity")).prop(C_PROP_NAME_HS, "Angular Velocity")
+		.data<&RigidBodyComponent::m_gravityScale>(entt::hashed_string("m_gravityScale")).prop(C_PROP_NAME_HS, "Gravity Scale")
+		.data<&RigidBodyComponent::m_linearDamping>(entt::hashed_string("m_linearDamping")).prop(C_PROP_NAME_HS, "Linear Damping")
+		.data<&RigidBodyComponent::m_linearVelocity>(entt::hashed_string("m_linearVelocity")).prop(C_PROP_NAME_HS, "Linear Velocity")
+		.data<&RigidBodyComponent::m_allowFastRotation>(entt::hashed_string("m_allowFastRotation")).prop(C_PROP_NAME_HS, "Allow Fast Rotation")
+		.data<&RigidBodyComponent::m_fixedRotation>(entt::hashed_string("m_fixedRotation")).prop(C_PROP_NAME_HS, "Fixed Rotation")
+		.data<&RigidBodyComponent::m_isBullet>(entt::hashed_string("m_isBullet")).prop(C_PROP_NAME_HS, "Is Bullet");
+
+	entt::meta<BoxColliderComponent>()
+		.type(entt::hashed_string(BoxColliderComponent::C_COMPONENT_NAME))
+		.prop(C_PROP_NAME_HS, "Rigid body")
+		.prop(C_PROP_REMOVABLE)
+		.data<&BoxColliderComponent::m_size>(entt::hashed_string("m_size")).prop(C_PROP_NAME_HS, "Size")
+		.data<&BoxColliderComponent::m_density>(entt::hashed_string("m_density")).prop(C_PROP_NAME_HS, "Density")
+		.data<&BoxColliderComponent::m_friction>(entt::hashed_string("m_friction")).prop(C_PROP_NAME_HS, "Friction")
+		.data<&BoxColliderComponent::m_restitution>(entt::hashed_string("m_restitution")).prop(C_PROP_NAME_HS, "Restitution");
+	/*
+struct BoxColliderComponent
+{
+	float	m_size = 0.5f;
+	float	m_density = 1.0f;
+	float	m_friction = 0.6f;
+	float	m_restitution = 0.1f;
+};
+	*/
 }
 
 } //-- jny

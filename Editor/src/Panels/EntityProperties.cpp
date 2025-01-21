@@ -229,6 +229,8 @@ void drawComponents(Entity& innerEntity, Ref<Scene>	m_scene)
 	drawComponent<SpriteComponent>(m_scene->registry(), innerEntity);
 	drawComponent<CameraComponent>(m_scene->registry(), innerEntity);
 	drawComponent<MainHeroComponent>(m_scene->registry(), innerEntity);
+	drawComponent<RigidBodyComponent>(m_scene->registry(), innerEntity);
+	drawComponent<BoxColliderComponent>(m_scene->registry(), innerEntity);
 }
 
 EntityProperties::EntityProperties(const Ref<EditorContext>& ctx) :
@@ -267,6 +269,14 @@ void EntityProperties::updateUI()
 				else if (!selectedEntity.hasComponent<MainHeroComponent>() && ImGui::Selectable("Main Hero Component"))
 				{
 					selectedEntity.addComponent<MainHeroComponent>();
+				}
+				else if (!selectedEntity.hasComponent<RigidBodyComponent>() && ImGui::Selectable("Rigid Body"))
+				{
+					selectedEntity.addComponent<RigidBodyComponent>();
+				}
+				else if (!selectedEntity.hasComponent<BoxColliderComponent>() && ImGui::Selectable("Box Collider"))
+				{
+					selectedEntity.addComponent<BoxColliderComponent>();
 				}
 				ImGui::EndPopup();
 			}

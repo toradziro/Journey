@@ -15,6 +15,8 @@ struct SpriteComponent;
 struct EntityNameComponent;
 struct CameraComponent;
 struct MainHeroComponent;
+struct RigidBodyComponent;
+struct BoxColliderComponent;
 
 class Scene : public ReferenceCounter
 {
@@ -53,6 +55,8 @@ private:
 	void onComponentCreation(EntityNameComponent& c) {}
 	void onComponentCreation(CameraComponent& c);
 	void onComponentCreation(MainHeroComponent& c) {}
+	void onComponentCreation(RigidBodyComponent& c) {}
+	void onComponentCreation(BoxColliderComponent& c) {}
 
 private:
 	friend class Entity;

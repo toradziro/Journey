@@ -10,13 +10,13 @@ namespace jny
 
 void MainHeroSystem::update(f32 dt)
 {
-	f32 characterPosX = 0.0f;
-	f32 characterPosY = 0.0f;
-
 	auto& inputPoll = Application::subsystems().st<jny::InputPoll>();
 
 	m_registry.view<MainHeroComponent>().each([&](entt::entity e, MainHeroComponent& mhc)
 		{
+			f32 characterPosX = 0.0f;
+			f32 characterPosY = 0.0f;
+
 			TransformComponent& tc = m_registry.get<TransformComponent>(e);
 			auto& pos = tc.m_position;
 
@@ -39,17 +39,17 @@ void MainHeroSystem::update(f32 dt)
 			}
 			characterPosX = pos.x;
 			characterPosY = pos.y;
-		});
 
-	m_registry.view<CameraComponent>().each([&](entt::entity e, CameraComponent& cc)
-	{
-		if (cc.m_primer)
-		{
-			auto& cameraPos = m_registry.get<TransformComponent>(e).m_position;
-			cameraPos.x = characterPosX;
-			cameraPos.y = characterPosY;
-		}
-	});
+			m_registry.view<CameraComponent>().each([&](entt::entity e, CameraComponent& cc)
+				{
+					if (cc.m_primer)
+					{
+						auto& cameraPos = m_registry.get<TransformComponent>(e).m_position;
+						cameraPos.x = characterPosX;
+						cameraPos.y = characterPosY;
+					}
+				});
+		});
 }
 
 }

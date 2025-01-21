@@ -3,6 +3,7 @@
 #include "Journey/Core/Application.h"
 #include "Journey/Renderer/Renderer2D.h"
 #include "Journey/Systems/MainHeroSystem.h"
+#include "Journey/Systems/PhysicSystem.h"
 #include "Components.h"
 
 #include <glm/glm.hpp>
@@ -49,6 +50,7 @@ namespace jny
 Scene::Scene()
 {
 	m_gameSystems.push_back(new MainHeroSystem(m_registry));
+	m_gameSystems.push_back(new PhysicSystem(m_registry));
 }
 
 Scene::~Scene()
