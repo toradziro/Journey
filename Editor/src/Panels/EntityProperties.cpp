@@ -48,7 +48,7 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 			ImGui::PushItemWidth(-FLT_MIN);
 			customDraw(obj, e);
 			ImGui::PopItemWidth();
-			return;
+			continue;
 		}
 		auto fieldDataType = fieldData.type();
 
@@ -166,6 +166,46 @@ void drawComponent(entt::id_type typeId, T& obj, entt::entity e)
 				data.set(obj, val);
 			}
 			ImGui::PopItemWidth();
+		}
+		else if (fieldDataType == entt::resolve<glm::vec2>())
+		{
+			const std::string imGuiIdX = fmt::format("##{}{}float2x", propName, static_cast<u32>(e));
+			const std::string imGuiIdY = fmt::format("##{}{}float2y", propName, static_cast<u32>(e));
+			glm::vec2 val = fieldData.cast<glm::vec2>();
+			const float lettersSize = ImGui::CalcTextSize("XY").x;
+			const float itemWidth = (ImGui::GetColumnWidth() / 2.0f) - lettersSize;
+
+			bool valueChanged = false;
+			ImGui::AlignTextToFramePadding();
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.7f, 0.0f, 0.0f, 0.9f });
+			ImGui::TextUnformatted("X");
+			ImGui::PopStyleColor();
+			ImGui::SameLine();
+			ImGui::PushItemWidth(itemWidth);
+			valueChanged |= ImGui::DragFloat(imGuiIdX.c_str(), &val.x, 0.1f);
+			ImGui::PopItemWidth();
+
+			ImGui::SameLine();
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f, 0.7f, 0.0f, 0.9f });
+			ImGui::TextUnformatted("Y");
+			ImGui::PopStyleColor();
+			ImGui::SameLine();
+			ImGui::PushItemWidth(itemWidth);
+			valueChanged |= ImGui::DragFloat(imGuiIdY.c_str(), &val.y, 0.1f);
+			ImGui::PopItemWidth();
+
+			if (valueChanged)
+			{
+				if (auto prop = data.prop(C_ON_PROP_CHANGE_HS); prop)
+				{
+					auto onChangeCall = prop.value().cast<std::function<void(T&, glm::vec2)>>();
+					onChangeCall(obj, val);
+				}
+				else
+				{
+					data.set(obj, val);
+				}
+			}
 		}
 	}
 }

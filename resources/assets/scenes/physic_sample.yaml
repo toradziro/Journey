@@ -4,7 +4,7 @@ Entities:
     EntityName:
       m_name: ground2
     Transform:
-      m_position: [10.7984972, 2.54987979, 0.00999999978]
+      m_position: [10.7984972, 2.54987979, -4]
       m_rotation: [0, 0, 35.1264687]
       m_scale: [20, 0.999999881, 1]
     Sprite:
@@ -14,7 +14,7 @@ Entities:
     EntityName:
       m_name: ground
     Transform:
-      m_position: [0, 0, 0]
+      m_position: [0, 0, -4.01000023]
       m_rotation: [0, 0, -17.7787437]
       m_scale: [20.1999989, 1, 1]
     Sprite:
@@ -24,7 +24,7 @@ Entities:
     EntityName:
       m_name: box
     Transform:
-      m_position: [8.61947536, 6.36932039, 0]
+      m_position: [8.61947536, 6.36932039, -4]
       m_rotation: [0, 0, 23.591032]
       m_scale: [1.00000143, 1.00000131, 1]
     Sprite:
