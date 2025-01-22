@@ -8,7 +8,21 @@ Entities:
       m_rotation: [0, 0, 35.1264687]
       m_scale: [20, 0.999999881, 1]
     Sprite:
-      m_color: [0.760975599, 0.458441406, 0.458441406, 1]
+      m_color: [0, 0.455696106, 1, 1]
+    RigidBody:
+      m_bodyType: 0
+      m_angularDamping: 0
+      m_angularVelocity: 0
+      m_gravityScale: 1
+      m_linearDamping: 0
+      m_linearVelocity: [0, 0]
+      m_allowFastRotation: false
+      m_fixedRotation: false
+    BoxCollider:
+      m_size: 0.5
+      m_density: 1
+      m_friction: 0.600000024
+      m_restitution: 0.100000001
 
   - entity_id: 2
     EntityName:
@@ -18,29 +32,57 @@ Entities:
       m_rotation: [0, 0, -17.7787437]
       m_scale: [20.1999989, 1, 1]
     Sprite:
-      m_color: [0.25472194, 0.169851273, 0.839024425, 1]
+      m_color: [0, 0.454901963, 1, 1]
+    RigidBody:
+      m_bodyType: 0
+      m_angularDamping: 0
+      m_angularVelocity: 0
+      m_gravityScale: 1
+      m_linearDamping: 0
+      m_linearVelocity: [0, 0]
+      m_allowFastRotation: false
+      m_fixedRotation: false
+    BoxCollider:
+      m_size: 0.5
+      m_density: 1
+      m_friction: 0.600000024
+      m_restitution: 0.100000001
 
   - entity_id: 1
     EntityName:
       m_name: box
     Transform:
-      m_position: [8.61947536, 6.36932039, -4]
-      m_rotation: [0, 0, 23.591032]
-      m_scale: [1.00000143, 1.00000131, 1]
+      m_position: [-2.3491478, 7.84819651, -4]
+      m_rotation: [0, 0, -37.8249817]
+      m_scale: [1.0000006, 1.0000006, 1]
     Sprite:
       m_color: [1, 1, 1, 1]
       m_texture: D:/dev/Journey/resources/assets/textures/ehindy_circle.png
+    RigidBody:
+      m_bodyType: 1
+      m_angularDamping: 0
+      m_angularVelocity: 0
+      m_gravityScale: 1
+      m_linearDamping: 0
+      m_linearVelocity: [0, 0]
+      m_allowFastRotation: false
+      m_fixedRotation: false
+    BoxCollider:
+      m_size: 0.5
+      m_density: 1
+      m_friction: 0.600000024
+      m_restitution: 0.600000024
 
   - entity_id: 0
     EntityName:
       m_name: Camera
     Transform:
-      m_position: [0, 1.70646501, 14.7999401]
-      m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
+      m_position: [2.78794098, 1.70646501, 15.2440996]
+      m_rotation: [3.0592041, -1.8448168, -0.0985769182]
+      m_scale: [1, 1, 0.999999762]
     Camera:
-      m_zoom: 10
+      m_zoom: 15
       m_fov: 45
       m_primer: true
       m_fixedAspectRatio: false
-      m_perspective: true
+      m_perspective: false

@@ -116,6 +116,50 @@ void SceneSerializer::serializeEntity(YAML::Emitter& sFile, Entity e)
 		sFile << Key << "m_movementSpeed" << Value << c.m_movementSpeed;
 		sFile << EndMap;
 	}
+
+	/*
+	BodyType	m_bodyType = BodyType::Static;
+	float		m_angularDamping = 0.0f;	//-- Angular damping is use to reduce the angular velocity.
+	float		m_angularVelocity = 0.0f;	//-- The initial angular velocity of the body. Radians per second.
+	float		m_gravityScale = 1.0f;		//-- Scale the gravity applied to this body. Non-dimensional.
+	float		m_linearDamping = 0.0f;		//-- Linear damping is use to reduce the linear velocity.
+	glm::vec2	m_linearVelocity = { 0.0f, 0.0f };
+	bool		m_allowFastRotation = false;
+	bool		m_fixedRotation = false;	//-- Should this body be prevented from rotating? Useful for characters
+	*/
+
+	if (e.hasComponent<RigidBodyComponent>())
+	{
+		auto& c = e.component<RigidBodyComponent>();
+		sFile << Key << c.C_COMPONENT_NAME;
+		sFile << BeginMap;
+		
+		sFile << Key << "m_bodyType" << Value << static_cast<u32>(c.m_bodyType);
+		sFile << Key << "m_angularDamping" << Value << c.m_angularDamping;
+		sFile << Key << "m_angularVelocity" << Value << c.m_angularVelocity;
+		sFile << Key << "m_gravityScale" << Value << c.m_gravityScale;
+		sFile << Key << "m_linearDamping" << Value << c.m_linearDamping;
+		sFile << Key << "m_linearVelocity" << Value << c.m_linearVelocity;
+		sFile << Key << "m_allowFastRotation" << Value << c.m_allowFastRotation;
+		sFile << Key << "m_fixedRotation" << Value << c.m_fixedRotation;
+
+		sFile << EndMap;
+	}
+
+	if (e.hasComponent<BoxColliderComponent>())
+	{
+		auto& c = e.component<BoxColliderComponent>();
+
+		sFile << Key << c.C_COMPONENT_NAME;
+		sFile << BeginMap;
+
+		sFile << Key << "m_size" << Value << c.m_size;
+		sFile << Key << "m_density" << Value << c.m_density;
+		sFile << Key << "m_friction" << Value << c.m_friction;
+		sFile << Key << "m_restitution" << Value << c.m_restitution;
+
+		sFile << EndMap;
+	}
 }
 
 void SceneSerializer::deserialize(const std::string& filename)
@@ -179,6 +223,64 @@ void SceneSerializer::deserialize(const std::string& filename)
 				if (auto moveSpeed = mhc["m_movementSpeed"]; moveSpeed)
 				{
 					realMhc.m_movementSpeed = moveSpeed.as<f32>();
+				}
+			}
+
+			if (auto rbc = eSpecs[RigidBodyComponent::C_COMPONENT_NAME]; rbc)
+			{
+				auto& realRbc = createdE.addComponent<RigidBodyComponent>();
+				if (auto bodyType = rbc["m_bodyType"]; bodyType)
+				{
+					realRbc.m_bodyType = static_cast<BodyType>(bodyType.as<u32>());
+				}
+				if (auto angularDamping = rbc["m_angularDamping"]; angularDamping)
+				{
+					realRbc.m_angularDamping = angularDamping.as<f32>();
+				}
+				if (auto angularVelocity = rbc["m_angularVelocity"]; angularVelocity)
+				{
+					realRbc.m_angularVelocity = angularVelocity.as<f32>();
+				}
+				if (auto gravityScale = rbc["m_gravityScale"]; gravityScale)
+				{
+					realRbc.m_gravityScale = gravityScale.as<f32>();
+				}
+				if (auto linearDamping = rbc["m_linearDamping"]; linearDamping)
+				{
+					realRbc.m_linearDamping = linearDamping.as<f32>();
+				}
+				if (auto linearVelocity = rbc["m_linearVelocity"]; linearVelocity)
+				{
+					realRbc.m_linearVelocity = linearVelocity.as<glm::vec2>();
+				}
+				if (auto allowFastRotation = rbc["m_allowFastRotation"]; allowFastRotation)
+				{
+					realRbc.m_allowFastRotation = allowFastRotation.as<bool>();
+				}
+				if (auto fixedRotation = rbc["m_fixedRotation"]; fixedRotation)
+				{
+					realRbc.m_fixedRotation = fixedRotation.as<bool>();
+				}
+			}
+
+			if (auto bcc = eSpecs[BoxColliderComponent::C_COMPONENT_NAME]; bcc)
+			{
+				auto& realBcc = createdE.addComponent<BoxColliderComponent>();
+				if (auto size = bcc["m_size"]; size)
+				{
+					realBcc.m_size = size.as<f32>();
+				}
+				if (auto friction = bcc["m_friction"]; friction)
+				{
+					realBcc.m_friction = friction.as<f32>();
+				}
+				if (auto density = bcc["m_density"]; density)
+				{
+					realBcc.m_density = density.as<f32>();
+				}
+				if (auto restitution = bcc["m_restitution"]; restitution)
+				{
+					realBcc.m_restitution = restitution.as<f32>();
 				}
 			}
 		}

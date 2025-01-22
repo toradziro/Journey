@@ -128,11 +128,11 @@ struct RigidBodyComponent
 
 	BodyType	m_bodyType = BodyType::Static;
 
-	float	m_angularDamping = 0.0f;	//-- Angular damping is use to reduce the angular velocity.
-	float	m_angularVelocity = 0.0f;	//-- The initial angular velocity of the body. Radians per second.
-	float	m_gravityScale = 1.0f;		//-- Scale the gravity applied to this body. Non-dimensional.
+	f32			m_angularDamping = 0.0f;	//-- Angular damping is use to reduce the angular velocity.
+	f32			m_angularVelocity = 0.0f;	//-- The initial angular velocity of the body. Radians per second.
+	f32			m_gravityScale = 1.0f;		//-- Scale the gravity applied to this body. Non-dimensional.
 
-	float	m_linearDamping = 0.0f;		//-- Linear damping is use to reduce the linear velocity.
+	f32			m_linearDamping = 0.0f;		//-- Linear damping is use to reduce the linear velocity.
 	//-- The damping parameter can be larger than 1 but the damping effect becomes 
 	//-- sensitive to the time step when the damping parameter is large.
 	//-- Generally linear damping is undesirable because it makes objects move slowly as if they are floating.

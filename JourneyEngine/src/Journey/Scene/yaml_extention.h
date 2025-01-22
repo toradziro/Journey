@@ -5,6 +5,36 @@
 namespace YAML
 {
 
+//============================= VEC2 =============================
+Emitter& operator<<(Emitter& out, const glm::vec2& v)
+{
+	out << Flow;
+	out << BeginSeq << v.x << v.y << EndSeq;
+	return out;
+}
+
+template<>
+struct convert<glm::vec2>
+{
+	static Node encode(const glm::vec2& vec)
+	{
+		Node node;
+		node.push_back(vec.x);
+		node.push_back(vec.y);
+		return node;
+	}
+
+	static bool decode(const Node& node, glm::vec2& vec)
+	{
+		if (!node.IsSequence() || node.size() != 2) {
+			return false;
+		}
+		vec.x = node[0].as<float>();
+		vec.y = node[1].as<float>();
+		return true;
+	}
+};
+
 //============================= VEC3 =============================
 Emitter& operator<<(Emitter& out, const glm::vec3& v)
 {
