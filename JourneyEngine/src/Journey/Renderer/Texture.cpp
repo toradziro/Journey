@@ -12,7 +12,7 @@ void subTexture(QuadCfg& cfg
 	, const glm::vec2& spriteSize
 	, const glm::vec2& cellsFromAtlas)
 {
-	Ref<SubTexture2D> sbt = SubTexture2D::createFromCoords(subTexture, spriteSize, cellsFromAtlas, cfg.m_texture);
+	s_ptr<SubTexture2D> sbt = SubTexture2D::createFromCoords(subTexture, spriteSize, cellsFromAtlas, cfg.m_texture);
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -20,10 +20,10 @@ void subTexture(QuadCfg& cfg
 	}
 }
 
-Ref<Texture2D> Texture2D::create(const std::string& texturePath)
+s_ptr<Texture2D> Texture2D::create(const std::string& texturePath)
 {
 	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
-	Ref<Texture2D> tex = nullptr;
+	s_ptr<Texture2D> tex = nullptr;
 
 	switch (rendererApi)
 	{
@@ -31,7 +31,7 @@ Ref<Texture2D> Texture2D::create(const std::string& texturePath)
 		JNY_ASSERT(true, "Can't be None");
 		break;
 	case RendererAPI::API::OpenGL:
-		tex = new OpenGLTexture2D(texturePath);
+		tex = std::make_shared<OpenGLTexture2D>(texturePath);
 		break;
 	default:
 		break;
@@ -40,10 +40,10 @@ Ref<Texture2D> Texture2D::create(const std::string& texturePath)
 	return tex;
 }
 
-Ref<Texture2D> Texture2D::create(u32 width, u32 height)
+s_ptr<Texture2D> Texture2D::create(u32 width, u32 height)
 {
 	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
-	Ref<Texture2D> tex = nullptr;
+	s_ptr<Texture2D> tex = nullptr;
 
 	switch (rendererApi)
 	{
@@ -51,7 +51,7 @@ Ref<Texture2D> Texture2D::create(u32 width, u32 height)
 		JNY_ASSERT(true, "Can't be None");
 		break;
 	case RendererAPI::API::OpenGL:
-		tex = new OpenGLTexture2D(width, height);
+		tex = std::make_shared<OpenGLTexture2D>(width, height);
 		break;
 	default:
 		break;
@@ -60,7 +60,7 @@ Ref<Texture2D> Texture2D::create(u32 width, u32 height)
 	return tex;
 }
 
-SubTexture2D::SubTexture2D(const Ref<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max)
+SubTexture2D::SubTexture2D(const s_ptr<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max)
 	: m_texture(texture)
 {
 	m_textureCoordinates[0] = min;
@@ -69,10 +69,10 @@ SubTexture2D::SubTexture2D(const Ref<Texture2D>& texture, const glm::vec2& min, 
 	m_textureCoordinates[3] = { min.x, max.y };
 }
 
-Ref<SubTexture2D> SubTexture2D::createFromCoords(const glm::vec2& coordinates,
+s_ptr<SubTexture2D> SubTexture2D::createFromCoords(const glm::vec2& coordinates,
 	const glm::vec2& spriteSize,
 	const glm::vec2& cellsFromAtlas,
-	const Ref<Texture2D>& texture)
+	const s_ptr<Texture2D>& texture)
 {
 	float width = static_cast<float>(texture->width());
 	float height = static_cast<float>(texture->height());
@@ -86,7 +86,7 @@ Ref<SubTexture2D> SubTexture2D::createFromCoords(const glm::vec2& coordinates,
 
 	glm::vec2 minCoords = { startPosX, startPosY };
 	glm::vec2 maxCoords = { startPosX + stepX, startPosY + stepY };
-	return Ref<SubTexture2D>::create(texture, minCoords, maxCoords);
+	return std::make_shared<SubTexture2D>(texture, minCoords, maxCoords);
 }
 
 } //-- jny

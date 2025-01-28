@@ -55,7 +55,7 @@ std::string glTypeToStr(GLuint type)
 OpenGLShader::OpenGLShader(const std::string& path)
 	: m_path(path)
 {
-	Ref<File> shaderSource = Application::subsystems().st<VFS>().loadFile(path);
+	s_ptr<File> shaderSource = Application::subsystems().st<VFS>().loadFile(path);
 	std::string sourceAsStr = shaderSource->toString();
 	auto splitSources = preprocess(sourceAsStr);
 	compile(splitSources);

@@ -10,7 +10,7 @@ namespace jny
 class EntityProperties final : public IPanel
 {
 public:
-	EntityProperties(const Ref<EditorContext>& ctx);
+	EntityProperties(const s_ptr<EditorContext>& ctx);
 	~EntityProperties() = default;
 
 	virtual void update(f32 dt) override;

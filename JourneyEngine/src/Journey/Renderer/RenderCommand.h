@@ -17,7 +17,7 @@ public:
 
 	void windowResized(u32 width, u32 height);
 	void createRenderer(RendererAPI::API api);
-	void drawIndexed(const Ref<VertexArray>& vertexArray, u32 size = 0)
+	void drawIndexed(const s_ptr<VertexArray>& vertexArray, u32 size = 0)
 	{
 		PROFILE_FUNC;
 

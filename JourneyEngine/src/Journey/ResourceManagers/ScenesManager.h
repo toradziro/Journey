@@ -17,7 +17,7 @@ class ScenesManager : ISingleton
 
 public:
 	void				init();
-	Ref<Scene>			create(const std::string& scenePath);
+	s_ptr<Scene>			create(const std::string& scenePath);
 
 	void				update(float dt);
 
@@ -27,7 +27,7 @@ public:
 	}
 
 private:
-	using PathsToReferences = std::unordered_map<std::string, Ref<Scene>>;
+	using PathsToReferences = std::unordered_map<std::string, s_ptr<Scene>>;
 
 	PathsToReferences			m_scenesLibrary;
 	std::vector<fs_path>		m_assetsPaths;

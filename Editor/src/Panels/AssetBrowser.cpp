@@ -42,9 +42,9 @@ std::string convertToVfsPath(jny::fs_path path)
 	return currPathAsStr;
 }
 
-jny::Ref<jny::Texture2D> loadIcon(ResourceType type)
+jny::s_ptr<jny::Texture2D> loadIcon(ResourceType type)
 {
-	jny::Ref<jny::Texture2D> res = nullptr;
+	jny::s_ptr<jny::Texture2D> res = nullptr;
 	auto& tm = jny::Application::subsystems().st<jny::TextureManager>();
 	auto& vfs = jny::Application::subsystems().st<jny::VFS>();
 
@@ -157,7 +157,7 @@ void drawButtonInGrid(
 namespace jny
 {
 
-AssetBrowser::AssetBrowser(const Ref<EditorContext>& ctx) : IPanel(ctx)
+AssetBrowser::AssetBrowser(const s_ptr<EditorContext>& ctx) : IPanel(ctx)
 {
 	auto& vfs = Application::subsystems().st<VFS>();
 	m_currPath = normalizePath(vfs.rootResourcesPath());
@@ -244,7 +244,7 @@ void AssetBrowser::drawContent()
 			}
 			else
 			{
-				Ref<Texture2D> iconTexture;
+				s_ptr<Texture2D> iconTexture;
 				ResourceType resourceType = nameToResourceType(path.extension().string());
 				if (resourceType == ResourceType::Texture)
 				{
@@ -262,7 +262,7 @@ void AssetBrowser::drawContent()
 						if (resourceType == ResourceType::Scene)
 						{
 							m_ctx->m_selectedEntity = {};
-							m_ctx->m_currentScene = Ref<Scene>::create();
+							m_ctx->m_currentScene = std::make_shared<Scene>();
 							m_ctx->m_currentScene->deserialize(dirIt.path().filename().string());
 							m_ctx->m_sceneChanged = true;
 						}

@@ -13,7 +13,7 @@ namespace jny
 class AssetBrowser final : public IPanel
 {
 public:
-	AssetBrowser(const Ref<EditorContext>& ctx);
+	AssetBrowser(const s_ptr<EditorContext>& ctx);
 	~AssetBrowser() = default;
 
 	virtual void	update(f32 dt) override;

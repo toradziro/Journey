@@ -49,8 +49,8 @@ namespace jny
 
 Scene::Scene()
 {
-	m_gameSystems.push_back(new MainHeroSystem(m_registry));
-	m_gameSystems.push_back(new PhysicSystem(m_registry));
+	m_gameSystems.push_back(std::move(std::make_unique<MainHeroSystem>(m_registry)));
+	m_gameSystems.push_back(std::move(std::make_unique<PhysicSystem>(m_registry)));
 }
 
 Scene::~Scene()

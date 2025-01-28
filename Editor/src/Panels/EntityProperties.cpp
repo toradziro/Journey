@@ -262,7 +262,7 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 	}
 }
 
-void drawComponents(Entity& innerEntity, Ref<Scene>	m_scene)
+void drawComponents(Entity& innerEntity, s_ptr<Scene> m_scene)
 {
 	drawComponent<EntityNameComponent>(m_scene->registry(), innerEntity);
 	drawComponent<TransformComponent>(m_scene->registry(), innerEntity);
@@ -273,7 +273,7 @@ void drawComponents(Entity& innerEntity, Ref<Scene>	m_scene)
 	drawComponent<BoxColliderComponent>(m_scene->registry(), innerEntity);
 }
 
-EntityProperties::EntityProperties(const Ref<EditorContext>& ctx) :
+EntityProperties::EntityProperties(const s_ptr<EditorContext>& ctx) :
 	IPanel(ctx)
 {
 }

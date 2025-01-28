@@ -34,11 +34,11 @@ void TextureManager::init()
 	Log::info("Textures paths loaded");
 }
 
-Ref<Texture2D> TextureManager::create(const std::string& texturePath)
+s_ptr<Texture2D> TextureManager::create(const std::string& texturePath)
 {
 	std::string normalizedPath = jny::normalizePath(texturePath);
 
-	Ref<Texture2D> res = nullptr;
+	s_ptr<Texture2D> res = nullptr;
 	if (m_textureLibrary.count(normalizedPath))
 	{
 		res = m_textureLibrary[normalizedPath];
@@ -55,9 +55,9 @@ Ref<Texture2D> TextureManager::create(const std::string& texturePath)
 	return res;
 }
 
-Ref<Texture2D> TextureManager::create(const std::string& textureName, u32 width, u32 height)
+s_ptr<Texture2D> TextureManager::create(const std::string& textureName, u32 width, u32 height)
 {
-	Ref<Texture2D> res = nullptr;
+	s_ptr<Texture2D> res = nullptr;
 	if (m_textureLibrary.count(textureName))
 	{
 		res = m_textureLibrary[textureName];

@@ -36,7 +36,7 @@ void SceneSerializer::serialize(const std::string& filename)
 		sFile << BeginMap;
 		//-- Here will come uuid later
 		sFile << Key << C_ENTITY_ID_KEY << Value << static_cast<u32>(e);
-		serializeEntity(sFile, { e, m_scene.raw() });
+		serializeEntity(sFile, Entity(e, m_scene));
 		sFile << Newline;
 		sFile << EndMap;
 	};

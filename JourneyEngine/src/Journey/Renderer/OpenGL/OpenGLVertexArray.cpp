@@ -56,7 +56,7 @@ void OpenGLVertexArray::unbind() const
 	glBindVertexArray(0);
 }
 
-void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
+void OpenGLVertexArray::addVertexBuffer(const s_ptr<VertexBuffer>& vertexBuffer)
 {
 	JNY_ASSERT(!vertexBuffer->layout().elements().empty(), "Empty layout");
 
@@ -114,7 +114,7 @@ void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	m_vertexBuffers.push_back(vertexBuffer);
 }
 
-void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& IndexBuffer)
+void OpenGLVertexArray::setIndexBuffer(const s_ptr<IndexBuffer>& IndexBuffer)
 {
 	glBindVertexArray(m_rendererId);
 	IndexBuffer->bind();

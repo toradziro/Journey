@@ -51,7 +51,7 @@ struct FramebufferSpecs
 	bool							m_swapChainTarget = false;
 };
 
-class Framebuffer : public ReferenceCounter
+class Framebuffer
 {
 public:
 	virtual ~Framebuffer() = default;
@@ -66,7 +66,7 @@ public:
 	virtual u32 colorAttachment(u32 index = 0) = 0;
 	virtual int readbackPixel(u32 index, i32 x, i32 y) = 0;
 
-	static Ref<Framebuffer> create(const FramebufferSpecs& specs);
+	static s_ptr<Framebuffer> create(const FramebufferSpecs& specs);
 };
 
 }

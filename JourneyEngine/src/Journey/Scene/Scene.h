@@ -18,7 +18,7 @@ struct MainHeroComponent;
 struct RigidBodyComponent;
 struct BoxColliderComponent;
 
-class Scene : public ReferenceCounter
+class Scene
 {
 public:
 	Scene();
@@ -66,7 +66,7 @@ private:
 
 	std::string					m_sceneName = "Untitled";
 
-	std::vector<Ref<System>>	m_gameSystems;
+	std::vector<u_ptr<System>>	m_gameSystems;
 
 	u32							m_viewportWidth = 1;
 	u32							m_viewportHeight = 1;

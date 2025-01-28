@@ -28,10 +28,10 @@ void Renderer2D::init()
 	Application::subsystems().st<RenderCommand>().init();
 
 	//-- Vertex array
-	m_quadVertexArray = Ref<VertexArray>(VertexArray::create());
+	m_quadVertexArray = s_ptr<VertexArray>(VertexArray::create());
 
 	//-- Vertex buffer
-	m_quadVertexBuffer = Ref<VertexBuffer>(VertexBuffer::create(C_MAX_VERTICES * sizeof(QuadVertex)));
+	m_quadVertexBuffer = s_ptr<VertexBuffer>(VertexBuffer::create(C_MAX_VERTICES * sizeof(QuadVertex)));
 	//-- Setting up vertex attribute array (layout for providing data splitting in shader)
 	BufferLayout::LayoutData layoutData = {
 		{ buff_utils::ShaderDataType::Float3, "a_Position" },
@@ -64,7 +64,7 @@ void Renderer2D::init()
 		offset += C_VERTICES_IN_QUAD;
 	}
 
-	Ref<IndexBuffer> indexBuffer = Ref<IndexBuffer>(IndexBuffer::create(indices, C_MAX_INDICES));
+	s_ptr<IndexBuffer> indexBuffer = s_ptr<IndexBuffer>(IndexBuffer::create(indices, C_MAX_INDICES));
 	m_quadVertexArray->setIndexBuffer(indexBuffer);
 	delete[] indices;
 
@@ -162,7 +162,7 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 		startNextBatch();
 	}
 
-	Ref<Texture2D> textureToUse = nullptr;
+	s_ptr<Texture2D> textureToUse = nullptr;
 	switch (cfg.m_textureOpt)
 	{
 		case TextureOpt::FlatColored:
@@ -174,7 +174,7 @@ void Renderer2D::drawQuad(const QuadCfg& cfg)
 		default:
 			break;
 	}
-	JNY_ASSERT(textureToUse.raw() != nullptr, "Set texture on the quad");
+	JNY_ASSERT(textureToUse.get() != nullptr, "Set texture on the quad");
 
 	u32 textureIndex = C_INVALID_INDEX;
 	for (u32 i = 0; i < m_currTextureSlot; ++i)

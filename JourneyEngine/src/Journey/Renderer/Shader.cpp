@@ -7,15 +7,15 @@
 namespace jny
 {
 
-Shader* Shader::create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+s_ptr<Shader> Shader::create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 {
 	const auto api = Application::subsystems().st<RenderCommand>().api();
-	Shader* shader = nullptr;
+	s_ptr<Shader> shader = nullptr;
 
 	switch (api)
 	{
 		case RendererAPI::API::OpenGL:
-			shader = new OpenGLShader(name, vertexSrc, fragmentSrc);
+			shader = std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
 			break;
 		case RendererAPI::API::None:
 			JNY_ASSERT(false, "Can't be none");
@@ -27,15 +27,15 @@ Shader* Shader::create(const std::string& name, const std::string& vertexSrc, co
 	return shader;
 }
 
-jny::Shader* Shader::create(const std::string& path)
+s_ptr<jny::Shader> Shader::create(const std::string& path)
 {
 	const auto api = Application::subsystems().st<RenderCommand>().api();
-	Shader* shader = nullptr;
+	s_ptr<Shader> shader = nullptr;
 
 	switch (api)
 	{
 	case RendererAPI::API::OpenGL:
-		shader = new OpenGLShader(path);
+		shader = std::make_shared<OpenGLShader>(path);
 		break;
 	case RendererAPI::API::None:
 		JNY_ASSERT(false, "Can't be none");
@@ -47,14 +47,14 @@ jny::Shader* Shader::create(const std::string& path)
 	return shader;
 }
 
-void ShaderLibrary::add(const Ref<Shader>& shader)
+void ShaderLibrary::add(const s_ptr<Shader>& shader)
 {
 	JNY_ASSERT(m_shaders.count(shader->path()) == 0, "Shader with this path already exists");
 
 	m_shaders[shader->path()] = shader;
 }
 
-jny::Ref<jny::Shader> ShaderLibrary::load(const std::string& path)
+jny::s_ptr<jny::Shader> ShaderLibrary::load(const std::string& path)
 {
 	JNY_ASSERT(m_shaders.count(path) == 0, "Shader with this path already exists");
 
@@ -62,7 +62,7 @@ jny::Ref<jny::Shader> ShaderLibrary::load(const std::string& path)
 	return m_shaders[path];
 }
 
-jny::Ref<jny::Shader> ShaderLibrary::shader(const std::string& path)
+jny::s_ptr<jny::Shader> ShaderLibrary::shader(const std::string& path)
 {
 	JNY_ASSERT(m_shaders.count(path) == 1, "Unknown shader");
 

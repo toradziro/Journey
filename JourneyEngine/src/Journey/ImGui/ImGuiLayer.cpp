@@ -138,7 +138,7 @@ void ImGuiLayer::attach()
 	if (!std::filesystem::exists(C_CONFIG_FILE_NAME))
 	{
 		auto& vfs = Application::subsystems().st<VFS>();
-		Ref<File> defaultLayout = vfs.loadFile(C_DEFAULT_LAYOUT_PATH);
+		s_ptr<File> defaultLayout = vfs.loadFile(C_DEFAULT_LAYOUT_PATH);
 		std::string layoutAsStr = defaultLayout->toString();
 		ImGui::LoadIniSettingsFromMemory(layoutAsStr.c_str(), layoutAsStr.size());
 	}

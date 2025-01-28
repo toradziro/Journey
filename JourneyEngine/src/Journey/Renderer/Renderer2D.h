@@ -38,7 +38,7 @@ struct QuadCfg
 								{ 1.0f, 1.0f },
 								{ 0.0f, 1.0f }
 							};
-	Ref<Texture2D>	m_texture = nullptr;
+	s_ptr<Texture2D>	m_texture = nullptr;
 
 	TextureOpt		m_textureOpt = TextureOpt::FlatColored;
 	RotateOpt		m_rotateOpt = RotateOpt::AlignedByAxices;
@@ -94,22 +94,22 @@ private:
 		u32 indexCount() const { return m_quadCount * C_INDICES_IN_QUAD; }
 	};
 
-	std::array<Ref<Texture2D>, C_MAX_TEXTURE_SLOTS>	m_textureSlots;
+	std::array<s_ptr<Texture2D>, C_MAX_TEXTURE_SLOTS>	m_textureSlots;
 	//-- Need to apply transformation matrix to
 	glm::vec4										m_quadVertexPosition[C_VERTICES_IN_QUAD];
 
 	Statistic										m_frameStat;
 
-	Ref<VertexArray>								m_quadVertexArray;
-	Ref<VertexBuffer>								m_quadVertexBuffer;
-	Ref<Shader>										m_textureShader;
-	Ref<Texture2D>									m_whiteTexture;
+	s_ptr<VertexArray>								m_quadVertexArray;
+	s_ptr<VertexBuffer>								m_quadVertexBuffer;
+	s_ptr<Shader>									m_textureShader;
+	s_ptr<Texture2D>								m_whiteTexture;
 
 	QuadVertex*										m_quadVertexBase = nullptr;
 	QuadVertex*										m_quadVertexPtr = nullptr;
 
-	u32										m_currQuadIndex = 0;
-	u32										m_currTextureSlot = 1; //-- 0 is for white texture
+	u32												m_currQuadIndex = 0;
+	u32												m_currTextureSlot = 1; //-- 0 is for white texture
 };
 
 } //-- jny

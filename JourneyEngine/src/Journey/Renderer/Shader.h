@@ -7,7 +7,7 @@
 namespace jny
 {
 
-class Shader : public ReferenceCounter
+class Shader
 {
 public:
 	virtual ~Shader() = default;
@@ -28,8 +28,8 @@ public:
 	virtual void uploadUniformMat3(const glm::mat3& value, std::string_view name) const = 0;
 	virtual void uploadUniformMat4(const glm::mat4& value, std::string_view name) const = 0;
 
-	static Shader* create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
-	static Shader* create(const std::string& path);
+	static s_ptr<Shader> create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+	static s_ptr<Shader> create(const std::string& path);
 };
 
 class ShaderLibrary : ISingleton
@@ -39,12 +39,12 @@ class ShaderLibrary : ISingleton
 public:
 	ShaderLibrary() = default;
 
-	void add(const Ref<Shader>& shader);
-	Ref<Shader> load(const std::string& path);
-	Ref<Shader> shader(const std::string& path);
+	void add(const s_ptr<Shader>& shader);
+	s_ptr<Shader> load(const std::string& path);
+	s_ptr<Shader> shader(const std::string& path);
 
 private:
-	std::unordered_map<std::string, Ref<Shader>> m_shaders;
+	std::unordered_map<std::string, s_ptr<Shader>> m_shaders;
 };
 
 } //-- jny

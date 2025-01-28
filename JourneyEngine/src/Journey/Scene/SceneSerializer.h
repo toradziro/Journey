@@ -19,7 +19,7 @@ class SceneSerializer
 {
 public:
 	SceneSerializer() = default;
-	SceneSerializer(const Ref<Scene>& scene) : m_scene(scene) {}
+	SceneSerializer(Scene* scene) : m_scene(scene) {}
 	~SceneSerializer() = default;
 
 	void serialize(const std::string& filename);
@@ -31,7 +31,7 @@ public:
 private:
 	void serializeEntity(YAML::Emitter& sFile, Entity e);
 
-	Ref<Scene>	m_scene;
+	Scene*	m_scene;
 };
 
 } //-- jny

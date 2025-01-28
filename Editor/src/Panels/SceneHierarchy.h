@@ -10,7 +10,7 @@ namespace jny
 class SceneHierarchy final : public IPanel
 {
 public:
-	SceneHierarchy(const Ref<EditorContext>& ctx);
+	SceneHierarchy(const s_ptr<EditorContext>& ctx);
 	~SceneHierarchy() = default;
 
 	virtual void update(f32 dt) override;

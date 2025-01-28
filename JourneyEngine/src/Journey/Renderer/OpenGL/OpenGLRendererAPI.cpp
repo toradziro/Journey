@@ -37,7 +37,7 @@ void OpenGLRendererAPI::clearRedIntTexture(u32 textureIndex, i32 value)
 	glClearTexImage(textureIndex, 0, GL_RED_INTEGER, GL_INT, &value);
 }
 
-void OpenGLRendererAPI::drawIndexed(const Ref<VertexArray>& vertexArray, u32 count)
+void OpenGLRendererAPI::drawIndexed(const s_ptr<VertexArray>& vertexArray, u32 count)
 {
 	PROFILE_FUNC;
 

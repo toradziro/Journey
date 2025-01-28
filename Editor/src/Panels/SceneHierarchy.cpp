@@ -9,7 +9,7 @@
 namespace jny
 {
 
-SceneHierarchy::SceneHierarchy(const Ref<EditorContext>& ctx) :
+SceneHierarchy::SceneHierarchy(const s_ptr<EditorContext>& ctx) :
 	IPanel(ctx)
 {
 }
@@ -31,7 +31,7 @@ void SceneHierarchy::updateUI()
 		entt::registry& registry = ctx()->m_currentScene->registry();
 		registry.view<entt::entity>().each([&](entt::entity entity)
 			{
-				Entity innerEntity(entity, ctx()->m_currentScene.raw());
+				Entity innerEntity(entity, ctx()->m_currentScene.get());
 
 				const std::string_view entityName = innerEntity.component<EntityNameComponent>().m_name;
 				int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanFullWidth;

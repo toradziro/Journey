@@ -9,9 +9,9 @@
 namespace jny
 {
 
-struct EditorContext : public ReferenceCounter
+struct EditorContext
 {
-	Ref<Scene>		m_currentScene;
+	s_ptr<Scene>	m_currentScene;
 	EditorCamera	m_editorCamera;
 	Entity			m_selectedEntity;
 

@@ -16,15 +16,15 @@ class TextureManager : ISingleton
 
 public:
 	void				init();
-	Ref<Texture2D>		create(const std::string& texturePath);
-	Ref<Texture2D>		create(const std::string& textureName, u32 width, u32 height);
+	s_ptr<Texture2D>		create(const std::string& texturePath);
+	s_ptr<Texture2D>		create(const std::string& textureName, u32 width, u32 height);
 
 	void				update(float dt);
 
 	const std::vector<fs_path>& allTexturesOnDisk() const { return m_assetsPaths; }
 
 private:
-	using PathsToReferences = std::unordered_map<std::string, Ref<Texture2D>>;
+	using PathsToReferences = std::unordered_map<std::string, s_ptr<Texture2D>>;
 
 	PathsToReferences			m_textureLibrary;
 	std::vector<fs_path>		m_assetsPaths;

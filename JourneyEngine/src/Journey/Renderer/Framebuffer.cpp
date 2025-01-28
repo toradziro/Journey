@@ -7,10 +7,10 @@
 namespace jny
 {
 
-Ref<Framebuffer> Framebuffer::create(const FramebufferSpecs& specs)
+s_ptr<Framebuffer> Framebuffer::create(const FramebufferSpecs& specs)
 {
 	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
-	Ref<Framebuffer> buffer;
+	s_ptr<Framebuffer> buffer;
 
 	switch (rendererApi)
 	{
@@ -18,7 +18,7 @@ Ref<Framebuffer> Framebuffer::create(const FramebufferSpecs& specs)
 		JNY_ASSERT(true, "Can't be none");
 		break;
 	case RendererAPI::API::OpenGL:
-		buffer = new OpenGLFramebuffer(specs);
+		buffer = std::make_shared<OpenGLFramebuffer>(specs);
 		break;
 	default:
 		JNY_ASSERT(true, "Can't be none");

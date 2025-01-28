@@ -58,7 +58,7 @@ private:
 	void switchToEditorMode();
 
 private:
-	Ref<EditorContext>				m_context;
+	s_ptr<EditorContext>			m_context;
 	std::vector<IPanel*>			m_panels;
 
 	glm::vec2						m_sampledTexture = { 2.0f, 3.0f };
@@ -66,7 +66,7 @@ private:
 
 	std::pair<ImVec2, ImVec2>		m_viewportBounds = {};
 
-	Ref<Framebuffer>				m_framebuffer;
+	s_ptr<Framebuffer>				m_framebuffer;
 	Application*					m_app;
 
 	GizmoData						m_gizmoData;

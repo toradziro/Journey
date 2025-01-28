@@ -8,7 +8,7 @@ namespace jny
 
 struct QuadCfg;
 
-class Texture : public ReferenceCounter
+class Texture
 {
 public:
 	virtual ~Texture() = default;
@@ -32,25 +32,25 @@ public:
 private:
 	friend TextureManager;
 
-	static Ref<Texture2D> create(const std::string& texturePath);
-	static Ref<Texture2D> create(u32 width, u32 height);
+	static s_ptr<Texture2D> create(const std::string& texturePath);
+	static s_ptr<Texture2D> create(u32 width, u32 height);
 };
 
-class SubTexture2D : public ReferenceCounter
+class SubTexture2D
 {
 public:
-	SubTexture2D(const Ref<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max);
+	SubTexture2D(const s_ptr<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max);
 
 	const glm::vec2* textureCoordinates() const { return m_textureCoordinates; }
-	const Ref<Texture2D>& texture() const { return m_texture; }
+	const s_ptr<Texture2D>& texture() const { return m_texture; }
 
-	static Ref<SubTexture2D> createFromCoords(const glm::vec2& coordinates,
+	static s_ptr<SubTexture2D> createFromCoords(const glm::vec2& coordinates,
 		const glm::vec2& spriteSize,
 		const glm::vec2& cellsFromAtlas,
-		const Ref<Texture2D>& texture);
+		const s_ptr<Texture2D>& texture);
 
 private:
-	Ref<Texture2D>	m_texture;
+	s_ptr<Texture2D>	m_texture;
 
 	//-- Offset in a sprite sheet for one index
 	glm::vec2		m_textureCoordinates[4];

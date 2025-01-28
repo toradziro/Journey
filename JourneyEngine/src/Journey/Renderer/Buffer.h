@@ -99,7 +99,7 @@ private:
 	u32 m_stride = 0;
 };
 
-class VertexBuffer : public ReferenceCounter
+class VertexBuffer
 {
 public:
 	virtual ~VertexBuffer() = default;
@@ -116,7 +116,7 @@ public:
 	static VertexBuffer* create(float* vertices, u32 count);
 };
 
-class IndexBuffer : public ReferenceCounter
+class IndexBuffer
 {
 public:
 	virtual ~IndexBuffer() = default;

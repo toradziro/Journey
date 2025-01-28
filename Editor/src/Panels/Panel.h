@@ -10,15 +10,15 @@ namespace jny
 class IPanel
 {
 public:
-	IPanel(const Ref<EditorContext>& context) : m_ctx(context) {}
+	IPanel(const s_ptr<EditorContext>& context) : m_ctx(context) {}
 
 	virtual void update(f32 dt) = 0;
 	virtual void updateUI() = 0;
 
-	Ref<EditorContext>& ctx() { return m_ctx; }
+	s_ptr<EditorContext>& ctx() { return m_ctx; }
 
 protected:
-	Ref<EditorContext>	m_ctx;
+	s_ptr<EditorContext>	m_ctx;
 };
 
 } //-- jny

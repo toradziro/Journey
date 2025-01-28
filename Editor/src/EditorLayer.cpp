@@ -45,7 +45,7 @@ void EditorLayer::attach()
 	//-- FrambufferTextureFormat::RED_INTEGER
 	m_frambufferPickingIndex = 2;
 	m_framebuffer = Framebuffer::create(std::move(specs));
-	m_context->m_currentScene = Ref<Scene>::create();
+	m_context->m_currentScene = std::make_shared<Scene>();
 }
 
 void EditorLayer::detach()
@@ -124,7 +124,7 @@ void EditorLayer::update(f32 dt)
 		{
 			m_context->m_selectedEntity = {};
 		}
-		m_context->m_selectedEntity = Entity(entt::entity(entityId), m_context->m_currentScene.raw());
+		m_context->m_selectedEntity = Entity(entt::entity(entityId), m_context->m_currentScene.get());
 	}
 
 	m_framebuffer->unbind();
@@ -305,7 +305,7 @@ void EditorLayer::saveSceneAs()
 
 void EditorLayer::newScene()
 {
-	m_context->m_currentScene = Ref<Scene>::create();
+	m_context->m_currentScene = std::make_shared<Scene>();
 	m_context->m_selectedEntity = {};
 }
 
@@ -616,7 +616,7 @@ void EditorLayer::drawViewportToolbar()
 
 		auto& tm = jny::Application::subsystems().st<jny::TextureManager>();
 		auto& vfs = jny::Application::subsystems().st<jny::VFS>();
-		Ref<Texture2D> icon = nullptr;
+		s_ptr<Texture2D> icon = nullptr;
 
 		switch (m_sceneMode)
 		{

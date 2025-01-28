@@ -51,7 +51,7 @@ struct SpriteComponent
 	SpriteComponent(const SpriteComponent&) = default;
 
 	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	Ref<Texture2D>	m_texture = nullptr;
+	s_ptr<Texture2D>	m_texture = nullptr;
 };
 
 struct EntityNameComponent

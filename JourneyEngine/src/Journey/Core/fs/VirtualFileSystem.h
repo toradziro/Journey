@@ -9,7 +9,7 @@ namespace jny
 using fs_path = std::filesystem::path;
 namespace fs = std::filesystem;
 
-struct File : public ReferenceCounter
+struct File
 {
 	std::string toString()
 	{
@@ -33,9 +33,9 @@ public:
 
 	void		init();
 
-	Ref<File>	loadFile(const fs_path& path) const;
-	Ref<File>	createFile(const fs_path& path) const;
-	void		writeFile(const Ref<File>& file) const;
+	s_ptr<File>	loadFile(const fs_path& path) const;
+	s_ptr<File>	createFile(const fs_path& path) const;
+	void		writeFile(const s_ptr<File>& file) const;
 	
 	fs_path		virtualToNativePath(const fs_path& path) const;
 	fs_path		rootResourcesPath() const { return m_vfsPath; }

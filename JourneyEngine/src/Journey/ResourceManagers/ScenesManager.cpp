@@ -42,12 +42,12 @@ void ScenesManager::init()
 	Log::info("Scenes paths loaded");
 }
 
-Ref<Scene> ScenesManager::create(const std::string& scenePath)
+s_ptr<Scene> ScenesManager::create(const std::string& scenePath)
 {
-	Ref<Scene> res = nullptr;
+	s_ptr<Scene> res = nullptr;
 	if (auto it = std::ranges::find(m_assetsPaths, scenePath); it != m_assetsPaths.end())
 	{
-		res = Ref<Scene>::create();
+		res = std::make_shared<Scene>();
 		res->deserialize(it->filename().string());
 		return res;
 	}

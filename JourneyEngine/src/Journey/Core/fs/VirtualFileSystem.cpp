@@ -25,9 +25,9 @@ void VFS::init()
 	Log::info("{}", m_vfsPath.string());
 }
 
-Ref<File> VFS::loadFile(const fs_path& path) const
+s_ptr<File> VFS::loadFile(const fs_path& path) const
 {
-	Ref<File> readFile = new File;
+	s_ptr<File> readFile = std::make_shared<File>();
 	readFile->m_virtualPath = path;
 	readFile->m_nativePath = virtualToNativePath(path);
 
@@ -57,16 +57,16 @@ Ref<File> VFS::loadFile(const fs_path& path) const
 	return readFile;
 }
 
-Ref<File> VFS::createFile(const fs_path& path) const
+s_ptr<File> VFS::createFile(const fs_path& path) const
 {
-	Ref<File> file = Ref<File>::create();
+	s_ptr<File> file = std::make_shared<File>();
 	file->m_virtualPath = path;
 	file->m_nativePath = virtualToNativePath(path);
 
 	return file;
 }
 
-void VFS::writeFile(const Ref<File>& file) const
+void VFS::writeFile(const s_ptr<File>& file) const
 {
 	std::ofstream out(file->m_nativePath, std::ios::out
 		| std::ios::trunc
