@@ -211,19 +211,23 @@ void AssetBrowser::drawContent()
 	using dir_it = std::filesystem::directory_iterator;
 	using dir_recurse_it = std::filesystem::recursive_directory_iterator;
 
+	auto [xSize, _] = ImGui::GetContentRegionAvail();
+	int columnsCount = std::max<int>(1, static_cast<int>(xSize / (C_BUTTON_SIZE * ImGui::GetWindowDpiScale())));
+
 	int column = 0;
-	if (ImGui::BeginTable("##ContentGrid", 6, ImGuiTableFlags_SizingFixedFit))
+	if (ImGui::BeginTable("##ContentGrid", columnsCount, ImGuiTableFlags_SizingFixedFit))
 	{
 		for (const auto& dirIt : dir_it(m_currPath))
 		{
 			fs_path path = dirIt.path();
 			std::string filename = path.filename().string();
 
-			if (column >= 6)
+			if (column == columnsCount)
 			{
 				ImGui::TableNextRow();
 				column = 0;
 			}
+			
 			ImGui::TableNextColumn();
 
 			if (dirIt.is_directory())
