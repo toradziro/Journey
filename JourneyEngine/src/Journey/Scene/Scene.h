@@ -50,13 +50,10 @@ public:
 	void switchToEditorMode();
 
 private:
-	void onComponentCreation(TransformComponent& c) {}
-	void onComponentCreation(SpriteComponent&c ) {}
-	void onComponentCreation(EntityNameComponent& c) {}
+	template<typename T>
+	void onComponentCreation(T& c) {}
+
 	void onComponentCreation(CameraComponent& c);
-	void onComponentCreation(MainHeroComponent& c) {}
-	void onComponentCreation(RigidBodyComponent& c) {}
-	void onComponentCreation(BoxColliderComponent& c) {}
 
 private:
 	friend class Entity;

@@ -14,7 +14,6 @@ namespace
 
 constexpr const char* C_SCENE_DIR = "assets/scenes/";
 constexpr const char* C_ENTITIES_KEY = "Entities";
-constexpr const char* C_ENTITY_ID_KEY = "entity_id";
 constexpr const char* C_SCENE_KEY = "Scene";
 constexpr const char* C_FILE_EXTENTION = ".yaml";
 
@@ -35,9 +34,7 @@ void SceneSerializer::serialize(const std::string& filename)
 	{
 		sFile << BeginMap;
 		//-- Here will come uuid later
-		sFile << Key << C_ENTITY_ID_KEY << Value << static_cast<u32>(e);
 		serializeEntity(sFile, Entity(e, m_scene));
-		sFile << Newline;
 		sFile << EndMap;
 	};
 	sFile << EndSeq;
@@ -68,6 +65,15 @@ void SceneSerializer::serializeEntity(YAML::Emitter& sFile, Entity e)
 		sFile << Key << c.C_COMPONENT_NAME;
 		sFile << BeginMap;
 		sFile << Key << "m_name" << Value << c.m_name;
+		sFile << EndMap;
+	}
+
+	if (e.hasComponent<UuidComponent>())
+	{
+		auto& c = e.component<UuidComponent>();
+		sFile << Key << c.C_COMPONENT_NAME;
+		sFile << BeginMap;
+		sFile << Key << "m_uuid" << Value << (u64)c.m_uuid;
 		sFile << EndMap;
 	}
 
@@ -116,17 +122,6 @@ void SceneSerializer::serializeEntity(YAML::Emitter& sFile, Entity e)
 		sFile << Key << "m_movementSpeed" << Value << c.m_movementSpeed;
 		sFile << EndMap;
 	}
-
-	/*
-	BodyType	m_bodyType = BodyType::Static;
-	float		m_angularDamping = 0.0f;	//-- Angular damping is use to reduce the angular velocity.
-	float		m_angularVelocity = 0.0f;	//-- The initial angular velocity of the body. Radians per second.
-	float		m_gravityScale = 1.0f;		//-- Scale the gravity applied to this body. Non-dimensional.
-	float		m_linearDamping = 0.0f;		//-- Linear damping is use to reduce the linear velocity.
-	glm::vec2	m_linearVelocity = { 0.0f, 0.0f };
-	bool		m_allowFastRotation = false;
-	bool		m_fixedRotation = false;	//-- Should this body be prevented from rotating? Useful for characters
-	*/
 
 	if (e.hasComponent<RigidBodyComponent>())
 	{
@@ -178,8 +173,12 @@ void SceneSerializer::deserialize(const std::string& filename)
 	{
 		for (auto eSpecs : entities)
 		{
-			[[maybe_unused]] u32 eId = eSpecs[C_ENTITY_ID_KEY].as<u32>();
 			Entity createdE = m_scene->createEntity();
+
+			if (auto uuid = eSpecs[UuidComponent::C_COMPONENT_NAME]; uuid)
+			{
+				createdE.component<UuidComponent>().m_uuid = uuid["m_uuid"].as<u64>();
+			}
 
 			if (auto enc = eSpecs[EntityNameComponent::C_COMPONENT_NAME]; enc)
 			{

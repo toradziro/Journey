@@ -202,15 +202,18 @@ void registerComponents()
 		.data<&BoxColliderComponent::m_density>(entt::hashed_string("m_density")).prop(C_PROP_NAME_HS, "Density")
 		.data<&BoxColliderComponent::m_friction>(entt::hashed_string("m_friction")).prop(C_PROP_NAME_HS, "Friction")
 		.data<&BoxColliderComponent::m_restitution>(entt::hashed_string("m_restitution")).prop(C_PROP_NAME_HS, "Restitution");
-	/*
-struct BoxColliderComponent
-{
-	float	m_size = 0.5f;
-	float	m_density = 1.0f;
-	float	m_friction = 0.6f;
-	float	m_restitution = 0.1f;
-};
-	*/
+
+	// UuidComponent
+	entt::meta<UuidComponent>()
+		.type(entt::hashed_string(UuidComponent::C_COMPONENT_NAME))
+		.prop(C_PROP_NAME_HS, "UUID")
+		.prop(C_PROP_REMOVABLE)
+		.data<&UuidComponent::m_uuid>(entt::hashed_string("m_uuid")).prop(C_PROP_NAME_HS, "Body Type")
+		.prop(C_CASTOM_UI_DRAW,
+			std::function<void(UuidComponent&, entt::entity)>([](UuidComponent& component, entt::entity e)
+			{
+				ImGui::Text("%llu", (u64)component.m_uuid);
+			}));
 }
 
 } //-- jny

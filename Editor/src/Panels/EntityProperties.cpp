@@ -264,6 +264,7 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 
 void drawComponents(Entity& innerEntity, s_ptr<Scene> m_scene)
 {
+	drawComponent<UuidComponent>(m_scene->registry(), innerEntity);
 	drawComponent<EntityNameComponent>(m_scene->registry(), innerEntity);
 	drawComponent<TransformComponent>(m_scene->registry(), innerEntity);
 	drawComponent<SpriteComponent>(m_scene->registry(), innerEntity);

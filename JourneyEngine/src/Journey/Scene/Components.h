@@ -1,13 +1,13 @@
 #pragma once
 
+#include "Journey/Renderer/Texture.h"
+#include "Journey/Renderer/Camera.h"
+#include "Journey/Scene/Entity.h"
+#include "Journey/Core/UUID.h"
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-
-#include <Journey/Renderer/Texture.h>
-#include <Journey/Renderer/Camera.h>
-#include <Journey/Scene/Entity.h>
 #include <box2d/box2d.h>
 
 namespace jny
@@ -20,6 +20,16 @@ static inline constexpr auto C_FORMAT_STR_HS = entt::hashed_string::value("forma
 static inline constexpr auto C_CASTOM_UI_DRAW = entt::hashed_string::value("castom_ui_draw");
 
 void registerComponents();
+
+struct UuidComponent
+{
+	static inline constexpr const char* C_COMPONENT_NAME = "UUID";
+
+	UuidComponent() = default;
+	UuidComponent(const UuidComponent&) = default;
+
+	UUID	m_uuid;
+};
 
 struct TransformComponent
 {

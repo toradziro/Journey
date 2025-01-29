@@ -1,18 +1,10 @@
 Scene: default
 Entities:
-  - entity_id: 1048578
-    EntityName:
-      m_name: sample2
-    Transform:
-      m_position: [0.79315567, 0, 0]
-      m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
-    Sprite:
-      m_color: [0.741176486, 0.0862745121, 0.0862745121, 0.68235296]
-
-  - entity_id: 0
+  - entity_id: 1
     EntityName:
       m_name: sample1
+    UUID:
+      m_uuid: 1707496150518147992
     Transform:
       m_position: [1.44777012, 0, -0.162735581]
       m_rotation: [0, 0, 0]
@@ -20,3 +12,15 @@ Entities:
     Sprite:
       m_color: [1, 1, 1, 1]
       m_texture: D:/dev/Journey/resources/editor/icons/directory_icon.png
+
+  - entity_id: 0
+    EntityName:
+      m_name: sample2
+    UUID:
+      m_uuid: 17262990742947579322
+    Transform:
+      m_position: [0.79315567, 0, 0]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 1]
+    Sprite:
+      m_color: [0.741176486, 0.0862745121, 0.0862745121, 0.68235296]

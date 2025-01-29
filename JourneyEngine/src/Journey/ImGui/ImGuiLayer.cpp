@@ -128,7 +128,8 @@ void ImGuiLayer::attach()
 	m_regularFont = io.Fonts->AddFontFromFileTTF(C_REGULAR_FONTS, regularFontSize, &fontConfig);
 	m_pixelFont = io.Fonts->AddFontFromFileTTF(C_PIXEL_FONTS, pixelFontSize, &fontConfig);
 
-	m_currFont = m_pixelFont;
+	//m_currFont = m_pixelFont;
+	m_currFont = m_regularFont;
 
 	io.Fonts->Build();
 

@@ -1,8 +1,9 @@
 Scene: physic_sample
 Entities:
-  - entity_id: 3
-    EntityName:
+  - EntityName:
       m_name: ground2
+    UUID:
+      m_uuid: 1309710191877731635
     Transform:
       m_position: [10.7984972, 2.54987979, -4]
       m_rotation: [0, 0, 35.1264687]
@@ -23,10 +24,10 @@ Entities:
       m_density: 1
       m_friction: 0.600000024
       m_restitution: 0.100000001
-
-  - entity_id: 2
-    EntityName:
+  - EntityName:
       m_name: ground
+    UUID:
+      m_uuid: 12557797906249119276
     Transform:
       m_position: [0, 0, -4.01000023]
       m_rotation: [0, 0, -17.7787437]
@@ -47,17 +48,19 @@ Entities:
       m_density: 1
       m_friction: 0.600000024
       m_restitution: 0.100000001
-
-  - entity_id: 1
-    EntityName:
+  - EntityName:
       m_name: box
+    UUID:
+      m_uuid: 3412126949629609837
     Transform:
-      m_position: [-2.3491478, 7.84819651, -4]
-      m_rotation: [0, 0, -37.8249817]
-      m_scale: [1.0000006, 1.0000006, 1]
+      m_position: [-0.569190562, 6.60945654, -3.99999809]
+      m_rotation: [0, 0, 72.2182007]
+      m_scale: [1.00000072, 1.00000072, 1]
     Sprite:
       m_color: [1, 1, 1, 1]
       m_texture: D:/dev/Journey/resources/assets/textures/ehindy_circle.png
+    MainHero:
+      m_movementSpeed: 5
     RigidBody:
       m_bodyType: 1
       m_angularDamping: 0
@@ -72,16 +75,16 @@ Entities:
       m_density: 1
       m_friction: 0.600000024
       m_restitution: 0.600000024
-
-  - entity_id: 0
-    EntityName:
+  - EntityName:
       m_name: Camera
+    UUID:
+      m_uuid: 1220698529127090451
     Transform:
-      m_position: [2.78794098, 1.70646501, 15.2440996]
+      m_position: [4.51784086, -0.398606539, 15.2440996]
       m_rotation: [3.0592041, -1.8448168, -0.0985769182]
       m_scale: [1, 1, 0.999999762]
     Camera:
-      m_zoom: 15
+      m_zoom: 19
       m_fov: 45
       m_primer: true
       m_fixedAspectRatio: false

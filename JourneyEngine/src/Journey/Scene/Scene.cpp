@@ -184,6 +184,7 @@ Entity Scene::createEntity()
 	Entity e = Entity(this);
 	e.addComponent<TransformComponent>();
 	e.addComponent<EntityNameComponent>();
+	e.addComponent<UuidComponent>();
 	return e;
 }
 
