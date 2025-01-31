@@ -1,75 +1,6 @@
 Scene: gate_example
 Entities:
-  - entity_id: 5
-    EntityName:
-      m_name: bomb
-    UUID:
-      m_uuid: 9915501563840500817
-    Transform:
-      m_position: [-1.08335924, 0.184500664, -7.69999981]
-      m_rotation: [0, 0, 0]
-      m_scale: [0.200000003, 0.200000003, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/bomb.png
-
-  - entity_id: 4
-    EntityName:
-      m_name: game_camera
-    UUID:
-      m_uuid: 18387085105517509215
-    Transform:
-      m_position: [0, 0, 1]
-      m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
-    Camera:
-      m_zoom: 10
-      m_fov: 45
-      m_primer: true
-      m_fixedAspectRatio: false
-      m_perspective: true
-
-  - entity_id: 3
-    EntityName:
-      m_name: checkerboard
-    UUID:
-      m_uuid: 13066714553135309694
-    Transform:
-      m_position: [0, 0, -9.69999981]
-      m_rotation: [0, 0, 0]
-      m_scale: [10, 10, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/checkerboard.png
-
-  - entity_id: 2
-    EntityName:
-      m_name: gate
-    UUID:
-      m_uuid: 13590514715158301382
-    Transform:
-      m_position: [-1.9851501, 0.98652792, -9.39999962]
-      m_rotation: [0, 0, 0]
-      m_scale: [1.20000005, 1.20000005, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/gate.png
-
-  - entity_id: 1
-    EntityName:
-      m_name: main_hero
-    UUID:
-      m_uuid: 2405567702985260367
-    Transform:
-      m_position: [-1.54021907, 0.520490646, -6.9000001]
-      m_rotation: [0, 0, 0]
-      m_scale: [1, 1, 1]
-    Sprite:
-      m_color: [1, 1, 1, 1]
-      m_texture: D:/dev/Journey/resources/assets/textures/gg2.png
-
-  - entity_id: 0
-    EntityName:
+  - EntityName:
       m_name: camera
     UUID:
       m_uuid: 10496771180290050124
@@ -83,3 +14,63 @@ Entities:
       m_primer: true
       m_fixedAspectRatio: false
       m_perspective: true
+  - EntityName:
+      m_name: main_hero
+    UUID:
+      m_uuid: 2405567702985260367
+    Transform:
+      m_position: [-1.54021907, 0.520490646, -6.9000001]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/gg2.png
+    MainHero:
+      m_movementSpeed: 5
+  - EntityName:
+      m_name: gate
+    UUID:
+      m_uuid: 13590514715158301382
+    Transform:
+      m_position: [-1.9851501, 0.98652792, -9.39999962]
+      m_rotation: [0, 0, 0]
+      m_scale: [1.20000005, 1.20000005, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/gate.png
+  - EntityName:
+      m_name: checkerboard
+    UUID:
+      m_uuid: 13066714553135309694
+    Transform:
+      m_position: [0, 0, -9.69999981]
+      m_rotation: [0, 0, 0]
+      m_scale: [10, 10, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/checkerboard.png
+  - EntityName:
+      m_name: game_camera
+    UUID:
+      m_uuid: 18387085105517509215
+    Transform:
+      m_position: [0, 0, 1]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 1]
+    Camera:
+      m_zoom: 10
+      m_fov: 45
+      m_primer: true
+      m_fixedAspectRatio: false
+      m_perspective: true
+  - EntityName:
+      m_name: bomb
+    UUID:
+      m_uuid: 9915501563840500817
+    Transform:
+      m_position: [-1.08335924, 0.184500664, -7.69999981]
+      m_rotation: [0, 0, 0]
+      m_scale: [0.200000003, 0.200000003, 1]
+    Sprite:
+      m_color: [1, 1, 1, 1]
+      m_texture: D:/dev/Journey/resources/assets/textures/bomb.png

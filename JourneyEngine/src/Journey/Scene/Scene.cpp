@@ -226,6 +226,8 @@ Entity Scene::activeCameraEntity()
 
 void Scene::switchToGameMode()
 {
+	copyToSnapshot();
+
 	std::ranges::for_each(m_gameSystems, [](auto& s)
 		{
 			s->attach();
@@ -234,6 +236,8 @@ void Scene::switchToGameMode()
 
 void Scene::switchToEditorMode()
 {
+	restoreFromSnapshot();
+
 	std::ranges::for_each(m_gameSystems, [](auto& s)
 		{
 			s->detach();
@@ -243,6 +247,67 @@ void Scene::switchToEditorMode()
 void Scene::onComponentCreation(CameraComponent& c)
 {
 	c.onViewportResize(m_viewportWidth, m_viewportHeight);
+}
+
+template<typename Comp>
+void copyComponent(Entity& e, entt::registry& registry, entt::entity idToCopy)
+{
+	if (e.hasComponent<Comp>())
+	{
+		registry.emplace<Comp>(idToCopy, e.component<Comp>());
+	}
+}
+
+template<typename Comp>
+void copyComponentFromSnapshot(entt::registry& registry
+	, entt::registry& snapshot
+	, entt::entity idInRegistry
+	, entt::entity idInSnapshot)
+{
+	if (snapshot.all_of<Comp>(idInSnapshot))
+	{
+		registry.emplace<Comp>(idInRegistry, snapshot.get<Comp>(idInSnapshot));
+	}
+}
+
+void Scene::copyToSnapshot()
+{
+	m_registry.view<UuidComponent>().each([&](entt::entity e, UuidComponent& comp)
+		{
+			Entity wrapperE(e, this);
+
+			entt::entity snapshotE = m_snapshot.create();
+			m_snapshot.emplace<UuidComponent>(snapshotE, comp);
+
+			copyComponent<TransformComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<SpriteComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<EntityNameComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<CameraComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<MainHeroComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<RigidBodyComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<BoxColliderComponent>(wrapperE, m_snapshot, snapshotE);
+		});
+}
+
+void Scene::restoreFromSnapshot()
+{
+	m_registry.clear();
+
+	m_snapshot.view<UuidComponent>().each([&](entt::entity snapshotE, UuidComponent& comp)
+		{
+			entt::entity registryE = m_registry.create();
+			m_registry.emplace<UuidComponent>(registryE, comp);
+
+			copyComponentFromSnapshot<TransformComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<SpriteComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<EntityNameComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<CameraComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<MainHeroComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<RigidBodyComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<BoxColliderComponent>(m_registry, m_snapshot, registryE, snapshotE);
+		});
+
+	m_snapshot.clear();
 }
 
 } //-- jny

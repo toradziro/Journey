@@ -10,6 +10,17 @@
 #include <glm/gtc/quaternion.hpp>
 #include <box2d/box2d.h>
 
+/*
+UuidComponent;
+TransformComponent;
+SpriteComponent;
+EntityNameComponent;
+CameraComponent;
+MainHeroComponent;
+RigidBodyComponent;
+BoxColliderComponent;
+*/
+
 namespace jny
 {
 
@@ -136,6 +147,9 @@ struct RigidBodyComponent
 {
 	static inline constexpr const char* C_COMPONENT_NAME = "RigidBody";
 
+	RigidBodyComponent() = default;
+	RigidBodyComponent(const RigidBodyComponent&) = default;
+
 	BodyType	m_bodyType = BodyType::Static;
 
 	f32			m_angularDamping = 0.0f;	//-- Angular damping is use to reduce the angular velocity.
@@ -161,6 +175,9 @@ struct RigidBodyComponent
 struct BoxColliderComponent
 {
 	static inline constexpr const char* C_COMPONENT_NAME = "BoxCollider";
+
+	BoxColliderComponent() = default;
+	BoxColliderComponent(const BoxColliderComponent&) = default;
 
 	float	m_size = 0.5f;
 	float	m_density = 1.0f;

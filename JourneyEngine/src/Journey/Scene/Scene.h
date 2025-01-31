@@ -54,12 +54,15 @@ private:
 	void onComponentCreation(T& c) {}
 
 	void onComponentCreation(CameraComponent& c);
+	void copyToSnapshot();
+	void restoreFromSnapshot();
 
 private:
 	friend class Entity;
 	friend class SceneSerializer;
 	//-- Scene entities and components storage
 	entt::registry				m_registry;
+	entt::registry				m_snapshot;
 
 	std::string					m_sceneName = "Untitled";
 
