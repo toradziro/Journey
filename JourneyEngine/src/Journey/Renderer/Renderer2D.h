@@ -105,6 +105,7 @@ private:
 		glm::vec4	m_color = {};
 		f32			m_radius = 0.0f;
 		f32			m_thikness = 0.0f;
+		glm::vec2	m_localPos = {};
 		i32			m_entityId = -1;
 	};
 

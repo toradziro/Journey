@@ -60,11 +60,12 @@ void Renderer2D::init()
 			{ buff_utils::ShaderDataType::Float4, "a_color" },
 			{ buff_utils::ShaderDataType::Float, "a_radius" },
 			{ buff_utils::ShaderDataType::Float, "a_thikness" },
+			{ buff_utils::ShaderDataType::Float2, "a_localPos" },
 			{ buff_utils::ShaderDataType::Int, "a_entityId" }
 		};
 		BufferLayout layout = BufferLayout(std::move(layoutData));
 		m_circleVertexBuffer->setLayout(layout);
-		m_circleVertexArray->addVertexBuffer(m_quadVertexBuffer);
+		m_circleVertexArray->addVertexBuffer(m_circleVertexBuffer);
 
 		m_circleVertexBase = new CircleVertex[C_MAX_VERTICES];
 	}
@@ -126,12 +127,10 @@ void Renderer2D::beginScene(const EditorCamera& camera)
 {
 	PROFILE_FUNC;
 
-	m_quadVertexArray->bind();
-
-	m_quadShader->bind();
-	m_quadShader->uploadUniformMat4(camera.VPMatrix(), "u_vpMatrix");
+	m_currentFrameViewProjection = camera.VPMatrix();
 
 	m_quadVertexPtr = m_quadVertexBase;
+	m_circleVertexPtr = m_circleVertexBase;
 	m_currQuadBatchIndex = 0;
 	m_currCircleBatchIndex = 0;
 	m_currTextureSlot = 1;
@@ -277,6 +276,7 @@ void Renderer2D::drawCircle(const CircleCfg& cfg)
 			m_circleVertexPtr->m_radius = cfg.m_radius;
 			m_circleVertexPtr->m_thikness = cfg.m_thikness;
 			m_circleVertexPtr->m_position = cfg.m_transform * pos;
+			m_circleVertexPtr->m_localPos = pos * 2.0f;
 			m_circleVertexPtr->m_entityId = cfg.m_entityId;
 			m_circleVertexPtr++;
 			++idx;

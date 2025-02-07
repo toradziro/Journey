@@ -12,6 +12,11 @@ namespace
 
 constexpr glm::vec3 C_WORLD_UP = { 0.0f, 1.0f, 0.0f };
 
+bool isEqual(f32 a, f32 b, float epsilon = 1e-6f)
+{
+	return std::abs(a - b) < epsilon;
+}
+
 }
 
 namespace jny
@@ -122,6 +127,10 @@ const glm::mat4 EditorCamera::projMatrix() const
 
 void EditorCamera::rotate(f32 deltaX, f32 deltaY)
 {
+	if (isEqual(deltaX, 0.0f) && isEqual(deltaY, 0.0f))
+	{
+		return;
+	}
 	m_yaw += deltaX * m_rotationSpeed;
 	m_pitch -= deltaY * m_rotationSpeed;
 
