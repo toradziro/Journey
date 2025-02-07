@@ -78,6 +78,7 @@ void Scene::fillQuadsDrawList()
 		}
 		quad.m_transform = transform.transform();
 		quad.m_zDepth = transform.m_position.z;
+		quad.m_entityId = static_cast<i32>(e);
 
 		m_quadsDrawList.push_back(quad);
 	}
@@ -104,6 +105,7 @@ void Scene::fillCirclesDrawList()
 		circleCfg.m_thikness = circleComponent.m_edgeThikness;
 		circleCfg.m_transform = transform.transform();
 		circleCfg.m_zDepth = transform.m_position.z;
+		circleCfg.m_entityId = static_cast<i32>(e);
 
 		m_circleDrawList.push_back(circleCfg);
 	}
