@@ -7,10 +7,10 @@
 namespace jny
 {
 
-VertexArray* VertexArray::create()
+s_ptr<VertexArray> VertexArray::create()
 {
 	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
-	VertexArray* buffer = nullptr;
+	s_ptr<VertexArray> buffer = nullptr;
 
 	switch (rendererApi)
 	{
@@ -18,7 +18,7 @@ VertexArray* VertexArray::create()
 		JNY_ASSERT(true, "Can't be None");
 		break;
 	case RendererAPI::API::OpenGL:
-		buffer = new OpenGLVertexArray();
+		buffer = std::make_shared<OpenGLVertexArray>();
 		break;
 	default:
 		break;

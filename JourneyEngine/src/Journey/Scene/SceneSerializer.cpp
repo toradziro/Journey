@@ -155,6 +155,20 @@ void SceneSerializer::serializeEntity(YAML::Emitter& sFile, Entity e)
 
 		sFile << EndMap;
 	}
+
+	if (e.hasComponent<CircleComponent>())
+	{
+		auto& c = e.component<CircleComponent>();
+
+		sFile << Key << c.C_COMPONENT_NAME;
+		sFile << BeginMap;
+
+		sFile << Key << "m_color" << Value << c.m_color;
+		sFile << Key << "m_edgeThikness" << Value << c.m_edgeThikness;
+		sFile << Key << "m_radius" << Value << c.m_radius;
+
+		sFile << EndMap;
+	}
 }
 
 void SceneSerializer::deserialize(const std::string& filename)
@@ -280,6 +294,23 @@ void SceneSerializer::deserialize(const std::string& filename)
 				if (auto restitution = bcc["m_restitution"]; restitution)
 				{
 					realBcc.m_restitution = restitution.as<f32>();
+				}
+			}
+
+			if (auto cc = eSpecs[CircleComponent::C_COMPONENT_NAME]; cc)
+			{
+				auto& realCc = createdE.addComponent<CircleComponent>();
+				if (auto color = cc["m_color"]; color)
+				{
+					realCc.m_color = color.as<glm::vec4>();
+				}
+				if (auto edgeThikness = cc["m_edgeThikness"]; edgeThikness)
+				{
+					realCc.m_edgeThikness = edgeThikness.as<f32>();
+				}
+				if (auto radius = cc["m_radius"]; radius)
+				{
+					realCc.m_radius = radius.as<f32>();
 				}
 			}
 		}

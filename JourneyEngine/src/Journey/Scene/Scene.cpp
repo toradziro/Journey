@@ -59,6 +59,61 @@ Scene::~Scene()
 	m_registry.destroy(view.begin(), view.end());
 }
 
+void Scene::fillQuadsDrawList()
+{
+	auto group = m_registry.group<SpriteComponent>(entt::get<TransformComponent>);
+	m_quadsDrawList.clear();
+	m_quadsDrawList.reserve(group.size());
+	for (auto& e : group)
+	{
+		auto& transform = group.get<TransformComponent>(e);
+		auto& sprite = group.get<SpriteComponent>(e);
+
+		QuadCfg quad;
+		quad.m_color = sprite.m_color;
+		if (sprite.m_texture)
+		{
+			quad.m_textureOpt = TextureOpt::Textured;
+			quad.m_texture = sprite.m_texture;
+		}
+		quad.m_transform = transform.transform();
+		quad.m_zDepth = transform.m_position.z;
+
+		m_quadsDrawList.push_back(quad);
+	}
+
+	std::ranges::sort(m_quadsDrawList, [](const auto& quad1, const auto& quad2)
+		{
+			return quad1.m_zDepth < quad2.m_zDepth;
+		});
+}
+
+void Scene::fillCirclesDrawList()
+{
+	auto group = m_registry.group<CircleComponent>(entt::get<TransformComponent>);
+	m_circleDrawList.clear();
+	m_circleDrawList.reserve(group.size());
+	for (auto& e : group)
+	{
+		auto& transform = group.get<TransformComponent>(e);
+		auto& circleComponent = group.get<CircleComponent>(e);
+
+		CircleCfg circleCfg;
+		circleCfg.m_color = circleComponent.m_color;
+		circleCfg.m_radius = circleComponent.m_radius;
+		circleCfg.m_thikness = circleComponent.m_edgeThikness;
+		circleCfg.m_transform = transform.transform();
+		circleCfg.m_zDepth = transform.m_position.z;
+
+		m_circleDrawList.push_back(circleCfg);
+	}
+
+	std::ranges::sort(m_circleDrawList, [](const auto& c1, const auto& c2)
+		{
+			return c1.m_zDepth < c2.m_zDepth;
+		});
+}
+
 void Scene::update(f32 dt)
 {
 	CameraComponent* mainCamera = nullptr;
@@ -91,35 +146,16 @@ void Scene::update(f32 dt)
 		auto& renderer2D = Application::subsystems().st<Renderer2D>();
 		renderer2D.beginScene(*mainCamera, mainCameraTransform);
 
-		auto group = m_registry.group<SpriteComponent>(entt::get<TransformComponent>);
-		std::vector<QuadCfg> drawList;
-		drawList.reserve(group.size());
-		for (auto& e : group)
-		{
-			auto& transform = group.get<TransformComponent>(e);
-			auto& sprite = group.get<SpriteComponent>(e);
+		fillQuadsDrawList();
+		fillCirclesDrawList();
 
-			QuadCfg quad;
-			quad.m_color = sprite.m_color;
-			if (sprite.m_texture)
-			{
-				quad.m_textureOpt = TextureOpt::Textured;
-				quad.m_texture = sprite.m_texture;
-			}
-			quad.m_transform = transform.transform();
-			quad.m_zDepth = transform.m_position.z;
-
-			drawList.push_back(quad);
-		}
-
-		std::ranges::sort(drawList, [](const auto& quad1, const auto& quad2)
-			{
-				return quad1.m_zDepth < quad2.m_zDepth;
-			});
-
-		for (auto& quad : drawList)
+		for (auto& quad : m_quadsDrawList)
 		{
 			renderer2D.drawQuad(quad);
+		}
+		for (auto& circle : m_circleDrawList)
+		{
+			renderer2D.drawCircle(circle);
 		}
 		renderer2D.endScene();
 	}
@@ -130,36 +166,16 @@ void Scene::editorModeUpdate(f32 dt, const EditorCamera& camera)
 	auto& renderer2D = Application::subsystems().st<Renderer2D>();
 	renderer2D.beginScene(camera);
 
-	auto group = m_registry.group<SpriteComponent>(entt::get<TransformComponent>);
-	std::vector<QuadCfg> drawList;
-	drawList.reserve(group.size());
-	for (auto& e : group)
-	{
-		auto& transform = group.get<TransformComponent>(e);
-		auto& sprite = group.get<SpriteComponent>(e);
+	fillQuadsDrawList();
+	fillCirclesDrawList();
 
-		QuadCfg quad;
-		quad.m_entityId = static_cast<i32>(e);
-		quad.m_color = sprite.m_color;
-		if (sprite.m_texture)
-		{
-			quad.m_textureOpt = TextureOpt::Textured;
-			quad.m_texture = sprite.m_texture;
-		}
-		quad.m_transform = transform.transform();
-		quad.m_zDepth = transform.m_position.z;
-
-		drawList.push_back(quad);
-	}
-
-	std::ranges::sort(drawList, [](const auto& quad1, const auto& quad2)
-		{
-			return quad1.m_zDepth < quad2.m_zDepth;
-		});
-
-	for (auto& quad : drawList)
+	for (auto& quad : m_quadsDrawList)
 	{
 		renderer2D.drawQuad(quad);
+	}
+	for (auto& circle : m_circleDrawList)
+	{
+		renderer2D.drawCircle(circle);
 	}
 	renderer2D.endScene();
 }
@@ -286,6 +302,7 @@ void Scene::copyToSnapshot()
 			copyComponent<MainHeroComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<RigidBodyComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<BoxColliderComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<CircleComponent>(wrapperE, m_snapshot, snapshotE);
 		});
 }
 
@@ -305,6 +322,7 @@ void Scene::restoreFromSnapshot()
 			copyComponentFromSnapshot<MainHeroComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<RigidBodyComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<BoxColliderComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<CircleComponent>(m_registry, m_snapshot, registryE, snapshotE);
 		});
 
 	m_snapshot.clear();

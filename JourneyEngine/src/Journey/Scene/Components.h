@@ -19,6 +19,7 @@ CameraComponent;
 MainHeroComponent;
 RigidBodyComponent;
 BoxColliderComponent;
+CircleComponent
 */
 
 namespace jny
@@ -73,6 +74,18 @@ struct SpriteComponent
 
 	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	s_ptr<Texture2D>	m_texture = nullptr;
+};
+
+struct CircleComponent
+{
+	static inline constexpr const char* C_COMPONENT_NAME = "Circle";
+
+	CircleComponent() = default;
+	CircleComponent(const CircleComponent&) = default;
+
+	glm::vec4	m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	f32			m_radius = 0.5f;
+	f32			m_edgeThikness = 1.0f;
 };
 
 struct EntityNameComponent

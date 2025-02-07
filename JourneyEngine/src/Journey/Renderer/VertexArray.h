@@ -19,7 +19,7 @@ public:
 	virtual const std::vector<s_ptr<VertexBuffer>>& vertexBuffers() const = 0;
 	virtual const s_ptr<IndexBuffer>& indexBuffer() const = 0;
 
-	static VertexArray* create();
+	static s_ptr<VertexArray> create();
 };
 
 } //-- jny

@@ -164,14 +164,14 @@ void registerComponents()
 	//-- Main hero example
 	entt::meta<MainHeroComponent>()
 		.type(entt::hashed_string(MainHeroComponent::C_COMPONENT_NAME))
-		.prop(C_PROP_NAME_HS, "Main hero")
+		.prop(C_PROP_NAME_HS, "Main Hero")
 		.prop(C_PROP_REMOVABLE)
 		.data<&MainHeroComponent::m_movementSpeed>(entt::hashed_string("moveSpeed")).prop(C_PROP_NAME_HS, "Move Speed");
 
 	//-- Physic come here
 	entt::meta<RigidBodyComponent>()
 		.type(entt::hashed_string(RigidBodyComponent::C_COMPONENT_NAME))
-		.prop(C_PROP_NAME_HS, "Rigid body")
+		.prop(C_PROP_NAME_HS, "Rigid Body")
 		.prop(C_PROP_REMOVABLE)
 		.data<&RigidBodyComponent::m_bodyType>(entt::hashed_string("m_bodyType")).prop(C_PROP_NAME_HS, "Body Type")
 			.prop(C_CASTOM_UI_DRAW,
@@ -196,7 +196,7 @@ void registerComponents()
 
 	entt::meta<BoxColliderComponent>()
 		.type(entt::hashed_string(BoxColliderComponent::C_COMPONENT_NAME))
-		.prop(C_PROP_NAME_HS, "Rigid body")
+		.prop(C_PROP_NAME_HS, "Box Collider")
 		.prop(C_PROP_REMOVABLE)
 		.data<&BoxColliderComponent::m_size>(entt::hashed_string("m_size")).prop(C_PROP_NAME_HS, "Size")
 		.data<&BoxColliderComponent::m_density>(entt::hashed_string("m_density")).prop(C_PROP_NAME_HS, "Density")
@@ -208,12 +208,21 @@ void registerComponents()
 		.type(entt::hashed_string(UuidComponent::C_COMPONENT_NAME))
 		.prop(C_PROP_NAME_HS, "UUID")
 		.prop(C_PROP_REMOVABLE)
-		.data<&UuidComponent::m_uuid>(entt::hashed_string("m_uuid")).prop(C_PROP_NAME_HS, "Body Type")
+		.data<&UuidComponent::m_uuid>(entt::hashed_string("m_uuid")).prop(C_PROP_NAME_HS, "UUID")
 		.prop(C_CASTOM_UI_DRAW,
 			std::function<void(UuidComponent&, entt::entity)>([](UuidComponent& component, entt::entity e)
 			{
 				ImGui::Text("%llu", (u64)component.m_uuid);
 			}));
+
+	// UuidComponent
+	entt::meta<CircleComponent>()
+		.type(entt::hashed_string(CircleComponent::C_COMPONENT_NAME))
+		.prop(C_PROP_NAME_HS, "Circle")
+		.prop(C_PROP_REMOVABLE)
+		.data<&CircleComponent::m_radius>(entt::hashed_string("m_radius")).prop(C_PROP_NAME_HS, "Radius")
+		.data<&CircleComponent::m_color>(entt::hashed_string("m_color")).prop(C_PROP_NAME_HS, "Color")
+		.data<&CircleComponent::m_edgeThikness>(entt::hashed_string("m_edgeThikness")).prop(C_PROP_NAME_HS, "Edge Thikness");
 }
 
 } //-- jny

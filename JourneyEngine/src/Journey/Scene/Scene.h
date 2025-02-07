@@ -17,6 +17,8 @@ struct CameraComponent;
 struct MainHeroComponent;
 struct RigidBodyComponent;
 struct BoxColliderComponent;
+struct QuadCfg;
+struct CircleCfg;
 
 class Scene
 {
@@ -56,6 +58,8 @@ private:
 	void onComponentCreation(CameraComponent& c);
 	void copyToSnapshot();
 	void restoreFromSnapshot();
+	void fillQuadsDrawList();
+	void fillCirclesDrawList();
 
 private:
 	friend class Entity;
@@ -67,6 +71,8 @@ private:
 	std::string					m_sceneName = "Untitled";
 
 	std::vector<u_ptr<System>>	m_gameSystems;
+	std::vector<QuadCfg>		m_quadsDrawList;
+	std::vector<CircleCfg>		m_circleDrawList;
 
 	u32							m_viewportWidth = 1;
 	u32							m_viewportHeight = 1;

@@ -44,6 +44,18 @@ struct QuadCfg
 	RotateOpt		m_rotateOpt = RotateOpt::AlignedByAxices;
 };
 
+struct CircleCfg
+{
+	glm::mat4		m_transform = { 1.0f };
+
+	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	f32				m_zDepth = 0.0f;
+	i32				m_entityId = -1;
+
+	f32				m_radius = 0.0f;
+	f32				m_thikness = 0.0f;
+};
+
 class Renderer2D : public ISingleton
 {
 	JNY_SINGLETON_TYPE(Renderer2D)
@@ -53,26 +65,28 @@ public:
 	constexpr static	u32 C_VERTICES_IN_QUAD = 4;
 	constexpr static	u32 C_INDICES_IN_QUAD = 6;
 
-	void init();
-	void shutdown();
+	void			init();
+	void			shutdown();
 
-	void beginScene(const EditorCamera& camera);
-	void beginScene(const CameraComponent& camera, const glm::mat4& transform);
-	void endScene();
+	void			beginScene(const EditorCamera& camera);
+	void			beginScene(const CameraComponent& camera, const glm::mat4& transform);
+	void			endScene();
 
-	void flush();
+	void			flushQuads();
+	void			flushCircles();
 
 	//-- Primitives
-	void drawQuad(const QuadCfg& cfg);
+	void			drawQuad(const QuadCfg& cfg);
+	void			drawCircle(const CircleCfg& cfg);
 	
 	//-- Statistics
-	void resetStatistics() { m_frameStat = {}; }
-	const auto& stats() const { return m_frameStat; }
+	void			resetStatistics() { m_frameStat = {}; }
+	const auto&		stats() const { return m_frameStat; }
 
-	void windowResized(u32 width, u32 height);
+	void			windowResized(u32 width, u32 height);
 
 private:
-	void startNextBatch();
+	void			startNextBatch();
 
 private:
 	struct QuadVertex
@@ -82,6 +96,15 @@ private:
 		glm::vec2	m_textureCoordinate = {};
 		f32			m_textureIndex = 0.0f;
 		f32			m_tilingFactor = 0.0f;
+		i32			m_entityId = -1;
+	};
+
+	struct CircleVertex
+	{
+		glm::vec3	m_position = {};
+		glm::vec4	m_color = {};
+		f32			m_radius = 0.0f;
+		f32			m_thikness = 0.0f;
 		i32			m_entityId = -1;
 	};
 
@@ -98,17 +121,26 @@ private:
 	//-- Need to apply transformation matrix to
 	glm::vec4										m_quadVertexPosition[C_VERTICES_IN_QUAD];
 
+	glm::mat4										m_currentFrameViewProjection = { 1.0f };
+
 	Statistic										m_frameStat;
 
 	s_ptr<VertexArray>								m_quadVertexArray;
+	s_ptr<VertexArray>								m_circleVertexArray;
 	s_ptr<VertexBuffer>								m_quadVertexBuffer;
-	s_ptr<Shader>									m_textureShader;
+	s_ptr<VertexBuffer>								m_circleVertexBuffer;
+	s_ptr<Shader>									m_quadShader;
+	s_ptr<Shader>									m_circleShader;
 	s_ptr<Texture2D>								m_whiteTexture;
 
 	QuadVertex*										m_quadVertexBase = nullptr;
 	QuadVertex*										m_quadVertexPtr = nullptr;
 
-	u32												m_currQuadIndex = 0;
+	CircleVertex*									m_circleVertexBase = nullptr;
+	CircleVertex*									m_circleVertexPtr = nullptr;
+
+	u32												m_currQuadBatchIndex = 0;
+	u32												m_currCircleBatchIndex = 0;
 	u32												m_currTextureSlot = 1; //-- 0 is for white texture
 };
 

@@ -65,10 +65,10 @@ u32 componentsCount(buff_utils::ShaderDataType type)
 
 }
 
-VertexBuffer* VertexBuffer::create(float* vertices, u32 count)
+s_ptr<VertexBuffer> VertexBuffer::create(float* vertices, u32 count)
 {
 	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
-	VertexBuffer* buffer = nullptr;
+	s_ptr<VertexBuffer> buffer = nullptr;
 
 	switch (rendererApi)
 	{
@@ -76,7 +76,7 @@ VertexBuffer* VertexBuffer::create(float* vertices, u32 count)
 			JNY_ASSERT(true, "Can't be none");
 			break;
 		case RendererAPI::API::OpenGL:
-			buffer = new OpenGLVertexBuffer(vertices, count);
+			buffer = std::make_shared<OpenGLVertexBuffer>(vertices, count);
 			break;
 		default:
 			JNY_ASSERT(true, "Can't be none");
@@ -86,10 +86,10 @@ VertexBuffer* VertexBuffer::create(float* vertices, u32 count)
 	return buffer;
 }
 
-jny::VertexBuffer* VertexBuffer::create(u32 size)
+s_ptr<VertexBuffer> VertexBuffer::create(u32 size)
 {
 	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
-	VertexBuffer* buffer = nullptr;
+	s_ptr<VertexBuffer> buffer = nullptr;
 
 	switch (rendererApi)
 	{
@@ -97,7 +97,7 @@ jny::VertexBuffer* VertexBuffer::create(u32 size)
 		JNY_ASSERT(true, "Can't be none");
 		break;
 	case RendererAPI::API::OpenGL:
-		buffer = new OpenGLVertexBuffer(size);
+		buffer = std::make_shared<OpenGLVertexBuffer>(size);
 		break;
 	default:
 		JNY_ASSERT(true, "Can't be none");
@@ -107,10 +107,10 @@ jny::VertexBuffer* VertexBuffer::create(u32 size)
 	return buffer;
 }
 
-IndexBuffer* IndexBuffer::create(u32* indices, u32 count)
+s_ptr<IndexBuffer> IndexBuffer::create(u32* indices, u32 count)
 {
 	auto rendererApi = Application::subsystems().st<RenderCommand>().api();
-	IndexBuffer* buffer = nullptr;
+	s_ptr<IndexBuffer> buffer = nullptr;
 
 	switch (rendererApi)
 	{
@@ -118,7 +118,7 @@ IndexBuffer* IndexBuffer::create(u32* indices, u32 count)
 			JNY_ASSERT(true, "Can't be none");
 			break;
 		case RendererAPI::API::OpenGL:
-			buffer = new OpenGLIndexBuffer(indices, count);
+			buffer = std::make_shared<OpenGLIndexBuffer>(indices, count);
 			break;
 		default:
 			JNY_ASSERT(true, "Can't be none");

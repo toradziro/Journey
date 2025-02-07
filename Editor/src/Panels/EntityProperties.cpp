@@ -272,6 +272,7 @@ void drawComponents(Entity& innerEntity, s_ptr<Scene> m_scene)
 	drawComponent<MainHeroComponent>(m_scene->registry(), innerEntity);
 	drawComponent<RigidBodyComponent>(m_scene->registry(), innerEntity);
 	drawComponent<BoxColliderComponent>(m_scene->registry(), innerEntity);
+	drawComponent<CircleComponent>(m_scene->registry(), innerEntity);
 }
 
 EntityProperties::EntityProperties(const s_ptr<EditorContext>& ctx) :
@@ -318,6 +319,10 @@ void EntityProperties::updateUI()
 				else if (!selectedEntity.hasComponent<BoxColliderComponent>() && ImGui::Selectable("Box Collider"))
 				{
 					selectedEntity.addComponent<BoxColliderComponent>();
+				}
+				else if (!selectedEntity.hasComponent<CircleComponent>() && ImGui::Selectable("Circle Component"))
+				{
+					selectedEntity.addComponent<CircleComponent>();
 				}
 				ImGui::EndPopup();
 			}

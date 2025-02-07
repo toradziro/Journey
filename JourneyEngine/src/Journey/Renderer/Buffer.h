@@ -112,8 +112,8 @@ public:
 	virtual void setLayout(const BufferLayout& layout) = 0;
 	virtual const BufferLayout& layout() const = 0;
 
-	static VertexBuffer* create(u32 count);
-	static VertexBuffer* create(float* vertices, u32 count);
+	static s_ptr<VertexBuffer> create(u32 count);
+	static s_ptr<VertexBuffer> create(float* vertices, u32 count);
 };
 
 class IndexBuffer
@@ -126,7 +126,7 @@ public:
 
 	virtual u32 count() const = 0;
 
-	static IndexBuffer* create(u32* indices, u32 count);
+	static s_ptr<IndexBuffer> create(u32* indices, u32 count);
 };
 
 } //-- jny
