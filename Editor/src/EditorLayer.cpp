@@ -117,7 +117,8 @@ void EditorLayer::update(f32 dt)
 		mouseFrameX <= static_cast<int>(m_viewportSize.x) &&
 		mouseFrameY <= static_cast<int>(m_viewportSize.y) &&
 		ImGui::IsMouseClicked(ImGuiMouseButton_Left) &&
-		!ImGuizmo::IsOver() && !ImGuizmo::IsUsing())
+		!ImGuizmo::IsOver() && !ImGuizmo::IsUsing() &&
+		m_sceneMode == SceneMode::Editor)
 	{
 		int entityId = m_framebuffer->readbackPixel(m_frambufferPickingIndex, mouseFrameX, mouseFrameY);
 		if (entityId == -1)
@@ -550,6 +551,7 @@ void EditorLayer::switchToGameMode()
 	if (m_context->m_currentScene)
 	{
 		m_context->m_currentScene->switchToGameMode();
+		m_context->m_selectedEntity = {};
 		m_sceneMode = SceneMode::Game;
 	}
 }

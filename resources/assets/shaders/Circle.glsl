@@ -58,9 +58,9 @@ void main()
 				 smoothstep(innerEdge, innerEdge - 0.01, dist);
 
 	entityId = v_entityId;
-	if (mask <= 0.0)
-		discard;
-
-	color = vec4(v_color.rgb, v_color.a * mask);
 	colorDepth = vec4(gl_FragCoord.z, gl_FragCoord.z, gl_FragCoord.z, 1.0);
+	if (mask > 0.0)
+	{
+		color = vec4(v_color.rgb, v_color.a * mask);
+	}
 }
