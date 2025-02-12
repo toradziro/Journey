@@ -87,6 +87,8 @@ public:
 
 private:
 	void			startNextBatch();
+	void			prepareQuadsDrawer();
+	void			prepareCircleDrawer();
 
 private:
 	struct QuadVertex

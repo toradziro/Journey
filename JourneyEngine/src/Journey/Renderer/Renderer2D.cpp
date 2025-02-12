@@ -16,65 +16,12 @@ constexpr	u32 C_MAX_VERTICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Re
 constexpr	u32 C_MAX_INDICES = jny::Renderer2D::C_MAX_QUADS_IN_A_BATCH * jny::Renderer2D::C_INDICES_IN_QUAD;
 constexpr	u32 C_INVALID_INDEX = std::numeric_limits<u32>::max();
 
-} //-- unnamed
-
-namespace jny
+u32* generateIndices()
 {
-
-void Renderer2D::init()
-{
-	PROFILE_FUNC;
-
-	//-- prepareQuadsDrawer();
-	//-- prepareCircleDrawer();
-
-	Application::subsystems().st<RenderCommand>().init();
-
-	//-- Vertex array
-	m_quadVertexArray = VertexArray::create();
-	m_circleVertexArray = VertexArray::create();
-
-	//-- Vertex buffer
-	m_quadVertexBuffer = VertexBuffer::create(C_MAX_VERTICES * sizeof(QuadVertex));
-	m_circleVertexBuffer = VertexBuffer::create(C_MAX_VERTICES * sizeof(CircleVertex));
-	
-	{
-		//-- Setting up vertex attribute array (layout for providing data splitting in shader)
-		BufferLayout::LayoutData layoutData = {
-			{ buff_utils::ShaderDataType::Float3, "a_position" },
-			{ buff_utils::ShaderDataType::Float4, "a_color" },
-			{ buff_utils::ShaderDataType::Float2, "a_texturePos" },
-			{ buff_utils::ShaderDataType::Float, "a_textureIndex" },
-			{ buff_utils::ShaderDataType::Float, "a_tilingFactor" },
-			{ buff_utils::ShaderDataType::Int, "a_entityId" }
-		};
-		BufferLayout layout = BufferLayout(std::move(layoutData));
-		m_quadVertexBuffer->setLayout(layout);
-		m_quadVertexArray->addVertexBuffer(m_quadVertexBuffer);
-
-		m_quadVertexBase = new QuadVertex[C_MAX_VERTICES];
-	}
-	{
-		BufferLayout::LayoutData layoutData = {
-			{ buff_utils::ShaderDataType::Float3, "a_position" },
-			{ buff_utils::ShaderDataType::Float4, "a_color" },
-			{ buff_utils::ShaderDataType::Float, "a_radius" },
-			{ buff_utils::ShaderDataType::Float, "a_thikness" },
-			{ buff_utils::ShaderDataType::Float2, "a_localPos" },
-			{ buff_utils::ShaderDataType::Int, "a_entityId" }
-		};
-		BufferLayout layout = BufferLayout(std::move(layoutData));
-		m_circleVertexBuffer->setLayout(layout);
-		m_circleVertexArray->addVertexBuffer(m_circleVertexBuffer);
-
-		m_circleVertexBase = new CircleVertex[C_MAX_VERTICES];
-	}
-
-	//-- Indices & Index buffer
 	u32* indices = new u32[C_MAX_INDICES];
 
 	u32 offset = 0;
-	for (u32 i = 0; i < C_MAX_INDICES - 5; i += C_INDICES_IN_QUAD)
+	for (u32 i = 0; i < C_MAX_INDICES - 5; i += jny::Renderer2D::C_INDICES_IN_QUAD)
 	{
 		indices[i] = offset;
 		indices[i + 1] = offset + 1;
@@ -84,12 +31,44 @@ void Renderer2D::init()
 		indices[i + 4] = offset + 3;
 		indices[i + 5] = offset;
 
-		offset += C_VERTICES_IN_QUAD;
+		offset += jny::Renderer2D::C_VERTICES_IN_QUAD;
 	}
+	return indices;
+}
+
+} //-- unnamed
+
+namespace jny
+{
+
+void Renderer2D::prepareQuadsDrawer()
+{
+	//-- Vertex array
+	m_quadVertexArray = VertexArray::create();
+
+	//-- Vertex buffer
+	m_quadVertexBuffer = VertexBuffer::create(C_MAX_VERTICES * sizeof(QuadVertex));
+
+	//-- Setting up vertex attribute array (layout for providing data splitting in shader)
+	BufferLayout::LayoutData layoutData = {
+		{ buff_utils::ShaderDataType::Float3, "a_position" },
+		{ buff_utils::ShaderDataType::Float4, "a_color" },
+		{ buff_utils::ShaderDataType::Float2, "a_texturePos" },
+		{ buff_utils::ShaderDataType::Float, "a_textureIndex" },
+		{ buff_utils::ShaderDataType::Float, "a_tilingFactor" },
+		{ buff_utils::ShaderDataType::Int, "a_entityId" }
+	};
+	BufferLayout layout = BufferLayout(std::move(layoutData));
+	m_quadVertexBuffer->setLayout(layout);
+	m_quadVertexArray->addVertexBuffer(m_quadVertexBuffer);
+
+	m_quadVertexBase = new QuadVertex[C_MAX_VERTICES];
+
+	//-- Indices & Index buffer
+	u32* indices = generateIndices();
 
 	s_ptr<IndexBuffer> indexBuffer = s_ptr<IndexBuffer>(IndexBuffer::create(indices, C_MAX_INDICES));
 	m_quadVertexArray->setIndexBuffer(indexBuffer);
-	m_circleVertexArray->setIndexBuffer(indexBuffer);
 	delete[] indices;
 
 	auto& shaderLib = Application::subsystems().st<ShaderLibrary>();
@@ -113,8 +92,49 @@ void Renderer2D::init()
 	m_quadVertexPosition[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
 	m_quadVertexPosition[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
 	m_quadVertexPosition[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
+}
 
+void Renderer2D::prepareCircleDrawer()
+{
+	//-- Vertex array
+	m_circleVertexArray = VertexArray::create();
+
+	//-- Vertex buffer
+	m_circleVertexBuffer = VertexBuffer::create(C_MAX_VERTICES * sizeof(CircleVertex));
+
+	BufferLayout::LayoutData layoutData = {
+		{ buff_utils::ShaderDataType::Float3, "a_position" },
+		{ buff_utils::ShaderDataType::Float4, "a_color" },
+		{ buff_utils::ShaderDataType::Float, "a_radius" },
+		{ buff_utils::ShaderDataType::Float, "a_thikness" },
+		{ buff_utils::ShaderDataType::Float2, "a_localPos" },
+		{ buff_utils::ShaderDataType::Int, "a_entityId" }
+	};
+	BufferLayout layout = BufferLayout(std::move(layoutData));
+	m_circleVertexBuffer->setLayout(layout);
+	m_circleVertexArray->addVertexBuffer(m_circleVertexBuffer);
+
+	m_circleVertexBase = new CircleVertex[C_MAX_VERTICES];
+
+	//-- Indices & Index buffer
+	u32* indices = generateIndices();
+
+	s_ptr<IndexBuffer> indexBuffer = s_ptr<IndexBuffer>(IndexBuffer::create(indices, C_MAX_INDICES));
+	m_circleVertexArray->setIndexBuffer(indexBuffer);
+	delete[] indices;
+
+	auto& shaderLib = Application::subsystems().st<ShaderLibrary>();
 	m_circleShader = shaderLib.load("assets/shaders/Circle.glsl");
+}
+
+void Renderer2D::init()
+{
+	PROFILE_FUNC;
+
+	Application::subsystems().st<RenderCommand>().init();
+
+	prepareQuadsDrawer();
+	prepareCircleDrawer();
 }
 
 void Renderer2D::shutdown()
