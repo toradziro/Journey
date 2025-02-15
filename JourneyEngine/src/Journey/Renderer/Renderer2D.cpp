@@ -127,6 +127,29 @@ void Renderer2D::prepareCircleDrawer()
 	m_circleShader = shaderLib.load("assets/shaders/Circle.glsl");
 }
 
+void Renderer2D::prepareLineDrawer()
+{
+	m_lineVertexArray = VertexArray::create();
+
+	//-- Vertex buffer
+	m_lineVertexBuffer = VertexBuffer::create(C_MAX_VERTICES * sizeof(CircleVertex));
+
+	BufferLayout::LayoutData layoutData = {
+		{ buff_utils::ShaderDataType::Float3, "a_position" },
+		{ buff_utils::ShaderDataType::Float4, "a_color" },
+		{ buff_utils::ShaderDataType::Int, "a_entityId" }
+	};
+
+	BufferLayout layout = BufferLayout(std::move(layoutData));
+	m_lineVertexBuffer->setLayout(layout);
+	m_lineVertexArray->addVertexBuffer(m_lineVertexBuffer);
+
+	m_lineVertexBase = new LineVertex[C_MAX_VERTICES];
+
+	auto& shaderLib = Application::subsystems().st<ShaderLibrary>();
+	m_lineShader = shaderLib.load("assets/shaders/Line.glsl");
+}
+
 void Renderer2D::init()
 {
 	PROFILE_FUNC;
@@ -135,12 +158,14 @@ void Renderer2D::init()
 
 	prepareQuadsDrawer();
 	prepareCircleDrawer();
+	prepareLineDrawer();
 }
 
 void Renderer2D::shutdown()
 {
 	delete[] m_quadVertexBase;
 	delete[] m_circleVertexBase;
+	delete[] m_lineVertexBase;
 }
 
 void Renderer2D::beginScene(const EditorCamera& camera)
@@ -151,6 +176,8 @@ void Renderer2D::beginScene(const EditorCamera& camera)
 
 	m_quadVertexPtr = m_quadVertexBase;
 	m_circleVertexPtr = m_circleVertexBase;
+	m_lineVertexPtr = m_lineVertexBase;
+
 	m_currQuadBatchIndex = 0;
 	m_currCircleBatchIndex = 0;
 	m_currTextureSlot = 1;
@@ -164,6 +191,8 @@ void Renderer2D::beginScene(const CameraComponent& camera, const glm::mat4& tran
 
 	m_quadVertexPtr = m_quadVertexBase;
 	m_circleVertexPtr = m_circleVertexBase;
+	m_lineVertexPtr = m_lineVertexBase;
+
 	m_currQuadBatchIndex = 0;
 	m_currCircleBatchIndex = 0;
 
@@ -176,6 +205,7 @@ void Renderer2D::endScene()
 
 	flushQuads();
 	flushCircles();
+	flushLines();
 }
 
 void Renderer2D::flushQuads()
@@ -216,6 +246,24 @@ void Renderer2D::flushCircles()
 	if (m_currCircleBatchIndex != 0)
 	{
 		Application::subsystems().st<RenderCommand>().drawIndexed(m_circleVertexArray, m_currCircleBatchIndex);
+		m_frameStat.m_drawCalls++;
+	}
+}
+
+void Renderer2D::flushLines()
+{
+	m_lineVertexArray->bind();
+	m_lineShader->bind();
+	m_lineShader->uploadUniformMat4(m_currentFrameViewProjection, "u_vpMatrix");
+
+	u32 dataSize = static_cast<u32>(
+			reinterpret_cast<u8*>(m_lineVertexPtr) - reinterpret_cast<u8*>(m_lineVertexBase)
+		);
+	m_lineVertexBuffer->setData(m_lineVertexBase, dataSize);
+
+	if (m_currLineBatchIndex != 0)
+	{
+		Application::subsystems().st<RenderCommand>().drawLines(m_lineVertexArray, dataSize);
 		m_frameStat.m_drawCalls++;
 	}
 }
@@ -289,7 +337,6 @@ void Renderer2D::drawCircle(const CircleCfg& cfg)
 		startNextBatch();
 	}
 
-	u8 idx = 0;
 	std::ranges::for_each(m_quadVertexPosition, [&](const auto& pos)
 		{
 			m_circleVertexPtr->m_color = cfg.m_color;
@@ -299,12 +346,33 @@ void Renderer2D::drawCircle(const CircleCfg& cfg)
 			m_circleVertexPtr->m_localPos = pos * 2.0f;
 			m_circleVertexPtr->m_entityId = cfg.m_entityId;
 			m_circleVertexPtr++;
-			++idx;
 		});
 
 	m_currCircleBatchIndex += C_INDICES_IN_QUAD;
 
 	m_frameStat.m_quadCount++;
+}
+
+void Renderer2D::drawLine(const LineCfg& cfg)
+{
+	PROFILE_FUNC;
+
+	if (m_currLineBatchIndex >= C_MAX_INDICES)
+	{
+		startNextBatch();
+	}
+
+	m_lineVertexPtr->m_color = cfg.m_color;
+	m_lineVertexPtr->m_position = cfg.m_startPoint;
+	m_lineVertexPtr->m_entityId = cfg.m_entityId;
+	m_lineVertexPtr++;
+
+	m_lineVertexPtr->m_color = cfg.m_color;
+	m_lineVertexPtr->m_position = cfg.m_endPoint;
+	m_lineVertexPtr->m_entityId = cfg.m_entityId;
+	m_lineVertexPtr++;
+
+	m_currLineBatchIndex += 2;
 }
 
 void Renderer2D::startNextBatch()
@@ -313,8 +381,12 @@ void Renderer2D::startNextBatch()
 
 	m_quadVertexPtr = m_quadVertexBase;
 	m_circleVertexPtr = m_circleVertexBase;
+	m_lineVertexPtr = m_lineVertexBase;
+
 	m_currQuadBatchIndex = 0;
 	m_currCircleBatchIndex = 0;
+	m_currLineBatchIndex = 0;
+
 	m_currTextureSlot = 1;
 }
 

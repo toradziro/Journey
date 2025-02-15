@@ -17,6 +17,7 @@ public:
 	virtual void clearRedIntTexture(u32 textureIndex, i32 value) override;
 
 	virtual void drawIndexed(const s_ptr<VertexArray>& vertexArray, u32 count = 0) override;
+	virtual void drawLines(const s_ptr<VertexArray>& vertexArray, u32 count = 0) override;
 };
 
 } //-- jny

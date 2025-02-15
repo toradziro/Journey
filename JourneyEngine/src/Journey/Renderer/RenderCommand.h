@@ -23,6 +23,12 @@ public:
 
 		m_RendererAPI->drawIndexed(vertexArray, size);
 	}
+	void drawLines(const s_ptr<VertexArray>& vertexArray, u32 size = 0)
+	{
+		PROFILE_FUNC;
+
+		m_RendererAPI->drawLines(vertexArray, size);
+	}
 	void setClearColor(const glm::vec4& color)
 	{
 		m_RendererAPI->setClearColor(color);

@@ -42,7 +42,7 @@ void EditorLayer::attach()
 		FrambufferTextureFormat::RGBA8,
 		FrambufferTextureFormat::RED_INTEGER
 	};
-	//-- FrambufferTextureFormat::RED_INTEGER
+
 	m_frambufferPickingIndex = 2;
 	m_framebuffer = Framebuffer::create(std::move(specs));
 	m_context->m_currentScene = std::make_shared<Scene>();

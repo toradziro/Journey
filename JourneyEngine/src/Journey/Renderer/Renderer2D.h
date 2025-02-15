@@ -56,6 +56,15 @@ struct CircleCfg
 	f32				m_thikness = 0.0f;
 };
 
+struct LineCfg
+{
+	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	i32				m_entityId = -1;
+
+	glm::vec3		m_startPoint = {};
+	glm::vec3		m_endPoint = {};
+};
+
 class Renderer2D : public ISingleton
 {
 	JNY_SINGLETON_TYPE(Renderer2D)
@@ -74,10 +83,12 @@ public:
 
 	void			flushQuads();
 	void			flushCircles();
+	void			flushLines();
 
 	//-- Primitives
 	void			drawQuad(const QuadCfg& cfg);
 	void			drawCircle(const CircleCfg& cfg);
+	void			drawLine(const LineCfg& cfg);
 	
 	//-- Statistics
 	void			resetStatistics() { m_frameStat = {}; }
@@ -89,6 +100,7 @@ private:
 	void			startNextBatch();
 	void			prepareQuadsDrawer();
 	void			prepareCircleDrawer();
+	void			prepareLineDrawer();
 
 private:
 	struct QuadVertex
@@ -111,6 +123,13 @@ private:
 		i32			m_entityId = -1;
 	};
 
+	struct LineVertex
+	{
+		glm::vec3	m_position = {};
+		glm::vec4	m_color = {};
+		i32			m_entityId = -1;
+	};
+
 	struct Statistic
 	{
 		u32	m_drawCalls = 0;
@@ -130,10 +149,16 @@ private:
 
 	s_ptr<VertexArray>								m_quadVertexArray;
 	s_ptr<VertexArray>								m_circleVertexArray;
+	s_ptr<VertexArray>								m_lineVertexArray;
+
 	s_ptr<VertexBuffer>								m_quadVertexBuffer;
 	s_ptr<VertexBuffer>								m_circleVertexBuffer;
+	s_ptr<VertexBuffer>								m_lineVertexBuffer;
+
 	s_ptr<Shader>									m_quadShader;
 	s_ptr<Shader>									m_circleShader;
+	s_ptr<Shader>									m_lineShader;
+
 	s_ptr<Texture2D>								m_whiteTexture;
 
 	QuadVertex*										m_quadVertexBase = nullptr;
@@ -142,8 +167,12 @@ private:
 	CircleVertex*									m_circleVertexBase = nullptr;
 	CircleVertex*									m_circleVertexPtr = nullptr;
 
+	LineVertex*										m_lineVertexBase = nullptr;
+	LineVertex*										m_lineVertexPtr = nullptr;
+
 	u32												m_currQuadBatchIndex = 0;
 	u32												m_currCircleBatchIndex = 0;
+	u32												m_currLineBatchIndex = 0;
 	u32												m_currTextureSlot = 1; //-- 0 is for white texture
 };
 

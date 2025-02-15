@@ -48,4 +48,11 @@ void OpenGLRendererAPI::drawIndexed(const s_ptr<VertexArray>& vertexArray, u32 c
 	glDrawElements(GL_TRIANGLES, indiciesCount, GL_UNSIGNED_INT, nullptr);
 }
 
+void OpenGLRendererAPI::drawLines(const s_ptr<VertexArray>& vertexArray, u32 count)
+{
+	vertexArray->bind();
+
+	glDrawArrays(GL_LINES, 0, count);
+}
+
 }
