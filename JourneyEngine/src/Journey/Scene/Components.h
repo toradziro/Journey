@@ -88,6 +88,18 @@ struct CircleComponent
 	f32			m_edgeThikness = 1.0f;
 };
 
+struct LineComponent
+{
+	static inline constexpr const char* C_COMPONENT_NAME = "Line";
+
+	LineComponent() = default;
+	LineComponent(const LineComponent&) = default;
+
+	glm::vec4	m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glm::vec3	m_startPoint = { 0.0f, 0.0f, 0.0f };
+	glm::vec3	m_endPoint = { 1.0f, 1.0f, 0.0f };
+};
+
 struct EntityNameComponent
 {
 	static inline constexpr const char* C_COMPONENT_NAME = "EntityName";

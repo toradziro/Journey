@@ -116,6 +116,52 @@ void Scene::fillCirclesDrawList()
 		});
 }
 
+void Scene::fillLinesDrawList()
+{
+	auto group = m_registry.group<LineComponent>(entt::get<TransformComponent>);
+	m_linesDrawList.clear();
+	m_linesDrawList.reserve(group.size());
+	for (auto& e : group)
+	{
+		auto& transform = group.get<TransformComponent>(e);
+		auto& lineComponent = group.get<LineComponent>(e);
+
+		LineCfg lineCfg;
+		lineCfg.m_color = lineComponent.m_color;
+		lineCfg.m_startPoint = lineComponent.m_startPoint;
+		lineCfg.m_endPoint = lineComponent.m_endPoint;
+
+		lineCfg.m_entityId = static_cast<i32>(e);
+
+		m_linesDrawList.push_back(lineCfg);
+	}
+}
+
+void Scene::fillDrawLists()
+{
+	fillQuadsDrawList();
+	fillCirclesDrawList();
+	fillLinesDrawList();
+}
+
+void Scene::drawAllPrimitives()
+{
+	auto& renderer2D = Application::subsystems().st<Renderer2D>();
+
+	for (auto& quad : m_quadsDrawList)
+	{
+		renderer2D.drawQuad(quad);
+	}
+	for (auto& circle : m_circleDrawList)
+	{
+		renderer2D.drawCircle(circle);
+	}
+	for (auto& line : m_linesDrawList)
+	{
+		renderer2D.drawLine(line);
+	}
+}
+
 void Scene::update(f32 dt)
 {
 	CameraComponent* mainCamera = nullptr;
@@ -148,17 +194,9 @@ void Scene::update(f32 dt)
 		auto& renderer2D = Application::subsystems().st<Renderer2D>();
 		renderer2D.beginScene(*mainCamera, mainCameraTransform);
 
-		fillQuadsDrawList();
-		fillCirclesDrawList();
+		fillDrawLists();
+		drawAllPrimitives();
 
-		for (auto& quad : m_quadsDrawList)
-		{
-			renderer2D.drawQuad(quad);
-		}
-		for (auto& circle : m_circleDrawList)
-		{
-			renderer2D.drawCircle(circle);
-		}
 		renderer2D.endScene();
 	}
 }
@@ -168,17 +206,9 @@ void Scene::editorModeUpdate(f32 dt, const EditorCamera& camera)
 	auto& renderer2D = Application::subsystems().st<Renderer2D>();
 	renderer2D.beginScene(camera);
 
-	fillQuadsDrawList();
-	fillCirclesDrawList();
+	fillDrawLists();
+	drawAllPrimitives();
 
-	for (auto& quad : m_quadsDrawList)
-	{
-		renderer2D.drawQuad(quad);
-	}
-	for (auto& circle : m_circleDrawList)
-	{
-		renderer2D.drawCircle(circle);
-	}
 	renderer2D.endScene();
 }
 
@@ -305,6 +335,7 @@ void Scene::copyToSnapshot()
 			copyComponent<RigidBodyComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<BoxColliderComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<CircleComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<LineComponent>(wrapperE, m_snapshot, snapshotE);
 		});
 }
 
@@ -325,6 +356,7 @@ void Scene::restoreFromSnapshot()
 			copyComponentFromSnapshot<RigidBodyComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<BoxColliderComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<CircleComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<LineComponent>(m_registry, m_snapshot, registryE, snapshotE);
 		});
 
 	m_snapshot.clear();

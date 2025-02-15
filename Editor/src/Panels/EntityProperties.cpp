@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <format>
+
 namespace jny
 {
 
@@ -262,6 +264,16 @@ void drawComponent(entt::registry& registry, Entity& innerEntity)
 	}
 }
 
+template<typename T>
+void drawAddComponent(Entity& selectedE)
+{
+	std::string resName = std::format("{} Component", T::C_COMPONENT_NAME);
+	if (!selectedE.hasComponent<T>() && ImGui::Selectable(resName.c_str()))
+	{
+		selectedE.addComponent<T>();
+	}
+}
+
 void drawComponents(Entity& innerEntity, s_ptr<Scene> m_scene)
 {
 	drawComponent<UuidComponent>(m_scene->registry(), innerEntity);
@@ -273,6 +285,7 @@ void drawComponents(Entity& innerEntity, s_ptr<Scene> m_scene)
 	drawComponent<RigidBodyComponent>(m_scene->registry(), innerEntity);
 	drawComponent<BoxColliderComponent>(m_scene->registry(), innerEntity);
 	drawComponent<CircleComponent>(m_scene->registry(), innerEntity);
+	drawComponent<LineComponent>(m_scene->registry(), innerEntity);
 }
 
 EntityProperties::EntityProperties(const s_ptr<EditorContext>& ctx) :
@@ -300,30 +313,15 @@ void EntityProperties::updateUI()
 			if (ImGui::BeginPopup("##addComponentPopup"))
 			{
 				auto& selectedEntity = ctx()->m_selectedEntity;
-				if (!selectedEntity.hasComponent<SpriteComponent>() && ImGui::Selectable("Sprite Component"))
-				{
-					selectedEntity.addComponent<SpriteComponent>();
-				}
-				else if (!selectedEntity.hasComponent<CameraComponent>() && ImGui::Selectable("Camera Component"))
-				{
-					selectedEntity.addComponent<CameraComponent>();
-				}
-				else if (!selectedEntity.hasComponent<MainHeroComponent>() && ImGui::Selectable("Main Hero Component"))
-				{
-					selectedEntity.addComponent<MainHeroComponent>();
-				}
-				else if (!selectedEntity.hasComponent<RigidBodyComponent>() && ImGui::Selectable("Rigid Body"))
-				{
-					selectedEntity.addComponent<RigidBodyComponent>();
-				}
-				else if (!selectedEntity.hasComponent<BoxColliderComponent>() && ImGui::Selectable("Box Collider"))
-				{
-					selectedEntity.addComponent<BoxColliderComponent>();
-				}
-				else if (!selectedEntity.hasComponent<CircleComponent>() && ImGui::Selectable("Circle Component"))
-				{
-					selectedEntity.addComponent<CircleComponent>();
-				}
+
+				drawAddComponent<SpriteComponent>(selectedEntity);
+				drawAddComponent<CameraComponent>(selectedEntity);
+				drawAddComponent<MainHeroComponent>(selectedEntity);
+				drawAddComponent<RigidBodyComponent>(selectedEntity);
+				drawAddComponent<BoxColliderComponent>(selectedEntity);
+				drawAddComponent<CircleComponent>(selectedEntity);
+				drawAddComponent<LineComponent>(selectedEntity);
+
 				ImGui::EndPopup();
 			}
 

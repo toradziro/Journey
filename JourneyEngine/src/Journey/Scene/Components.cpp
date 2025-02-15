@@ -215,7 +215,7 @@ void registerComponents()
 				ImGui::Text("%llu", (u64)component.m_uuid);
 			}));
 
-	// UuidComponent
+	// CircleComponent
 	entt::meta<CircleComponent>()
 		.type(entt::hashed_string(CircleComponent::C_COMPONENT_NAME))
 		.prop(C_PROP_NAME_HS, "Circle")
@@ -223,6 +223,15 @@ void registerComponents()
 		.data<&CircleComponent::m_radius>(entt::hashed_string("m_radius")).prop(C_PROP_NAME_HS, "Radius")
 		.data<&CircleComponent::m_color>(entt::hashed_string("m_color")).prop(C_PROP_NAME_HS, "Color")
 		.data<&CircleComponent::m_edgeThikness>(entt::hashed_string("m_edgeThikness")).prop(C_PROP_NAME_HS, "Edge Thikness");
+
+	// Line
+	entt::meta<LineComponent>()
+		.type(entt::hashed_string(LineComponent::C_COMPONENT_NAME))
+		.prop(C_PROP_NAME_HS, "Line")
+		.prop(C_PROP_REMOVABLE)
+		.data<&LineComponent::m_color>(entt::hashed_string("m_color")).prop(C_PROP_NAME_HS, "Color")
+		.data<&LineComponent::m_startPoint>(entt::hashed_string("m_startPoint")).prop(C_PROP_NAME_HS, "Start Point")
+		.data<&LineComponent::m_endPoint>(entt::hashed_string("m_endPoint")).prop(C_PROP_NAME_HS, "End Point");
 }
 
 } //-- jny

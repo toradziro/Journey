@@ -169,6 +169,20 @@ void SceneSerializer::serializeEntity(YAML::Emitter& sFile, Entity e)
 
 		sFile << EndMap;
 	}
+
+	if (e.hasComponent<LineComponent>())
+	{
+		auto& c = e.component<LineComponent>();
+
+		sFile << Key << c.C_COMPONENT_NAME;
+		sFile << BeginMap;
+
+		sFile << Key << "m_color" << Value << c.m_color;
+		sFile << Key << "m_startPoint" << Value << c.m_startPoint;
+		sFile << Key << "m_endPoint" << Value << c.m_endPoint;
+
+		sFile << EndMap;
+	}
 }
 
 void SceneSerializer::deserialize(const std::string& filename)
@@ -311,6 +325,23 @@ void SceneSerializer::deserialize(const std::string& filename)
 				if (auto radius = cc["m_radius"]; radius)
 				{
 					realCc.m_radius = radius.as<f32>();
+				}
+			}
+
+			if (auto lc = eSpecs[LineComponent::C_COMPONENT_NAME]; lc)
+			{
+				auto& realLc = createdE.addComponent<LineComponent>();
+				if (auto color = lc["m_color"]; color)
+				{
+					realLc.m_color = color.as<glm::vec4>();
+				}
+				if (auto startPoint = lc["m_startPoint"]; startPoint)
+				{
+					realLc.m_startPoint = startPoint.as<glm::vec3>();
+				}
+				if (auto endPoint = lc["m_endPoint"]; endPoint)
+				{
+					realLc.m_endPoint = endPoint.as<glm::vec3>();
 				}
 			}
 		}

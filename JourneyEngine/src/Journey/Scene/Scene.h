@@ -19,6 +19,7 @@ struct RigidBodyComponent;
 struct BoxColliderComponent;
 struct QuadCfg;
 struct CircleCfg;
+struct LineCfg;
 
 class Scene
 {
@@ -60,6 +61,9 @@ private:
 	void restoreFromSnapshot();
 	void fillQuadsDrawList();
 	void fillCirclesDrawList();
+	void fillLinesDrawList();
+	void fillDrawLists();
+	void drawAllPrimitives();
 
 private:
 	friend class Entity;
@@ -73,6 +77,7 @@ private:
 	std::vector<u_ptr<System>>	m_gameSystems;
 	std::vector<QuadCfg>		m_quadsDrawList;
 	std::vector<CircleCfg>		m_circleDrawList;
+	std::vector<LineCfg>		m_linesDrawList;
 
 	u32							m_viewportWidth = 1;
 	u32							m_viewportHeight = 1;
