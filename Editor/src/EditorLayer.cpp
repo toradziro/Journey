@@ -103,6 +103,8 @@ void EditorLayer::update(f32 dt)
 		m_context->m_currentScene->update(dt);
 	}
 
+	drawVisualizers();
+
 	ImVec2 mousePos = ImGui::GetMousePos();
 	mousePos.x -= m_viewportBounds.first.x;
 	mousePos.y -= m_viewportBounds.first.y;
@@ -655,6 +657,44 @@ void EditorLayer::drawViewportToolbar()
 	}
 
 	ImGui::SetCursorPos(cursorToRestore);
+}
+
+void EditorLayer::drawVisualizers()
+{
+	s_ptr<Scene> currScene = m_context->m_currentScene;
+	Renderer2D& render = Application::subsystems().st<Renderer2D>();
+
+	if (m_sceneMode == SceneMode::Editor)
+	{
+		render.beginScene(m_context->m_editorCamera);
+	}
+	else
+	{
+		Entity activeCameraE = currScene->activeCameraEntity();
+		auto& cc = activeCameraE.component<CameraComponent>();
+		auto& tc = activeCameraE.component<TransformComponent>();
+		render.beginScene(cc, tc.transform());
+	}
+
+	auto bcView = currScene->view<BoxColliderComponent>();
+	for (auto e : bcView)
+	{
+		Entity innerE(e, currScene.get());
+		auto& bcc = innerE.component<BoxColliderComponent>();
+		auto& tc = innerE.component<TransformComponent>();
+
+		TransformComponent rectangleTransform = tc;
+		rectangleTransform.m_scale = tc.m_scale * (bcc.m_size * 2.0f);
+
+		render.drawRectangle({ rectangleTransform.transform(), {0.0f, 0.0f, 1.0f, 1.0f}});
+	}
+	//auto ccView = currScene->view<CircleColliderComponent>();
+	//for (auto e : ccView)
+	//{
+	//	Entity innerE(e, currScene.get());
+
+	//}
+	render.endScene();
 }
 
 }

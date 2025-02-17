@@ -57,6 +57,8 @@ private:
 	void switchToGameMode();
 	void switchToEditorMode();
 
+	void drawVisualizers();
+
 private:
 	s_ptr<EditorContext>			m_context;
 	std::vector<IPanel*>			m_panels;

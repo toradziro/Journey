@@ -52,6 +52,12 @@ public:
 	void switchToGameMode();
 	void switchToEditorMode();
 
+	template<typename... Components>
+	auto view()
+	{
+		return m_registry.view<Components...>();
+	}
+
 private:
 	template<typename T>
 	void onComponentCreation(T& c) {}
