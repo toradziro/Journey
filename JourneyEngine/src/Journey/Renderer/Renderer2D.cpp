@@ -343,7 +343,7 @@ void Renderer2D::drawCircle(const CircleCfg& cfg)
 			m_circleVertexPtr->m_radius = cfg.m_radius;
 			m_circleVertexPtr->m_thikness = cfg.m_thikness;
 			m_circleVertexPtr->m_position = cfg.m_transform * pos;
-			m_circleVertexPtr->m_localPos = pos * 2.0f;
+			m_circleVertexPtr->m_localPos = pos;
 			m_circleVertexPtr->m_entityId = cfg.m_entityId;
 			m_circleVertexPtr++;
 		});

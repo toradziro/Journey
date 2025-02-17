@@ -61,7 +61,7 @@ void PhysicSystem::attach()
 			if (m_registry.all_of<CircleColliderComponent>(e))
 			{
 				auto& circleCollider = m_registry.get<CircleColliderComponent>(e);
-				b2Circle circle = { { 0.0f, 0.0f }, circleCollider.m_radius };
+				b2Circle circle = { { 0.0f, 0.0f }, circleCollider.m_radius * tc.m_scale.x };
 				b2ShapeDef shapeDef = b2DefaultShapeDef();
 
 				shapeDef.density = circleCollider.m_density;

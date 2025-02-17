@@ -167,11 +167,6 @@ void Scene::update(f32 dt)
 	CameraComponent* mainCamera = nullptr;
 	glm::mat4 mainCameraTransform = {};
 
-	std::ranges::for_each(m_gameSystems, [dt](auto& s)
-		{
-			s->update(dt);
-		});
-
 	//-- get in group allows to avoid owning component
 	for (auto& e : m_registry.group<CameraComponent>(entt::get<TransformComponent>))
 	{
@@ -193,6 +188,12 @@ void Scene::update(f32 dt)
 	{
 		auto& renderer2D = Application::subsystems().st<Renderer2D>();
 		renderer2D.beginScene(*mainCamera, mainCameraTransform);
+
+		//-- update all game systems
+		for (auto& s : m_gameSystems)
+		{
+			s->update(dt);
+		}
 
 		fillDrawLists();
 		drawAllPrimitives();

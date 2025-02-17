@@ -1,17 +1,17 @@
 Scene: physic_sample
 Entities:
   - EntityName:
-      m_name: ground2
+      m_name: circle
     UUID:
-      m_uuid: 1309710191877731635
+      m_uuid: 2884401264049573520
     Transform:
-      m_position: [10.7984972, 2.54987979, -4]
-      m_rotation: [0, 0, 35.1264687]
-      m_scale: [20, 0.999999881, 1]
-    Sprite:
-      m_color: [0.352941185, 0.196078435, 0.0784313753, 1]
+      m_position: [9.52146626, 10.1401596, -4]
+      m_rotation: [0, 0, 0]
+      m_scale: [1, 1, 1]
+    MainHero:
+      m_movementSpeed: 5
     RigidBody:
-      m_bodyType: 0
+      m_bodyType: 1
       m_angularDamping: 0
       m_angularVelocity: 0
       m_gravityScale: 1
@@ -19,35 +19,29 @@ Entities:
       m_linearVelocity: [0, 0]
       m_allowFastRotation: false
       m_fixedRotation: false
-    BoxCollider:
-      m_size: 0.5
+    CircleCollider:
+      m_radius: 0.5
       m_density: 1
       m_friction: 0.600000024
       m_restitution: 0.100000001
+    Circle:
+      m_color: [0.500310481, 0.230182067, 0.512415349, 1]
+      m_edgeThikness: 0.209999993
+      m_radius: 0.5
   - EntityName:
-      m_name: ground
+      m_name: camera
     UUID:
-      m_uuid: 12557797906249119276
+      m_uuid: 1220698529127090451
     Transform:
-      m_position: [0, 0, -4.01000023]
-      m_rotation: [0, 0, -17.7787437]
-      m_scale: [20.1999989, 1, 1]
-    Sprite:
-      m_color: [0.352941185, 0.196078435, 0.0784313753, 1]
-    RigidBody:
-      m_bodyType: 0
-      m_angularDamping: 0
-      m_angularVelocity: 0
-      m_gravityScale: 1
-      m_linearDamping: 0
-      m_linearVelocity: [0, 0]
-      m_allowFastRotation: false
-      m_fixedRotation: false
-    BoxCollider:
-      m_size: 0.5
-      m_density: 1
-      m_friction: 0.600000024
-      m_restitution: 0.100000001
+      m_position: [4.51784086, 3.80100012, 11.5439997]
+      m_rotation: [3.0592041, -1.8448168, -0.0985769182]
+      m_scale: [1, 1, 0.999999762]
+    Camera:
+      m_zoom: 10
+      m_fov: 45
+      m_primer: true
+      m_fixedAspectRatio: false
+      m_perspective: true
   - EntityName:
       m_name: box
     UUID:
@@ -73,31 +67,17 @@ Entities:
       m_friction: 0.600000024
       m_restitution: 0.600000024
   - EntityName:
-      m_name: camera
+      m_name: ground
     UUID:
-      m_uuid: 1220698529127090451
+      m_uuid: 12557797906249119276
     Transform:
-      m_position: [4.51784086, 3.80100012, 11.5439997]
-      m_rotation: [3.0592041, -1.8448168, -0.0985769182]
-      m_scale: [1, 1, 0.999999762]
-    Camera:
-      m_zoom: 10
-      m_fov: 45
-      m_primer: true
-      m_fixedAspectRatio: false
-      m_perspective: true
-  - EntityName:
-      m_name: circle
-    UUID:
-      m_uuid: 2884401264049573520
-    Transform:
-      m_position: [9.52146626, 10.1401596, -4]
-      m_rotation: [0, 0, 0]
-      m_scale: [2, 2, 1]
-    MainHero:
-      m_movementSpeed: 5
+      m_position: [0, 0, -4.01000023]
+      m_rotation: [0, 0, -17.7787437]
+      m_scale: [20.1999989, 1, 1]
+    Sprite:
+      m_color: [0.352941185, 0.196078435, 0.0784313753, 1]
     RigidBody:
-      m_bodyType: 1
+      m_bodyType: 0
       m_angularDamping: 0
       m_angularVelocity: 0
       m_gravityScale: 1
@@ -105,12 +85,32 @@ Entities:
       m_linearVelocity: [0, 0]
       m_allowFastRotation: false
       m_fixedRotation: false
-    CircleCollider:
-      m_radius: 0.5
+    BoxCollider:
+      m_size: 0.5
       m_density: 1
       m_friction: 0.600000024
       m_restitution: 0.100000001
-    Circle:
-      m_color: [0.500310481, 0.230182067, 0.512415349, 1]
-      m_edgeThikness: 0.209999993
-      m_radius: 0.5
+  - EntityName:
+      m_name: ground2
+    UUID:
+      m_uuid: 1309710191877731635
+    Transform:
+      m_position: [10.7984972, 2.54987979, -4]
+      m_rotation: [0, 0, 35.1264687]
+      m_scale: [20, 0.999999881, 1]
+    Sprite:
+      m_color: [0.352941185, 0.196078435, 0.0784313753, 1]
+    RigidBody:
+      m_bodyType: 0
+      m_angularDamping: 0
+      m_angularVelocity: 0
+      m_gravityScale: 1
+      m_linearDamping: 0
+      m_linearVelocity: [0, 0]
+      m_allowFastRotation: false
+      m_fixedRotation: false
+    BoxCollider:
+      m_size: 0.5
+      m_density: 1
+      m_friction: 0.600000024
+      m_restitution: 0.100000001
