@@ -375,6 +375,26 @@ void Renderer2D::drawLine(const LineCfg& cfg)
 	m_currLineBatchIndex += 2;
 }
 
+void Renderer2D::drawRectangle(const RectangleCfg& cfg)
+{
+	PROFILE_FUNC;
+
+	if (m_currLineBatchIndex >= C_MAX_INDICES)
+	{
+		startNextBatch();
+	}
+	//-- 1 2 2 3 3 4 4 1
+	std::array<i32, 8> indices = { 0, 1, 1, 2, 2, 3, 3, 0 };
+	for (i32 i : indices)
+	{
+		m_lineVertexPtr->m_color = cfg.m_color;
+		m_lineVertexPtr->m_position = cfg.m_transform * m_quadVertexPosition[i];
+		m_lineVertexPtr->m_entityId = cfg.m_entityId;
+		m_lineVertexPtr++;
+		m_currLineBatchIndex++;
+	}
+}
+
 void Renderer2D::startNextBatch()
 {
 	endScene();

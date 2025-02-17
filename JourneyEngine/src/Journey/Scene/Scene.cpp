@@ -151,6 +151,7 @@ void Scene::drawAllPrimitives()
 	for (auto& quad : m_quadsDrawList)
 	{
 		renderer2D.drawQuad(quad);
+		//renderer2D.drawRectangle({ quad.m_transform, { 1.0f, 0.0f, 0.0f, 1.0f }, quad.m_entityId });
 	}
 	for (auto& circle : m_circleDrawList)
 	{

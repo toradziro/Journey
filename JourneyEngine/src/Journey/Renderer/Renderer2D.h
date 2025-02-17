@@ -47,22 +47,29 @@ struct QuadCfg
 struct CircleCfg
 {
 	glm::mat4		m_transform = { 1.0f };
-
 	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	f32				m_zDepth = 0.0f;
-	i32				m_entityId = -1;
-
 	f32				m_radius = 0.0f;
 	f32				m_thikness = 0.0f;
+
+	i32				m_entityId = -1;
 };
 
 struct LineCfg
 {
 	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	i32				m_entityId = -1;
-
 	glm::vec3		m_startPoint = {};
 	glm::vec3		m_endPoint = {};
+
+	i32				m_entityId = -1;
+};
+
+struct RectangleCfg
+{
+	glm::mat4		m_transform = { 1.0f };
+	glm::vec4		m_color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	i32				m_entityId = -1;
 };
 
 class Renderer2D : public ISingleton
@@ -89,6 +96,7 @@ public:
 	void			drawQuad(const QuadCfg& cfg);
 	void			drawCircle(const CircleCfg& cfg);
 	void			drawLine(const LineCfg& cfg);
+	void			drawRectangle(const RectangleCfg& cfg);
 	
 	//-- Statistics
 	void			resetStatistics() { m_frameStat = {}; }
