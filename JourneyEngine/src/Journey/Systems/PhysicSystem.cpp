@@ -57,6 +57,19 @@ void PhysicSystem::attach()
 
 				b2CreatePolygonShape(rbc.m_internalBoxId, &shapeDef, &box);
 			}
+
+			if (m_registry.all_of<CircleColliderComponent>(e))
+			{
+				auto& circleCollider = m_registry.get<CircleColliderComponent>(e);
+				b2Circle circle = { { 0.0f, 0.0f }, circleCollider.m_radius };
+				b2ShapeDef shapeDef = b2DefaultShapeDef();
+
+				shapeDef.density = circleCollider.m_density;
+				shapeDef.friction = circleCollider.m_friction;
+				shapeDef.restitution = circleCollider.m_restitution;
+
+				b2CreateCircleShape(rbc.m_internalBoxId, &shapeDef, &circle);
+			}
 		});
 }
 

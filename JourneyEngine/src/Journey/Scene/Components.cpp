@@ -203,6 +203,16 @@ void registerComponents()
 		.data<&BoxColliderComponent::m_friction>(entt::hashed_string("m_friction")).prop(C_PROP_NAME_HS, "Friction")
 		.data<&BoxColliderComponent::m_restitution>(entt::hashed_string("m_restitution")).prop(C_PROP_NAME_HS, "Restitution");
 
+	// CircleColliderComponent
+	entt::meta<CircleColliderComponent>()
+		.type(entt::hashed_string(CircleColliderComponent::C_COMPONENT_NAME))
+		.prop(C_PROP_NAME_HS, "Circle Collider")
+		.prop(C_PROP_REMOVABLE)
+		.data<&CircleColliderComponent::m_radius>(entt::hashed_string("m_radius")).prop(C_PROP_NAME_HS, "Radius")
+		.data<&CircleColliderComponent::m_density>(entt::hashed_string("m_density")).prop(C_PROP_NAME_HS, "Density")
+		.data<&CircleColliderComponent::m_friction>(entt::hashed_string("m_friction")).prop(C_PROP_NAME_HS, "Friction")
+		.data<&CircleColliderComponent::m_restitution>(entt::hashed_string("m_restitution")).prop(C_PROP_NAME_HS, "Restitution");
+
 	// UuidComponent
 	entt::meta<UuidComponent>()
 		.type(entt::hashed_string(UuidComponent::C_COMPONENT_NAME))
@@ -220,7 +230,7 @@ void registerComponents()
 		.type(entt::hashed_string(CircleComponent::C_COMPONENT_NAME))
 		.prop(C_PROP_NAME_HS, "Circle")
 		.prop(C_PROP_REMOVABLE)
-		.data<&CircleComponent::m_radius>(entt::hashed_string("m_radius")).prop(C_PROP_NAME_HS, "Radius")
+		//.data<&CircleComponent::m_radius>(entt::hashed_string("m_radius")).prop(C_PROP_NAME_HS, "Radius")
 		.data<&CircleComponent::m_color>(entt::hashed_string("m_color")).prop(C_PROP_NAME_HS, "Color")
 		.data<&CircleComponent::m_edgeThikness>(entt::hashed_string("m_edgeThikness")).prop(C_PROP_NAME_HS, "Edge Thikness");
 

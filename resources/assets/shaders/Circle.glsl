@@ -59,8 +59,9 @@ void main()
 
 	entityId = v_entityId;
 	colorDepth = vec4(gl_FragCoord.z, gl_FragCoord.z, gl_FragCoord.z, 1.0);
-	if (mask > 0.0)
+	if (mask < 1.0)
 	{
-		color = vec4(v_color.rgb, v_color.a * mask);
+		discard;
 	}
+	color = vec4(v_color.rgb, v_color.a * mask);
 }

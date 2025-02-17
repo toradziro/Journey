@@ -156,6 +156,21 @@ void SceneSerializer::serializeEntity(YAML::Emitter& sFile, Entity e)
 		sFile << EndMap;
 	}
 
+	if (e.hasComponent<CircleColliderComponent>())
+	{
+		auto& c = e.component<CircleColliderComponent>();
+
+		sFile << Key << c.C_COMPONENT_NAME;
+		sFile << BeginMap;
+
+		sFile << Key << "m_radius" << Value << c.m_radius;
+		sFile << Key << "m_density" << Value << c.m_density;
+		sFile << Key << "m_friction" << Value << c.m_friction;
+		sFile << Key << "m_restitution" << Value << c.m_restitution;
+
+		sFile << EndMap;
+	}
+
 	if (e.hasComponent<CircleComponent>())
 	{
 		auto& c = e.component<CircleComponent>();
@@ -308,6 +323,27 @@ void SceneSerializer::deserialize(const std::string& filename)
 				if (auto restitution = bcc["m_restitution"]; restitution)
 				{
 					realBcc.m_restitution = restitution.as<f32>();
+				}
+			}
+
+			if (auto ccc = eSpecs[CircleColliderComponent::C_COMPONENT_NAME]; ccc)
+			{
+				auto& realCcc = createdE.addComponent<CircleColliderComponent>();
+				if (auto radius = ccc["m_radius"]; radius)
+				{
+					realCcc.m_radius = radius.as<f32>();
+				}
+				if (auto friction = ccc["m_friction"]; friction)
+				{
+					realCcc.m_friction = friction.as<f32>();
+				}
+				if (auto density = ccc["m_density"]; density)
+				{
+					realCcc.m_density = density.as<f32>();
+				}
+				if (auto restitution = ccc["m_restitution"]; restitution)
+				{
+					realCcc.m_restitution = restitution.as<f32>();
 				}
 			}
 

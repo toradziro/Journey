@@ -58,8 +58,6 @@ Entities:
       m_scale: [1.00000072, 1.00000072, 1]
     Sprite:
       m_color: [0.297968388, 0.297968388, 0.297968388, 1]
-    MainHero:
-      m_movementSpeed: 5
     RigidBody:
       m_bodyType: 1
       m_angularDamping: 0
@@ -79,15 +77,15 @@ Entities:
     UUID:
       m_uuid: 1220698529127090451
     Transform:
-      m_position: [4.51784086, -0.398606539, 15.2440996]
+      m_position: [4.51784086, 3.80100012, 11.5439997]
       m_rotation: [3.0592041, -1.8448168, -0.0985769182]
       m_scale: [1, 1, 0.999999762]
     Camera:
-      m_zoom: 19
+      m_zoom: 10
       m_fov: 45
       m_primer: true
       m_fixedAspectRatio: false
-      m_perspective: false
+      m_perspective: true
   - EntityName:
       m_name: circle
     UUID:
@@ -95,8 +93,24 @@ Entities:
     Transform:
       m_position: [9.52146626, 10.1401596, -4]
       m_rotation: [0, 0, 0]
-      m_scale: [3.81999993, 3.81999993, 3.81999993]
+      m_scale: [2, 2, 1]
+    MainHero:
+      m_movementSpeed: 5
+    RigidBody:
+      m_bodyType: 1
+      m_angularDamping: 0
+      m_angularVelocity: 0
+      m_gravityScale: 1
+      m_linearDamping: 0
+      m_linearVelocity: [0, 0]
+      m_allowFastRotation: false
+      m_fixedRotation: false
+    CircleCollider:
+      m_radius: 0.5
+      m_density: 1
+      m_friction: 0.600000024
+      m_restitution: 0.100000001
     Circle:
       m_color: [0.500310481, 0.230182067, 0.512415349, 1]
-      m_edgeThikness: 0.109999999
+      m_edgeThikness: 0.209999993
       m_radius: 0.5

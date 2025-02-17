@@ -284,6 +284,7 @@ void drawComponents(Entity& innerEntity, s_ptr<Scene> m_scene)
 	drawComponent<MainHeroComponent>(m_scene->registry(), innerEntity);
 	drawComponent<RigidBodyComponent>(m_scene->registry(), innerEntity);
 	drawComponent<BoxColliderComponent>(m_scene->registry(), innerEntity);
+	drawComponent<CircleColliderComponent>(m_scene->registry(), innerEntity);
 	drawComponent<CircleComponent>(m_scene->registry(), innerEntity);
 	drawComponent<LineComponent>(m_scene->registry(), innerEntity);
 }
@@ -319,6 +320,7 @@ void EntityProperties::updateUI()
 				drawAddComponent<MainHeroComponent>(selectedEntity);
 				drawAddComponent<RigidBodyComponent>(selectedEntity);
 				drawAddComponent<BoxColliderComponent>(selectedEntity);
+				drawAddComponent<CircleColliderComponent>(selectedEntity);
 				drawAddComponent<CircleComponent>(selectedEntity);
 				drawAddComponent<LineComponent>(selectedEntity);
 

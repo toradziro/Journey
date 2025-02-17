@@ -210,4 +210,17 @@ struct BoxColliderComponent
 	float	m_restitution = 0.1f;
 };
 
+struct CircleColliderComponent
+{
+	static inline constexpr const char* C_COMPONENT_NAME = "CircleCollider";
+
+	CircleColliderComponent() = default;
+	CircleColliderComponent(const CircleColliderComponent&) = default;
+
+	float	m_radius = 0.5f;
+	float	m_density = 1.0f;
+	float	m_friction = 0.6f;
+	float	m_restitution = 0.1f;
+};
+
 } //-- jny

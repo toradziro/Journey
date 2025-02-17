@@ -334,6 +334,7 @@ void Scene::copyToSnapshot()
 			copyComponent<MainHeroComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<RigidBodyComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<BoxColliderComponent>(wrapperE, m_snapshot, snapshotE);
+			copyComponent<CircleColliderComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<CircleComponent>(wrapperE, m_snapshot, snapshotE);
 			copyComponent<LineComponent>(wrapperE, m_snapshot, snapshotE);
 		});
@@ -355,6 +356,7 @@ void Scene::restoreFromSnapshot()
 			copyComponentFromSnapshot<MainHeroComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<RigidBodyComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<BoxColliderComponent>(m_registry, m_snapshot, registryE, snapshotE);
+			copyComponentFromSnapshot<CircleColliderComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<CircleComponent>(m_registry, m_snapshot, registryE, snapshotE);
 			copyComponentFromSnapshot<LineComponent>(m_registry, m_snapshot, registryE, snapshotE);
 		});
