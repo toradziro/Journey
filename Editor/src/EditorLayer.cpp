@@ -686,14 +686,23 @@ void EditorLayer::drawVisualizers()
 		TransformComponent rectangleTransform = tc;
 		rectangleTransform.m_scale = tc.m_scale * (bcc.m_size * 2.0f);
 
-		render.drawRectangle({ rectangleTransform.transform(), {0.0f, 0.0f, 1.0f, 1.0f}});
+		render.drawRectangle({ rectangleTransform.transform(), { 0.0f, 0.0f, 1.0f, 1.0f } });
 	}
-	//auto ccView = currScene->view<CircleColliderComponent>();
-	//for (auto e : ccView)
-	//{
-	//	Entity innerE(e, currScene.get());
 
-	//}
+	auto ccView = currScene->view<CircleColliderComponent>();
+	for (auto e : ccView)
+	{
+		Entity innerE(e, currScene.get());
+		auto& ccc = innerE.component<CircleColliderComponent>();
+		auto& tc = innerE.component<TransformComponent>();
+
+		TransformComponent circleTransform = tc;
+		circleTransform.m_scale = glm::vec3{ tc.m_scale.x * (ccc.m_radius * 2.0f), tc.m_scale.y * (ccc.m_radius * 2.0f), tc.m_scale.z };
+		//-- For overlay
+		circleTransform.m_position.z += 0.001f;
+
+		render.drawCircle({ circleTransform.transform(), { 0.0f, 0.0f, 1.0f, 1.0f }, 0.0f, 0.5f, 0.03f });
+	}
 	render.endScene();
 }
 
