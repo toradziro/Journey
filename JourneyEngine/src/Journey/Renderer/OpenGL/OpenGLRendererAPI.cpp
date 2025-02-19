@@ -55,4 +55,9 @@ void OpenGLRendererAPI::drawLines(const s_ptr<VertexArray>& vertexArray, u32 cou
 	glDrawArrays(GL_LINES, 0, count);
 }
 
+void OpenGLRendererAPI::setLineWidth(f32 widthInPixels)
+{
+	glLineWidth(widthInPixels);
+}
+
 }

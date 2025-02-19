@@ -180,6 +180,7 @@ void Renderer2D::beginScene(const EditorCamera& camera)
 
 	m_currQuadBatchIndex = 0;
 	m_currCircleBatchIndex = 0;
+	m_currLineBatchIndex = 0;
 	m_currTextureSlot = 1;
 }
 
@@ -194,8 +195,8 @@ void Renderer2D::beginScene(const CameraComponent& camera, const glm::mat4& tran
 	m_lineVertexPtr = m_lineVertexBase;
 
 	m_currQuadBatchIndex = 0;
+	m_currLineBatchIndex = 0;
 	m_currCircleBatchIndex = 0;
-
 	m_currTextureSlot = 1;
 }
 
@@ -263,7 +264,7 @@ void Renderer2D::flushLines()
 
 	if (m_currLineBatchIndex != 0)
 	{
-		Application::subsystems().st<RenderCommand>().drawLines(m_lineVertexArray, dataSize);
+		Application::subsystems().st<RenderCommand>().drawLines(m_lineVertexArray, dataSize / sizeof(LineVertex));
 		m_frameStat.m_drawCalls++;
 	}
 }

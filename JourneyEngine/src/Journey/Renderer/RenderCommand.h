@@ -29,6 +29,10 @@ public:
 
 		m_RendererAPI->drawLines(vertexArray, size);
 	}
+	void setLinesWidth(f32 linesWidthInPixels)
+	{
+		m_RendererAPI->setLineWidth(linesWidthInPixels);
+	}
 	void setClearColor(const glm::vec4& color)
 	{
 		m_RendererAPI->setClearColor(color);

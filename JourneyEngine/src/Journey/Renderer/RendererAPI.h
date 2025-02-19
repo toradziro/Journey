@@ -28,6 +28,8 @@ public:
 
 	virtual void drawIndexed(const s_ptr<VertexArray>& vertexArray, u32 count = 0) = 0;
 	virtual void drawLines(const s_ptr<VertexArray>& vertexArray, u32 count = 0) = 0;
+	
+	virtual void setLineWidth(f32 widthInPixels) = 0;
 
 	inline API api() const { return m_API; }
 	void setApi(API api) { m_API = api; }

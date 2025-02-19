@@ -18,6 +18,8 @@ public:
 
 	virtual void drawIndexed(const s_ptr<VertexArray>& vertexArray, u32 count = 0) override;
 	virtual void drawLines(const s_ptr<VertexArray>& vertexArray, u32 count = 0) override;
+
+	virtual void setLineWidth(f32 widthInPixels) override;
 };
 
 } //-- jny

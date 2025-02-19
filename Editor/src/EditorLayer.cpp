@@ -676,6 +676,8 @@ void EditorLayer::drawVisualizers()
 		render.beginScene(cc, tc.transform());
 	}
 
+	Application::subsystems().st<RenderCommand>().setLinesWidth(3.0f);
+
 	auto bcView = currScene->view<BoxColliderComponent>();
 	for (auto e : bcView)
 	{
@@ -701,12 +703,17 @@ void EditorLayer::drawVisualizers()
 		//-- For overlay
 		circleTransform.m_position.z += 0.001f;
 
-		render.drawCircle({ circleTransform.transform(), { 0.0f, 0.0f, 1.0f, 1.0f }, 0.0f, 0.5f, 0.03f });
+		render.drawCircle({ circleTransform.transform(), { 0.0f, 0.0f, 1.0f, 1.0f }, 0.0f, 0.5f, 0.04f });
 	}
 
-	if (m_context->m_selectedEntity)
+	if (m_sceneMode == SceneMode::Editor && m_context->m_selectedEntity)
 	{
-		auto& tc = m_context->m_selectedEntity.component<TransformComponent>();
+		auto tc = m_context->m_selectedEntity.component<TransformComponent>();
+		if (m_context->m_selectedEntity.hasComponent<BoxColliderComponent>() || m_context->m_selectedEntity.hasComponent<BoxColliderComponent>())
+		{
+			tc.m_scale.x += 0.04f;
+			tc.m_scale.y += 0.04f;
+		}
 		render.drawRectangle({ tc.transform(), { 1.0f, 0.5f, 0.0f, 1.0f } });
 	}
 
