@@ -703,6 +703,13 @@ void EditorLayer::drawVisualizers()
 
 		render.drawCircle({ circleTransform.transform(), { 0.0f, 0.0f, 1.0f, 1.0f }, 0.0f, 0.5f, 0.03f });
 	}
+
+	if (m_context->m_selectedEntity)
+	{
+		auto& tc = m_context->m_selectedEntity.component<TransformComponent>();
+		render.drawRectangle({ tc.transform(), { 1.0f, 0.5f, 0.0f, 1.0f } });
+	}
+
 	render.endScene();
 }
 
