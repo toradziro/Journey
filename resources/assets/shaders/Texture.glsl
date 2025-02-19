@@ -85,6 +85,10 @@ void main()
 		default: texColor = v_Color; break;
 	}
 	color = texColor;
+	if (texColor.a == 0.0)
+	{
+		discard;
+	}
 	colorDepth = vec4(v_TexturePos, 1.0, 1.0);
 	entityId = v_entityId;
 }
